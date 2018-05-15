@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, TouchableNativeFeedback } from "react-native";
 import Logo from "../components/Logo";
-import Button from "../components/Button";
+import CustomButton from "../components/CustomButton";
 import styles from "../styles/VerifyingCandidate";
 
 class VerifyingCandidate extends Component {
@@ -24,11 +24,11 @@ class VerifyingCandidate extends Component {
             We couldn't find your email address in our system. Please select
             option below
           </Text>
-          <Button
+          <CustomButton
             text="Have you applied before?"
             onPress={this.handlePressApplied}
           />
-          <Button text="It's Walk-In" onPress={this.handlePressWalkin} />
+          <CustomButton text="It's Walk-In" onPress={this.handlePressWalkin} />
         </View>
       </View>
     );

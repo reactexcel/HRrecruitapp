@@ -1,14 +1,17 @@
 import React, { Component, Fragment } from "react";
+import { TextInput, Keyboard, View } from "react-native";
 import {
+  Container,
+  Content,
+  Body,
   Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableNativeFeedback,
-  Keyboard,
-  ActivityIndicator
-} from "react-native";
-import Button from "../components/Button";
+  Card,
+  CardItem,
+  Item,
+  Input,
+  Spinner,
+} from "native-base";
+import CustomButton from "../components/CustomButton";
 import { isLowercase, isEmail } from "validator";
 import Logo from "../components/Logo";
 import styles from "../styles/InterviewLogin";
@@ -27,12 +30,6 @@ class InterviewLogin extends Component {
     header: null
   };
 
-  _onResponderRelease = event => {
-    Keyboard.dismiss();
-    this.textInput.blur();
-  };
-  _onStartShouldSetResponder = event => [true];
-
   handleSubmit = async email => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
@@ -42,11 +39,9 @@ class InterviewLogin extends Component {
       } = this.props;
       if (status === 0) {
         this.props.navigation.navigate("VerifyingCandidate");
-        this.textInput.clear();
         this.setState({ email: "" });
       } else if (status === 1) {
         this.props.navigation.navigate("ExistingEmail");
-        this.textInput.clear();
         this.setState({ email: "" });
       }
     }
@@ -76,49 +71,54 @@ class InterviewLogin extends Component {
     const appliedText = navigation.getParam("appliedText");
 
     return (
-      <View
-        style={styles.container}
-        onStartShouldSetResponder={this._onStartShouldSetResponder}
-        onResponderRelease={this._onResponderRelease}
-      >
-        <Logo />
-        <View style={styles.formView}>
-          {!appliedBefore ? (
-            <Fragment>
-              <Text style={styles.headerText}>Interview Test Papers</Text>
-              <View style={styles.horizontalLine} />
-              <Text style={styles.text}>
-                Login with your Email-Id to take interview test paper, in case
-                of any questions please contact HR
-              </Text>
-            </Fragment>
-          ) : (
-            <Text style={styles.text}>{appliedText}</Text>
-          )}
-          <View style={styles.inputTextView}>
-            <TextInput
-              ref={input => {
-                this.textInput = input;
-              }}
-              style={styles.inputText}
-              placeholder="Email"
-              placeholderTextColor="#c1c0c1"
-              name="email"
-              value={this.state.email}
-              keyboardType="email-address"
-              selectionColor="#c1c0c1"
-              underlineColorAndroid="#c1c0c1"
-              onChangeText={text => this.setState({ email: text })}
-              autoCapitalize="none"
-            />
+      <Container style={styles.container}>
+        <Content padder>
+          <View style = {styles.logoView}>
+            <Logo />
           </View>
-          {registering ? (
-            <ActivityIndicator size="large" color="#0000ff" />
-          ) : (
-            <Button onPress={this.handleSubmit} text="Submit" />
-          )}
-        </View>
-      </View>
+          <Card style={styles.formView}>
+            {!appliedBefore ? (
+              <Fragment>
+                <CardItem header>
+                  <Text style={styles.headerText}>Interview Test Papers</Text>
+                </CardItem>
+                <Content style={styles.horizontalLine} />
+                <CardItem>
+                  <Body>
+                    <Text style={styles.text}>
+                      Login with your Email-Id to take interview test paper, in
+                      case of any questions please contact HR
+                    </Text>
+                  </Body>
+                </CardItem>
+              </Fragment>
+            ) : (
+              <CardItem>
+                <Text style={styles.text}>{appliedText}</Text>
+              </CardItem>
+            )}
+            <Item style={{ paddingVertical: 10 }}>
+              <Input
+                style={styles.inputText}
+                placeholder="Email"
+                placeholderTextColor="#c1c0c1"
+                name="email"
+                value={this.state.email}
+                keyboardType="email-address"
+                selectionColor="#c1c0c1"
+                underlineColorAndroid="#c1c0c1"
+                onChangeText={text => this.setState({ email: text })}
+                autoCapitalize="none"
+              />
+            </Item>
+            {registering ? (
+              <Spinner color="#0000ff" />
+            ) : (
+              <CustomButton onPress={this.handleSubmit} text = "Submit"/>
+            )}
+          </Card>
+        </Content>
+      </Container>
     );
   }
 }

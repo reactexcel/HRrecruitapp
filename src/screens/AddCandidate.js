@@ -3,7 +3,7 @@ import { Text, View, TextInput, Picker, ScrollView } from "react-native";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
 import Logo from "../components/Logo";
-import Button from "../components/Button";
+import CustomButton from "../components/CustomButton";
 import styles from "../styles/AddCandidate";
 
 class AddCandidate extends Component {
@@ -63,7 +63,6 @@ class AddCandidate extends Component {
     for (value in values) {
       data.append(value, values[value]);
     }
-    console.log(values, "values");
   };
   render() {
     const { handleSubmit } = this.props;
@@ -103,7 +102,7 @@ class AddCandidate extends Component {
             component={this.renderField}
             keyboardType="numeric"
           />
-          <Button text="Add" onPress={handleSubmit(this.onSubmit)} />
+          <CustomButton text="Add" onPress={handleSubmit(this.onSubmit)} />
         </View>
       </View>
     );
