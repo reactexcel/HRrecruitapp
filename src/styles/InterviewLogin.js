@@ -9,8 +9,8 @@ export default StyleSheet.create({
     borderBottomColor: "#eeeeef",
     width: "100%"
   },
-  logoView:{
-    paddingVertical:50
+  logoView: {
+    paddingVertical: 50
   },
   formView: {
     alignItems: "center",
@@ -29,9 +29,14 @@ export default StyleSheet.create({
     fontWeight: "400",
     letterSpacing: 1
   },
+  inputTextView: {
+    paddingVertical: 10,
+    borderBottomWidth: 0
+  },
   text: {
     letterSpacing: 1,
     textAlign: "center",
+    fontSize: 14,
     color: "#818181"
   }
 });

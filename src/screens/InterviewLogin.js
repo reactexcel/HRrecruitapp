@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { TextInput, Keyboard, View } from "react-native";
+import { View } from "react-native";
 import {
   Container,
   Content,
@@ -97,7 +97,7 @@ class InterviewLogin extends Component {
                 <Text style={styles.text}>{appliedText}</Text>
               </CardItem>
             )}
-            <Item style={{ paddingVertical: 10 }}>
+            <Item style={styles.inputTextView}>
               <Input
                 style={styles.inputText}
                 placeholder="Email"
