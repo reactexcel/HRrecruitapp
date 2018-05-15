@@ -9,8 +9,9 @@ import {
   CardItem,
   Item,
   Input,
-  Spinner,
+  Spinner
 } from "native-base";
+import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import { isLowercase, isEmail } from "validator";
 import Logo from "../components/Logo";
@@ -73,50 +74,56 @@ class InterviewLogin extends Component {
     return (
       <Container style={styles.container}>
         <Content padder>
-          <View style = {styles.logoView}>
-            <Logo />
-          </View>
-          <Card style={styles.formView}>
-            {!appliedBefore ? (
-              <Fragment>
-                <CardItem header>
-                  <Text style={styles.headerText}>Interview Test Papers</Text>
-                </CardItem>
-                <Content style={styles.horizontalLine} />
-                <CardItem>
-                  <Body>
-                    <Text style={styles.text}>
-                      Login with your Email-Id to take interview test paper, in
-                      case of any questions please contact HR
-                    </Text>
-                  </Body>
-                </CardItem>
-              </Fragment>
-            ) : (
-              <CardItem>
-                <Text style={styles.text}>{appliedText}</Text>
-              </CardItem>
-            )}
-            <Item style={styles.inputTextView}>
-              <Input
-                style={styles.inputText}
-                placeholder="Email"
-                placeholderTextColor="#c1c0c1"
-                name="email"
-                value={this.state.email}
-                keyboardType="email-address"
-                selectionColor="#c1c0c1"
-                underlineColorAndroid="#c1c0c1"
-                onChangeText={text => this.setState({ email: text })}
-                autoCapitalize="none"
-              />
-            </Item>
-            {registering ? (
-              <Spinner color="#0000ff" />
-            ) : (
-              <CustomButton onPress={this.handleSubmit} text = "Submit"/>
-            )}
-          </Card>
+          <Grid>
+            <Row style={styles.logoView}>
+              <Logo />
+            </Row>
+            <Row>
+              <Card style={styles.formView}>
+                {!appliedBefore ? (
+                  <Fragment>
+                    <CardItem header>
+                      <Text style={styles.headerText}>
+                        Interview Test Papers
+                      </Text>
+                    </CardItem>
+                    <Content style={styles.horizontalLine} />
+                    <CardItem>
+                      <Body>
+                        <Text style={styles.text}>
+                          Login with your Email-Id to take interview test paper,
+                          in case of any questions please contact HR
+                        </Text>
+                      </Body>
+                    </CardItem>
+                  </Fragment>
+                ) : (
+                  <CardItem>
+                    <Text style={styles.text}>{appliedText}</Text>
+                  </CardItem>
+                )}
+                <Item style={styles.inputTextView}>
+                  <Input
+                    style={styles.inputText}
+                    placeholder="Email"
+                    placeholderTextColor="#c1c0c1"
+                    name="email"
+                    value={this.state.email}
+                    keyboardType="email-address"
+                    selectionColor="#c1c0c1"
+                    underlineColorAndroid="#c1c0c1"
+                    onChangeText={text => this.setState({ email: text })}
+                    autoCapitalize="none"
+                  />
+                </Item>
+                {registering ? (
+                  <Spinner color="#0000ff" />
+                ) : (
+                  <CustomButton onPress={this.handleSubmit} text="Submit" />
+                )}
+              </Card>
+            </Row>
+          </Grid>
         </Content>
       </Container>
     );

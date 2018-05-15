@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {View} from "react-native";
 import { Container, Content, Card, CardItem, Item ,Text} from "native-base";
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles/VerifyingCandidate";
@@ -20,9 +21,11 @@ class VerifyingCandidate extends Component {
     return (
       <Container style={styles.container}>
         <Content padder>
-          <View style={styles.logoView}>
+        <Grid>
+        <Row style={styles.logoView}>
             <Logo />
-          </View>
+          </Row>
+          <Row>
           <Card style={styles.blockView}>
             <CardItem>
               <Text style={styles.headerText}>
@@ -30,16 +33,21 @@ class VerifyingCandidate extends Component {
                 option below
               </Text>
             </CardItem>
+            <CardItem>
               <CustomButton
                 text="Have you applied before?"
                 onPress={this.handlePressApplied}
               />
-              <View style = {{paddingVertical:8}}/>
+              </CardItem>
+              <CardItem>
               <CustomButton
                 text="It's Walk-In"
                 onPress={this.handlePressWalkin}
               />
+              </CardItem>
           </Card>
+          </Row>
+          </Grid>
         </Content>
       </Container>
     );

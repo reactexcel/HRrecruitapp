@@ -5,7 +5,9 @@ export default StyleSheet.create({
     backgroundColor: "#2e3e4d",
   },
   logoView: {
-    paddingVertical: 50
+    height: 125,
+    justifyContent: "center",
+    alignItems: "center"
   },
   blockView: {
     alignItems: "center",

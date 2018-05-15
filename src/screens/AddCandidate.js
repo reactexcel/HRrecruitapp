@@ -1,5 +1,17 @@
 import React, { Component, Fragment } from "react";
-import { Text, View, TextInput, Picker, ScrollView } from "react-native";
+import { View } from "react-native";
+import {
+  Container,
+  Content,
+  Body,
+  Text,
+  Card,
+  CardItem,
+  Item,
+  Input,
+  Picker
+} from "native-base";
+import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
 import Logo from "../components/Logo";
@@ -16,20 +28,24 @@ class AddCandidate extends Component {
       meta: { touched, error }
     } = props;
     return (
-      <View style={styles.inputTextView}>
-        <TextInput
-          style={styles.inputText}
-          {...inputProps}
-          onChangeText={input.onChange}
-          onBlur={input.onBlur}
-          onFocus={input.onFocus}
-          value={input.value}
-          placeholderTextColor="#c1c0c1"
-          selectionColor="#c1c0c1"
-          underlineColorAndroid="#c1c0c1"
-        />
-        {touched && error && <Text style={styles.errorText}>{error}</Text>}
-      </View>
+      <Fragment>
+        <Item style={styles.inputTextView}>
+          <Input
+            style={styles.inputText}
+            {...inputProps}
+            onChangeText={input.onChange}
+            onBlur={input.onBlur}
+            onFocus={input.onFocus}
+            value={input.value}
+            placeholderTextColor="#c1c0c1"
+            selectionColor="#c1c0c1"
+            underlineColorAndroid="#c1c0c1"
+          />
+        </Item>
+        <View style={styles.errorTextView}>
+          {touched && error && <Text style={styles.errorText}>{error}</Text>}
+        </View>
+      </Fragment>
     );
   }
   renderpicker({
@@ -52,59 +68,74 @@ class AddCandidate extends Component {
             {children}
           </Picker>
         </View>
-        <View style={styles.inputTextView}>
+        <View style={styles.errorTextView}>
           {touched && error && <Text style={styles.errorText}>{error}</Text>}
         </View>
       </Fragment>
     );
   }
   onSubmit = values => {
-    const data = new FormData();
-    for (value in values) {
-      data.append(value, values[value]);
-    }
+    console.log(values);
   };
   render() {
     const { handleSubmit } = this.props;
     return (
-      <View style={styles.container}>
-        <Logo />
-        <View style={styles.formView}>
-          <Text style={styles.headerText}>Add Candidate</Text>
-          <View style={styles.horizontalLine} />
-          <Field
-            name="email"
-            placeholder="Email"
-            keyboardType="email-address"
-            component={this.renderField}
-            autoCapitalize="none"
-          />
-          <Field
-            name="name"
-            placeholder="Full Name"
-            component={this.renderField}
-          />
-          <Field name="gender" component={this.renderpicker} mode="dropdown">
-            <Picker.Item label="Select Gender" />
-            <Picker.Item label="Female" value="female" />
-            <Picker.Item label="Male" value="male" />
-            <Picker.Item label="Others" value="others" />
-          </Field>
+      <Container style={styles.container}>
+        <Content padder>
+          <Grid>
+            <Row style={styles.logoView}>
+              <Logo />
+            </Row>
+            <Row>
+              <Card style={styles.formView}>
+                <CardItem>
+                  <Text style={styles.headerText}>Add Candidate</Text>
+                </CardItem>
+                <Content style={styles.horizontalLine} />
+                <Field
+                  name="email"
+                  placeholder="Email"
+                  keyboardType="email-address"
+                  component={this.renderField}
+                  autoCapitalize="none"
+                />
+                <Field
+                  name="name"
+                  placeholder="Full Name"
+                  component={this.renderField}
+                />
+                <Field
+                  name="gender"
+                  component={this.renderpicker}
+                  mode="dropdown"
+                >
+                  <Picker.Item label="Select Gender" />
+                  <Picker.Item label="Female" value="female" />
+                  <Picker.Item label="Male" value="male" />
+                  <Picker.Item label="Others" value="others" />
+                </Field>
 
-          <Field
-            name="source"
-            placeholder="Source"
-            component={this.renderField}
-          />
-          <Field
-            name="phone"
-            placeholder="Mobile number"
-            component={this.renderField}
-            keyboardType="numeric"
-          />
-          <CustomButton text="Add" onPress={handleSubmit(this.onSubmit)} />
-        </View>
-      </View>
+                <Field
+                  name="source"
+                  placeholder="Source"
+                  component={this.renderField}
+                />
+                <Field
+                  name="phone"
+                  placeholder="Mobile number"
+                  component={this.renderField}
+                  keyboardType="numeric"
+                />
+                <CardItem /> 
+                  <CustomButton
+                    text="Add"
+                    onPress={handleSubmit(this.onSubmit)}
+                  />
+              </Card>
+            </Row>
+          </Grid>
+        </Content>
+      </Container>
     );
   }
 }

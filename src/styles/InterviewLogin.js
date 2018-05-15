@@ -9,8 +9,10 @@ export default StyleSheet.create({
     borderBottomColor: "#eeeeef",
     width: "100%"
   },
-  logoView: {
-    paddingVertical: 50
+  logoView:{
+    height: 125,
+    justifyContent: "center",
+    alignItems: "center"
   },
   formView: {
     alignItems: "center",

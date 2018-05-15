@@ -2,20 +2,17 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#2e3e4d",
-    alignItems: "center",
-    justifyContent: "space-evenly"
+    backgroundColor: "#2e3e4d"
   },
-  formView : {
-    flex: 0.75,
-    width: "90%",
-    justifyContent: "space-evenly",
+  logoView: {
+    height: 125,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  formView: {
     alignItems: "center",
-    backgroundColor: "#f5f5f5",
     borderRadius: 5,
-    padding: 10,
-    
+    padding: 10
   },
   inputText: {
     color: "#333333",
@@ -23,8 +20,12 @@ export default StyleSheet.create({
     fontWeight: "400",
     letterSpacing: 1
   },
-  inputTextView : {
-      width : '100%'
+  inputTextView: {
+    borderBottomWidth: 0,
+    width: "100%"
+  },
+  errorTextView: {
+    width: "95%"
   },
   headerText: {
     color: "#333333",
@@ -33,17 +34,19 @@ export default StyleSheet.create({
     letterSpacing: 1
   },
   horizontalLine: {
+    paddingVertical:5,
     borderBottomWidth: 1,
     borderBottomColor: "#eeeeef",
     width: "100%"
   },
-  picker :{
+  picker: {
     width: "98%",
     borderBottomColor: "#c1c0c1",
-    borderBottomWidth: 1
+    borderBottomWidth: 1,
+    marginBottom:7
   },
-  errorText : {
-      color : "#ed1040",
-      fontSize:12
+  errorText: {
+    color: "#ed1040",
+    fontSize: 12
   }
 });
