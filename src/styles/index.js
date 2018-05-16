@@ -22,10 +22,20 @@ export default StyleSheet.create({
     letterSpacing: 1,
     textAlign: "center"
   },
+  text: {
+    letterSpacing: 1,
+    textAlign: "center",
+    fontSize: 14,
+    color: COLOR.DarkGrey
+  },
   inputText: {
     color: COLOR.Black,
     fontSize: 15,
     fontWeight: "400",
     letterSpacing: 1
+  },
+  inputTextView: {
+    paddingVertical: 10,
+    borderBottomWidth: 0
   }
 });

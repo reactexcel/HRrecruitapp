@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View } from "react-native";
+import { AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -20,31 +20,31 @@ import _styles from "../styles/InterviewLogin";
 import {COLOR} from "../styles/color"
 import { connect } from "react-redux";
 import { signUp } from "../actions";
+import {setItem} from "../helper";
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      errors: {}
     };
   }
   static navigationOptions = {
     header: null
   };
 
-  handleSubmit = async email => {
+  handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
       await this.props.signUp(this.state.email);
       const {
-        interviewSignUp: { status }
+        interviewSignUp: { status, fb_id }
       } = this.props;
       if (status === 0) {
         this.props.navigation.navigate("VerifyingCandidate");
         this.setState({ email: "" });
       } else if (status === 1) {
-        this.props.navigation.navigate("ExistingEmail");
+        this.props.navigation.navigate("OTPpage");
         this.setState({ email: "" });
       }
     }
@@ -72,7 +72,6 @@ class InterviewLogin extends Component {
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
-
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -92,7 +91,7 @@ class InterviewLogin extends Component {
                     <Content style={_styles.horizontalLine} />
                     <CardItem>
                       <Body>
-                        <Text style={_styles.text}>
+                        <Text style={styles.text}>
                           Login with your Email-Id to take interview test paper,
                           in case of any questions please contact HR
                         </Text>
@@ -104,7 +103,7 @@ class InterviewLogin extends Component {
                     <Text style={styles.text}>{appliedText}</Text>
                   </CardItem>
                 )}
-                <Item style={_styles.inputTextView}>
+                <Item style={styles.inputTextView}>
                   <Input
                     style={styles.inputText}
                     placeholder="Email"

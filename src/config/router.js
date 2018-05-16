@@ -1,7 +1,7 @@
 import { createStackNavigator } from "react-navigation";
 import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
-import ExistingEmail from "../screens/ExistingEmail";
+import OTPpage from "../screens/OTPpage";
 import AddCandidate from '../screens/AddCandidate';
 
 const Rootstack = createStackNavigator({
@@ -11,8 +11,8 @@ const Rootstack = createStackNavigator({
   VerifyingCandidate : {
     screen : VerifyingCandidate
   },
-  ExistingEmail : {
-    screen : ExistingEmail
+  OTPpage : {
+    screen : OTPpage
   },
   AddCandidate : {
     screen : AddCandidate
