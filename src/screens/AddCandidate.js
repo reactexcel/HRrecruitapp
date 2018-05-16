@@ -16,7 +16,9 @@ import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
-import styles from "../styles/AddCandidate";
+import styles from "../styles";
+import _styles from "../styles/AddCandidate";
+import {COLOR} from "../styles/color";
 
 class AddCandidate extends Component {
   static navigationOptions = {
@@ -29,7 +31,7 @@ class AddCandidate extends Component {
     } = props;
     return (
       <Fragment>
-        <Item style={styles.inputTextView}>
+        <Item style={_styles.inputTextView}>
           <Input
             style={styles.inputText}
             {...inputProps}
@@ -37,13 +39,13 @@ class AddCandidate extends Component {
             onBlur={input.onBlur}
             onFocus={input.onFocus}
             value={input.value}
-            placeholderTextColor="#c1c0c1"
-            selectionColor="#c1c0c1"
-            underlineColorAndroid="#c1c0c1"
+            placeholderTextColor={COLOR.Grey}
+            selectionColor={COLOR.Grey}
+            underlineColorAndroid={COLOR.Grey}
           />
         </Item>
-        <View style={styles.errorTextView}>
-          {touched && error && <Text style={styles.errorText}>{error}</Text>}
+        <View style={_styles.errorTextView}>
+          {touched && error && <Text style={_styles.errorText}>{error}</Text>}
         </View>
       </Fragment>
     );
@@ -58,7 +60,7 @@ class AddCandidate extends Component {
     } = pickerProps;
     return (
       <Fragment>
-        <View style={styles.picker}>
+        <View style={_styles.picker}>
           <Picker
             selectedValue={value}
             onValueChange={value => onChange(value)}
@@ -68,8 +70,8 @@ class AddCandidate extends Component {
             {children}
           </Picker>
         </View>
-        <View style={styles.errorTextView}>
-          {touched && error && <Text style={styles.errorText}>{error}</Text>}
+        <View style={_styles.errorTextView}>
+          {touched && error && <Text style={_styles.errorText}>{error}</Text>}
         </View>
       </Fragment>
     );
@@ -87,11 +89,11 @@ class AddCandidate extends Component {
               <Logo />
             </Row>
             <Row>
-              <Card style={styles.formView}>
+              <Card style={styles.blockView}>
                 <CardItem>
                   <Text style={styles.headerText}>Add Candidate</Text>
                 </CardItem>
-                <Content style={styles.horizontalLine} />
+                <Content style={_styles.horizontalLine} />
                 <Field
                   name="email"
                   placeholder="Email"

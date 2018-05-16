@@ -15,7 +15,9 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import { isLowercase, isEmail } from "validator";
 import Logo from "../components/Logo";
-import styles from "../styles/InterviewLogin";
+import styles from "../styles";
+import _styles from "../styles/InterviewLogin";
+import {COLOR} from "../styles/color"
 import { connect } from "react-redux";
 import { signUp } from "../actions";
 
@@ -79,7 +81,7 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              <Card style={styles.formView}>
+              <Card style={styles.blockView}>
                 {!appliedBefore ? (
                   <Fragment>
                     <CardItem header>
@@ -87,10 +89,10 @@ class InterviewLogin extends Component {
                         Interview Test Papers
                       </Text>
                     </CardItem>
-                    <Content style={styles.horizontalLine} />
+                    <Content style={_styles.horizontalLine} />
                     <CardItem>
                       <Body>
-                        <Text style={styles.text}>
+                        <Text style={_styles.text}>
                           Login with your Email-Id to take interview test paper,
                           in case of any questions please contact HR
                         </Text>
@@ -102,16 +104,16 @@ class InterviewLogin extends Component {
                     <Text style={styles.text}>{appliedText}</Text>
                   </CardItem>
                 )}
-                <Item style={styles.inputTextView}>
+                <Item style={_styles.inputTextView}>
                   <Input
                     style={styles.inputText}
                     placeholder="Email"
-                    placeholderTextColor="#c1c0c1"
+                    placeholderTextColor={COLOR.Grey}
                     name="email"
                     value={this.state.email}
                     keyboardType="email-address"
-                    selectionColor="#c1c0c1"
-                    underlineColorAndroid="#c1c0c1"
+                    selectionColor={COLOR.Grey}
+                    underlineColorAndroid={COLOR.Grey}
                     onChangeText={text => this.setState({ email: text })}
                     autoCapitalize="none"
                   />

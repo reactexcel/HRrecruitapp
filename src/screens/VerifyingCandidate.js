@@ -4,7 +4,7 @@ import { Container, Content, Card, CardItem, Item ,Text} from "native-base";
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
-import styles from "../styles/VerifyingCandidate";
+import styles from '../styles'
 
 class VerifyingCandidate extends Component {
   static navigationOptions = {
