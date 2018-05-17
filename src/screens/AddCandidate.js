@@ -18,7 +18,7 @@ import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
 import _styles from "../styles/AddCandidate";
-import {COLOR} from "../styles/color";
+import { COLOR } from "../styles/color";
 
 class AddCandidate extends Component {
   static navigationOptions = {
@@ -50,7 +50,7 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
-  renderpicker({
+  renderPicker({
     input: { onChange, value, ...inputProps },
     children,
     ...pickerProps
@@ -58,12 +58,17 @@ class AddCandidate extends Component {
     const {
       meta: { touched, error }
     } = pickerProps;
+    console.log(value);
     return (
       <Fragment>
         <View style={_styles.picker}>
           <Picker
             selectedValue={value}
-            onValueChange={value => onChange(value)}
+            onValueChange={value => {
+              requestAnimationFrame(() => {
+                onChange(value);
+              });
+            }}
             {...inputProps}
             {...pickerProps}
           >
@@ -76,9 +81,11 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
+
   onSubmit = values => {
     console.log(values);
   };
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -108,13 +115,13 @@ class AddCandidate extends Component {
                 />
                 <Field
                   name="gender"
-                  component={this.renderpicker}
+                  component={this.renderPicker}
                   mode="dropdown"
                 >
-                  <Picker.Item label="Select Gender" />
-                  <Picker.Item label="Female" value="female" />
-                  <Picker.Item label="Male" value="male" />
-                  <Picker.Item label="Others" value="others" />
+                  <Item label="Select gender" value="" />
+                  <Item label="Female" value="female" />
+                  <Item label="Male" value="male" />
+                  <Item label="Others" value="others" />
                 </Field>
 
                 <Field
@@ -128,11 +135,11 @@ class AddCandidate extends Component {
                   component={this.renderField}
                   keyboardType="numeric"
                 />
-                <CardItem /> 
-                  <CustomButton
-                    text="Add"
-                    onPress={handleSubmit(this.onSubmit)}
-                  />
+                <CardItem />
+                <CustomButton
+                  text="Add"
+                  onPress={handleSubmit(this.onSubmit)}
+                />
               </Card>
             </Row>
           </Grid>
@@ -143,7 +150,8 @@ class AddCandidate extends Component {
 }
 validate = values => {
   const errors = {};
-  if (!values.name) errors.name = "Cannot be Empty";
+  if (!values.name) {errors.name = "Cannot be Empty"}
+
   if (!values.email) {
     errors.email = "Cannot be Empty";
   } else if (!isEmail(values.email) || !isLowercase(values.email)) {

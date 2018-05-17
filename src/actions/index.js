@@ -4,7 +4,7 @@ import {
   INTERVIEW_EMAIL_SIGN_UP_REQUEST
 } from "./types";
 import { OTP_REQUEST, OTP_SUCCESS, OTP_FAILED } from "./types";
-import { API_URL, API_URL_OTHER } from "../config/dev";
+import { API_URL } from "../config/dev";
 import { getItem } from "../helper";
 
 // Action for Signing Up with email to take interview test paper
@@ -25,15 +25,12 @@ export const verifyingOTP = (otp, fb_id) => async dispatch => {
   const examToken = otp;
   dispatch({ type: OTP_REQUEST });
   try {
-    console.log(examToken,fb_id)
-    const res = await axios.post(`${API_URL_OTHER}verifyExamToken`, {
+    const res = await axios.post(`${API_URL}verifyExamToken`, {
       fb_id,
       examToken
     });
-    console.log(res);
     dispatch({ type: OTP_SUCCESS, payload: res });
   } catch (err) {
-    console.log(err);
     dispatch({ type: OTP_FAILED });
   }
 };

@@ -84,7 +84,7 @@ class OTPpage extends Component {
                   />
                 </Item>
                 {registering ? (
-                  <Spinner color="#0000ff" />
+                  <Spinner color="#2196f3" />
                 ) : (
                   <CustomButton text="Submit" onPress={this.handleSubmit} />
                 )}

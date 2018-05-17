@@ -45,7 +45,7 @@ class InterviewLogin extends Component {
         this.setState({ email: "" });
       } else if (status === 1) {
         this.props.navigation.navigate("OTPpage");
-        this.setState({ email: "" });
+        this.textInput._root.clear();
       }
     }
   };
@@ -119,7 +119,7 @@ class InterviewLogin extends Component {
                   />
                 </Item>
                 {registering ? (
-                  <Spinner color="#0000ff" />
+                  <Spinner color="#2196f3" />
                 ) : (
                   <CustomButton onPress={this.handleSubmit} text="Submit" />
                 )}
