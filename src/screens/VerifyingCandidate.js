@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { Text, View, TouchableNativeFeedback } from "react-native";
+import {View} from "react-native";
+import { Container, Content, Card, CardItem, Item ,Text} from "native-base";
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import Logo from "../components/Logo";
-import Button from "../components/Button";
-import styles from "../styles/VerifyingCandidate";
+import CustomButton from "../components/CustomButton";
+import styles from '../styles'
 
 class VerifyingCandidate extends Component {
   static navigationOptions = {
@@ -17,20 +19,37 @@ class VerifyingCandidate extends Component {
   handlePressWalkin = () => this.props.navigation.navigate("AddCandidate");
   render() {
     return (
-      <View style={styles.container}>
-        <Logo />
-        <View style={styles.blockView}>
-          <Text style={styles.headerText}>
-            We couldn't find your email address in our system. Please select
-            option below
-          </Text>
-          <Button
-            text="Have you applied before?"
-            onPress={this.handlePressApplied}
-          />
-          <Button text="It's Walk-In" onPress={this.handlePressWalkin} />
-        </View>
-      </View>
+      <Container style={styles.container}>
+        <Content padder>
+        <Grid>
+        <Row style={styles.logoView}>
+            <Logo />
+          </Row>
+          <Row>
+          <Card style={styles.blockView}>
+            <CardItem>
+              <Text style={styles.headerText}>
+                We couldn't find your email address in our system. Please select
+                option below
+              </Text>
+            </CardItem>
+            <CardItem>
+              <CustomButton
+                text="Have you applied before?"
+                onPress={this.handlePressApplied}
+              />
+              </CardItem>
+              <CardItem>
+              <CustomButton
+                text="It's Walk-In"
+                onPress={this.handlePressWalkin}
+              />
+              </CardItem>
+          </Card>
+          </Row>
+          </Grid>
+        </Content>
+      </Container>
     );
   }
 }
