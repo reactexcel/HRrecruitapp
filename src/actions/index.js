@@ -34,3 +34,29 @@ export const verifyingOTP = (otp, fb_id) => async dispatch => {
     dispatch({ type: OTP_FAILED });
   }
 };
+
+//Action for adding new component
+export const addCandidate = data => async dispatch => {
+  const formData = new FormData();
+  for (let key in data) {
+    formData.append(key, data[key]);
+  }
+  const res = await axios.post(`${API_URL}addNewCandidate`, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    },
+    body: formData
+  });
+  console.log(";woking");
+  console.log(res);
+  dispatch({ type: ADD_CANDIDATE, payload: res });
+};
+
+//Action for getting questions for candidate
+export const getQuestions = (fb_id) => async dispatch => {
+try { const res = await axios.get(`${API_URL}getQuestinsForCandidate/${fb_id}`);
+  console.log(res,'questions')}
+  catch(err){
+    console.log(err)
+  }
+}

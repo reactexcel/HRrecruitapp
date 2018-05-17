@@ -30,7 +30,8 @@ class InterviewLogin extends Component {
     };
   }
   static navigationOptions = {
-    header: null
+    // headerTitle: <Text style={styles.text}>Interview Test</Text>,
+    header : null
   };
 
   handleSubmit = async () => {

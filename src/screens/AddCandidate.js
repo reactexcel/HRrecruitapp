@@ -19,6 +19,8 @@ import CustomButton from "../components/CustomButton";
 import styles from "../styles";
 import _styles from "../styles/AddCandidate";
 import { COLOR } from "../styles/color";
+import { connect } from "react-redux";
+import { addCandidate } from "../actions";
 
 class AddCandidate extends Component {
   static navigationOptions = {
@@ -84,6 +86,7 @@ class AddCandidate extends Component {
 
   onSubmit = values => {
     console.log(values);
+    this.props.addCandidate(values);
   };
 
   render() {
@@ -102,14 +105,14 @@ class AddCandidate extends Component {
                 </CardItem>
                 <Content style={_styles.horizontalLine} />
                 <Field
-                  name="email"
+                  name="sender_email"
                   placeholder="Email"
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
                 />
                 <Field
-                  name="name"
+                  name="from"
                   placeholder="Full Name"
                   component={this.renderField}
                 />
@@ -121,7 +124,6 @@ class AddCandidate extends Component {
                   <Item label="Select gender" value="" />
                   <Item label="Female" value="female" />
                   <Item label="Male" value="male" />
-                  <Item label="Others" value="others" />
                 </Field>
 
                 <Field
@@ -130,7 +132,7 @@ class AddCandidate extends Component {
                   component={this.renderField}
                 />
                 <Field
-                  name="phone"
+                  name="mobile_no"
                   placeholder="Mobile number"
                   component={this.renderField}
                   keyboardType="numeric"
@@ -150,23 +152,28 @@ class AddCandidate extends Component {
 }
 validate = values => {
   const errors = {};
-  if (!values.name) {errors.name = "Cannot be Empty"}
+  if (!values.from) {
+    errors.from = "Cannot be Empty";
+  }
 
-  if (!values.email) {
-    errors.email = "Cannot be Empty";
-  } else if (!isEmail(values.email) || !isLowercase(values.email)) {
-    errors.email = "Enter a valid email and must be in lowercase";
+  if (!values.sender_email) {
+    errors.sender_email = "Cannot be Empty";
+  } else if (
+    !isEmail(values.sender_email) ||
+    !isLowercase(values.sender_email)
+  ) {
+    errors.sender_email = "Enter a valid email and must be in lowercase";
   }
   if (!values.gender) errors.gender = "Select a gender";
   if (!values.source) errors.source = "Cannot be Empty";
-  if (!values.phone) {
-    errors.phone = "Cannot be Empty";
-  } else if (!isMobilePhone(values.phone, "en-IN")) {
-    errors.phone = "Enter valid phone number";
+  if (!values.mobile_no) {
+    errors.mobile_no = "Cannot be Empty";
+  } else if (!isMobilePhone(values.mobile_no, "en-IN")) {
+    errors.mobile_no = "Enter valid phone number";
   }
   return errors;
 };
 export default reduxForm({
   form: "AddCandidate",
   validate
-})(AddCandidate);
+})(connect(null, { addCandidate })(AddCandidate));

@@ -23,14 +23,14 @@ class OTPpage extends Component {
     super();
     this.state = {
       otp: "",
-      fb_id : props.fb_id,
+      fb_id: props.fb_id,
       errors: {}
     };
   }
   validate(data) {
     const errors = {};
     if (!data) {
-      errors.data = "Enter  OTP";
+      errors.data = "Enter OTP";
       alert(errors.data);
     }
     return errors;
@@ -40,17 +40,22 @@ class OTPpage extends Component {
     const errors = this.validate(this.state.otp);
     if (Object.keys(errors).length === 0) {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
-      if(this.props.otp.data.status === 1){
-        this.props.navigation.navigate('Instructions')
-        this.textInput._root.clear()
+      const {status,data} = this.props.otp.data
+      if (status === 1) {
+        this.props.navigation.navigate("Instructions",{
+          fb_id : data.fb_id,
+          profile_pic: data.profile_pic,
+          name : data.name
+        });
+        this.textInput._root.clear();
       }
     }
   };
   render() {
-    console.log(this.props.otp);
     const {
       otp: { registering, message }
     } = this.props;
+    console.log(this.props.otp)
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -70,7 +75,7 @@ class OTPpage extends Component {
                 <CardItem>{message ? <Text> {message}</Text> : null}</CardItem>
                 <Item style={styles.inputTextView}>
                   <Input
-                  ref = {input => this.textInput = input}
+                    ref={input => (this.textInput = input)}
                     style={styles.inputText}
                     placeholder="Enter OTP"
                     placeholderTextColor={COLOR.Grey}
