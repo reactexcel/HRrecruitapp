@@ -36,10 +36,14 @@ class OTPpage extends Component {
     return errors;
   }
 
-  handleSubmit = () => {
+  handleSubmit = async () => {
     const errors = this.validate(this.state.otp);
     if (Object.keys(errors).length === 0) {
-      this.props.verifyingOTP(this.state.otp, this.state.fb_id);
+      await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
+      if(this.props.otp.data.status === 1){
+        this.props.navigation.navigate('Instructions')
+        this.textInput._root.clear()
+      }
     }
   };
   render() {
@@ -66,6 +70,7 @@ class OTPpage extends Component {
                 <CardItem>{message ? <Text> {message}</Text> : null}</CardItem>
                 <Item style={styles.inputTextView}>
                   <Input
+                  ref = {input => this.textInput = input}
                     style={styles.inputText}
                     placeholder="Enter OTP"
                     placeholderTextColor={COLOR.Grey}

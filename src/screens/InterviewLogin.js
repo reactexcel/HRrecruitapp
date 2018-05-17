@@ -17,16 +17,16 @@ import { isLowercase, isEmail } from "validator";
 import Logo from "../components/Logo";
 import styles from "../styles";
 import _styles from "../styles/InterviewLogin";
-import {COLOR} from "../styles/color"
+import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { signUp } from "../actions";
-import {setItem} from "../helper";
+import { setItem } from "../helper";
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
+      email: ""
     };
   }
   static navigationOptions = {
@@ -105,6 +105,7 @@ class InterviewLogin extends Component {
                 )}
                 <Item style={styles.inputTextView}>
                   <Input
+                    ref={input => (this.textInput = input)}
                     style={styles.inputText}
                     placeholder="Email"
                     placeholderTextColor={COLOR.Grey}

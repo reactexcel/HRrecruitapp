@@ -3,6 +3,7 @@ import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
 import OTPpage from "../screens/OTPpage";
 import AddCandidate from '../screens/AddCandidate';
+import Instructions from '../screens/Instructions';
 
 const Rootstack = createStackNavigator({
   InterviewLogin: {
@@ -16,6 +17,9 @@ const Rootstack = createStackNavigator({
   },
   AddCandidate : {
     screen : AddCandidate
+  },
+  Instructions : {
+    screen : Instructions
   }
 },{
     initialScreen : 'InterviewLogin',
