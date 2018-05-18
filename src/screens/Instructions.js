@@ -16,7 +16,6 @@ import CustomButton from "../components/CustomButton";
 class Instructions extends Component {
   componentDidMount() {
     const fb_id = this.props.navigation.getParam("fb_id");
-    console.log(fb_id);
     this.props.getQuestions(fb_id);
   }
   static navigationOptions = ({ navigation }) => {
@@ -24,10 +23,18 @@ class Instructions extends Component {
     const profile_pic = navigation.getParam("profile_pic");
     return {
       title: name,
-      headerRight: <Thumbnail small source={{ uri: profile_pic }} />
+      headerLeft: (
+        <Content padder>
+          <Thumbnail small source={{ uri: profile_pic }} />
+        </Content>
+      )
     };
   };
   render() {
+    const instructions = {
+      ins:
+        "The test consists of multiple sections, make sure to complete all sections.There is time limit of the test. A time counter will start as soon as the test gets started and test will automatically be submitted when the time limit is reached.Do not close the test all in between, if you do you will have to start from scratch. Test is given best in landscape mode. So change your mobile display to landscape. Do not open any other tabs in your browser, if you open a new tab it will get recorded."
+    };
     const name = this.props.navigation.getParam("name");
     console.log(name);
     return (
@@ -36,6 +43,9 @@ class Instructions extends Component {
           <Card style={styles.blockView}>
             <CardItem>
               <Text style={styles.headerText}>Instructions</Text>
+            </CardItem>
+            <CardItem>
+              <Text style={styles.text}>{instructions.ins}</Text>
             </CardItem>
             <CustomButton text="Continue" />
           </Card>
