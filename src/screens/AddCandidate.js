@@ -16,6 +16,7 @@ import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
+import HorizontalLine from "../components/HorizontalLine";
 import styles from "../styles";
 import _styles from "../styles/AddCandidate";
 import { COLOR } from "../styles/color";
@@ -60,7 +61,6 @@ class AddCandidate extends Component {
     const {
       meta: { touched, error }
     } = pickerProps;
-    console.log(value);
     return (
       <Fragment>
         <View style={_styles.picker}>
@@ -103,7 +103,7 @@ class AddCandidate extends Component {
                 <CardItem>
                   <Text style={styles.headerText}>Add Candidate</Text>
                 </CardItem>
-                <Content style={_styles.horizontalLine} />
+                <HorizontalLine />
                 <Field
                   name="sender_email"
                   placeholder="Email"

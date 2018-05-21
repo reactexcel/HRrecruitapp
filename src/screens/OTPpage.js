@@ -14,7 +14,6 @@ import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
 import { COLOR } from "../styles/color";
-import { getItem } from "../helper";
 import { connect } from "react-redux";
 import { verifyingOTP } from "../actions";
 
@@ -38,14 +37,16 @@ class OTPpage extends Component {
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.otp);
+
     if (Object.keys(errors).length === 0) {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
-      const {status,data} = this.props.otp.data
+      const { status, data } = this.props.otp.data;
+
       if (status === 1) {
-        this.props.navigation.navigate("Instructions",{
-          fb_id : data.fb_id,
+        this.props.navigation.navigate("Instructions", {
+          fb_id: data.fb_id,
           profile_pic: data.profile_pic,
-          name : data.name
+          name: data.name
         });
         this.textInput._root.clear();
       }
@@ -55,7 +56,6 @@ class OTPpage extends Component {
     const {
       otp: { registering, message }
     } = this.props;
-    console.log(this.props.otp)
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -72,7 +72,11 @@ class OTPpage extends Component {
                     of our HR. Confirm the same, please ask HR for OTP password
                   </Text>
                 </CardItem>
-                <CardItem>{message ? <Text> {message}</Text> : null}</CardItem>
+                <CardItem>
+                  {message ? (
+                    <Text style={{ color: COLOR.Red }}> {message}</Text>
+                  ) : null}
+                </CardItem>
                 <Item style={styles.inputTextView}>
                   <Input
                     ref={input => (this.textInput = input)}

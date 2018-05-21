@@ -6,12 +6,14 @@ import {
   Text,
   Thumbnail,
   Card,
-  CardItem
+  CardItem,
+  Spinner
 } from "native-base";
 import { connect } from "react-redux";
 import { getQuestions } from "../actions";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
+import HorizontalLine from "../components/HorizontalLine";
 
 class Instructions extends Component {
   componentDidMount() {
@@ -30,13 +32,19 @@ class Instructions extends Component {
       )
     };
   };
+  handlePress = () => {
+    this.props.navigation.navigate("TestPage", {
+      ...this.props.questions,
+      ...this.props.navigation.state.params
+    });
+  };
   render() {
     const instructions = {
       ins:
         "The test consists of multiple sections, make sure to complete all sections.There is time limit of the test. A time counter will start as soon as the test gets started and test will automatically be submitted when the time limit is reached.Do not close the test all in between, if you do you will have to start from scratch. Test is given best in landscape mode. So change your mobile display to landscape. Do not open any other tabs in your browser, if you open a new tab it will get recorded."
     };
     const name = this.props.navigation.getParam("name");
-    console.log(name);
+    const { questions } = this.props;
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -44,15 +52,21 @@ class Instructions extends Component {
             <CardItem>
               <Text style={styles.headerText}>Instructions</Text>
             </CardItem>
+            <HorizontalLine />
             <CardItem>
               <Text style={styles.text}>{instructions.ins}</Text>
             </CardItem>
-            <CustomButton text="Continue" />
+            {questions !== null ? (
+              <CustomButton text="Continue" onPress={this.handlePress} />
+            ) : (
+              <Spinner color="#2196f3" />
+            )}
           </Card>
         </Content>
       </Container>
     );
   }
 }
+const mapStatetoProps = ({ questions }) => ({ questions });
 
-export default connect(null, { getQuestions })(Instructions);
+export default connect(mapStatetoProps, { getQuestions })(Instructions);
