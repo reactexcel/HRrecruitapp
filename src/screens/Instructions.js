@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image } from "react-native";
+import { Image, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -19,6 +19,12 @@ class Instructions extends Component {
   componentDidMount() {
     const fb_id = this.props.navigation.getParam("fb_id");
     this.props.getQuestions(fb_id);
+  }
+  componentWillReceiveProps(nxtprops){
+    console.log(nxtprops.questions.data.status);
+    if(nxtprops.questions.data.status == 1){
+      AsyncStorage.setItem('question', JSON.stringify({data:nxtprops.questions.data.data}));
+    }
   }
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
