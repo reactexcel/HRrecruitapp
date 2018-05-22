@@ -21,9 +21,8 @@ class Instructions extends Component {
     this.props.getQuestions(fb_id);
   }
   componentWillReceiveProps(nxtprops){
-    console.log(nxtprops.questions.data.status);
     if(nxtprops.questions.data.status == 1){
-      AsyncStorage.setItem('question', JSON.stringify({data:nxtprops.questions.data.data}));
+      AsyncStorage.setItem('question', JSON.stringify({data:nxtprops.questions.data}));
     }
   }
   static navigationOptions = ({ navigation }) => {

@@ -10,7 +10,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, NetInfo } from 'react-native';
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
@@ -23,7 +23,8 @@ class TestPage extends Component {
     super(props);
     this.state = {
       timer: null,
-      counter: props.navigation.state.params.data.timeForExam * 60 * 1000,
+      count:0,
+      counter: 60 * 60 * 1000,
       question:[],
     };
   }
@@ -32,10 +33,19 @@ class TestPage extends Component {
     this.setState({ timer });
     AsyncStorage.getItem('question', (err, result) => {
       if(result !== null ){
-        const question = JSON.parse(result)
-        this.setState({question:question.data})
+        const question = JSON.parse(result);
+        console.log(question)
+        this.setState({question:question.data,count:question.data.count})
       }
     });
+    NetInfo.isConnected.addEventListener('connectionChange', this.handleNetwork);
+  }
+  handleNetwork(isconnect){
+    console.log(isconnect);
+    //functinality for net connection at time of answering paper
+  }
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleNetwork);
   }
   componentWillUnmount() {
     clearInterval(this.state.timer);
@@ -83,8 +93,7 @@ class TestPage extends Component {
       callHelp: { calling, success }
     } = this.props;
 
-    const { data } = this.props.navigation.state.params;
-    console.log(data, "data");
+    const { count } = this.state;
 
     if (success !== undefined) {
       if (success === false) {
@@ -106,7 +115,7 @@ class TestPage extends Component {
                 </Text>
                 <Text style={styles.text}>
                   Questions Attempted : {"0/"}
-                  {data.count}{" "}
+                  {count}{" "}
                 </Text>
               </Col>
               <Col style={{ width: "25%", alignItems: "flex-end" }}>
