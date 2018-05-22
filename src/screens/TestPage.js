@@ -8,12 +8,14 @@ import {
   CardItem,
   Thumbnail,
   Button,
-  Spinner
+  Spinner,
+  Radio
 } from "native-base";
-import { AsyncStorage, NetInfo, FlatList } from "react-native";
+import { AsyncStorage, NetInfo, FlatList, View } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
+import HorizontalLine from "../components/HorizontalLine";
 import { callingHelp } from "../actions";
 import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
@@ -25,8 +27,10 @@ class TestPage extends Component {
       timer: null,
       count: 0,
       counter: 60 * 60 * 1000,
-      question: []
+      question: [],
+      isOffline: true
     };
+    this.handleNetwork = this.handleNetwork.bind(this);
   }
   componentDidMount() {
     let timer = setInterval(this.tick, 1000);
@@ -34,7 +38,6 @@ class TestPage extends Component {
     AsyncStorage.getItem("question", (err, result) => {
       if (result !== null) {
         const question = JSON.parse(result);
-        console.log(question);
         this.setState({ question: question.data, count: question.data.count });
       }
     });
@@ -46,6 +49,7 @@ class TestPage extends Component {
   handleNetwork(isconnect) {
     console.log(isconnect);
     //functinality for net connection at time of answering paper
+    this.setState({ isOffline: isconnect });
   }
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
@@ -99,8 +103,7 @@ class TestPage extends Component {
       callHelp: { calling, success }
     } = this.props;
 
-    const { count, question } = { ...this.state };
-    console.log(question);
+    const { count, question, isOffline } = { ...this.state };
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
@@ -108,79 +111,119 @@ class TestPage extends Component {
     }
     return (
       <Container style={styles.container}>
-        {/* {question.data != undefined? */}
-        <Content padder>
-          <Card style={styles.blockView}>
-            <CardItem>
-              <Text style={styles.headerText}> Test Questions </Text>
-            </CardItem>
-            <Row>
-              <Col style={{ width: "75%", alignItems: "flex-start" }}>
-                <Text style={styles.text}>
-                  Remaining Time :{" "}
-                  <Text style={{ color: COLOR.Red }}>{this.state.counter}</Text>
-                </Text>
-                <Text style={styles.text}>
-                  Questions Attempted : {"0/"}
-                  {count}{" "}
-                </Text>
-              </Col>
-              <Col style={{ width: "25%", alignItems: "flex-end" }}>
-                {calling ? (
-                  <Spinner color="#2196f3" />
-                ) : (
-                  <Button onPress={this.handleCallHelp} info>
-                    <Text style={{ fontSize: 10, textAlign: "center" }}>
-                      Call for Help
+        {isOffline ? (
+          <Content padder>
+            <Card style={styles.blockView}>
+              <CardItem>
+                <Text style={styles.headerText}> Test Questions </Text>
+              </CardItem>
+              <Row>
+                <Col style={{ width: "75%", alignItems: "flex-start" }}>
+                  <Text style={styles.text}>
+                    Remaining Time :{" "}
+                    <Text style={{ color: COLOR.Red }}>
+                      {this.state.counter}
                     </Text>
-                  </Button>
-                )}
-              </Col>
-            </Row>
-          </Card>
-          <Card>
-            <CardItem>
-              <FlatList
-                data={question.data}
-                renderItem={({ item }) => (
-                  <Content>
-                    {/* <Text>{item.group_name}</Text> */}
-                    <FlatList
-                      data={item.questions}
-                      ListHeaderComponent={() => (
-                        // <Card>
-                        //   <CardItem>
-                            <Text style={styles.headerText}>
-                              {item.group_name}
-                            </Text>
-                        //   </CardItem>
-                        // </Card>
-                      )}
-                      renderItem={({ item, index }) => (
-                        <Content>
-                          <Text>
-                            Ques.{index + 1} {item.question}
-                          </Text>
-                          <FlatList
-                            data={item.options}
-                            renderItem={({ item, index }) => (
-                              <Text>
-                                {index + 1}. {item.option}
+                  </Text>
+                  <Text style={styles.text}>
+                    Questions Attempted : {"0/"}
+                    {count}{" "}
+                  </Text>
+                </Col>
+                <Col style={{ width: "25%", alignItems: "flex-end" }}>
+                  {calling ? (
+                    <Spinner color="#2196f3" />
+                  ) : (
+                    <Button onPress={this.handleCallHelp} info>
+                      <Text style={{ fontSize: 10, textAlign: "center" }}>
+                        Call for Help
+                      </Text>
+                    </Button>
+                  )}
+                </Col>
+              </Row>
+            </Card>
+            <Card>
+              <Content style={{ backgroundColor: "white" }}>
+                <CardItem>
+                  <FlatList
+                    data={question.data}
+                    renderItem={({ item }) => (
+                      <Content>
+                        <FlatList
+                          data={item.questions}
+                          ListHeaderComponent={() => (
+                            <Card style={styles.blockView}>
+                              <CardItem>
+                                <Text style={styles.headerText}>
+                                  {item.group_name}
+                                </Text>
+                              </CardItem>
+                            </Card>
+                          )}
+                          renderItem={({ item, index }) => (
+                            <Content padder>
+                              <Text style={{ fontSize: 16 }}>
+                                {index + 1}. {item.question}
                               </Text>
-                            )}
-                          />
-                        </Content>
-                      )}
-                    />
-                  </Content>
-                )}
-              />
-            </CardItem>
-          </Card>
-        </Content>
-        {/* :
-          null
-        } */}
+                              {item.description ? (
+                                <View
+                                  style={{
+                                    borderRadius: 5,
+                                    flex: 1,
+                                    padding: 10,
+                                    backgroundColor: COLOR.LightGrey,
+                                    elevation: 1,
+                                    marginVertical: 5
+                                  }}
+                                >
+                                  <Text style={{ opacity: 0.8 }}>
+                                    {item.description}
+                                  </Text>
+                                </View>
+                              ) : null}
+                              <FlatList
+                                data={item.options}
+                                renderItem={({ item, index }) => (
+                                  <Content padder>
+                                    <Row>
+                                      <Col style = {{width:"10%"}}>
+                                        <Radio />
+                                      </Col>
+                                      <Col>
+                                        <Text>{item.option}</Text>
+                                      </Col>
+                                    </Row>
+                                  </Content>
+                                )}
+                              />
+                              <View style={{ paddingTop: 15 }}>
+                                <HorizontalLine />
+                              </View>
+                            </Content>
+                          )}
+                        />
+                      </Content>
+                    )}
+                  />
+                </CardItem>
+              </Content>
+            </Card>
+          </Content>
+        ) : (
+          <Content padder>
+            <Card style={styles.blockView}>
+              <CardItem>
+                <Text style={styles.headerText}>Start Test</Text>
+              </CardItem>
+              <Row>
+                <Text>
+                  To Start Test Please turn off you Internet connection
+                </Text>
+              </Row>
+            </Card>
+          </Content>
+        )}
       </Container>
     );
   }
