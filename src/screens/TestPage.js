@@ -10,7 +10,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { AsyncStorage, NetInfo } from 'react-native';
+import { AsyncStorage, NetInfo, FlatList } from 'react-native';
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
@@ -93,8 +93,8 @@ class TestPage extends Component {
       callHelp: { calling, success }
     } = this.props;
 
-    const { count } = this.state;
-
+    const { count, question } = {...this.state};
+    console.log(question);
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
@@ -102,6 +102,7 @@ class TestPage extends Component {
     }
     return (
       <Container style={styles.container}>
+        {/* {question.data != undefined? */}
         <Content padder>
           <Card style={styles.blockView}>
             <CardItem>
@@ -131,7 +132,39 @@ class TestPage extends Component {
               </Col>
             </Row>
           </Card>
+          <Card>
+            <CardItem>
+              <FlatList
+              data={question.data}
+              renderItem={({ item }) => (
+                <Content>
+                    <Text>{item.group_name}</Text>
+                    <FlatList
+                      data={item.questions}
+                      renderItem={({ item,index }) => (
+                        <Content>
+                          <Text>Ques.{index+1}{" "}{item.question}</Text>
+                          <FlatList
+                            data={item.options}
+                            renderItem={({ item, index }) => (
+                              <Text>
+                                {index + 1}.{" "}
+                                {item.option}
+                              </Text>
+                            )}
+                            />
+                        </Content>
+                      )}
+                      />
+                  </Content>
+                )}
+                />
+            </CardItem>
+          </Card>
         </Content>
+        {/* :
+          null
+        } */}
       </Container>
     );
   }
