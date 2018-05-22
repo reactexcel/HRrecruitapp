@@ -10,7 +10,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { AsyncStorage, NetInfo, FlatList } from 'react-native';
+import { AsyncStorage, NetInfo, FlatList } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
@@ -23,29 +23,35 @@ class TestPage extends Component {
     super(props);
     this.state = {
       timer: null,
-      count:0,
+      count: 0,
       counter: 60 * 60 * 1000,
-      question:[],
+      question: []
     };
   }
   componentDidMount() {
     let timer = setInterval(this.tick, 1000);
     this.setState({ timer });
-    AsyncStorage.getItem('question', (err, result) => {
-      if(result !== null ){
+    AsyncStorage.getItem("question", (err, result) => {
+      if (result !== null) {
         const question = JSON.parse(result);
-        console.log(question)
-        this.setState({question:question.data,count:question.data.count})
+        console.log(question);
+        this.setState({ question: question.data, count: question.data.count });
       }
     });
-    NetInfo.isConnected.addEventListener('connectionChange', this.handleNetwork);
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
   }
-  handleNetwork(isconnect){
+  handleNetwork(isconnect) {
     console.log(isconnect);
     //functinality for net connection at time of answering paper
   }
   componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener('connectionChange', this.handleNetwork);
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
   }
   componentWillUnmount() {
     clearInterval(this.state.timer);
@@ -93,7 +99,7 @@ class TestPage extends Component {
       callHelp: { calling, success }
     } = this.props;
 
-    const { count, question } = {...this.state};
+    const { count, question } = { ...this.state };
     console.log(question);
     if (success !== undefined) {
       if (success === false) {
@@ -135,30 +141,40 @@ class TestPage extends Component {
           <Card>
             <CardItem>
               <FlatList
-              data={question.data}
-              renderItem={({ item }) => (
-                <Content>
-                    <Text>{item.group_name}</Text>
+                data={question.data}
+                renderItem={({ item }) => (
+                  <Content>
+                    {/* <Text>{item.group_name}</Text> */}
                     <FlatList
                       data={item.questions}
-                      renderItem={({ item,index }) => (
+                      ListHeaderComponent={() => (
+                        // <Card>
+                        //   <CardItem>
+                            <Text style={styles.headerText}>
+                              {item.group_name}
+                            </Text>
+                        //   </CardItem>
+                        // </Card>
+                      )}
+                      renderItem={({ item, index }) => (
                         <Content>
-                          <Text>Ques.{index+1}{" "}{item.question}</Text>
+                          <Text>
+                            Ques.{index + 1} {item.question}
+                          </Text>
                           <FlatList
                             data={item.options}
                             renderItem={({ item, index }) => (
                               <Text>
-                                {index + 1}.{" "}
-                                {item.option}
+                                {index + 1}. {item.option}
                               </Text>
                             )}
-                            />
+                          />
                         </Content>
                       )}
-                      />
+                    />
                   </Content>
                 )}
-                />
+              />
             </CardItem>
           </Card>
         </Content>
@@ -169,9 +185,8 @@ class TestPage extends Component {
     );
   }
 }
-const mapStateToProps = state => ({ 
-  callHelp : state.callHelp ,
-  questions : state.questions,
+const mapStateToProps = state => ({
+  callHelp: state.callHelp,
+  questions: state.questions
 });
-
 export default connect(mapStateToProps, { callingHelp })(TestPage);
