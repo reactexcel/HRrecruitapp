@@ -10,6 +10,7 @@ import {
   Button,
   Spinner
 } from "native-base";
+import { FlatList } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
@@ -22,7 +23,8 @@ class TestPage extends Component {
     super(props);
     this.state = {
       timer: null,
-      counter: props.navigation.state.params.data.timeForExam * 60 * 1000
+      counter: props.navigation.state.params.data.timeForExam * 60 * 1000,
+      questions: []
     };
   }
   componentDidMount() {
@@ -76,7 +78,7 @@ class TestPage extends Component {
     } = this.props;
 
     const { data } = this.props.navigation.state.params;
-    console.log(data, "data");
+    console.log(data.data, "data");
 
     if (success !== undefined) {
       if (success === false) {
@@ -113,13 +115,35 @@ class TestPage extends Component {
                 )}
               </Col>
             </Row>
-            {/* <CardItem>
-            {
-              data.data.map(grp => {
-                <Text>{grp.group_name}</Text>
-              })
-            }
-            </CardItem> */}
+          </Card>
+          <Card>
+            <CardItem>
+              <FlatList
+                data={data.data}
+                renderItem={({ item }) => (
+                  <Content>
+                    <Text>{item.group_name}</Text>
+                    <FlatList
+                      data={item.questions}
+                      renderItem={({ item,index }) => (
+                        <Content>
+                          <Text>Ques.{index+1}{" "}{item.question}</Text>
+                          <FlatList
+                            data={item.options}
+                            renderItem={({ item, index }) => (
+                              <Text>
+                                {index + 1}.{" "}
+                                {item.option}
+                              </Text>
+                            )}
+                          />
+                        </Content>
+                      )}
+                    />
+                  </Content>
+                )}
+              />
+            </CardItem>
           </Card>
         </Content>
       </Container>
