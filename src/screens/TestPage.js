@@ -10,7 +10,7 @@ import {
   Button,
   Spinner
 } from "native-base";
-import { AsyncStorage, NetInfo, FlatList } from 'react-native';
+import { AsyncStorage, NetInfo, FlatList, View } from 'react-native';
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
@@ -26,7 +26,9 @@ class TestPage extends Component {
       count:0,
       counter: 60 * 60 * 1000,
       question:[],
+      isOffline:true,
     };
+    this.handleNetwork=this.handleNetwork.bind(this);
   }
   componentDidMount() {
     let timer = setInterval(this.tick, 1000);
@@ -34,7 +36,6 @@ class TestPage extends Component {
     AsyncStorage.getItem('question', (err, result) => {
       if(result !== null ){
         const question = JSON.parse(result);
-        console.log(question)
         this.setState({question:question.data,count:question.data.count})
       }
     });
@@ -43,6 +44,7 @@ class TestPage extends Component {
   handleNetwork(isconnect){
     console.log(isconnect);
     //functinality for net connection at time of answering paper
+    this.setState({isOffline:isconnect});
   }
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener('connectionChange', this.handleNetwork);
@@ -93,8 +95,7 @@ class TestPage extends Component {
       callHelp: { calling, success }
     } = this.props;
 
-    const { count, question } = {...this.state};
-    console.log(question);
+    const { count, question, isOffline } = {...this.state};
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
@@ -102,7 +103,7 @@ class TestPage extends Component {
     }
     return (
       <Container style={styles.container}>
-        {/* {question.data != undefined? */}
+        {!isOffline ?
         <Content padder>
           <Card style={styles.blockView}>
             <CardItem>
@@ -132,39 +133,50 @@ class TestPage extends Component {
               </Col>
             </Row>
           </Card>
-          <Card>
-            <CardItem>
-              <FlatList
-              data={question.data}
-              renderItem={({ item }) => (
-                <Content>
-                    <Text>{item.group_name}</Text>
-                    <FlatList
-                      data={item.questions}
-                      renderItem={({ item,index }) => (
-                        <Content>
-                          <Text>Ques.{index+1}{" "}{item.question}</Text>
-                          <FlatList
-                            data={item.options}
-                            renderItem={({ item, index }) => (
-                              <Text>
-                                {index + 1}.{" "}
-                                {item.option}
-                              </Text>
-                            )}
-                            />
-                        </Content>
-                      )}
-                      />
-                  </Content>
-                )}
-                />
-            </CardItem>
+          <Card  >
+            <Content style={{backgroundColor:'white'}} >
+              <CardItem>
+                <FlatList
+                data={question.data}
+                renderItem={({ item }) => (
+                  <Content>
+                      <Text>{item.group_name}</Text>
+                      <FlatList
+                        data={item.questions}
+                        renderItem={({ item,index }) => (
+                          <Content>
+                            <Text>Ques.{index+1}{" "}{item.question}</Text>
+                            <FlatList
+                              data={item.options}
+                              renderItem={({ item, index }) => (
+                                <Text>
+                                  {index + 1}.{" "}
+                                  {item.option}
+                                </Text>
+                              )}
+                              />
+                          </Content>
+                        )}
+                        />
+                    </Content>
+                  )}
+                  />
+              </CardItem>
+            </Content>              
           </Card>
         </Content>
-        {/* :
-          null
-        } */}
+         :
+         <Content padder>
+          <Card style={styles.blockView} >
+            <CardItem >
+              <Text style={styles.headerText} >Start Test</Text>
+            </CardItem>
+            <Row>
+                <Text>To Start Test Please turn off you Internet connection</Text>
+            </Row>
+          </Card>
+          </Content>
+        } 
       </Container>
     );
   }
