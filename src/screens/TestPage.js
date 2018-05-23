@@ -32,7 +32,8 @@ class TestPage extends Component {
       solution:[],
       isSubmit:false,
       isLoading:false,
-      isOffline: true
+      isOffline: true,
+      show: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
@@ -51,9 +52,12 @@ class TestPage extends Component {
     );
   }
   handleNetwork(isconnect) {
-    console.log(isconnect);
+    console.log(isconnect, "handleNetwork");
     //functinality for net connection at time of answering paper
-    this.setState({ isOffline: isconnect });
+    this.setState({ isOnline: isconnect });
+    this.state.isOnline
+      ? this.setState({ show: false })
+      : this.setState({ show: this.state.show });
   }
   componentWillUnmount() {
     clearInterval(this.state.timer);
@@ -61,7 +65,9 @@ class TestPage extends Component {
       "connectionChange",
       this.handleNetwork
     );
+    clearInterval(this.state.timer);
   }
+
   tick = () => {
     this.setState({ counter: this.state.counter - 1000 });
     // let now = new Date().getTime();
@@ -125,13 +131,16 @@ class TestPage extends Component {
       });
       AsyncStorage.setItem('solution',JSON.stringify({solution:solution}));
   }
+  handleStartTest = () => {
+    this.setState({ show: true });
+  };
 
   render() {
     const {
       callHelp: { calling, success }
     } = this.props;
 
-    const { count, question, isOffline } = { ...this.state };
+    const { count, question, isOffline, show } = { ...this.state };
     let solution = this.state.solution;
     console.log(solution.length);
     if (success !== undefined) {
@@ -141,7 +150,7 @@ class TestPage extends Component {
     }
     return (
       <Container style={styles.container}>
-        {isOffline ? (
+        {show ? (
           <Content padder>
             <Card style={styles.blockView}>
               <CardItem>
@@ -248,11 +257,22 @@ class TestPage extends Component {
               <CardItem>
                 <Text style={styles.headerText}>Start Test</Text>
               </CardItem>
-              <Row>
-                <Text>
-                  To Start Test Please turn off you Internet connection
+              <HorizontalLine />
+              <CardItem>
+                <Text style={styles.text}>
+                  To Start Test, please turn off your Internet connection.
                 </Text>
-              </Row>
+              </CardItem>
+              {isOnline ? (
+                <Button disabled block>
+                  <Text>Click Here</Text>
+                </Button>
+              ) : (
+                <CustomButton
+                  text="Click Here"
+                  onPress={this.handleStartTest}
+                />
+              )}
             </Card>
           </Content>
         )}
