@@ -34,13 +34,12 @@ class TestPage extends Component {
       isSubmit: false,
       isLoading: false,
       isOnline: true,
-      show: false
+      show: false,
+      selected: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
   componentDidMount() {
-    // let timer = setInterval(this.tick, 1000);
-    // this.setState({ timer });
     AsyncStorage.getItem("question", (err, result) => {
       if (result !== null) {
         const question = JSON.parse(result);
@@ -53,12 +52,9 @@ class TestPage extends Component {
     );
   }
   handleNetwork(isconnect) {
-    console.log(isconnect, "handleNetwork");
     //functinality for net connection at time of answering paper
     this.setState({ isOnline: isconnect });
-    this.state.isOnline
-      ? this.setState({ show: false })
-      : this.setState({ show: this.state.show });
+    // this.state.isOnline ? this.setState({ show: false }) : null;
   }
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
@@ -111,7 +107,7 @@ class TestPage extends Component {
       solution.push(answer);
     }
     this.setState({
-      solution
+      solution: _.uniqBy(solution, solution.Q_id)
     });
     AsyncStorage.setItem("solution", JSON.stringify({ solution: solution }));
   }
@@ -126,16 +122,16 @@ class TestPage extends Component {
 
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
-    console.log(solution.length);
+    // console.log(solution.length, "length");
+    console.log(this.state.selected);
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
       }
     }
-    console.log(this.props,'props')
     return (
       <Container style={styles.container}>
-        {show ? (
+        {!show ? (
           <Content padder>
             <Card style={styles.blockView}>
               <CardItem>
@@ -149,8 +145,8 @@ class TestPage extends Component {
                       {/* {this.state.counter} */}
                       <TimerCountdown
                         initialSecondsRemaining={this.state.counter}
-                        onTick={() => console.log("tick")}
-                        onTimeElapsed={() => console.log("complete")}
+                        onTick={() => {}}
+                        onTimeElapsed={() => {}}
                         allowFontScaling={true}
                         style={{ fontSize: 20 }}
                       />
@@ -214,7 +210,7 @@ class TestPage extends Component {
                                 </View>
                               ) : null}
                               {_.map(item.options, (value, index) => {
-                                console.log(solution);
+                                console.log(solution, "solution");
                                 let isSolution =
                                   solution[0] != undefined
                                     ? _.findIndex(solution, value => {
@@ -223,18 +219,21 @@ class TestPage extends Component {
                                         );
                                       })
                                     : null;
-                                console.log(isSolution);
+                                console.log(isSolution, "isSol");
                                 return (
                                   <Content key={index} padder>
                                     <Row>
                                       <Col style={{ width: "10%" }}>
                                         <Radio
-                                          onPress={() =>
+                                          onPress={() => {
+                                            this.setState({ selected: true });
+
                                             this.handleSubmit(
                                               item._id,
                                               value.opt_id
-                                            )
-                                          }
+                                            );
+                                          }}
+                                          selected={this.state.selected}
                                         />
                                       </Col>
                                       <Col>
