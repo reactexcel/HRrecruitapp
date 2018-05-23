@@ -11,7 +11,7 @@ import {
   Spinner,
   Radio
 } from "native-base";
-import * as _ from 'lodash';
+import * as _ from "lodash";
 import { AsyncStorage, NetInfo, FlatList, View } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
@@ -20,6 +20,7 @@ import HorizontalLine from "../components/HorizontalLine";
 import { callingHelp } from "../actions";
 import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
+import TimerCountdown from "react-native-timer-countdown";
 
 class TestPage extends Component {
   constructor(props) {
@@ -27,19 +28,19 @@ class TestPage extends Component {
     this.state = {
       timer: null,
       count: 0,
-      counter: 60 * 60 * 1000,
+      counter: props.navigation.state.params.data.timeForExam * 60 * 1000,
       question: [],
-      solution:[],
-      isSubmit:false,
-      isLoading:false,
-      isOffline: true,
+      solution: [],
+      isSubmit: false,
+      isLoading: false,
+      isOnline: true,
       show: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
   componentDidMount() {
-    let timer = setInterval(this.tick, 1000);
-    this.setState({ timer });
+    // let timer = setInterval(this.tick, 1000);
+    // this.setState({ timer });
     AsyncStorage.getItem("question", (err, result) => {
       if (result !== null) {
         const question = JSON.parse(result);
@@ -60,28 +61,11 @@ class TestPage extends Component {
       : this.setState({ show: this.state.show });
   }
   componentWillUnmount() {
-    clearInterval(this.state.timer);
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
       this.handleNetwork
     );
-    clearInterval(this.state.timer);
   }
-
-  tick = () => {
-    this.setState({ counter: this.state.counter - 1000 });
-    // let now = new Date().getTime();
-
-    // // Find the distance between now an the count down date
-    // let distance = countDownDate - now;
-
-    // // Time calculations for days, hours, minutes and seconds
-    // let hours = Math.floor(
-    //   (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-    // );
-    // let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    // let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-  };
 
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
@@ -106,30 +90,30 @@ class TestPage extends Component {
     }
   };
 
-  handleSubmit (question,option) {
-      const solution = this.state.solution;
-      let answer;
-      if(solution[0] != undefined){
-        let found = false;  
-       let solutions =  _.map(solution,(value,index)=>{
-        if(value.Q_id == question){
-            value.ans_id = option;
-            found =true;
-          } else if( !found ) {
-             answer = {Q_id : question ,ans_id : option };
-          }
-        });
-      } else {
-        answer = {Q_id : question ,ans_id : option };
-      }
-
-      if(answer != undefined){
-        solution.push(answer)
-      }
-      this.setState({
-        solution,
+  handleSubmit(question, option) {
+    const solution = this.state.solution;
+    let answer;
+    if (solution[0] != undefined) {
+      let found = false;
+      let solutions = _.map(solution, (value, index) => {
+        if (value.Q_id == question) {
+          value.ans_id = option;
+          found = true;
+        } else if (!found) {
+          answer = { Q_id: question, ans_id: option };
+        }
       });
-      AsyncStorage.setItem('solution',JSON.stringify({solution:solution}));
+    } else {
+      answer = { Q_id: question, ans_id: option };
+    }
+
+    if (answer != undefined) {
+      solution.push(answer);
+    }
+    this.setState({
+      solution
+    });
+    AsyncStorage.setItem("solution", JSON.stringify({ solution: solution }));
   }
   handleStartTest = () => {
     this.setState({ show: true });
@@ -140,7 +124,7 @@ class TestPage extends Component {
       callHelp: { calling, success }
     } = this.props;
 
-    const { count, question, isOffline, show } = { ...this.state };
+    const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
     console.log(solution.length);
     if (success !== undefined) {
@@ -148,6 +132,7 @@ class TestPage extends Component {
         notify("Something went wrong");
       }
     }
+    console.log(this.props,'props')
     return (
       <Container style={styles.container}>
         {show ? (
@@ -161,7 +146,14 @@ class TestPage extends Component {
                   <Text style={styles.text}>
                     Remaining Time :{" "}
                     <Text style={{ color: COLOR.Red }}>
-                      {this.state.counter}
+                      {/* {this.state.counter} */}
+                      <TimerCountdown
+                        initialSecondsRemaining={this.state.counter}
+                        onTick={() => console.log("tick")}
+                        onTimeElapsed={() => console.log("complete")}
+                        allowFontScaling={true}
+                        style={{ fontSize: 20 }}
+                      />
                     </Text>
                   </Text>
                   <Text style={styles.text}>
@@ -187,8 +179,8 @@ class TestPage extends Component {
                 <CardItem>
                   <FlatList
                     data={question.data}
-                    renderItem={({ item ,index }) => (
-                      <Content key={index} >
+                    renderItem={({ item, index }) => (
+                      <Content key={index}>
                         <FlatList
                           data={item.questions}
                           ListHeaderComponent={() => (
@@ -221,15 +213,29 @@ class TestPage extends Component {
                                   </Text>
                                 </View>
                               ) : null}
-                              {_.map(item.options,(value, index)=>{
+                              {_.map(item.options, (value, index) => {
                                 console.log(solution);
-                                let isSolution = solution[0]!=undefined ? _.findIndex(solution,(value)=>{ return value.questionId == index.question }) :null;
+                                let isSolution =
+                                  solution[0] != undefined
+                                    ? _.findIndex(solution, value => {
+                                        return (
+                                          value.questionId == index.question
+                                        );
+                                      })
+                                    : null;
                                 console.log(isSolution);
-                               return (
+                                return (
                                   <Content key={index} padder>
                                     <Row>
-                                      <Col style = {{width:"10%"}}>
-                                        <Radio onPress={()=> this.handleSubmit(item._id,value.opt_id) }  />
+                                      <Col style={{ width: "10%" }}>
+                                        <Radio
+                                          onPress={() =>
+                                            this.handleSubmit(
+                                              item._id,
+                                              value.opt_id
+                                            )
+                                          }
+                                        />
                                       </Col>
                                       <Col>
                                         <Text>{value.option}</Text>
