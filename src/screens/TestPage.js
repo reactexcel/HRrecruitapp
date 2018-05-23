@@ -11,6 +11,7 @@ import {
   Spinner,
   Radio
 } from "native-base";
+import * as _ from 'lodash';
 import { AsyncStorage, NetInfo, FlatList, View } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
@@ -28,6 +29,9 @@ class TestPage extends Component {
       count: 0,
       counter: 60 * 60 * 1000,
       question: [],
+      solution:[],
+      isSubmit:false,
+      isLoading:false,
       isOffline: true
     };
     this.handleNetwork = this.handleNetwork.bind(this);
@@ -52,13 +56,11 @@ class TestPage extends Component {
     this.setState({ isOffline: isconnect });
   }
   componentWillUnmount() {
+    clearInterval(this.state.timer);
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
       this.handleNetwork
     );
-  }
-  componentWillUnmount() {
-    clearInterval(this.state.timer);
   }
   tick = () => {
     this.setState({ counter: this.state.counter - 1000 });
@@ -98,12 +100,40 @@ class TestPage extends Component {
     }
   };
 
+  handleSubmit (question,option) {
+      const solution = this.state.solution;
+      let answer;
+      if(solution[0] != undefined){
+        let found = false;  
+       let solutions =  _.map(solution,(value,index)=>{
+        if(value.Q_id == question){
+            value.ans_id = option;
+            found =true;
+          } else if( !found ) {
+             answer = {Q_id : question ,ans_id : option };
+          }
+        });
+      } else {
+        answer = {Q_id : question ,ans_id : option };
+      }
+
+      if(answer != undefined){
+        solution.push(answer)
+      }
+      this.setState({
+        solution,
+      });
+      AsyncStorage.setItem('solution',JSON.stringify({solution:solution}));
+  }
+
   render() {
     const {
       callHelp: { calling, success }
     } = this.props;
 
     const { count, question, isOffline } = { ...this.state };
+    let solution = this.state.solution;
+    console.log(solution.length);
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
@@ -126,7 +156,7 @@ class TestPage extends Component {
                     </Text>
                   </Text>
                   <Text style={styles.text}>
-                    Questions Attempted : {"0/"}
+                    Questions Attempted : {`${solution.length}/`}
                     {count}{" "}
                   </Text>
                 </Col>
@@ -148,8 +178,8 @@ class TestPage extends Component {
                 <CardItem>
                   <FlatList
                     data={question.data}
-                    renderItem={({ item }) => (
-                      <Content>
+                    renderItem={({ item ,index }) => (
+                      <Content key={index} >
                         <FlatList
                           data={item.questions}
                           ListHeaderComponent={() => (
@@ -162,7 +192,7 @@ class TestPage extends Component {
                             </Card>
                           )}
                           renderItem={({ item, index }) => (
-                            <Content padder>
+                            <Content key={index} padder>
                               <Text style={{ fontSize: 16 }}>
                                 {index + 1}. {item.question}
                               </Text>
@@ -182,21 +212,23 @@ class TestPage extends Component {
                                   </Text>
                                 </View>
                               ) : null}
-                              <FlatList
-                                data={item.options}
-                                renderItem={({ item, index }) => (
-                                  <Content padder>
+                              {_.map(item.options,(value, index)=>{
+                                console.log(solution);
+                                let isSolution = solution[0]!=undefined ? _.findIndex(solution,(value)=>{ return value.questionId == index.question }) :null;
+                                console.log(isSolution);
+                               return (
+                                  <Content key={index} padder>
                                     <Row>
                                       <Col style = {{width:"10%"}}>
-                                        <Radio />
+                                        <Radio onPress={()=> this.handleSubmit(item._id,value.opt_id) }  />
                                       </Col>
                                       <Col>
-                                        <Text>{item.option}</Text>
+                                        <Text>{value.option}</Text>
                                       </Col>
                                     </Row>
                                   </Content>
-                                )}
-                              />
+                                );
+                              })}
                               <View style={{ paddingTop: 15 }}>
                                 <HorizontalLine />
                               </View>
