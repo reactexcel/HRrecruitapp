@@ -28,7 +28,6 @@ class TestPage extends Component {
     this.state = {
       timer: null,
       count: 0,
-      counter: props.navigation.state.params.data.timeForExam * 60 * 1000,
       question: [],
       solution: [],
       isSubmit: false,
@@ -66,12 +65,28 @@ class TestPage extends Component {
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
+    const counter = navigation.state.params.data.timeForExam * 60 * 1000;
     return {
       title: name,
       headerLeft: (
         <Content padder>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
+      ),
+      headerRight: (
+        <Text style={styles.text}>
+          Remaining Time :{" "}
+          <Text style={{ color: COLOR.Red }}>
+            {/* {this.state.counter} */}
+            <TimerCountdown
+              initialSecondsRemaining={counter}
+              onTick={() => {}}
+              onTimeElapsed={() => {}}
+              allowFontScaling={true}
+              style={{ fontSize: 15 }}
+            />
+          </Text>
+        </Text>
       )
     };
   };
@@ -122,8 +137,7 @@ class TestPage extends Component {
 
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
-    // console.log(solution.length, "length");
-    console.log(this.state.selected);
+
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
@@ -139,19 +153,6 @@ class TestPage extends Component {
               </CardItem>
               <Row>
                 <Col style={{ width: "75%", alignItems: "flex-start" }}>
-                  <Text style={styles.text}>
-                    Remaining Time :{" "}
-                    <Text style={{ color: COLOR.Red }}>
-                      {/* {this.state.counter} */}
-                      <TimerCountdown
-                        initialSecondsRemaining={this.state.counter}
-                        onTick={() => {}}
-                        onTimeElapsed={() => {}}
-                        allowFontScaling={true}
-                        style={{ fontSize: 20 }}
-                      />
-                    </Text>
-                  </Text>
                   <Text style={styles.text}>
                     Questions Attempted : {`${solution.length}/`}
                     {count}{" "}
