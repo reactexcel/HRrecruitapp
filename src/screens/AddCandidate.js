@@ -85,7 +85,6 @@ class AddCandidate extends Component {
   }
 
   onSubmit = values => {
-    console.log(values);
     this.props.addCandidate(values);
   };
 

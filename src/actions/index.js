@@ -13,13 +13,15 @@ import {
 } from "./types";
 import { API_URL } from "../config/dev";
 
+const _axios = () => axios.create({ baseURL: API_URL });
+
 // Action for Signing Up with email to take interview test paper
 export const signUp = email => async dispatch => {
   const profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
   const appliedEmail = email;
   dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_REQUEST });
   try {
-    const res = await axios.post(`${API_URL}signup_login_fb`, {
+    const res = await _axios().post("signup_login_fb", {
       email,
       appliedEmail,
       profile_pic
@@ -35,7 +37,7 @@ export const verifyingOTP = (otp, fb_id) => async dispatch => {
   const examToken = otp;
   dispatch({ type: OTP_REQUEST });
   try {
-    const res = await axios.post(`${API_URL}verifyExamToken`, {
+    const res = await _axios().post("verifyExamToken", {
       fb_id,
       examToken
     });
@@ -51,15 +53,12 @@ export const addCandidate = data => async dispatch => {
   for (let key in data) {
     formData.append(key, data[key]);
   }
-  const res = await axios.post(`${API_URL}addNewCandidate`,
-  {
+  const res = await _axios().post("addNewCandidate", {
     headers: {
       "Content-Type": "multipart/form-data"
     },
     body: formData
-  }
-);
-  console.log(";woking");
+  });
   console.log(res);
   dispatch({ type: ADD_CANDIDATE, payload: res });
 };
@@ -67,7 +66,7 @@ export const addCandidate = data => async dispatch => {
 //Action for getting questions for candidate
 export const getQuestions = fb_id => async dispatch => {
   try {
-    const res = await axios.get(`${API_URL}getQuestinsForCandidate/${fb_id}`);
+    const res = await _axios().get(`getQuestinsForCandidate/${fb_id}`);
     dispatch({ type: QUESTIONS_SUCCESS, payload: res });
   } catch (err) {
     console.log(err);
@@ -80,12 +79,29 @@ export const getQuestions = fb_id => async dispatch => {
 export const callingHelp = (accessToken, fb_id) => async dispatch => {
   dispatch({ type: CALL_HELP_REQUEST });
   try {
-    const res = await axios.post(
-      `${API_URL}askHrForHelp?accessToken=${accessToken}`,
-      {fb_id}
-    );
+    const res = await _axios().post("askHrForHelp?accessToken=${accessToken}", {
+      fb_id
+    });
     dispatch({ type: CALL_HELP_SUCCESS, payload: res });
   } catch (err) {
     dispatch({ type: CALL_HELP_FAILURE });
   }
+};
+
+// Action for submitting Test
+export const submitTest = (
+  answers,
+  fb_id,
+  job_profile,
+  questionIds,
+  taken_time_minutes
+) => async dispatch => {
+  const res = await _axios().post("submitExam", {
+    answers,
+    fb_id,
+    job_profile,
+    questionIds,
+    taken_time_minutes
+  });
+  console.log(res)
 };

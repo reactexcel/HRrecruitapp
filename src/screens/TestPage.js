@@ -17,7 +17,7 @@ import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
-import { callingHelp } from "../actions";
+import { callingHelp, submitTest } from "../actions";
 import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
@@ -26,7 +26,6 @@ class TestPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      timer: null,
       count: 0,
       question: [],
       solution: [],
@@ -77,7 +76,6 @@ class TestPage extends Component {
         <Text style={styles.text}>
           Remaining Time :{" "}
           <Text style={{ color: COLOR.Red }}>
-            {/* {this.state.counter} */}
             <TimerCountdown
               initialSecondsRemaining={counter}
               onTick={() => {}}
@@ -121,11 +119,43 @@ class TestPage extends Component {
     if (answer != undefined) {
       solution.push(answer);
     }
+    const uniqSolution = _.uniqWith(solution, _.isEqual);
     this.setState({
-      solution: _.uniqBy(solution, solution.Q_id)
+      solution: uniqSolution
     });
-    AsyncStorage.setItem("solution", JSON.stringify({ solution: solution }));
+    AsyncStorage.setItem(
+      "solution",
+      JSON.stringify({ solution: uniqSolution })
+    );
   }
+
+  handleTestSubmit = async () => {
+    const answers = await AsyncStorage.getItem("solution", (err, result) => {
+      if (result !== null) {
+        const ans = JSON.parse(result);
+        console.log(ans, "answers");
+        return ans.solution;
+      }
+    });
+    const { params } = this.props.navigation.state;
+    const fb_id = params.fb_id;
+    const job_profile = params.data.job_profile;
+    const questionIds = [];
+    _.forEach(params.data.data, value => {
+      _.forEach(value.questions, value => {
+        questionIds.push(value._id);
+      });
+    });
+    const taken_time_minutes = 10;
+    this.props.submitTest(
+      this.state.solution,
+      fb_id,
+      job_profile,
+      questionIds,
+      taken_time_minutes
+    );
+  };
+
   handleStartTest = () => {
     this.setState({ show: true });
   };
@@ -137,6 +167,7 @@ class TestPage extends Component {
 
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
+    console.log(this.props.navigation.state.params, "params");
 
     if (success !== undefined) {
       if (success === false) {
@@ -160,7 +191,11 @@ class TestPage extends Component {
                 </Col>
                 <Col style={{ width: "25%", alignItems: "flex-end" }}>
                   {calling ? (
-                    <Spinner color="#2196f3" />
+                    <Button disabled>
+                      <Text style={{ fontSize: 10, textAlign: "center" }}>
+                        Call for Help
+                      </Text>
+                    </Button>
                   ) : (
                     <Button onPress={this.handleCallHelp} info>
                       <Text style={{ fontSize: 10, textAlign: "center" }}>
@@ -211,7 +246,6 @@ class TestPage extends Component {
                                 </View>
                               ) : null}
                               {_.map(item.options, (value, index) => {
-                                console.log(solution, "solution");
                                 let isSolution =
                                   solution[0] != undefined
                                     ? _.findIndex(solution, value => {
@@ -220,7 +254,6 @@ class TestPage extends Component {
                                         );
                                       })
                                     : null;
-                                console.log(isSolution, "isSol");
                                 return (
                                   <Content key={index} padder>
                                     <Row>
@@ -228,7 +261,6 @@ class TestPage extends Component {
                                         <Radio
                                           onPress={() => {
                                             this.setState({ selected: true });
-
                                             this.handleSubmit(
                                               item._id,
                                               value.opt_id
@@ -254,6 +286,10 @@ class TestPage extends Component {
                     )}
                   />
                 </CardItem>
+                <CustomButton
+                  text="Submit Test"
+                  onPress={this.handleTestSubmit}
+                />
               </Content>
             </Card>
           </Content>
@@ -290,4 +326,4 @@ const mapStateToProps = state => ({
   callHelp: state.callHelp,
   questions: state.questions
 });
-export default connect(mapStateToProps, { callingHelp })(TestPage);
+export default connect(mapStateToProps, { callingHelp, submitTest })(TestPage);
