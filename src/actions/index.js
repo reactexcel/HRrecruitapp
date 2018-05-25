@@ -11,6 +11,11 @@ import {
   CALL_HELP_SUCCESS,
   CALL_HELP_FAILURE
 } from "./types";
+import {
+  SUBMIT_TEST_REQUEST,
+  SUBMIT_TEST_SUCCESS,
+  SUBMIT_TEST_FAILURE
+} from "./types";
 import { API_URL } from "../config/dev";
 
 const _axios = () => axios.create({ baseURL: API_URL });
@@ -69,7 +74,6 @@ export const getQuestions = fb_id => async dispatch => {
     const res = await _axios().get(`getQuestinsForCandidate/${fb_id}`);
     dispatch({ type: QUESTIONS_SUCCESS, payload: res });
   } catch (err) {
-    console.log(err);
     dispatch({ type: QUESTIONS_FAILURE });
   }
 };
@@ -89,19 +93,14 @@ export const callingHelp = (accessToken, fb_id) => async dispatch => {
 };
 
 // Action for submitting Test
-export const submitTest = (
-  answers,
-  fb_id,
-  job_profile,
-  questionIds,
-  taken_time_minutes
-) => async dispatch => {
-  const res = await _axios().post("submitExam", {
-    answers,
-    fb_id,
-    job_profile,
-    questionIds,
-    taken_time_minutes
-  });
-  console.log(res)
+export const submitTest = data => async dispatch => {
+  dispatch({ type: SUBMIT_TEST_REQUEST });
+  try {
+    const res = await _axios().post("submitExam", {
+      ...data
+    });
+    dispatch({ type: SUBMIT_TEST_SUCCESS, payload: res });
+  } catch (err) {
+    dispatch({ type: SUBMIT_TEST_FAILURE });
+  }
 };

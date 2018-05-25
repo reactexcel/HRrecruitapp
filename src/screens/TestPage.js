@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Alert } from "react-native";
 import {
   Container,
   Content,
@@ -33,7 +34,7 @@ class TestPage extends Component {
       isSubmit: false,
       isLoading: false,
       isOnline: true,
-      show: false,
+      show: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
@@ -74,8 +75,7 @@ class TestPage extends Component {
       ),
       headerRight: (
         <Content padder>
-        <Text style={styles.text}>
-          Remaining Time :{" "}
+          <Text style={styles.text}>Remaining Time : </Text>
           <Text style={{ color: COLOR.Red }}>
             <TimerCountdown
               initialSecondsRemaining={counter}
@@ -85,7 +85,6 @@ class TestPage extends Component {
               style={{ fontSize: 15 }}
             />
           </Text>
-        </Text>
         </Content>
       )
     };
@@ -148,12 +147,28 @@ class TestPage extends Component {
       });
     });
     const taken_time_minutes = 10;
-    this.props.submitTest(
-      this.state.answers.solution,
-      fb_id,
-      job_profile,
-      questionIds,
-      taken_time_minutes
+    const data = {
+      answers: this.state.answers.solution,
+      fb_id: fb_id,
+      job_profile: job_profile,
+      questionIds: questionIds,
+      taken_time_minutes: taken_time_minutes
+    };
+    this.props.submitTest(data);
+  };
+
+  confirmSubmit = () => {
+    Alert.alert(
+      "Confirm Please",
+      "Are you sure, you want to submit your Test? You won't be able to change your response after submitting the test.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        { text: "OK", onPress: () => this.handleTestSubmit() }
+      ]
     );
   };
 
@@ -287,10 +302,7 @@ class TestPage extends Component {
                     })}
                   </Content>
                 </CardItem>
-                <CustomButton
-                  text="Submit Test"
-                  onPress={this.handleTestSubmit}
-                />
+                <CustomButton text="Submit Test" onPress={this.confirmSubmit} />
               </Content>
             </Card>
           </Content>

@@ -20,9 +20,12 @@ class Instructions extends Component {
     const fb_id = this.props.navigation.getParam("fb_id");
     this.props.getQuestions(fb_id);
   }
-  componentWillReceiveProps(nxtprops){
-    if(nxtprops.questions.data.status == 1){
-      AsyncStorage.setItem('question', JSON.stringify({data:nxtprops.questions.data}));
+  componentWillReceiveProps(nxtprops) {
+    if (nxtprops.questions.data.status == 1) {
+      AsyncStorage.setItem(
+        "question",
+        JSON.stringify({ data: nxtprops.questions.data })
+      );
     }
   }
   static navigationOptions = ({ navigation }) => {
@@ -44,10 +47,6 @@ class Instructions extends Component {
     });
   };
   render() {
-    const instructions = {
-      ins:
-        "The test consists of multiple sections, make sure to complete all sections.There is time limit of the test. A time counter will start as soon as the test gets started and test will automatically be submitted when the time limit is reached.Do not close the test all in between, if you do you will have to start from scratch. Test is given best in landscape mode. So change your mobile display to landscape. Do not open any other tabs in your browser, if you open a new tab it will get recorded."
-    };
     const name = this.props.navigation.getParam("name");
     const { questions } = this.props;
     return (
@@ -58,11 +57,13 @@ class Instructions extends Component {
               <Text style={styles.headerText}>Instructions</Text>
             </CardItem>
             <HorizontalLine />
-            <CardItem>
-              <Text style={styles.text}>{instructions.ins}</Text>
-            </CardItem>
             {questions !== null ? (
-              <CustomButton text="Continue" onPress={this.handlePress} />
+              <React.Fragment>
+                <CardItem>
+                  <Text style={styles.text}>{questions.data.instructions}</Text>
+                </CardItem>
+                <CustomButton text="Continue" onPress={this.handlePress} />
+              </React.Fragment>
             ) : (
               <Spinner color="#2196f3" />
             )}
