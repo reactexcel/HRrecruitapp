@@ -29,11 +29,11 @@ class TestPage extends Component {
       count: 0,
       question: [],
       solution: [],
+      answers: [],
       isSubmit: false,
       isLoading: false,
       isOnline: true,
       show: false,
-      selected: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
@@ -73,6 +73,7 @@ class TestPage extends Component {
         </Content>
       ),
       headerRight: (
+        <Content padder>
         <Text style={styles.text}>
           Remaining Time :{" "}
           <Text style={{ color: COLOR.Red }}>
@@ -85,6 +86,7 @@ class TestPage extends Component {
             />
           </Text>
         </Text>
+        </Content>
       )
     };
   };
@@ -130,11 +132,10 @@ class TestPage extends Component {
   }
 
   handleTestSubmit = async () => {
-    const answers = await AsyncStorage.getItem("solution", (err, result) => {
+    await AsyncStorage.getItem("solution", (err, result) => {
       if (result !== null) {
         const ans = JSON.parse(result);
-        console.log(ans, "answers");
-        return ans.solution;
+        this.setState({ answers: ans });
       }
     });
     const { params } = this.props.navigation.state;
@@ -148,7 +149,7 @@ class TestPage extends Component {
     });
     const taken_time_minutes = 10;
     this.props.submitTest(
-      this.state.solution,
+      this.state.answers.solution,
       fb_id,
       job_profile,
       questionIds,
@@ -167,7 +168,6 @@ class TestPage extends Component {
 
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
-    console.log(this.props.navigation.state.params, "params");
 
     if (success !== undefined) {
       if (success === false) {
@@ -209,82 +209,83 @@ class TestPage extends Component {
             <Card>
               <Content style={{ backgroundColor: "white" }}>
                 <CardItem>
-                  <FlatList
-                    data={question.data}
-                    renderItem={({ item, index }) => (
-                      <Content key={index}>
-                        <FlatList
-                          data={item.questions}
-                          ListHeaderComponent={() => (
+                  <Content>
+                    {_.map(question.data, (questionObj, index) => {
+                      return (
+                        <React.Fragment>
+                          <Col>
                             <Card style={styles.blockView}>
                               <CardItem>
                                 <Text style={styles.headerText}>
-                                  {item.group_name}
+                                  {questionObj.group_name}
                                 </Text>
                               </CardItem>
                             </Card>
-                          )}
-                          renderItem={({ item, index }) => (
-                            <Content key={index} padder>
-                              <Text style={{ fontSize: 16 }}>
-                                {index + 1}. {item.question}
-                              </Text>
-                              {item.description ? (
-                                <View
-                                  style={{
-                                    borderRadius: 5,
-                                    flex: 1,
-                                    padding: 10,
-                                    backgroundColor: COLOR.LightGrey,
-                                    elevation: 1,
-                                    marginVertical: 5
-                                  }}
-                                >
-                                  <Text style={{ opacity: 0.8 }}>
-                                    {item.description}
-                                  </Text>
-                                </View>
-                              ) : null}
-                              {_.map(item.options, (value, index) => {
-                                let isSolution =
-                                  solution[0] != undefined
-                                    ? _.findIndex(solution, value => {
-                                        return (
-                                          value.questionId == index.question
-                                        );
-                                      })
-                                    : null;
-                                return (
-                                  <Content key={index} padder>
-                                    <Row>
-                                      <Col style={{ width: "10%" }}>
-                                        <Radio
-                                          onPress={() => {
-                                            this.setState({ selected: true });
-                                            this.handleSubmit(
-                                              item._id,
-                                              value.opt_id
-                                            );
-                                          }}
-                                          selected={this.state.selected}
-                                        />
-                                      </Col>
-                                      <Col>
-                                        <Text>{value.option}</Text>
-                                      </Col>
-                                    </Row>
-                                  </Content>
-                                );
-                              })}
-                              <View style={{ paddingTop: 15 }}>
-                                <HorizontalLine />
-                              </View>
-                            </Content>
-                          )}
-                        />
-                      </Content>
-                    )}
-                  />
+                          </Col>
+                          {_.map(questionObj.questions, (ques, index) => {
+                            return (
+                              <Content key={index} padder>
+                                <Text style={{ fontSize: 16 }}>
+                                  {index + 1}. {ques.question}
+                                </Text>
+                                {ques.description ? (
+                                  <View
+                                    style={{
+                                      borderRadius: 5,
+                                      flex: 1,
+                                      padding: 10,
+                                      backgroundColor: COLOR.LightGrey,
+                                      elevation: 1,
+                                      marginVertical: 5
+                                    }}
+                                  >
+                                    <Text style={{ opacity: 0.8 }}>
+                                      {ques.description}
+                                    </Text>
+                                  </View>
+                                ) : null}
+                                {_.map(ques.options, (values, index) => {
+                                  let isSolution =
+                                    solution[0] != undefined
+                                      ? _.findIndex(solution, value => {
+                                          return value.Q_id == ques._id;
+                                        })
+                                      : null;
+                                  let selected =
+                                    isSolution != null && isSolution != -1
+                                      ? solution[isSolution].ans_id ==
+                                        values.opt_id
+                                        ? true
+                                        : false
+                                      : false;
+                                  return (
+                                    <Content key={index} padder>
+                                      <Row>
+                                        <Col style={{ width: "10%" }}>
+                                          <Radio
+                                            onPress={() => {
+                                              this.handleSubmit(
+                                                ques._id,
+                                                values.opt_id
+                                              );
+                                            }}
+                                            selected={selected}
+                                          />
+                                        </Col>
+                                        <Col>
+                                          <Text>{values.option}</Text>
+                                        </Col>
+                                      </Row>
+                                    </Content>
+                                  );
+                                })}
+                              </Content>
+                            );
+                          })}
+                        </React.Fragment>
+                      );
+                    })}
+                  </Content>
                 </CardItem>
                 <CustomButton
                   text="Submit Test"
