@@ -16,6 +16,7 @@ import * as _ from "lodash";
 import { AsyncStorage, NetInfo, FlatList, View } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
+import _styles from "../styles/TestPage";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
 import { callingHelp, submitTest } from "../actions";
@@ -198,24 +199,20 @@ class TestPage extends Component {
                 <Text style={styles.headerText}> Test Questions </Text>
               </CardItem>
               <Row>
-                <Col style={{ width: "75%", alignItems: "flex-start" }}>
+                <Col style={_styles.quesCountView}>
                   <Text style={styles.text}>
                     Questions Attempted : {`${solution.length}/`}
                     {count}{" "}
                   </Text>
                 </Col>
-                <Col style={{ width: "25%", alignItems: "flex-end" }}>
+                <Col style={_styles.helpButtonView}>
                   {calling ? (
                     <Button disabled>
-                      <Text style={{ fontSize: 10, textAlign: "center" }}>
-                        Call for Help
-                      </Text>
+                      <Text style={_styles.helpButton}>Call for Help</Text>
                     </Button>
                   ) : (
                     <Button onPress={this.handleCallHelp} info>
-                      <Text style={{ fontSize: 10, textAlign: "center" }}>
-                        Call for Help
-                      </Text>
+                      <Text style={_styles.helpButton}>Call for Help</Text>
                     </Button>
                   )}
                 </Col>
@@ -244,16 +241,7 @@ class TestPage extends Component {
                                   {index + 1}. {ques.question}
                                 </Text>
                                 {ques.description ? (
-                                  <View
-                                    style={{
-                                      borderRadius: 5,
-                                      flex: 1,
-                                      padding: 10,
-                                      backgroundColor: COLOR.LightGrey,
-                                      elevation: 1,
-                                      marginVertical: 5
-                                    }}
-                                  >
+                                  <View style={_styles.descriptionView}>
                                     <Text style={{ opacity: 0.8 }}>
                                       {ques.description}
                                     </Text>
