@@ -19,10 +19,13 @@ import styles from "../styles";
 import _styles from "../styles/TestPage";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
+import HandleCallHelp from "../components/HandleCallHelp";
+import StartTest from "../components/StartTest";
 import { callingHelp, submitTest } from "../actions";
 import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
+import { setItem, getItem } from "../helper/storage";
 
 class TestPage extends Component {
   constructor(props) {
@@ -39,13 +42,9 @@ class TestPage extends Component {
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
-  componentDidMount() {
-    AsyncStorage.getItem("question", (err, result) => {
-      if (result !== null) {
-        const question = JSON.parse(result);
-        this.setState({ question: question.data, count: question.data.count });
-      }
-    });
+  async componentDidMount() {
+    const question = await getItem("question");
+    this.setState({ question: question.data, count: question.data.count });
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetwork
@@ -54,7 +53,7 @@ class TestPage extends Component {
   handleNetwork(isconnect) {
     //functinality for net connection at time of answering paper
     this.setState({ isOnline: isconnect });
-    // this.state.isOnline ? this.setState({ show: false }) : null;
+    this.state.isOnline ? this.setState({ show: false }) : null;
   }
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
@@ -91,17 +90,7 @@ class TestPage extends Component {
     };
   };
 
-  handleCallHelp = async () => {
-    const fb_id = this.props.navigation.getParam("fb_id");
-    const accessToken = fb_id ? true : null;
-    await this.props.callingHelp(accessToken, fb_id);
-    const { data } = this.props.callHelp;
-    if (data.status === 1) {
-      notify("Please Wait. The message has been sent to HR");
-    }
-  };
-
-  handleSubmit(question, option) {
+  async handleSubmit(question, option) {
     const solution = this.state.solution;
     let answer;
     if (solution[0] != undefined) {
@@ -125,19 +114,12 @@ class TestPage extends Component {
     this.setState({
       solution: uniqSolution
     });
-    AsyncStorage.setItem(
-      "solution",
-      JSON.stringify({ solution: uniqSolution })
-    );
+    await setItem("solution", JSON.stringify({ solution: uniqSolution }));
   }
 
   handleTestSubmit = async () => {
-    await AsyncStorage.getItem("solution", (err, result) => {
-      if (result !== null) {
-        const ans = JSON.parse(result);
-        this.setState({ answers: ans });
-      }
-    });
+    const ans = await getItem("solution");
+    this.setState({ answers: ans });
     const { params } = this.props.navigation.state;
     const fb_id = params.fb_id;
     const job_profile = params.data.job_profile;
@@ -165,7 +147,7 @@ class TestPage extends Component {
       [
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => {},
           style: "cancel"
         },
         { text: "OK", onPress: () => this.handleTestSubmit() }
@@ -178,18 +160,9 @@ class TestPage extends Component {
   };
 
   render() {
-    const {
-      callHelp: { calling, success }
-    } = this.props;
-
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
 
-    if (success !== undefined) {
-      if (success === false) {
-        notify("Something went wrong");
-      }
-    }
     return (
       <Container style={styles.container}>
         {!show ? (
@@ -198,25 +171,17 @@ class TestPage extends Component {
               <CardItem>
                 <Text style={styles.headerText}> Test Questions </Text>
               </CardItem>
-              <Row>
-                <Col style={_styles.quesCountView}>
+              <View>
+                <View>
                   <Text style={styles.text}>
                     Questions Attempted : {`${solution.length}/`}
                     {count}{" "}
                   </Text>
-                </Col>
-                <Col style={_styles.helpButtonView}>
-                  {calling ? (
-                    <Button disabled>
-                      <Text style={_styles.helpButton}>Call for Help</Text>
-                    </Button>
-                  ) : (
-                    <Button onPress={this.handleCallHelp} info>
-                      <Text style={_styles.helpButton}>Call for Help</Text>
-                    </Button>
-                  )}
-                </Col>
-              </Row>
+                </View>
+                <View>
+                  <HandleCallHelp {...this.props} />
+                </View>
+              </View>
             </Card>
             <Card>
               <Content style={{ backgroundColor: "white" }}>
@@ -295,29 +260,10 @@ class TestPage extends Component {
             </Card>
           </Content>
         ) : (
-          <Content padder>
-            <Card style={styles.blockView}>
-              <CardItem>
-                <Text style={styles.headerText}>Start Test</Text>
-              </CardItem>
-              <HorizontalLine />
-              <CardItem>
-                <Text style={styles.text}>
-                  To Start Test, please turn off your Internet connection.
-                </Text>
-              </CardItem>
-              {isOnline ? (
-                <Button disabled block>
-                  <Text>Click Here</Text>
-                </Button>
-              ) : (
-                <CustomButton
-                  text="Click Here"
-                  onPress={this.handleStartTest}
-                />
-              )}
-            </Card>
-          </Content>
+          <StartTest
+            isOnline={isOnline}
+            handleStartTest={this.handleStartTest}
+          />
         )}
       </Container>
     );

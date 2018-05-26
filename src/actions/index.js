@@ -64,7 +64,7 @@ export const addCandidate = data => async dispatch => {
     },
     body: formData
   });
-  console.log(res);
+
   dispatch({ type: ADD_CANDIDATE, payload: res });
 };
 

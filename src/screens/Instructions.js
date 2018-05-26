@@ -14,6 +14,7 @@ import { getQuestions } from "../actions";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
+import { setItem } from "../helper/storage";
 
 class Instructions extends Component {
   componentDidMount() {
@@ -22,10 +23,7 @@ class Instructions extends Component {
   }
   componentWillReceiveProps(nxtprops) {
     if (nxtprops.questions.data.status == 1) {
-      AsyncStorage.setItem(
-        "question",
-        JSON.stringify({ data: nxtprops.questions.data })
-      );
+      setItem("question", JSON.stringify({ data: nxtprops.questions.data }));
     }
   }
   static navigationOptions = ({ navigation }) => {

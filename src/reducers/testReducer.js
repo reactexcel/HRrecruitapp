@@ -2,7 +2,7 @@ import {
   SUBMIT_TEST_REQUEST,
   SUBMIT_TEST_SUCCESS,
   SUBMIT_TEST_FAILURE
-} from "./types";
+} from "../actions/types";
 
 export default function(state = null, action) {
   switch (action.type) {

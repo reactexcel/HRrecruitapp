@@ -16,6 +16,7 @@ import styles from "../styles";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { verifyingOTP } from "../actions";
+import { SUCCESS_STATUS } from "../helper/constant";
 
 class OTPpage extends Component {
   constructor(props) {
@@ -42,7 +43,7 @@ class OTPpage extends Component {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
       const { status, data } = this.props.otp.data;
 
-      if (status === 1) {
+      if (status === SUCCESS_STATUS) {
         this.props.navigation.navigate("Instructions", {
           fb_id: data.fb_id,
           profile_pic: data.profile_pic,

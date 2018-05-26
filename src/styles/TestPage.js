@@ -10,16 +10,12 @@ export default StyleSheet.create({
     elevation: 1,
     marginVertical: 5
   },
-  helpButton: {
-    fontSize: 10,
-    textAlign: "center"
-  },
   quesCountView: {
-    width: "75%",
+    width: "95%",
     alignItems: "flex-start"
   },
   helpButtonView: {
-    width: "25%",
+    width: "100%",
     alignItems: "flex-end"
   }
 });

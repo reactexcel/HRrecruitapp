@@ -22,6 +22,7 @@ import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { signUp } from "../actions";
 import { notify } from "../helper/notify"
+import { SUCCESS_STATUS } from "../helper/constant";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -47,7 +48,7 @@ class InterviewLogin extends Component {
       if (status === 0) {
         this.props.navigation.navigate("VerifyingCandidate");
         this.setState({ email: "" });
-      } else if (status === 1) {
+      } else if (status === SUCCESS_STATUS) {
         this.props.navigation.navigate("OTPpage");
         this.textInput._root.clear();
       }

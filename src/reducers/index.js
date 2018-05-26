@@ -5,6 +5,7 @@ import otpReducer from "./otpReducer";
 import addCandidateReducer from "./addCandidateReducer";
 import questionsReducer from "./questionsReducer";
 import callHelpReducer from "./callHelpReducer";
+import testReducer from "./testReducer";
 
 export default combineReducers({
   form: formReducer,
