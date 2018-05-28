@@ -13,16 +13,15 @@ import {
   Radio
 } from "native-base";
 import * as _ from "lodash";
-import { AsyncStorage, NetInfo, FlatList, View } from "react-native";
+import { AsyncStorage, NetInfo } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
-import CustomButton from "../components/CustomButton";
-import HorizontalLine from "../components/HorizontalLine";
 import HandleCallHelp from "../components/HandleCallHelp";
+import CustomButton from "../components/CustomButton";
 import Questions from "../components/Questions";
 import StartTest from "../components/StartTest";
-import { callingHelp, submitTest } from "../actions";
+import { callingHelp } from "../actions";
 import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
@@ -51,16 +50,16 @@ class TestPage extends Component {
       this.handleNetwork
     );
   }
-  handleNetwork(isconnect) {
-    //functinality for net connection at time of answering paper
-    this.setState({ isOnline: isconnect });
-    this.state.isOnline ? this.setState({ show: false }) : null;
-  }
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
       this.handleNetwork
     );
+  }
+  handleNetwork(isconnect) {
+    //functinality for net connection at time of answering paper
+    this.setState({ isOnline: isconnect });
+    this.state.isOnline ? this.setState({ show: false }) : null;
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -80,8 +79,16 @@ class TestPage extends Component {
           <Text style={{ color: COLOR.Red }}>
             <TimerCountdown
               initialSecondsRemaining={counter}
-              onTick={() => {}}
-              onTimeElapsed={() => {}}
+              onTick={counter => {
+                if (counter < 180000 && counter > 178000) {
+                  notify("You have less than 3 minutes left to complete your test");
+                }
+              }}
+              onTimeElapsed={() => {
+                navigation.navigate("SubmitTest", {
+                  ...navigation.state.params
+                });
+              }}
               allowFontScaling={true}
               style={{ fontSize: 15 }}
             />
@@ -118,40 +125,25 @@ class TestPage extends Component {
     await setItem("solution", JSON.stringify({ solution: uniqSolution }));
   };
 
-  handleTestSubmit = async () => {
-    const ans = await getItem("solution");
-    this.setState({ answers: ans });
-    const { params } = this.props.navigation.state;
-    const fb_id = params.fb_id;
-    const job_profile = params.data.job_profile;
-    const questionIds = [];
-    _.forEach(params.data.data, value => {
-      _.forEach(value.questions, value => {
-        questionIds.push(value._id);
-      });
-    });
-    const taken_time_minutes = 10;
-    const data = {
-      answers: this.state.answers.solution,
-      fb_id: fb_id,
-      job_profile: job_profile,
-      questionIds: questionIds,
-      taken_time_minutes: taken_time_minutes
-    };
-    this.props.submitTest(data);
-  };
-
   confirmSubmit = () => {
     Alert.alert(
       "Confirm Please",
-      "Are you sure, you want to submit your Test? You won't be able to change your response after submitting the test.",
+      `You have attempted ${this.state.solution.length}/${this.state.count}. 
+      \n Are you sure, you want to submit your Test? You won't be able to change your response after submitting the test.`,
       [
         {
           text: "Cancel",
           onPress: () => {},
           style: "cancel"
         },
-        { text: "OK", onPress: () => this.handleTestSubmit() }
+        {
+          text: "OK",
+          onPress: () => {
+            this.props.navigation.navigate("SubmitTest", {
+              ...this.props.navigation.state.params
+            });
+          }
+        }
       ]
     );
   };
@@ -166,23 +158,17 @@ class TestPage extends Component {
 
     return (
       <Container style={styles.container}>
-        {!show ? (
+        {show ? (
           <Content padder>
             <Card style={styles.blockView}>
               <CardItem>
                 <Text style={styles.headerText}> Test Questions </Text>
               </CardItem>
-              <View>
-                <View>
-                  <Text style={styles.text}>
-                    Questions Attempted : {`${solution.length}/`}
-                    {count}{" "}
-                  </Text>
-                </View>
-                <View>
-                  <HandleCallHelp {...this.props} />
-                </View>
-              </View>
+              <Text style={styles.text}>
+                Questions Attempted : {`${solution.length}/`}
+                {count}{" "}
+              </Text>
+              <HandleCallHelp {...this.props} />
             </Card>
             <Card>
               <Questions
@@ -205,6 +191,7 @@ class TestPage extends Component {
 }
 const mapStateToProps = state => ({
   callHelp: state.callHelp,
-  questions: state.questions
+  questions: state.questions,
+  test: state.test
 });
-export default connect(mapStateToProps, { callingHelp, submitTest })(TestPage);
+export default connect(mapStateToProps, { callingHelp })(TestPage);

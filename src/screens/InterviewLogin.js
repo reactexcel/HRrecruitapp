@@ -21,7 +21,7 @@ import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { signUp } from "../actions";
-import { notify } from "../helper/notify"
+import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 
 class InterviewLogin extends Component {
@@ -32,9 +32,17 @@ class InterviewLogin extends Component {
     };
   }
   static navigationOptions = {
-    // headerTitle: <Text style={styles.text}>Interview Test</Text>,
     header: null
   };
+
+  componentDidUpdate() {
+    const { success } = this.props.interviewSignUp;
+    if (success !== undefined) {
+      if (success === false) {
+        notify("Something went wrong");
+      }
+    }
+  }
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
@@ -55,7 +63,6 @@ class InterviewLogin extends Component {
     }
   };
 
-
   validate(data) {
     const errors = {};
     if (!data) {
@@ -75,17 +82,11 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-    
 
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
 
-    if (success !== undefined) {
-      if (success === false) {
-        notify("Something went wrong");
-      }
-    }
     return (
       <Container style={styles.container}>
         <Content padder>

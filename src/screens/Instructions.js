@@ -15,6 +15,7 @@ import styles from "../styles";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
 import { setItem } from "../helper/storage";
+import { SUCCESS_STATUS } from "../helper/constant";
 
 class Instructions extends Component {
   componentDidMount() {
@@ -22,7 +23,7 @@ class Instructions extends Component {
     this.props.getQuestions(fb_id);
   }
   componentWillReceiveProps(nxtprops) {
-    if (nxtprops.questions.data.status == 1) {
+    if (nxtprops.questions.data.status == SUCCESS_STATUS) {
       setItem("question", JSON.stringify({ data: nxtprops.questions.data }));
     }
   }

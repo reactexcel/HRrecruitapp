@@ -13,5 +13,6 @@ export default combineReducers({
   otp: otpReducer,
   addCandidate: addCandidateReducer,
   questions: questionsReducer,
-  callHelp: callHelpReducer
+  callHelp: callHelpReducer,
+  test: testReducer
 });

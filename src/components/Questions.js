@@ -10,14 +10,13 @@ import _styles from "../styles/TestPage";
 class Questions extends Component {
   render() {
     const { question, solution, handleSubmit } = this.props;
-    console.log(this.props, "questions proso");
     return (
       <Content style={{ backgroundColor: "white" }}>
         <CardItem>
           <Content>
             {map(question.data, (questionObj, index) => {
               return (
-                <React.Fragment>
+                <React.Fragment key={index}>
                   <Col>
                     <Card style={styles.blockView}>
                       <CardItem>
