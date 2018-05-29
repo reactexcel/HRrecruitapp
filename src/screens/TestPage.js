@@ -12,7 +12,9 @@ import {
   Spinner,
   Radio
 } from "native-base";
-import * as _ from "lodash";
+import map from "lodash/map";
+import uniqWith from "lodash/uniqWith";
+import isEqual from "lodash/isEqual";
 import { AsyncStorage, NetInfo } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
@@ -105,7 +107,7 @@ class TestPage extends Component {
     let answer;
     if (solution[0] != undefined) {
       let found = false;
-      let solutions = _.map(solution, (value, index) => {
+      let solutions = map(solution, (value, index) => {
         if (value.Q_id == question) {
           value.ans_id = option;
           found = true;
@@ -120,7 +122,7 @@ class TestPage extends Component {
     if (answer != undefined) {
       solution.push(answer);
     }
-    const uniqSolution = _.uniqWith(solution, _.isEqual);
+    const uniqSolution = uniqWith(solution, isEqual);
     this.setState({
       solution: uniqSolution
     });

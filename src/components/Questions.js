@@ -7,6 +7,7 @@ import findIndex from "lodash/findIndex";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
 import Accordion from "react-native-collapsible/Accordion";
+import { COLOR } from "../styles/color";
 
 class Questions extends Component {
   render() {
@@ -17,6 +18,7 @@ class Questions extends Component {
           <Content>
             <Accordion
               sections={question.data}
+              underlayColor={COLOR.LightGrey}
               renderHeader={questionObj => (
                 <Card style={styles.blockView}>
                   <CardItem>
