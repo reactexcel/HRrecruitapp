@@ -82,7 +82,7 @@ class TestPage extends Component {
               onTick={counter => {
                 if (counter < 180000 && counter > 178000) {
                   notify(
-                    "You have less than 3 minutes left to complete your test"
+                    "You have less than 3 minutes left to complete your test."
                   );
                 }
               }}
