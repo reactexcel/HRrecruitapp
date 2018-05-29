@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, NetInfo } from "react-native";
+import { BackHandler, NetInfo, Alert } from "react-native";
 import {
   Container,
   Content,
@@ -45,21 +45,33 @@ class SubmitTest extends Component {
       this.handleNetwork
     );
   }
-  componentDidUpdate() {
-    if (this.props.test !== null) {
-      const { success } = this.props.test;
+
+  static getDerivedStateFromProps(nextProps) {
+    if (nextProps.test.data !== undefined) {
+      if (nextProps.test.data.status === SUCCESS_STATUS) {
+        Alert.alert(
+          "Thank You",
+          "Your response has been recorded. Please contact HR for for further instructions.",
+          [
+            {
+              text: "OK",
+              onPress: () => nextProps.navigation.navigate("InterviewLogin")
+            }
+          ],
+          { cancelable: false }
+        );
+      }
+      const { success } = nextProps.test;
       if (success !== undefined) {
         if (success === false) {
           notify("Something went wrong");
         }
       }
     }
+
+    return null;
   }
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.test.data.status === SUCCESS_STATUS) {
-      this.props.navigation.navigate("InterviewLogin");
-    }
-  }
+
   handleBackButton = () => {
     alert("Not Allowed");
     return true;
@@ -100,7 +112,10 @@ class SubmitTest extends Component {
   };
   render() {
     const { isOnline } = this.state;
-    const { test: submitting } = this.props;
+    const {
+      test: { submitting }
+    } = this.props;
+
     return (
       <Container style={styles.container}>
         <Content padder>

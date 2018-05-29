@@ -35,13 +35,14 @@ class InterviewLogin extends Component {
     header: null
   };
 
-  componentDidUpdate() {
-    const { success } = this.props.interviewSignUp;
+  static getDerivedStateFromProps(nextProps) {
+    const { success } = nextProps.interviewSignUp;
     if (success !== undefined) {
       if (success === false) {
         notify("Something went wrong");
       }
     }
+    return null;
   }
 
   handleSubmit = async () => {

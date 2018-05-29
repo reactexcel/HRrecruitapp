@@ -81,7 +81,9 @@ class TestPage extends Component {
               initialSecondsRemaining={counter}
               onTick={counter => {
                 if (counter < 180000 && counter > 178000) {
-                  notify("You have less than 3 minutes left to complete your test");
+                  notify(
+                    "You have less than 3 minutes left to complete your test"
+                  );
                 }
               }}
               onTimeElapsed={() => {
@@ -129,7 +131,7 @@ class TestPage extends Component {
     Alert.alert(
       "Confirm Please",
       `You have attempted ${this.state.solution.length}/${this.state.count}. 
-      \n Are you sure, you want to submit your Test? You won't be able to change your response after submitting the test.`,
+      \nAre you sure, you want to submit your Test? You won't be able to change your response after submitting the test.`,
       [
         {
           text: "Cancel",

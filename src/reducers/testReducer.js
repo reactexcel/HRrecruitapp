@@ -4,7 +4,11 @@ import {
   SUBMIT_TEST_FAILURE
 } from "../actions/types";
 
-export default function(state = null, action) {
+const initialState = {
+  submitting: false
+};
+
+export default function(state = initialState, action) {
   switch (action.type) {
     case SUBMIT_TEST_REQUEST:
       return {
@@ -21,7 +25,7 @@ export default function(state = null, action) {
         sucess: false
       };
     default:
-      return state;
+      return initialState;
       break;
   }
 }
