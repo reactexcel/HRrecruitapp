@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, AsyncStorage } from "react-native";
+import { Image } from "react-native";
 import {
   Container,
   Content,

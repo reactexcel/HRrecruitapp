@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { AsyncStorage } from "react-native";
 import {
   Container,
   Content,

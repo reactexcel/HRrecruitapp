@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { StyleSheet } from "react-native";
-import { Container, Content, Text, Button } from "native-base";
+import { Text, Button } from "native-base";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { callHelp } from "../actions";

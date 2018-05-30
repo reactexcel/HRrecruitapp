@@ -15,7 +15,7 @@ import {
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
-import { AsyncStorage, NetInfo } from "react-native";
+import { NetInfo } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
