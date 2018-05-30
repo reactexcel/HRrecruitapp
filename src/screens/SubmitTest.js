@@ -69,6 +69,30 @@ class SubmitTest extends Component {
       }
     }
   }
+  // static getDerivedStateFromProps(nextProps) {
+  //   if (nextProps.test.data !== undefined) {
+  //     if (nextProps.test.data.status === SUCCESS_STATUS) {
+  //       Alert.alert(
+  //         "Thank You",
+  //         "Your response has been recorded. Please contact HR for for further instructions.",
+  //         [
+  //           {
+  //             text: "OK",
+  //             onPress: () => nextProps.navigation.navigate("InterviewLogin")
+  //           }
+  //         ],
+  //         { cancelable: false }
+  //       );
+  //     }
+  //     const { success } = nextProps.test;
+  //     if (success !== undefined) {
+  //       if (success === false) {
+  //         notify("Something went wrong");
+  //       }
+  //     }
+  //   }
+  //   return null;
+  // }
 
   handleBackButton = () => {
     alert("Not Allowed");

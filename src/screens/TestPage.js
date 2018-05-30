@@ -19,12 +19,12 @@ import { NetInfo } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
-import HandleCallHelp from "../components/HandleCallHelp";
 import CustomButton from "../components/CustomButton";
 import Questions from "../components/Questions";
 import StartTest from "../components/StartTest";
 import { callingHelp } from "../actions";
 import { notify } from "../helper/notify";
+import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
 import { setItem, getItem } from "../helper/storage";
@@ -101,6 +101,15 @@ class TestPage extends Component {
       )
     };
   };
+  handleCallHelp = async () => {
+    const fb_id = this.props.navigation.getParam("fb_id");
+    const accessToken = fb_id ? true : null;
+    await this.props.callingHelp(accessToken, fb_id);
+    const { data } = this.props.callHelp;
+    if (data.status === SUCCESS_STATUS) {
+      notify("Please Wait. The message has been sent to HR");
+    }
+  };
 
   handleSubmit = async (question, option) => {
     const solution = this.state.solution;
@@ -172,7 +181,6 @@ class TestPage extends Component {
                 Questions Attempted : {`${solution.length}/`}
                 {count}{" "}
               </Text>
-              <HandleCallHelp {...this.props} />
             </Card>
             <Card>
               <Questions
@@ -187,6 +195,8 @@ class TestPage extends Component {
           <StartTest
             isOnline={isOnline}
             handleStartTest={this.handleStartTest}
+            callHelp={this.props.callHelp}
+            handleCallHelp={this.handleCallHelp}
           />
         )}
       </Container>
@@ -195,7 +205,6 @@ class TestPage extends Component {
 }
 const mapStateToProps = state => ({
   callHelp: state.callHelp,
-  questions: state.questions,
-  test: state.test
+  questions: state.questions
 });
 export default connect(mapStateToProps, { callingHelp })(TestPage);
