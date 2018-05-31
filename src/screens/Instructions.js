@@ -22,10 +22,13 @@ class Instructions extends Component {
     const fb_id = this.props.navigation.getParam("fb_id");
     this.props.getQuestions(fb_id);
   }
-  componentWillReceiveProps(nxtprops) {
-    if (nxtprops.questions.data.status == SUCCESS_STATUS) {
-      setItem("question", JSON.stringify({ data: nxtprops.questions.data }));
+  static getDerivedStateFromProps(nxtprops) {
+    if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
+      if (nxtprops.questions.data.status == SUCCESS_STATUS) {
+        setItem("question", JSON.stringify({ data: nxtprops.questions.data }));
+      }
     }
+    return null;
   }
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");

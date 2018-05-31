@@ -52,7 +52,6 @@ export const verifyingOTP = (otp, fb_id) => async dispatch => {
   }
 };
 
-
 //Action for adding new component
 export const addCandidate = data => async dispatch => {
   const formData = new FormData();
