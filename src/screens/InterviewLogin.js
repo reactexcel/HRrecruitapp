@@ -55,7 +55,7 @@ class InterviewLogin extends Component {
 
       if (status === 0) {
         this.props.navigation.navigate("VerifyingCandidate");
-        this.setState({ email: "" });
+        this.textInput._root.clear();
       } else if (status === SUCCESS_STATUS) {
         this.props.navigation.navigate("OTPpage");
         this.textInput._root.clear();

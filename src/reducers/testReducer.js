@@ -22,7 +22,7 @@ export default function(state = initialState, action) {
       };
     case SUBMIT_TEST_FAILURE:
       return {
-        sucess: false
+        success: false
       };
     default:
       return initialState;

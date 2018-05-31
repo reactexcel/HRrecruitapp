@@ -24,15 +24,24 @@ const StartTest = props => {
           </CardItem>
           {isOnline ? (
             <Button disabled block>
-              <Text>Click Here</Text>
+              <Text uppercase={false} style={_styles.Button}>
+                Click Here
+              </Text>
             </Button>
           ) : (
             <CustomButton text="Click Here" onPress={handleStartTest} />
           )}
           <CardItem />
+          <CardItem>
+            <Text style={styles.text}>
+              To Call Help, Internet connection must be on.
+            </Text>
+          </CardItem>
           {calling ? (
             <Button disabled block>
-              <Text style={_styles.helpButton}>Call for Help</Text>
+              <Text uppercase={false} style={_styles.Button}>
+                Call for Help
+              </Text>
             </Button>
           ) : (
             <CustomButton onPress={handleCallHelp} text="Call for Help" />
@@ -45,8 +54,9 @@ const StartTest = props => {
 
 const _styles = StyleSheet.create({
   helpButton: {
-    fontSize: 10,
-    textAlign: "center"
+    fontSize: 15,
+    fontWeight: "300",
+    letterSpacing: 1
   }
 });
 

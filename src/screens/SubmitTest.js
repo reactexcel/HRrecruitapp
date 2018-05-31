@@ -18,6 +18,7 @@ import forEach from "lodash/forEach";
 import { submitTest } from "../actions";
 import { getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
+import { notify } from "../helper/notify";
 
 class SubmitTest extends Component {
   constructor() {
@@ -61,11 +62,11 @@ class SubmitTest extends Component {
           { cancelable: false }
         );
       }
-      const { success } = this.props.test;
-      if (success !== undefined) {
-        if (success === false) {
-          notify("Something went wrong");
-        }
+    }
+    const { success } = this.props.test;
+    if (success !== undefined) {
+      if (success === false) {
+        notify("Something went wrong");
       }
     }
   }
@@ -122,7 +123,7 @@ class SubmitTest extends Component {
         questionIds.push(value._id);
       });
     });
-    const taken_time_minutes = 50;
+    const taken_time_minutes = params.taken_time_minutes;
     const data = {
       answers: ans.solution,
       fb_id: fb_id,
@@ -132,12 +133,14 @@ class SubmitTest extends Component {
     };
     this.props.submitTest(data);
   };
+
   render() {
     const { isOnline } = this.state;
     const {
       test: { submitting }
     } = this.props;
 
+    console.log(this.props);
     return (
       <Container style={styles.container}>
         <Content padder>

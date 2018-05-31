@@ -7,8 +7,6 @@ import thunk from "redux-thunk";
 import rootReducer from "./src/reducers";
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
-
-// // for checking network requests
 // XMLHttpRequest = GLOBAL.originalXMLHttpRequest ?
 //     GLOBAL.originalXMLHttpRequest :
 //     GLOBAL.XMLHttpRequest;

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Image } from "react-native";
 import {
   Container,
@@ -60,12 +60,12 @@ class Instructions extends Component {
             </CardItem>
             <HorizontalLine />
             {questions !== null ? (
-              <React.Fragment>
+              <Fragment>
                 <CardItem>
                   <Text style={styles.text}>{questions.data.instructions}</Text>
                 </CardItem>
                 <CustomButton text="Continue" onPress={this.handlePress} />
-              </React.Fragment>
+              </Fragment>
             ) : (
               <Spinner color="#2196f3" />
             )}

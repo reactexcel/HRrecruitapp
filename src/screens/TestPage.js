@@ -40,7 +40,8 @@ class TestPage extends Component {
       isSubmit: false,
       isLoading: false,
       isOnline: true,
-      show: false
+      show: false,
+      time: 0
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
@@ -51,12 +52,15 @@ class TestPage extends Component {
       "connectionChange",
       this.handleNetwork
     );
+    this.props.navigation.setParams({ setTime: this.setTime });
   }
+
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
       this.handleNetwork
     );
+    // clearInterval();
   }
   handleNetwork(isconnect) {
     //functinality for net connection at time of answering paper
@@ -82,15 +86,19 @@ class TestPage extends Component {
             <TimerCountdown
               initialSecondsRemaining={counter}
               onTick={counter => {
+                if (navigation.state.params.setTime !== undefined) {
+                  navigation.state.params.setTime(counter);
+                }
                 if (counter < 180000 && counter > 178000) {
                   notify(
-                    "You have less than 3 minutes left to complete your test."
+                    "You have less than 3 minutes left to complete your test. If you don't submit manually, you will be directed to next page where you will submit your test"
                   );
                 }
               }}
               onTimeElapsed={() => {
                 navigation.navigate("SubmitTest", {
-                  ...navigation.state.params
+                  ...navigation.state.params,
+                  taken_time_minutes: 60
                 });
               }}
               allowFontScaling={true}
@@ -101,13 +109,24 @@ class TestPage extends Component {
       )
     };
   };
+  setTime = time => {
+    this.setState({ time });
+  };
   handleCallHelp = async () => {
     const fb_id = this.props.navigation.getParam("fb_id");
     const accessToken = fb_id ? true : null;
     await this.props.callingHelp(accessToken, fb_id);
     const { data } = this.props.callHelp;
-    if (data.status === SUCCESS_STATUS) {
-      notify("Please Wait. The message has been sent to HR");
+    if (data !== undefined) {
+      if (data.status === SUCCESS_STATUS) {
+        notify("Please Wait. The message has been sent to HR");
+      }
+    }
+    const { success } = this.props.callHelp;
+    if (success !== undefined) {
+      if (success === false) {
+        notify("Something went wrong");
+      }
     }
   };
 
@@ -139,6 +158,7 @@ class TestPage extends Component {
   };
 
   confirmSubmit = () => {
+    const time = this.state.time;
     Alert.alert(
       "Confirm Please",
       `You have attempted ${this.state.solution.length}/${this.state.count}. 
@@ -153,7 +173,8 @@ class TestPage extends Component {
           text: "OK",
           onPress: () => {
             this.props.navigation.navigate("SubmitTest", {
-              ...this.props.navigation.state.params
+              ...this.props.navigation.state.params,
+              taken_time_minutes: 60 - Math.floor(time / (60 * 1000))
             });
           }
         }
