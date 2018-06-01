@@ -60,7 +60,6 @@ class TestPage extends Component {
       "connectionChange",
       this.handleNetwork
     );
-    // clearInterval();
   }
   handleNetwork(isconnect) {
     //functinality for net connection at time of answering paper
@@ -84,7 +83,7 @@ class TestPage extends Component {
           <Text style={styles.text}>Remaining Time : </Text>
           <Text style={{ color: COLOR.Red }}>
             <TimerCountdown
-              initialSecondsRemaining={counter}
+              initialSecondsRemaining={counter + 10000}
               onTick={counter => {
                 if (navigation.state.params.setTime !== undefined) {
                   navigation.state.params.setTime(counter);
