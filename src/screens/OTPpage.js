@@ -41,15 +41,17 @@ class OTPpage extends Component {
 
     if (Object.keys(errors).length === 0) {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
-      const { status, data } = this.props.otp.data;
 
-      if (status === SUCCESS_STATUS) {
-        this.props.navigation.navigate("Instructions", {
-          fb_id: data.fb_id,
-          profile_pic: data.profile_pic,
-          name: data.name
-        });
-        this.textInput._root.clear();
+      if (this.props.otp.data !== undefined) {
+        const { status, data } = this.props.otp.data;
+        if (status === SUCCESS_STATUS) {
+          this.props.navigation.navigate("Instructions", {
+            fb_id: data.fb_id,
+            profile_pic: data.profile_pic,
+            name: data.name
+          });
+          this.textInput._root.clear();
+        }
       }
     }
   };

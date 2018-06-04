@@ -20,6 +20,7 @@ import { getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { notify } from "../helper/notify";
 import TimerCountdown from "react-native-timer-countdown";
+import { StackActions, NavigationActions } from "react-navigation";
 
 class SubmitTest extends Component {
   constructor() {
@@ -47,7 +48,6 @@ class SubmitTest extends Component {
       "connectionChange",
       this.handleNetwork
     );
-    console.log("submitTest unmount");
   }
 
   componentDidUpdate() {
@@ -142,7 +142,6 @@ class SubmitTest extends Component {
     const {
       test: { submitting }
     } = this.props;
-
     return (
       <Container style={styles.container}>
         <Content padder>

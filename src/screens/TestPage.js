@@ -36,7 +36,6 @@ class TestPage extends Component {
       count: 0,
       question: [],
       solution: [],
-      answers: [],
       isSubmit: false,
       isLoading: false,
       isOnline: true,
@@ -52,7 +51,10 @@ class TestPage extends Component {
       "connectionChange",
       this.handleNetwork
     );
-    this.props.navigation.setParams({ setTime: this.setTime });
+    this.props.navigation.setParams({
+      setTime: this.setTime,
+      show: this.state.show
+    });
   }
 
   componentWillUnmount() {
@@ -158,27 +160,31 @@ class TestPage extends Component {
 
   confirmSubmit = () => {
     const time = this.state.time;
-    Alert.alert(
-      "Confirm Please",
-      `You have attempted ${this.state.solution.length}/${this.state.count}. 
+    if (this.state.solution.length === 0) {
+      alert("Cannot submit without attempting any question.");
+    } else {
+      Alert.alert(
+        "Confirm Please",
+        `You have attempted ${this.state.solution.length}/${this.state.count}. 
       \nAre you sure, you want to submit your Test? You won't be able to change your response after submitting the test.`,
-      [
-        {
-          text: "Cancel",
-          onPress: () => {},
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            this.props.navigation.navigate("SubmitTest", {
-              ...this.props.navigation.state.params,
-              taken_time_minutes: 60 - Math.floor(time / (60 * 1000))
-            });
+        [
+          {
+            text: "Cancel",
+            onPress: () => {},
+            style: "cancel"
+          },
+          {
+            text: "OK",
+            onPress: () => {
+              this.props.navigation.navigate("SubmitTest", {
+                ...this.props.navigation.state.params,
+                taken_time_minutes: 60 - Math.floor(time / (60 * 1000))
+              });
+            }
           }
-        }
-      ]
-    );
+        ]
+      );
+    }
   };
 
   handleStartTest = () => {
