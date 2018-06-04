@@ -22,6 +22,7 @@ import { connect } from "react-redux";
 import { signUp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
+import {GOOGLE_ANALYTICS_TRACKER} from '../config/dev';
 
 class InterviewLogin extends Component {
   constructor() {
@@ -33,8 +34,9 @@ class InterviewLogin extends Component {
   static navigationOptions = {
     header: null
   };
-
+  
   static getDerivedStateFromProps(nextProps) {
+    
     const { success } = nextProps.interviewSignUp;
     if (success !== undefined) {
       if (success === false) {
@@ -46,17 +48,18 @@ class InterviewLogin extends Component {
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
-
     if (Object.keys(errors).length === 0) {
+      GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
       await this.props.signUp(this.state.email);
       const {
         interviewSignUp: { status, fb_id }
       } = this.props;
-
       if (status === 0) {
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status);
         this.props.navigation.navigate("VerifyingCandidate");
         this.textInput._root.clear();
       } else if (status === SUCCESS_STATUS) {
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, SUCCESS_STATUS);
         this.props.navigation.navigate("OTPpage");
         this.textInput._root.clear();
       }
