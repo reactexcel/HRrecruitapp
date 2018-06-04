@@ -17,6 +17,7 @@ import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { verifyingOTP } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
+import {GOOGLE_ANALYTICS_TRACKER} from '../config/dev';
 
 class OTPpage extends Component {
   constructor(props) {
@@ -44,6 +45,7 @@ class OTPpage extends Component {
       const { status, data } = this.props.otp.data;
 
       if (status === SUCCESS_STATUS) {
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.fb_id, status.toString());
         this.props.navigation.navigate("Instructions", {
           fb_id: data.fb_id,
           profile_pic: data.profile_pic,
