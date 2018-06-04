@@ -26,7 +26,7 @@ import {GOOGLE_ANALYTICS_TRACKER} from '../config/dev';
 
 class InterviewLogin extends Component {
   constructor() {
-    super();
+    super();  
     this.state = {
       email: ""
     };
@@ -55,11 +55,11 @@ class InterviewLogin extends Component {
         interviewSignUp: { status, fb_id }
       } = this.props;
       if (status === 0) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status);
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status.toString());
         this.props.navigation.navigate("VerifyingCandidate");
         this.textInput._root.clear();
       } else if (status === SUCCESS_STATUS) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, SUCCESS_STATUS);
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status.toString());
         this.props.navigation.navigate("OTPpage");
         this.textInput._root.clear();
       }
