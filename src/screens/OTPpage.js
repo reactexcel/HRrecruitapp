@@ -42,7 +42,6 @@ class OTPpage extends Component {
 
     if (Object.keys(errors).length === 0) {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
-      const { status, data } = this.props.otp.data;
 
       if (status === SUCCESS_STATUS) {
         GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.fb_id, status.toString());

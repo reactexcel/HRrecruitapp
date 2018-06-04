@@ -104,7 +104,7 @@ class AddCandidate extends Component {
                 </CardItem>
                 <HorizontalLine />
                 <Field
-                  name="sender_email"
+                  name="sender_mail"
                   placeholder="Email"
                   keyboardType="email-address"
                   component={this.renderField}
@@ -172,7 +172,8 @@ validate = values => {
   }
   return errors;
 };
+const mapStateToProps = ({ addCandidate }) => ({ addCandidate });
 export default reduxForm({
   form: "AddCandidate",
   validate
-})(connect(null, { addCandidate })(AddCandidate));
+})(connect(mapStateToProps, { addCandidate })(AddCandidate));

@@ -4,6 +4,11 @@ import {
   INTERVIEW_EMAIL_SIGN_UP_REQUEST,
   INTERVIEW_EMAIL_SIGN_UP_FAILURE
 } from "./types";
+import {
+  ADD_CANDIDATE_REQUEST,
+  ADD_CANDIDATE_SUCCESS,
+  ADD_CANDIDATE_FAILURE
+} from "./types";
 import { OTP_REQUEST, OTP_SUCCESS, OTP_FAILED } from "./types";
 import { QUESTIONS_SUCCESS, QUESTIONS_FAILURE } from "./types";
 import {
@@ -16,7 +21,7 @@ import {
   SUBMIT_TEST_SUCCESS,
   SUBMIT_TEST_FAILURE
 } from "./types";
-import { API_URL } from "../config/dev";
+import API_URL from "../config/dev";
 
 const _axios = () => axios.create({ baseURL: API_URL });
 
@@ -48,6 +53,7 @@ export const verifyingOTP = (otp, fb_id) => async dispatch => {
     });
     dispatch({ type: OTP_SUCCESS, payload: res });
   } catch (err) {
+    console.log(err);
     dispatch({ type: OTP_FAILED });
   }
 };
@@ -58,14 +64,14 @@ export const addCandidate = data => async dispatch => {
   for (let key in data) {
     formData.append(key, data[key]);
   }
-  const res = await _axios().post("addNewCandidate", {
-    headers: {
-      "Content-Type": "multipart/form-data"
-    },
-    body: formData
-  });
-
-  dispatch({ type: ADD_CANDIDATE, payload: res });
+  dispatch({ type: ADD_CANDIDATE_REQUEST });
+  try {
+    const res = await _axios().post("addNewCandidate", formData);
+    console.log(res);
+    dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
+  } catch (err) {
+    dispatch({ type: ADD_CANDIDATE_FAILURE });
+  }
 };
 
 //Action for getting questions for candidate
