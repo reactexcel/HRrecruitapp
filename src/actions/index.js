@@ -67,7 +67,6 @@ export const addCandidate = data => async dispatch => {
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
     const res = await _axios().post("addNewCandidate", formData);
-    console.log(res);
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
     dispatch({ type: ADD_CANDIDATE_FAILURE });
