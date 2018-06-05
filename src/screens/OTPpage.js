@@ -17,7 +17,7 @@ import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { verifyingOTP } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
-import {GOOGLE_ANALYTICS_TRACKER} from '../config/dev';
+import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 
 class OTPpage extends Component {
   constructor(props) {
@@ -42,15 +42,20 @@ class OTPpage extends Component {
 
     if (Object.keys(errors).length === 0) {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
-
-      if (status === SUCCESS_STATUS) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.fb_id.toString(), status.toString());
-        this.props.navigation.navigate("Instructions", {
-          fb_id: data.fb_id,
-          profile_pic: data.profile_pic,
-          name: data.name
-        });
-        this.textInput._root.clear();
+      if (this.props.otp.data !== undefined) {
+        const { status, data } = this.props.otp.data;
+        if (status === SUCCESS_STATUS) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            this.state.fb_id.toString(),
+            status.toString()
+          );
+          this.props.navigation.navigate("Instructions", {
+            fb_id: data.fb_id,
+            profile_pic: data.profile_pic,
+            name: data.name
+          });
+          this.textInput._root.clear();
+        }
       }
     }
   };
@@ -111,4 +116,7 @@ const mapStateToProps = state => ({
   fb_id: state.interviewSignUp.fb_id,
   otp: state.otp
 });
-export default connect(mapStateToProps, { verifyingOTP })(OTPpage);
+export default connect(
+  mapStateToProps,
+  { verifyingOTP }
+)(OTPpage);
