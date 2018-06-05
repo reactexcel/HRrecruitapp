@@ -14,23 +14,24 @@ import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
 import { COLOR } from "../styles/color";
-import { getItem } from "../helper";
 import { connect } from "react-redux";
 import { verifyingOTP } from "../actions";
+import { SUCCESS_STATUS } from "../helper/constant";
+import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 
 class OTPpage extends Component {
   constructor(props) {
     super();
     this.state = {
       otp: "",
-      fb_id : props.fb_id,
+      fb_id: props.fb_id,
       errors: {}
     };
   }
   validate(data) {
     const errors = {};
     if (!data) {
-      errors.data = "Enter  OTP";
+      errors.data = "Enter OTP";
       alert(errors.data);
     }
     return errors;
@@ -38,16 +39,27 @@ class OTPpage extends Component {
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.otp);
+
     if (Object.keys(errors).length === 0) {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
-      if(this.props.otp.data.status === 1){
-        this.props.navigation.navigate('Instructions')
-        this.textInput._root.clear()
+      if (this.props.otp.data !== undefined) {
+        const { status, data } = this.props.otp.data;
+        if (status === SUCCESS_STATUS) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            this.state.fb_id.toString(),
+            status.toString()
+          );
+          this.props.navigation.navigate("Instructions", {
+            fb_id: data.fb_id,
+            profile_pic: data.profile_pic,
+            name: data.name
+          });
+          this.textInput._root.clear();
+        }
       }
     }
   };
   render() {
-    console.log(this.props.otp);
     const {
       otp: { registering, message }
     } = this.props;
@@ -67,10 +79,14 @@ class OTPpage extends Component {
                     of our HR. Confirm the same, please ask HR for OTP password
                   </Text>
                 </CardItem>
-                <CardItem>{message ? <Text> {message}</Text> : null}</CardItem>
+                <CardItem>
+                  {message ? (
+                    <Text style={{ color: COLOR.Red }}> {message}</Text>
+                  ) : null}
+                </CardItem>
                 <Item style={styles.inputTextView}>
                   <Input
-                  ref = {input => this.textInput = input}
+                    ref={input => (this.textInput = input)}
                     style={styles.inputText}
                     placeholder="Enter OTP"
                     placeholderTextColor={COLOR.Grey}
@@ -84,7 +100,7 @@ class OTPpage extends Component {
                   />
                 </Item>
                 {registering ? (
-                  <Spinner color="#0000ff" />
+                  <Spinner color="#2196f3" />
                 ) : (
                   <CustomButton text="Submit" onPress={this.handleSubmit} />
                 )}
@@ -100,4 +116,7 @@ const mapStateToProps = state => ({
   fb_id: state.interviewSignUp.fb_id,
   otp: state.otp
 });
-export default connect(mapStateToProps, { verifyingOTP })(OTPpage);
+export default connect(
+  mapStateToProps,
+  { verifyingOTP }
+)(OTPpage);

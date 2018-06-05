@@ -16,9 +16,12 @@ import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
+import HorizontalLine from "../components/HorizontalLine";
 import styles from "../styles";
 import _styles from "../styles/AddCandidate";
-import {COLOR} from "../styles/color";
+import { COLOR } from "../styles/color";
+import { connect } from "react-redux";
+import { addCandidate } from "../actions";
 
 class AddCandidate extends Component {
   static navigationOptions = {
@@ -50,7 +53,7 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
-  renderpicker({
+  renderPicker({
     input: { onChange, value, ...inputProps },
     children,
     ...pickerProps
@@ -63,7 +66,11 @@ class AddCandidate extends Component {
         <View style={_styles.picker}>
           <Picker
             selectedValue={value}
-            onValueChange={value => onChange(value)}
+            onValueChange={value => {
+              requestAnimationFrame(() => {
+                onChange(value);
+              });
+            }}
             {...inputProps}
             {...pickerProps}
           >
@@ -76,9 +83,11 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
+
   onSubmit = values => {
-    console.log(values);
+    this.props.addCandidate(values);
   };
+
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -93,28 +102,27 @@ class AddCandidate extends Component {
                 <CardItem>
                   <Text style={styles.headerText}>Add Candidate</Text>
                 </CardItem>
-                <Content style={_styles.horizontalLine} />
+                <HorizontalLine />
                 <Field
-                  name="email"
+                  name="sender_mail"
                   placeholder="Email"
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
                 />
                 <Field
-                  name="name"
+                  name="from"
                   placeholder="Full Name"
                   component={this.renderField}
                 />
                 <Field
                   name="gender"
-                  component={this.renderpicker}
+                  component={this.renderPicker}
                   mode="dropdown"
                 >
-                  <Picker.Item label="Select Gender" />
-                  <Picker.Item label="Female" value="female" />
-                  <Picker.Item label="Male" value="male" />
-                  <Picker.Item label="Others" value="others" />
+                  <Item label="Select gender" value="" />
+                  <Item label="Female" value="female" />
+                  <Item label="Male" value="male" />
                 </Field>
 
                 <Field
@@ -123,16 +131,16 @@ class AddCandidate extends Component {
                   component={this.renderField}
                 />
                 <Field
-                  name="phone"
+                  name="mobile_no"
                   placeholder="Mobile number"
                   component={this.renderField}
                   keyboardType="numeric"
                 />
-                <CardItem /> 
-                  <CustomButton
-                    text="Add"
-                    onPress={handleSubmit(this.onSubmit)}
-                  />
+                <CardItem />
+                <CustomButton
+                  text="Add"
+                  onPress={handleSubmit(this.onSubmit)}
+                />
               </Card>
             </Row>
           </Grid>
@@ -143,22 +151,29 @@ class AddCandidate extends Component {
 }
 validate = values => {
   const errors = {};
-  if (!values.name) errors.name = "Cannot be Empty";
-  if (!values.email) {
-    errors.email = "Cannot be Empty";
-  } else if (!isEmail(values.email) || !isLowercase(values.email)) {
-    errors.email = "Enter a valid email and must be in lowercase";
+  if (!values.from) {
+    errors.from = "Cannot be Empty";
+  }
+
+  if (!values.sender_email) {
+    errors.sender_email = "Cannot be Empty";
+  } else if (
+    !isEmail(values.sender_email) ||
+    !isLowercase(values.sender_email)
+  ) {
+    errors.sender_email = "Enter a valid email and must be in lowercase";
   }
   if (!values.gender) errors.gender = "Select a gender";
   if (!values.source) errors.source = "Cannot be Empty";
-  if (!values.phone) {
-    errors.phone = "Cannot be Empty";
-  } else if (!isMobilePhone(values.phone, "en-IN")) {
-    errors.phone = "Enter valid phone number";
+  if (!values.mobile_no) {
+    errors.mobile_no = "Cannot be Empty";
+  } else if (!isMobilePhone(values.mobile_no, "en-IN")) {
+    errors.mobile_no = "Enter valid phone number";
   }
   return errors;
 };
+const mapStateToProps = ({ addCandidate }) => ({ addCandidate });
 export default reduxForm({
   form: "AddCandidate",
   validate
-})(AddCandidate);
+})(connect(mapStateToProps, { addCandidate })(AddCandidate));

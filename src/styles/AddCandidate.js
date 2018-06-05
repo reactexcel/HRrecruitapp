@@ -2,12 +2,6 @@ import { StyleSheet } from "react-native";
 import {COLOR} from './color'
 
 export default StyleSheet.create({
-  horizontalLine: {
-    paddingVertical: 5,
-    borderBottomWidth: 1,
-    borderBottomColor: COLOR.LightGrey,
-    width: "100%"
-  },
   picker: {
     width: "98%",
     borderBottomColor: COLOR.Grey,

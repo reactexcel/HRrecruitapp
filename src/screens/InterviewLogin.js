@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from "react";
-import { AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -9,22 +8,25 @@ import {
   CardItem,
   Item,
   Input,
-  Spinner
+  Spinner,
+  Toast
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
-import { isLowercase, isEmail } from "validator";
+import HorizontalLine from "../components/HorizontalLine";
 import Logo from "../components/Logo";
 import styles from "../styles";
-import _styles from "../styles/InterviewLogin";
+import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { signUp } from "../actions";
-import { setItem } from "../helper";
+import { notify } from "../helper/notify";
+import { SUCCESS_STATUS } from "../helper/constant";
+import {GOOGLE_ANALYTICS_TRACKER} from '../config/dev';
 
 class InterviewLogin extends Component {
   constructor() {
-    super();
+    super();  
     this.state = {
       email: ""
     };
@@ -32,20 +34,34 @@ class InterviewLogin extends Component {
   static navigationOptions = {
     header: null
   };
+  
+  static getDerivedStateFromProps(nextProps) {
+    
+    const { success } = nextProps.interviewSignUp;
+    if (success !== undefined) {
+      if (success === false) {
+        notify("Something went wrong");
+      }
+    }
+    return null;
+  }
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
+      GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
       await this.props.signUp(this.state.email);
       const {
         interviewSignUp: { status, fb_id }
       } = this.props;
       if (status === 0) {
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status.toString());
         this.props.navigation.navigate("VerifyingCandidate");
-        this.setState({ email: "" });
-      } else if (status === 1) {
+        this.textInput._root.clear();
+      } else if (status === SUCCESS_STATUS) {
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status.toString());
         this.props.navigation.navigate("OTPpage");
-        this.setState({ email: "" });
+        this.textInput._root.clear();
       }
     }
   };
@@ -67,11 +83,13 @@ class InterviewLogin extends Component {
 
   render() {
     const {
-      interviewSignUp: { registering }
+      interviewSignUp: { registering, success }
     } = this.props;
+
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
+
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -88,7 +106,7 @@ class InterviewLogin extends Component {
                         Interview Test Papers
                       </Text>
                     </CardItem>
-                    <Content style={_styles.horizontalLine} />
+                    <HorizontalLine />
                     <CardItem>
                       <Body>
                         <Text style={styles.text}>
@@ -119,7 +137,7 @@ class InterviewLogin extends Component {
                   />
                 </Item>
                 {registering ? (
-                  <Spinner color="#0000ff" />
+                  <Spinner color="#2196f3" />
                 ) : (
                   <CustomButton onPress={this.handleSubmit} text="Submit" />
                 )}
