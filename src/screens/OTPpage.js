@@ -44,7 +44,7 @@ class OTPpage extends Component {
       await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
 
       if (status === SUCCESS_STATUS) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.fb_id, status.toString());
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.fb_id.toString(), status.toString());
         this.props.navigation.navigate("Instructions", {
           fb_id: data.fb_id,
           profile_pic: data.profile_pic,
