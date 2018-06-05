@@ -52,8 +52,8 @@ class TestPage extends Component {
       this.handleNetwork
     );
     this.props.navigation.setParams({
-      setTime: this.setTime,
-      show: this.state.show
+      setTime: this.setTime
+      // show: this.state.show
     });
   }
 
@@ -73,6 +73,7 @@ class TestPage extends Component {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
     const counter = navigation.state.params.data.timeForExam * 60 * 1000;
+    console.log(navigation.state.params.show, "show");
     return {
       title: name,
       headerLeft: (
@@ -82,30 +83,36 @@ class TestPage extends Component {
       ),
       headerRight: (
         <Content padder>
-          <Text style={styles.text}>Remaining Time : </Text>
-          <Text style={{ color: COLOR.Red }}>
-            <TimerCountdown
-              initialSecondsRemaining={counter + 10000}
-              onTick={counter => {
-                if (navigation.state.params.setTime !== undefined) {
-                  navigation.state.params.setTime(counter);
-                }
-                if (counter < 180000 && counter > 178000) {
-                  notify(
-                    "You have less than 3 minutes left to complete your test. If you don't submit manually, you will be directed to next page where you will submit your test"
-                  );
-                }
-              }}
-              onTimeElapsed={() => {
-                navigation.navigate("SubmitTest", {
-                  ...navigation.state.params,
-                  taken_time_minutes: 60
-                });
-              }}
-              allowFontScaling={true}
-              style={{ fontSize: 15 }}
-            />
-          </Text>
+          {navigation.state.params.show !== undefined ? (
+            navigation.state.params.show ? (
+              <React.Fragment>
+                <Text style={styles.text}>Remaining Time : </Text>
+                <Text style={{ color: COLOR.Red }}>
+                  <TimerCountdown
+                    initialSecondsRemaining={counter}
+                    onTick={counter => {
+                      if (navigation.state.params.setTime !== undefined) {
+                        navigation.state.params.setTime(counter);
+                      }
+                      if (counter < 180000 && counter > 175000) {
+                        notify(
+                          "You have less than 3 minutes left to complete your test.Your marked responses are saved. If you don't submit manually, you will be directed to next page where you will submit your test"
+                        );
+                      }
+                    }}
+                    onTimeElapsed={() => {
+                      navigation.navigate("SubmitTest", {
+                        ...navigation.state.params,
+                        taken_time_minutes: 60
+                      });
+                    }}
+                    allowFontScaling={true}
+                    style={{ fontSize: 15 }}
+                  />
+                </Text>
+              </React.Fragment>
+            ) : null
+          ) : null}
         </Content>
       )
     };
@@ -189,11 +196,19 @@ class TestPage extends Component {
 
   handleStartTest = () => {
     this.setState({ show: true });
+    if (this.props.navigation.state.params.show === undefined) {
+      this.props.navigation.setParams({
+        show: true
+      });
+    } else if (this.props.navigation.state.params.show) {
+      return;
+    }
   };
 
   render() {
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
+    console.log(this.props.navigation.state.params, "props params");
 
     return (
       <Container style={styles.container}>
@@ -233,4 +248,7 @@ const mapStateToProps = state => ({
   callHelp: state.callHelp,
   questions: state.questions
 });
-export default connect(mapStateToProps, { callingHelp })(TestPage);
+export default connect(
+  mapStateToProps,
+  { callingHelp }
+)(TestPage);

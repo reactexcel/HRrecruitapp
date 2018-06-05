@@ -28,6 +28,14 @@ class OTPpage extends Component {
       errors: {}
     };
   }
+  static navigationOptions = {
+    // headerStyle: {
+    //   backgroundColor: COLOR.BGCOLOR,
+    //   elevation: 0
+    // },
+    headerTitle: <Text>Enter OTP</Text>,
+    title : "Enter OTP"
+  };
   validate(data) {
     const errors = {};
     if (!data) {

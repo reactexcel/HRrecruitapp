@@ -22,11 +22,11 @@ import { connect } from "react-redux";
 import { signUp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
-import {GOOGLE_ANALYTICS_TRACKER} from '../config/dev';
+import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 
 class InterviewLogin extends Component {
   constructor() {
-    super();  
+    super();
     this.state = {
       email: ""
     };
@@ -34,9 +34,8 @@ class InterviewLogin extends Component {
   static navigationOptions = {
     header: null
   };
-  
+
   static getDerivedStateFromProps(nextProps) {
-    
     const { success } = nextProps.interviewSignUp;
     if (success !== undefined) {
       if (success === false) {
@@ -55,13 +54,19 @@ class InterviewLogin extends Component {
         interviewSignUp: { status, fb_id }
       } = this.props;
       if (status === 0) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status.toString());
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(
+          this.state.email,
+          status.toString()
+        );
         this.props.navigation.navigate("VerifyingCandidate");
-        this.textInput._root.clear();
+        this.setState({ email: "" });
       } else if (status === SUCCESS_STATUS) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(this.state.email, status.toString());
+        GOOGLE_ANALYTICS_TRACKER.trackEvent(
+          this.state.email,
+          status.toString()
+        );
         this.props.navigation.navigate("OTPpage");
-        this.textInput._root.clear();
+        this.setState({ email: "" });
       }
     }
   };
@@ -123,7 +128,6 @@ class InterviewLogin extends Component {
                 )}
                 <Item style={styles.inputTextView}>
                   <Input
-                    ref={input => (this.textInput = input)}
                     style={styles.inputText}
                     placeholder="Email"
                     placeholderTextColor={COLOR.Grey}
@@ -152,4 +156,7 @@ class InterviewLogin extends Component {
 
 const mapStateToProps = ({ interviewSignUp }) => ({ interviewSignUp });
 
-export default connect(mapStateToProps, { signUp })(InterviewLogin);
+export default connect(
+  mapStateToProps,
+  { signUp }
+)(InterviewLogin);
