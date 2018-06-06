@@ -1,7 +1,8 @@
 import {
   INTERVIEW_EMAIL_SIGN_UP,
   INTERVIEW_EMAIL_SIGN_UP_REQUEST,
-  INTERVIEW_EMAIL_SIGN_UP_FAILURE
+  INTERVIEW_EMAIL_SIGN_UP_FAILURE,
+  INTERVIEW_EMAIL_SIGN_UP_ERROR
 } from "../actions/types";
 
 const initialState = {
@@ -18,7 +19,13 @@ export default function(state = initialState, action) {
       return { registering: false, ...action.payload };
       break;
     case INTERVIEW_EMAIL_SIGN_UP_FAILURE:
-      return { success: false };
+      return action.payload;
+      break;
+    case INTERVIEW_EMAIL_SIGN_UP_ERROR:
+      return {
+        success: false
+      };
+      break;
     default:
       return initialState;
       break;

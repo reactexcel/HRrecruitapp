@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert } from "react-native";
+import { Alert, NetInfo, BackHandler } from "react-native";
 import {
   Container,
   Content,
@@ -15,7 +15,6 @@ import {
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
-import { NetInfo } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
@@ -47,22 +46,27 @@ class TestPage extends Component {
   async componentDidMount() {
     const question = await getItem("question");
     this.setState({ question: question.data, count: question.data.count });
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetwork
     );
     this.props.navigation.setParams({
       setTime: this.setTime
-      // show: this.state.show
     });
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
       this.handleNetwork
     );
   }
+  handleBackButton = () => {
+    alert("You are not allowed to go back.");
+    return true;
+  };
   handleNetwork(isconnect) {
     //functinality for net connection at time of answering paper
     this.setState({ isOnline: isconnect });
@@ -73,7 +77,6 @@ class TestPage extends Component {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
     const counter = navigation.state.params.data.timeForExam * 60 * 1000;
-    console.log(navigation.state.params.show, "show");
     return {
       title: name,
       headerLeft: (
@@ -185,7 +188,7 @@ class TestPage extends Component {
             onPress: () => {
               this.props.navigation.navigate("SubmitTest", {
                 ...this.props.navigation.state.params,
-                taken_time_minutes: 60 - Math.floor(time / (60 * 1000))
+                taken_time_minutes: 60 - Math.ceil(time / (60 * 1000))
               });
             }
           }
@@ -208,7 +211,6 @@ class TestPage extends Component {
   render() {
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
-    console.log(this.props.navigation.state.params, "props params");
 
     return (
       <Container style={styles.container}>

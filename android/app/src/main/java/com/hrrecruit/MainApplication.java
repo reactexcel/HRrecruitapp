@@ -11,6 +11,8 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.apsl.versionnumber.RNVersionNumberPackage;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +32,8 @@ public class MainApplication extends Application implements ReactApplication {
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
             new AppCenterReactNativePackage(MainApplication.this),
-            new GoogleAnalyticsBridgePackage()
+            new GoogleAnalyticsBridgePackage(),
+            new RNVersionNumberPackage()
       );
     }
 

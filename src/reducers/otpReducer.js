@@ -1,4 +1,9 @@
-import { OTP_SUCCESS, OTP_REQUEST,OTP_FAILED } from "../actions/types";
+import {
+  OTP_SUCCESS,
+  OTP_REQUEST,
+  OTP_FAILED,
+  OTP_ERROR
+} from "../actions/types";
 
 const initialState = {
   registering: false
@@ -14,7 +19,11 @@ export default function(state = initialState, action) {
       return { registering: false, ...action.payload };
       break;
     case OTP_FAILED:
-      return { registering: false, message: "Invalid OTP" };
+      return { registering: false, ...action.payload };
+    case OTP_ERROR:
+      return {
+        success: false
+      };
     default:
       return initialState;
       break;

@@ -13,6 +13,7 @@ import { Grid, Row } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
+import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { verifyingOTP } from "../actions";
@@ -29,12 +30,7 @@ class OTPpage extends Component {
     };
   }
   static navigationOptions = {
-    // headerStyle: {
-    //   backgroundColor: COLOR.BGCOLOR,
-    //   elevation: 0
-    // },
-    headerTitle: <Text>Enter OTP</Text>,
-    title : "Enter OTP"
+    title: "Enter OTP"
   };
   validate(data) {
     const errors = {};
@@ -67,10 +63,18 @@ class OTPpage extends Component {
       }
     }
   };
+  static getDerivedStateFromProps(nextProps) {
+    const { success } = nextProps.otp;
+    if (success !== undefined && !success) {
+      notify("Something went wrong");
+    }
+    return null;
+  }
   render() {
     const {
       otp: { registering, message }
     } = this.props;
+
     return (
       <Container style={styles.container}>
         <Content padder>

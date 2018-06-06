@@ -23,6 +23,7 @@ import { signUp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
+import { getItem } from "../helper/storage";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -36,11 +37,12 @@ class InterviewLogin extends Component {
   };
 
   static getDerivedStateFromProps(nextProps) {
-    const { success } = nextProps.interviewSignUp;
-    if (success !== undefined) {
-      if (success === false) {
-        notify("Something went wrong");
-      }
+    const { error, success } = nextProps.interviewSignUp;
+    if (error !== undefined && error === 1) {
+      alert("Please ask HR to assign a Job Profile and round");
+    }
+    if (success !== undefined && !success) {
+      notify("Something went wrong");
     }
     return null;
   }
