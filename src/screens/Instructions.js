@@ -20,7 +20,8 @@ import { SUCCESS_STATUS } from "../helper/constant";
 class Instructions extends Component {
   componentDidMount() {
     const fb_id = this.props.navigation.getParam("fb_id");
-    this.props.getQuestions(fb_id);
+    const email = this.props.navigation.getParam("email");
+    this.props.getQuestions(email,fb_id);
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {

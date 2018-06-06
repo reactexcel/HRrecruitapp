@@ -7,5 +7,3 @@
     storageBucket: "myfirstfirebaseproject-abf19.appspot.com",
     messagingSenderId: "926600885980"
   }
-
- 

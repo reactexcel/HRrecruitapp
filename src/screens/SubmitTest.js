@@ -134,7 +134,7 @@ class SubmitTest extends Component {
       questionIds: questionIds,
       taken_time_minutes: taken_time_minutes
     };
-    this.props.submitTest(data);
+    this.props.submitTest(this.props.email,data);
   };
 
   render() {
@@ -171,5 +171,8 @@ class SubmitTest extends Component {
   }
 }
 
-const mapStateToProps = ({ test }) => ({ test });
+ const mapStateToProps = state => ({
+  test:state.test,
+  email: state.interviewSignUp.email,
+});
 export default connect(mapStateToProps, { submitTest })(SubmitTest);
