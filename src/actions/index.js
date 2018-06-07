@@ -41,7 +41,7 @@ export const signUp = email => async dispatch => {
     PubSub.publish('FIREBASE_SIGNUP_SUCCESS', {API_URL,email,res});  
     dispatch({ type: INTERVIEW_EMAIL_SIGN_UP, payload: { email, ...res.data } });
   } catch (err) {
-    PubSub.publish('FIREBASE_SIGNUP_FAILURE', {API_URL,email,res});
+    PubSub.publish('FIREBASE_SIGNUP_FAILURE', {API_URL,email,err});
     if (err.response.data.error === 1) {
       dispatch({
         type: INTERVIEW_EMAIL_SIGN_UP_FAILURE,

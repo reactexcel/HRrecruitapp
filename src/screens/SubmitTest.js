@@ -91,6 +91,7 @@ class SubmitTest extends Component {
   };
 
   handleTestSubmit = async () => {
+    const email = this.props.navigation.getParam("email");
     const ans = await getItem("solution");
     const { params } = this.props.navigation.state;
     const fb_id = params.fb_id;
@@ -109,7 +110,8 @@ class SubmitTest extends Component {
       questionIds: questionIds,
       taken_time_minutes: taken_time_minutes
     };
-    this.props.submitTest(this.props.email,data);
+    console.log(this.props,"this.rpspsspp")
+    this.props.submitTest(email,data);
   };
 
   render() {

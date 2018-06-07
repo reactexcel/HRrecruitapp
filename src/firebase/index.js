@@ -37,7 +37,7 @@ firebaseGetQuestion = (msg,data) => {
 
     const {API_URL, email, res,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
-    let getQuestion = `${modify_Date.toString()}` + modify_Email ;
+    let getQuestion = `${modify_Date.toString()}`+"/getTest/" + modify_Email ;
 
     return firebase.database().ref(getQuestion).set({
         API_URL:API_URL,
@@ -48,8 +48,8 @@ firebaseGetQuestion = (msg,data) => {
 }
 
 firebaseSubmitTest = (msg,data) => {
-    
-    const {API_URL, email, res,fb_id  } = data;
+
+    const {API_URL, email, res  } = data;
     let modify_Email = modifyEmail(email);    
     let submitTest = `${modify_Date.toString()}`+"/submitTest/" + modify_Email ;
 
@@ -57,7 +57,6 @@ firebaseSubmitTest = (msg,data) => {
         API_URL:API_URL,
         res: res.data,
         status:res.status,
-        fb_id:fb_id
     })
 }
 
