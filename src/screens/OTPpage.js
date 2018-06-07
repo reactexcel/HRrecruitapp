@@ -26,6 +26,7 @@ class OTPpage extends Component {
     this.state = {
       otp: "",
       fb_id: props.fb_id,
+      email: props.email,
       errors: {}
     };
   }
@@ -45,7 +46,7 @@ class OTPpage extends Component {
     const errors = this.validate(this.state.otp);
 
     if (Object.keys(errors).length === 0) {
-      await this.props.verifyingOTP(this.state.otp, this.state.fb_id);
+      await this.props.verifyingOTP(this.state.email, this.state.otp, this.state.fb_id);
       if (this.props.otp.data !== undefined) {
         const { status, data } = this.props.otp.data;
         if (status === SUCCESS_STATUS) {
@@ -56,7 +57,8 @@ class OTPpage extends Component {
           this.props.navigation.navigate("Instructions", {
             fb_id: data.fb_id,
             profile_pic: data.profile_pic,
-            name: data.name
+            name: data.name,
+            email:this.state.email
           });
           this.textInput._root.clear();
         }
@@ -126,6 +128,7 @@ class OTPpage extends Component {
 }
 const mapStateToProps = state => ({
   fb_id: state.interviewSignUp.fb_id,
+  email: state.interviewSignUp.email,
   otp: state.otp
 });
 export default connect(
