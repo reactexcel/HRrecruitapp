@@ -9,6 +9,7 @@ import {
   Input,
   Spinner
 } from "native-base";
+import { NetInfo } from 'react-native'
 import { Grid, Row } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
@@ -27,12 +28,31 @@ class OTPpage extends Component {
       otp: "",
       fb_id: props.fb_id,
       email: props.email,
-      errors: {}
+      errors: {},
+      isOnline:false
     };
   }
   static navigationOptions = {
     title: "Enter OTP"
   };
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
+  }
+
+  handleNetwork = isconnect => {
+    this.setState({ isOnline: isconnect });
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
+  }
+
   validate(data) {
     const errors = {};
     if (!data) {
@@ -46,22 +66,26 @@ class OTPpage extends Component {
     const errors = this.validate(this.state.otp);
 
     if (Object.keys(errors).length === 0) {
-      await this.props.verifyingOTP(this.state.email, this.state.otp, this.state.fb_id);
-      if (this.props.otp.data !== undefined) {
-        const { status, data } = this.props.otp.data;
-        if (status === SUCCESS_STATUS) {
-          GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            this.state.fb_id.toString(),
-            status.toString()
-          );
-          this.props.navigation.navigate("Instructions", {
-            fb_id: data.fb_id,
-            profile_pic: data.profile_pic,
-            name: data.name,
-            email:this.state.email
-          });
-          this.textInput._root.clear();
+      if(this.state.isOnline){
+        await this.props.verifyingOTP(this.state.email, this.state.otp, this.state.fb_id);
+        if (this.props.otp.data !== undefined) {
+          const { status, data } = this.props.otp.data;
+          if (status === SUCCESS_STATUS) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.fb_id.toString(),
+              status.toString()
+            );
+            this.props.navigation.navigate("Instructions", {
+              fb_id: data.fb_id,
+              profile_pic: data.profile_pic,
+              name: data.name,
+              email:this.state.email
+            });
+            this.textInput._root.clear();
+          }
         }
+      }else {
+        alert("Please connect to internet");
       }
     }
   };

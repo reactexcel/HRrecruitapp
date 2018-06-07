@@ -9,8 +9,9 @@ import {
   Item,
   Input,
   Spinner,
-  Toast
+  Toast,
 } from "native-base";
+import { NetInfo } from 'react-native'
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
@@ -29,7 +30,8 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: ""
+      email: "",
+      isOnline:false
     };
   }
   static navigationOptions = {
@@ -46,29 +48,50 @@ class InterviewLogin extends Component {
     }
     return null;
   }
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
+  }
+
+  handleNetwork = isconnect => {
+    this.setState({ isOnline: isconnect });
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
+  }
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-      GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
-      await this.props.signUp(this.state.email);
-      const {
-        interviewSignUp: { status, fb_id }
-      } = this.props;
-      if (status === 0) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(
-          this.state.email,
-          status.toString()
-        );
-        this.props.navigation.navigate("VerifyingCandidate");
-        this.setState({ email: "" });
-      } else if (status === SUCCESS_STATUS) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(
-          this.state.email,
-          status.toString()
-        );
-        this.props.navigation.navigate("OTPpage");
-        this.setState({ email: "" });
+      if(this.state.isOnline){
+        GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
+        await this.props.signUp(this.state.email);
+        const {
+          interviewSignUp: { status, fb_id }
+        } = this.props;
+        if (status === 0) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            this.state.email,
+            status.toString()
+          );
+          this.props.navigation.navigate("VerifyingCandidate");
+          this.setState({ email: "" });
+        } else if (status === SUCCESS_STATUS) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            this.state.email,
+            status.toString()
+          );
+          this.props.navigation.navigate("OTPpage");
+          this.setState({ email: "" });
+        }
+      }else {
+        alert("Please connect to internet");
       }
     }
   };
