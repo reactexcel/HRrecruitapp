@@ -28,9 +28,9 @@ class AddCandidate extends Component {
     header: null
   };
   static getDerivedStateFromProps(nextProps) {
-    const { message } = nextProps.addCandidate; 
-    if (message !== undefined ){
-      alert(message);
+    const { msg } = nextProps.addCandidate; 
+    if (msg !== undefined ){
+      alert(msg);
     }
     return null;
   }

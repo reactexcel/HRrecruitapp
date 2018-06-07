@@ -25,12 +25,12 @@ class Instructions extends Component {
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
-      const { data, message } = nxtprops.questions;
+      const { data, msg } = nxtprops.questions;
       if (data !== undefined && data.status == SUCCESS_STATUS) {
         setItem("question", JSON.stringify({ data: data }));
       }
-      if (message !== undefined ){
-       alert(message);
+      if (msg !== undefined ){
+       alert(msg);
       }
     }
     return null;

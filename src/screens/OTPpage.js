@@ -88,12 +88,12 @@ class OTPpage extends Component {
     }
   };
   static getDerivedStateFromProps(nextProps) {
-    const { success, message } = nextProps.otp;
+    const { success, msg } = nextProps.otp;
     if (success !== undefined && !success) {
       notify("Something went wrong");
     }
-    if (message !== undefined ){
-      alert(message);
+    if (msg !== undefined ){
+      alert(msg);
     }
     return null;
   }

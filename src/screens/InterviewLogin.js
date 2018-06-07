@@ -39,15 +39,15 @@ class InterviewLogin extends Component {
   };
 
   static getDerivedStateFromProps(nextProps) {
-    const { error, success, message } = nextProps.interviewSignUp;
+    const { error, success, msg } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
       alert("Please ask HR to assign a Job Profile and round");
     }
     if (success !== undefined && !success) {
       notify("Something went wrong");
     } 
-    if (message !== undefined ){
-      alert(message);
+    if (msg !== undefined ){
+      alert(msg);
     }
     return null;
   }
