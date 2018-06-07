@@ -6,9 +6,7 @@ export default function(state = null, action) {
       return action.payload;
       break;
     case QUESTIONS_FAILURE:
-      return {
-        success: false
-      };
+      return action.payload;
 
     default:
       return state;

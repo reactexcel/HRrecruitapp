@@ -37,5 +37,16 @@ export default StyleSheet.create({
   inputTextView: {
     paddingVertical: 10,
     borderBottomWidth: 0
+  },
+  footerView: {
+    height: 15,
+    backgroundColor: COLOR.BGCOLOR,
+    borderTopWidth: 0
+  },
+  footerText: {
+    letterSpacing: 1,
+    textAlign: "left",
+    fontSize: 10,
+    color: "#fff"
   }
 });
