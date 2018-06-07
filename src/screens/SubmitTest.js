@@ -91,6 +91,7 @@ class SubmitTest extends Component {
   };
 
   handleTestSubmit = async () => {
+    const user_email = this.props.navigation.getParam("email");
     const ans = await getItem("solution");
     const { params } = this.props.navigation.state;
     const fb_id = params.fb_id;
@@ -109,7 +110,7 @@ class SubmitTest extends Component {
       questionIds: questionIds,
       taken_time_minutes: taken_time_minutes
     };
-    this.props.submitTest(this.props.email,data);
+    this.props.submitTest(user_email,data);
   };
 
   render() {
