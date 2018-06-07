@@ -54,6 +54,14 @@ class TestPage extends Component {
     this.props.navigation.setParams({
       setTime: this.setTime
     });
+    const ans = await getItem("solution");
+
+    if (
+      ans !== undefined &&
+      email.email === this.props.navigation.state.params.email
+    ) {
+      this.setState({ solution: ans.solution });
+    }
   }
 
   componentWillUnmount() {
@@ -76,7 +84,10 @@ class TestPage extends Component {
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
-    const counter = navigation.state.params.data.timeForExam * 60 * 1000;
+    const counter =
+      navigation.state.params.time !== undefined
+        ? navigation.state.params.time
+        : navigation.state.params.data.timeForExam;
     return {
       title: name,
       headerLeft: (
@@ -94,6 +105,10 @@ class TestPage extends Component {
                   <TimerCountdown
                     initialSecondsRemaining={counter}
                     onTick={counter => {
+                      setItem(
+                        "remaining_time",
+                        JSON.stringify({ remaining_time: counter })
+                      );
                       if (navigation.state.params.setTime !== undefined) {
                         navigation.state.params.setTime(counter);
                       }
@@ -106,7 +121,8 @@ class TestPage extends Component {
                     onTimeElapsed={() => {
                       navigation.navigate("SubmitTest", {
                         ...navigation.state.params,
-                        taken_time_minutes: 60
+                        taken_time_minutes:
+                          navigation.state.params.data.timeForExam
                       });
                     }}
                     allowFontScaling={true}
@@ -197,7 +213,7 @@ class TestPage extends Component {
     }
   };
 
-  handleStartTest = () => {
+  handleStartTest = async () => {
     this.setState({ show: true });
     if (this.props.navigation.state.params.show === undefined) {
       this.props.navigation.setParams({
@@ -205,6 +221,23 @@ class TestPage extends Component {
       });
     } else if (this.props.navigation.state.params.show) {
       return;
+    }
+
+    const time =
+      this.props.navigation.state.params.data.timeForExam * 60 * 1000;
+    const remaining_time = await getItem("remaining_time");
+
+    if (
+      remaining_time !== undefined &&
+      remaining_time.remaining_time !== null
+    ) {
+      this.props.navigation.setParams({
+        time: remaining_time.remaining_time
+      });
+    } else {
+      this.props.navigation.setParams({
+        time
+      });
     }
   };
 
