@@ -36,7 +36,6 @@ firebaseVerifyOtp = (msg,data) => {
 firebaseGetQuestion = (msg,data) => {
 
     const {API_URL, email, res,fb_id  } = data;
-    console.log(data,"test")
     let modify_Email = modifyEmail(email);    
     let getQuestion = `${modify_Date.toString()}` + modify_Email ;
 
@@ -49,7 +48,6 @@ firebaseGetQuestion = (msg,data) => {
 }
 
 firebaseSubmitTest = (msg,data) => {
-    console.log(msg,data)
     
     const {API_URL, email, res,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
