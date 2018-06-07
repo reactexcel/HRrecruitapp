@@ -19,16 +19,16 @@ firebaseSignup = (msg,data) => {
 } 
 
 firebaseVerifyOtp = (msg,data) => {
-
-    const {API_URL, email, res, examToken,fb_id  } = data;
+    console.log(msg,data,"tesingarround")
+    const {API_URL, email, examToken,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
     let verfiyOtp = `${modify_Date.toString()}`+"/verfiyOtp/" + modify_Email ;
+    let apiData = msg == "FIREBASE_VERIFY_OTP_FAILURE" ? data.err.response.data : data.res.data;
 
     return firebase.database().ref(verfiyOtp).set({
         API_URL:API_URL,
-        res: res.data,
+        res: apiData,
         examToken:examToken,
-        status:res.status,
         fb_id:fb_id
     })
 }

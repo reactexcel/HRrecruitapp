@@ -29,7 +29,7 @@ class OTPpage extends Component {
       fb_id: props.fb_id,
       email: props.email,
       errors: {},
-      isOnline:false
+      isOnline:true
     };
   }
   static navigationOptions = {
@@ -65,7 +65,7 @@ class OTPpage extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.otp);
 
-    if (Object.keys(errors).length === 0) {
+    if (Object.keys(errors).length === 0) { 
       if(this.state.isOnline){
         await this.props.verifyingOTP(this.state.email, this.state.otp, this.state.fb_id);
         if (this.props.otp.data !== undefined) {
@@ -84,15 +84,16 @@ class OTPpage extends Component {
             this.textInput._root.clear();
           }
         }
-      }else {
-        alert("Please connect to internet");
       }
     }
   };
   static getDerivedStateFromProps(nextProps) {
-    const { success } = nextProps.otp;
+    const { success, message } = nextProps.otp;
     if (success !== undefined && !success) {
       notify("Something went wrong");
+    }
+    if (message !== undefined ){
+      alert(message);
     }
     return null;
   }
