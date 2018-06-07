@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image } from "react-native";
+import { Image, Alert } from "react-native";
 import {
   Container,
   Content,
@@ -25,11 +25,30 @@ class Instructions extends Component {
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
-      if (nxtprops.questions.data.status == SUCCESS_STATUS) {
-        setItem("question", JSON.stringify({ data: nxtprops.questions.data }));
+      const { data } = nxtprops.questions;
+      if (data !== undefined && data.status == SUCCESS_STATUS) {
+        setItem("question", JSON.stringify({ data: data }));
       }
     }
     return null;
+  }
+  componentDidUpdate() {
+    const { error, message } = this.props.questions;
+    if (error !== undefined) {
+      if (error === 1) {
+        Alert.alert(
+          "Alert",
+          `${message}`,
+          [
+            {
+              text: "OK",
+              onPress: () => this.props.navigation.popToTop()
+            }
+          ],
+          { cancelable: false }
+        );
+      }
+    }
   }
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
@@ -63,7 +82,13 @@ class Instructions extends Component {
             {questions !== null ? (
               <Fragment>
                 <CardItem>
-                  <Text style={styles.text}>{questions.data.instructions}</Text>
+                  {questions.data !== undefined ? (
+                    <Text style={styles.text}>
+                      {questions.data.instructions}
+                    </Text>
+                  ) : (
+                    <Text style={styles.text}>No data found</Text>
+                  )}
                 </CardItem>
                 <CustomButton text="Continue" onPress={this.handlePress} />
               </Fragment>
@@ -78,4 +103,7 @@ class Instructions extends Component {
 }
 const mapStatetoProps = ({ questions }) => ({ questions });
 
-export default connect(mapStatetoProps, { getQuestions })(Instructions);
+export default connect(
+  mapStatetoProps,
+  { getQuestions }
+)(Instructions);

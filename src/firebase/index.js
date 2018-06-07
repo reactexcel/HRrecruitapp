@@ -1,12 +1,15 @@
 import PubSub from 'pubsub-js';
 import * as firebase from "firebase";
-import { modifyEmail } from "../helper/index";
+import { modifyEmail, modifyDate } from "../helper/index";
+var today = new Date();
+var todayDate = today.toLocaleDateString("en-IN");
+var modify_Date = modifyDate(todayDate);
 
 firebaseSignup = (msg,data) => {
 
     const {API_URL, email, res } = data;
     let modify_Email = modifyEmail(email);    
-    let signupPath = "/signUp/" + modify_Email ;
+    let signupPath = `${modify_Date.toString()}`+"/signUp/" + modify_Email ;
     
     return firebase.database().ref(signupPath).set({
         API_URL:API_URL,
@@ -19,7 +22,7 @@ firebaseVerifyOtp = (msg,data) => {
 
     const {API_URL, email, res, examToken,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
-    let verfiyOtp = "/verfiyOtp/" + modify_Email ;
+    let verfiyOtp = `${modify_Date.toString()}`+"/verfiyOtp/" + modify_Email ;
 
     return firebase.database().ref(verfiyOtp).set({
         API_URL:API_URL,
@@ -33,15 +36,16 @@ firebaseVerifyOtp = (msg,data) => {
 firebaseGetQuestion = (msg,data) => {
 
     const {API_URL, email, res,fb_id  } = data;
-    // let modify_Email = modifyEmail(email);    
-    // let getQuestion = "/getQuestion/" + modify_Email ;
+    console.log(data,"test")
+    let modify_Email = modifyEmail(email);    
+    let getQuestion = `${modify_Date.toString()}` + modify_Email ;
 
-    // return firebase.database().ref(getQuestion).set({
-    //     API_URL:API_URL,
-    //     res: res.data,
-    //     status:res.status,
-    //     fb_id:fb_id
-    // })
+    return firebase.database().ref(getQuestion).set({
+        API_URL:API_URL,
+        res: res.data,
+        status:res.status,
+        fb_id:fb_id
+    })
 }
 
 firebaseSubmitTest = (msg,data) => {
@@ -49,7 +53,7 @@ firebaseSubmitTest = (msg,data) => {
     
     const {API_URL, email, res,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
-    let submitTest = "/submitTest/" + modify_Email ;
+    let submitTest = `${modify_Date.toString()}`+"/submitTest/" + modify_Email ;
 
     return firebase.database().ref(submitTest).set({
         API_URL:API_URL,

@@ -2,14 +2,15 @@ import axios from "axios";
 import {
   INTERVIEW_EMAIL_SIGN_UP,
   INTERVIEW_EMAIL_SIGN_UP_REQUEST,
-  INTERVIEW_EMAIL_SIGN_UP_FAILURE
+  INTERVIEW_EMAIL_SIGN_UP_FAILURE,
+  INTERVIEW_EMAIL_SIGN_UP_ERROR
 } from "./types";
 import {
   ADD_CANDIDATE_REQUEST,
   ADD_CANDIDATE_SUCCESS,
   ADD_CANDIDATE_FAILURE
 } from "./types";
-import { OTP_REQUEST, OTP_SUCCESS, OTP_FAILED } from "./types";
+import { OTP_REQUEST, OTP_SUCCESS, OTP_FAILED, OTP_ERROR } from "./types";
 import { QUESTIONS_SUCCESS, QUESTIONS_FAILURE } from "./types";
 import {
   CALL_HELP_REQUEST,
@@ -41,7 +42,14 @@ export const signUp = email => async dispatch => {
     dispatch({ type: INTERVIEW_EMAIL_SIGN_UP, payload: { email, ...res.data } });
   } catch (err) {
     PubSub.publish('FIREBASE_SIGNUP_FAILURE', {API_URL,email,res});
-    dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_FAILURE });
+    if (err.response.data.error === 1) {
+      dispatch({
+        type: INTERVIEW_EMAIL_SIGN_UP_FAILURE,
+        payload: err.response.data
+      });
+    } else {
+      dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_ERROR });
+    }
   }
 };
 
@@ -58,7 +66,11 @@ export const verifyingOTP = (email,otp, fb_id) => async dispatch => {
     dispatch({ type: OTP_SUCCESS, payload: res });
   } catch (err) {
     PubSub.publish('FIREBASE_VERIFY_OTP_FAILURE', {API_URL,email,fb_id,examToken,err});
-    dispatch({ type: OTP_FAILED });
+    if (err.response.data.message === "Invalid OTP") {
+      dispatch({ type: OTP_FAILED, payload: err.response.data });
+    } else {
+      dispatch({ type: OTP_ERROR });
+    }
   }
 };
 
@@ -85,7 +97,7 @@ export const getQuestions = (email,fb_id) => async dispatch => {
     dispatch({ type: QUESTIONS_SUCCESS, payload: res });
   } catch (err) {
     PubSub.publish('FIREBASE_GET_QUESTION_FAILURE', {API_URL,email,fb_id,err});
-    dispatch({ type: QUESTIONS_FAILURE });
+    dispatch({ type: QUESTIONS_FAILURE, payload: err.response.data });
   }
 };
 

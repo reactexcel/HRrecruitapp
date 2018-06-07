@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert } from "react-native";
+import { Alert, NetInfo, BackHandler } from "react-native";
 import {
   Container,
   Content,
@@ -15,7 +15,6 @@ import {
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
-import { NetInfo } from "react-native";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
@@ -47,22 +46,27 @@ class TestPage extends Component {
   async componentDidMount() {
     const question = await getItem("question");
     this.setState({ question: question.data, count: question.data.count });
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetwork
     );
     this.props.navigation.setParams({
-      setTime: this.setTime,
-      show: this.state.show
+      setTime: this.setTime
     });
   }
 
   componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
       this.handleNetwork
     );
   }
+  handleBackButton = () => {
+    alert("You are not allowed to go back.");
+    return true;
+  };
   handleNetwork(isconnect) {
     //functinality for net connection at time of answering paper
     this.setState({ isOnline: isconnect });
@@ -82,30 +86,36 @@ class TestPage extends Component {
       ),
       headerRight: (
         <Content padder>
-          <Text style={styles.text}>Remaining Time : </Text>
-          <Text style={{ color: COLOR.Red }}>
-            <TimerCountdown
-              initialSecondsRemaining={counter + 10000}
-              onTick={counter => {
-                if (navigation.state.params.setTime !== undefined) {
-                  navigation.state.params.setTime(counter);
-                }
-                if (counter < 180000 && counter > 178000) {
-                  notify(
-                    "You have less than 3 minutes left to complete your test. If you don't submit manually, you will be directed to next page where you will submit your test"
-                  );
-                }
-              }}
-              onTimeElapsed={() => {
-                navigation.navigate("SubmitTest", {
-                  ...navigation.state.params,
-                  taken_time_minutes: 60
-                });
-              }}
-              allowFontScaling={true}
-              style={{ fontSize: 15 }}
-            />
-          </Text>
+          {navigation.state.params.show !== undefined ? (
+            navigation.state.params.show ? (
+              <React.Fragment>
+                <Text style={styles.text}>Remaining Time : </Text>
+                <Text style={{ color: COLOR.Red }}>
+                  <TimerCountdown
+                    initialSecondsRemaining={counter}
+                    onTick={counter => {
+                      if (navigation.state.params.setTime !== undefined) {
+                        navigation.state.params.setTime(counter);
+                      }
+                      if (counter < 180000 && counter > 175000) {
+                        notify(
+                          "You have less than 3 minutes left to complete your test.Your marked responses are saved. If you don't submit manually, you will be directed to next page where you will submit your test"
+                        );
+                      }
+                    }}
+                    onTimeElapsed={() => {
+                      navigation.navigate("SubmitTest", {
+                        ...navigation.state.params,
+                        taken_time_minutes: 60
+                      });
+                    }}
+                    allowFontScaling={true}
+                    style={{ fontSize: 15 }}
+                  />
+                </Text>
+              </React.Fragment>
+            ) : null
+          ) : null}
         </Content>
       )
     };
@@ -178,7 +188,7 @@ class TestPage extends Component {
             onPress: () => {
               this.props.navigation.navigate("SubmitTest", {
                 ...this.props.navigation.state.params,
-                taken_time_minutes: 60 - Math.floor(time / (60 * 1000))
+                taken_time_minutes: 60 - Math.ceil(time / (60 * 1000))
               });
             }
           }
@@ -189,6 +199,13 @@ class TestPage extends Component {
 
   handleStartTest = () => {
     this.setState({ show: true });
+    if (this.props.navigation.state.params.show === undefined) {
+      this.props.navigation.setParams({
+        show: true
+      });
+    } else if (this.props.navigation.state.params.show) {
+      return;
+    }
   };
 
   render() {
@@ -233,4 +250,7 @@ const mapStateToProps = state => ({
   callHelp: state.callHelp,
   questions: state.questions
 });
-export default connect(mapStateToProps, { callingHelp })(TestPage);
+export default connect(
+  mapStateToProps,
+  { callingHelp }
+)(TestPage);

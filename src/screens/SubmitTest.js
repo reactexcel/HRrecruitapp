@@ -35,7 +35,6 @@ class SubmitTest extends Component {
       "connectionChange",
       this.handleNetwork
     );
-    console.log("submittest did mount");
   }
   handleNetwork = isconnect => {
     //functinality for net connection at time of answering paper
@@ -73,30 +72,6 @@ class SubmitTest extends Component {
       }
     }
   }
-  // static getDerivedStateFromProps(nextProps) {
-  //   if (nextProps.test.data !== undefined) {
-  //     if (nextProps.test.data.status === SUCCESS_STATUS) {
-  //       Alert.alert(
-  //         "Thank You",
-  //         "Your response has been recorded. Please contact HR for for further instructions.",
-  //         [
-  //           {
-  //             text: "OK",
-  //             onPress: () => nextProps.navigation.navigate("InterviewLogin")
-  //           }
-  //         ],
-  //         { cancelable: false }
-  //       );
-  //     }
-  //     const { success } = nextProps.test;
-  //     if (success !== undefined) {
-  //       if (success === false) {
-  //         notify("Something went wrong");
-  //       }
-  //     }
-  //   }
-  //   return null;
-  // }
 
   handleBackButton = () => {
     alert("Not Allowed");
@@ -142,6 +117,7 @@ class SubmitTest extends Component {
     const {
       test: { submitting }
     } = this.props;
+
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -176,3 +152,4 @@ class SubmitTest extends Component {
   email: state.interviewSignUp.email,
 });
 export default connect(mapStateToProps, { submitTest })(SubmitTest);
+
