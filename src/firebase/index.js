@@ -7,14 +7,14 @@ var modify_Date = modifyDate(todayDate);
 
 firebaseSignup = (msg,data) => {
 
-    const {API_URL, email, res } = data;
+    const {API_URL, email } = data;
     let modify_Email = modifyEmail(email);    
     let signupPath = `${modify_Date.toString()}`+"/signUp/" + modify_Email ;
-    
+    let apiData = msg == "FIREBASE_SIGNUP_FAILURE" ? data.err.response.data : data.res.data;
+
     return firebase.database().ref(signupPath).set({
         API_URL:API_URL,
-        res: res.data,
-        status:res.status
+        res: apiData,
     })
 } 
 
@@ -36,20 +36,18 @@ firebaseVerifyOtp = (msg,data) => {
 firebaseGetQuestion = (msg,data) => {
 
     const {API_URL, email, res,fb_id  } = data;
-    console.log(data,"test")
     let modify_Email = modifyEmail(email);    
-    let getQuestion = `${modify_Date.toString()}` + modify_Email ;
+    let getQuestion = `${modify_Date.toString()}`+"/getquestion/" + modify_Email ;
+    let apiData = msg == "FIREBASE_GET_QUESTION_FAILURE" ? data.err.response.data : data.res.data;
 
     return firebase.database().ref(getQuestion).set({
         API_URL:API_URL,
-        res: res.data,
-        status:res.status,
+        res: apiData,
         fb_id:fb_id
     })
 }
 
 firebaseSubmitTest = (msg,data) => {
-    console.log(msg,data)
     
     const {API_URL, email, res,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
