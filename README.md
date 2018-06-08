@@ -17,4 +17,6 @@
   * Login in [here](hhttps://appcenter.ms/apps) 
   * Open [this](https://appcenter.ms/orgs/Excellence-Technologies/apps/HR-Recruit/crashes/groups) to see the crash reports
 * Firebase Configured with ```ashutosh@excellencetechnologies.in```.
-  * Open this [link](https://developers.google.com/maps/documentation/android-api/signup) click on ```GET A KEY``` select your project , copy that key and replaced with old one.
+  * Configure project for android.
+  * [OpenURl](https://console.firebase.google.com/u/0/) you see the project name HR Recruit.
+  * [OpenURl](https://console.firebase.google.com/u/1/project/myfirstfirebaseproject-abf19/database/myfirstfirebaseproject-abf19/data) can see logged data form mobile app. 
