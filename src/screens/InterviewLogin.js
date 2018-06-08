@@ -70,10 +70,9 @@ class InterviewLogin extends Component {
       this.handleNetwork
     );
     const status = await getItem("status");
-    const ans = await getItem("solution");
-    // if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
-    //   this.backPressed();
-    // }
+    if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
+      this.backPressed();
+    }
   }
   backPressed = () => {
     Alert.alert(

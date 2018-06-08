@@ -62,7 +62,7 @@ class SubmitTest extends Component {
           [
             {
               text: "OK",
-              onPress: () => this.props.navigation.popToTop()
+              onPress: () => BackHandler.exitApp()
             }
           ],
           { cancelable: false }
