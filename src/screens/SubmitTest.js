@@ -114,7 +114,7 @@ class SubmitTest extends Component {
       questionIds: questionIds,
       taken_time_minutes: taken_time_minutes
     };
-    this.props.submitTest(email, data);
+    this.props.submitTest(email,data);
   };
 
   render() {

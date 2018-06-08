@@ -27,6 +27,13 @@ class AddCandidate extends Component {
   static navigationOptions = {
     header: null
   };
+  static getDerivedStateFromProps(nextProps) {
+    const { msg } = nextProps.addCandidate; 
+    if (msg !== undefined ){
+      alert(msg);
+    }
+    return null;
+  }
   renderField(props) {
     const { input, ...inputProps } = props;
     const {
@@ -172,6 +179,7 @@ validate = values => {
   }
   return errors;
 };
+
 const mapStateToProps = ({ addCandidate }) => ({ addCandidate });
 export default reduxForm({
   form: "AddCandidate",
