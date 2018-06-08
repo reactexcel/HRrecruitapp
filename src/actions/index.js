@@ -25,7 +25,7 @@ import {
 import API_URL from "../config/dev";
 import PubSub from 'pubsub-js';
 
-const _axios = () => axios.create({ baseURL: API_URL,timeout: 10000, });
+const _axios = () => axios.create({ baseURL: API_URL,timeout: 20000, }); //TimeOut set to 20 seconds
 
 // Action for Signing Up with email to take interview test paper
 export const signUp = email => async dispatch => {
