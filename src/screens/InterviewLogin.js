@@ -10,9 +10,9 @@ import {
   Item,
   Input,
   Spinner,
-  Toast,
+  Toast
 } from "native-base";
-import { NetInfo } from 'react-native'
+import { NetInfo } from "react-native";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
@@ -32,7 +32,7 @@ class InterviewLogin extends Component {
     super();
     this.state = {
       email: "",
-      isOnline:false
+      isOnline: false
     };
   }
   static navigationOptions = {
@@ -46,17 +46,11 @@ class InterviewLogin extends Component {
     }
     if (success !== undefined && !success) {
       notify("Something went wrong");
-    } 
-    if (msg !== undefined ){
+    }
+    if (msg !== undefined) {
       alert(msg);
     }
     return null;
-  }
-  componentDidMount() {
-    NetInfo.isConnected.addEventListener(
-      "connectionChange",
-      this.handleNetwork
-    );
   }
 
   handleNetwork = isconnect => {
@@ -71,11 +65,12 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
-    const ans = await getItem("solution");
-    const email = await getItem("email");
-    const fb_id = await getItem("fb_id");
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
     const status = await getItem("status");
-    const remaining_time = await getItem("remaining_time");
+    const ans = await getItem("solution");
     // if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
     //   this.backPressed();
     // }
@@ -94,9 +89,10 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-      if(this.state.isOnline){
+      if (this.state.isOnline) {
         GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
         await this.props.signUp(this.state.email);
+        setItem("email", JSON.stringify({ email: this.state.email }));
         const {
           interviewSignUp: { status, fb_id }
         } = this.props;
@@ -115,7 +111,7 @@ class InterviewLogin extends Component {
           this.props.navigation.navigate("OTPpage");
           this.setState({ email: "" });
         }
-      }else {
+      } else {
         alert("Please connect to internet");
       }
     }

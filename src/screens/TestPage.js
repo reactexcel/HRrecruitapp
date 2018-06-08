@@ -55,7 +55,7 @@ class TestPage extends Component {
       setTime: this.setTime
     });
     const ans = await getItem("solution");
-
+    const email = await getItem("email");
     if (
       ans !== undefined &&
       email.email === this.props.navigation.state.params.email
