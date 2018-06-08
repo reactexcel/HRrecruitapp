@@ -52,7 +52,6 @@ export const signUp = email => async dispatch => {
         dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_ERROR });
       }
     }else if(err.message) {
-        console.log(err.message,"customer")
         dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_FAILURE, payload: {msg:err.message} });
     }
   }

@@ -19,7 +19,7 @@ firebaseSignup = (msg,data) => {
 } 
 
 firebaseVerifyOtp = (msg,data) => {
-    console.log(msg,data,"tesingarround")
+    
     const {API_URL, email, examToken,fb_id  } = data;
     let modify_Email = modifyEmail(email);    
     let verfiyOtp = `${modify_Date.toString()}`+"/verfiyOtp/" + modify_Email ;
