@@ -19,4 +19,4 @@
 * Firebase Configured with ```ashutosh@excellencetechnologies.in```.
   * Configure project for android.
   * [OpenURl](https://console.firebase.google.com/u/0/) you see the project name HR Recruit.
-  * [OpenURl](https://console.firebase.google.com/u/1/project/myfirstfirebaseproject-abf19/database/myfirstfirebaseproject-abf19/data) can see logged data form mobile app. 
+  * [OpenURl](https://console.firebase.google.com/u/1/project/myfirstfirebaseproject-abf19/database/myfirstfirebaseproject-abf19/data) can see logged data form mobile app.
