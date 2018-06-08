@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { BackHandler, Alert } from "react-native";
 import {
   Container,
   Content,
@@ -9,8 +10,9 @@ import {
   Item,
   Input,
   Spinner,
-  Toast
+  Toast,
 } from "native-base";
+import { NetInfo } from 'react-native'
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
@@ -23,13 +25,14 @@ import { signUp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
-import { getItem } from "../helper/storage";
+import { getItem, setItem } from "../helper/storage";
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: ""
+      email: "",
+      isOnline:false
     };
   }
   static navigationOptions = {
@@ -37,38 +40,83 @@ class InterviewLogin extends Component {
   };
 
   static getDerivedStateFromProps(nextProps) {
-    const { error, success } = nextProps.interviewSignUp;
+    const { error, success, msg } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
       alert("Please ask HR to assign a Job Profile and round");
     }
     if (success !== undefined && !success) {
       notify("Something went wrong");
+    } 
+    if (msg !== undefined ){
+      alert(msg);
     }
     return null;
   }
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
+  }
+
+  handleNetwork = isconnect => {
+    this.setState({ isOnline: isconnect });
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetwork
+    );
+  }
+
+  async componentDidMount() {
+    const ans = await getItem("solution");
+    const email = await getItem("email");
+    const fb_id = await getItem("fb_id");
+    const status = await getItem("status");
+    const remaining_time = await getItem("remaining_time");
+    // if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
+    //   this.backPressed();
+    // }
+  }
+  backPressed = () => {
+    Alert.alert(
+      "Thank You",
+      "You have submitted your test.",
+      [{ text: "Ok", onPress: () => BackHandler.exitApp() }],
+      { cancelable: false }
+    );
+
+    return true;
+  };
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-      GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
-      await this.props.signUp(this.state.email);
-      const {
-        interviewSignUp: { status, fb_id }
-      } = this.props;
-      if (status === 0) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(
-          this.state.email,
-          status.toString()
-        );
-        this.props.navigation.navigate("VerifyingCandidate");
-        this.setState({ email: "" });
-      } else if (status === SUCCESS_STATUS) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent(
-          this.state.email,
-          status.toString()
-        );
-        this.props.navigation.navigate("OTPpage");
-        this.setState({ email: "" });
+      if(this.state.isOnline){
+        GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
+        await this.props.signUp(this.state.email);
+        const {
+          interviewSignUp: { status, fb_id }
+        } = this.props;
+        if (status === 0) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            this.state.email,
+            status.toString()
+          );
+          this.props.navigation.navigate("VerifyingCandidate");
+          this.setState({ email: "" });
+        } else if (status === SUCCESS_STATUS) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            this.state.email,
+            status.toString()
+          );
+          this.props.navigation.navigate("OTPpage");
+          this.setState({ email: "" });
+        }
+      }else {
+        alert("Please connect to internet");
       }
     }
   };
