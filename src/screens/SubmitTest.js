@@ -110,7 +110,6 @@ class SubmitTest extends Component {
       questionIds: questionIds,
       taken_time_minutes: taken_time_minutes
     };
-    console.log(this.props,"this.rpspsspp")
     this.props.submitTest(email,data);
   };
 

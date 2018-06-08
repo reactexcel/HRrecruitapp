@@ -25,7 +25,7 @@ import {
 import API_URL from "../config/dev";
 import PubSub from 'pubsub-js';
 
-const _axios = () => axios.create({ baseURL: API_URL });
+const _axios = () => axios.create({ baseURL: API_URL,timeout: 20000, }); //TimeOut set to 20 seconds
 
 // Action for Signing Up with email to take interview test paper
 export const signUp = email => async dispatch => {
@@ -41,14 +41,18 @@ export const signUp = email => async dispatch => {
     PubSub.publish('FIREBASE_SIGNUP_SUCCESS', {API_URL,email,res});  
     dispatch({ type: INTERVIEW_EMAIL_SIGN_UP, payload: { email, ...res.data } });
   } catch (err) {
-    PubSub.publish('FIREBASE_SIGNUP_FAILURE', {API_URL,email,err});
-    if (err.response.data.error === 1) {
-      dispatch({
-        type: INTERVIEW_EMAIL_SIGN_UP_FAILURE,
-        payload: err.response.data
-      });
-    } else {
-      dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_ERROR });
+    if(err.response){
+      PubSub.publish('FIREBASE_SIGNUP_FAILURE', {API_URL,email,err});
+      if (err.response.data.error === 1) {
+        dispatch({
+          type: INTERVIEW_EMAIL_SIGN_UP_FAILURE,
+          payload: err.response.data
+        });
+      } else {
+        dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_ERROR });
+      }
+    }else if(err.message) {
+        dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_FAILURE, payload: {msg:err.message} });
     }
   }
 };
@@ -65,12 +69,17 @@ export const verifyingOTP = (email,otp, fb_id) => async dispatch => {
     PubSub.publish('FIREBASE_VERIFY_OTP_SUCCESS', {API_URL,email,fb_id,examToken,res});
     dispatch({ type: OTP_SUCCESS, payload: res });
   } catch (err) {
-    PubSub.publish('FIREBASE_VERIFY_OTP_FAILURE', {API_URL,email,fb_id,examToken,err});
-    if (err.response.data.message === "Invalid OTP") {
-      dispatch({ type: OTP_FAILED, payload: err.response.data });
-    } else {
-      dispatch({ type: OTP_ERROR });
+    if(err.response){
+      if (err.response.data.message === "Invalid OTP") {
+        PubSub.publish('FIREBASE_VERIFY_OTP_FAILURE', {API_URL,email,fb_id,examToken,err});
+        dispatch({ type: OTP_FAILED, payload: err.response.data });
+      } else {
+        dispatch({ type: OTP_ERROR });
+      }
+    }else if (err.message) {
+        dispatch({ type: OTP_FAILED, payload: {msg:err.message} });
     }
+    
   }
 };
 
@@ -85,7 +94,14 @@ export const addCandidate = data => async dispatch => {
     const res = await _axios().post("addNewCandidate", formData);
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
-    dispatch({ type: ADD_CANDIDATE_FAILURE });
+    if(err.message){
+      dispatch({ 
+        type: ADD_CANDIDATE_FAILURE,
+        payload: {msg:err.message}
+       });
+    }else {
+      dispatch({ type: ADD_CANDIDATE_FAILURE });
+    }
   }
 };
 
@@ -96,8 +112,12 @@ export const getQuestions = (email,fb_id) => async dispatch => {
     PubSub.publish('FIREBASE_GET_QUESTION_SUCCESS', {API_URL,email,fb_id,res});
     dispatch({ type: QUESTIONS_SUCCESS, payload: res });
   } catch (err) {
-    PubSub.publish('FIREBASE_GET_QUESTION_FAILURE', {API_URL,email,fb_id,err});
-    dispatch({ type: QUESTIONS_FAILURE, payload: err.response.data });
+    if(err.message == 'timeout of 10000ms exceeded' ){ // Show alert about timeout to user
+      dispatch({ type: QUESTIONS_FAILURE, payload: {msg:err.message} });
+    }else {
+      PubSub.publish('FIREBASE_GET_QUESTION_FAILURE', {API_URL,email,fb_id,err});
+      dispatch({ type: QUESTIONS_FAILURE, payload: err.response.data });
+    }
   }
 };
 
@@ -111,7 +131,11 @@ export const callingHelp = (accessToken, fb_id) => async dispatch => {
     });
     dispatch({ type: CALL_HELP_SUCCESS, payload: res });
   } catch (err) {
-    dispatch({ type: CALL_HELP_FAILURE });
+    if(err.message){ // Show alert about timeout to user
+      dispatch({ type: CALL_HELP_FAILURE, payload: {msg:err.message} });
+    }else {
+      dispatch({ type: CALL_HELP_FAILURE });
+    }
   }
 };
 
@@ -125,7 +149,12 @@ export const submitTest = (email,data) => async dispatch => {
     PubSub.publish('FIREBASE_SUBMIT_TEST_SUCCESS', {API_URL,email,data,res});
     dispatch({ type: SUBMIT_TEST_SUCCESS, payload: res });
   } catch (err) {
-    PubSub.publish('FIREBASE_SUBMIT_TEST_FAILURE', {API_URL,email,data,err});
-    dispatch({ type: SUBMIT_TEST_FAILURE });
+    if(err.message){ // Show alert about timeout to user
+      dispatch({ type: SUBMIT_TEST_FAILURE, payload: {msg:err.message} });
+    }else {
+      PubSub.publish('FIREBASE_SUBMIT_TEST_FAILURE', {API_URL,email,data,err});
+      dispatch({ type: SUBMIT_TEST_FAILURE });
+    }
+    
   }
 };
