@@ -145,11 +145,7 @@ android {
             }
         }
     }
-    subprojects {
-        if(name.equals('react-native-google-analytics-bridge')) {
-            project.ext.'googlePlayServicesVersion' = '12.0.1'
-        }
-    }   
+       
 }
 
 dependencies {
