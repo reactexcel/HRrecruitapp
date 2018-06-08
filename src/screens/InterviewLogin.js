@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import { BackHandler, Alert } from "react-native";
 import {
   Container,
   Content,
@@ -24,7 +25,7 @@ import { signUp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
-import { getItem } from "../helper/storage";
+import { getItem, setItem } from "../helper/storage";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -68,6 +69,27 @@ class InterviewLogin extends Component {
       this.handleNetwork
     );
   }
+
+  async componentDidMount() {
+    const ans = await getItem("solution");
+    const email = await getItem("email");
+    const fb_id = await getItem("fb_id");
+    const status = await getItem("status");
+    const remaining_time = await getItem("remaining_time");
+    // if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
+    //   this.backPressed();
+    // }
+  }
+  backPressed = () => {
+    Alert.alert(
+      "Thank You",
+      "You have submitted your test.",
+      [{ text: "Ok", onPress: () => BackHandler.exitApp() }],
+      { cancelable: false }
+    );
+
+    return true;
+  };
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);

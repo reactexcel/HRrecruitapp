@@ -16,11 +16,10 @@ import styles from "../styles";
 import { connect } from "react-redux";
 import forEach from "lodash/forEach";
 import { submitTest } from "../actions";
-import { getItem } from "../helper/storage";
+import { getItem, setItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { notify } from "../helper/notify";
 import TimerCountdown from "react-native-timer-countdown";
-import { StackActions, NavigationActions } from "react-navigation";
 
 class SubmitTest extends Component {
   constructor() {
@@ -49,9 +48,14 @@ class SubmitTest extends Component {
     );
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
     if (this.props.test.data !== undefined) {
       if (this.props.test.data.status === SUCCESS_STATUS) {
+        const email = this.props.navigation.getParam("email");
+        const stored_email = await getItem("email");
+        if (stored_email.email === email) {
+          setItem("status", JSON.stringify({ submit_status: SUCCESS_STATUS }));
+        }
         Alert.alert(
           "Thank You",
           "Your response has been recorded. Please contact HR for for further instructions.",
@@ -97,8 +101,8 @@ class SubmitTest extends Component {
     const fb_id = params.fb_id;
     const job_profile = params.data.job_profile;
     const questionIds = [];
-    _.forEach(params.data.data, value => {
-      _.forEach(value.questions, value => {
+    forEach(params.data.data, value => {
+      forEach(value.questions, value => {
         questionIds.push(value._id);
       });
     });
@@ -148,9 +152,11 @@ class SubmitTest extends Component {
   }
 }
 
- const mapStateToProps = state => ({
-  test:state.test,
-  email: state.interviewSignUp.email,
+const mapStateToProps = state => ({
+  test: state.test,
+  email: state.interviewSignUp.email
 });
-export default connect(mapStateToProps, { submitTest })(SubmitTest);
-
+export default connect(
+  mapStateToProps,
+  { submitTest }
+)(SubmitTest);
