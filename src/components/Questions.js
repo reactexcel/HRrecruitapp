@@ -40,6 +40,7 @@ const Questions = props => {
                         <Text style={{ opacity: 0.8 }}>{ques.description}</Text>
                       </View>
                     ) : null}
+                    <Text style = {_styles.optText}>Options : </Text>
                     {map(ques.options, (values, index) => {
                       let isSolution =
                         solution[0] != undefined
@@ -54,10 +55,11 @@ const Questions = props => {
                             : false
                           : false;
                       return (
-                        <Content key={index} padder>
+                        <Content key={index} style={{ padding: 5 }}>
                           <Row>
                             <Col style={{ width: "10%" }}>
                               <Radio
+                                style={_styles.radio}
                                 onPress={() => {
                                   handleSubmit(ques._id, values.opt_id);
                                 }}
