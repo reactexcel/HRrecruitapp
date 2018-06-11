@@ -21,7 +21,7 @@ class Instructions extends Component {
   componentDidMount() {
     const fb_id = this.props.navigation.getParam("fb_id");
     const email = this.props.navigation.getParam("email");
-    this.props.getQuestions(email,fb_id);
+    this.props.getQuestions(email, fb_id);
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
@@ -29,30 +29,30 @@ class Instructions extends Component {
       if (data !== undefined && data.status == SUCCESS_STATUS) {
         setItem("question", JSON.stringify({ data: data }));
       }
-      if (msg !== undefined ){
-       alert(msg);
+      if (msg !== undefined) {
+        alert(msg);
       }
     }
     return null;
   }
-  componentDidUpdate() {
-    const { error, message } = this.props.questions;
-    if (error !== undefined) {
-      if (error === 1) {
-        Alert.alert(
-          "Alert",
-          `${message}`,
-          [
-            {
-              text: "OK",
-              onPress: () => this.props.navigation.popToTop()
-            }
-          ],
-          { cancelable: false }
-        );
-      }
-    }
-  }
+  // componentDidUpdate() {
+  //   const { error, message } = this.props.questions;
+  //   if (error !== undefined) {
+  //     if (error === 1) {
+  //       Alert.alert(
+  //         "Alert",
+  //         `${message}`,
+  //         [
+  //           {
+  //             text: "OK",
+  //             onPress: () => this.props.navigation.popToTop()
+  //           }
+  //         ],
+  //         { cancelable: false }
+  //       );
+  //     }
+  //   }
+  // }
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
@@ -84,16 +84,32 @@ class Instructions extends Component {
             <HorizontalLine />
             {questions !== null ? (
               <Fragment>
-                <CardItem>
-                  {questions.data !== undefined ? (
-                    <Text style={styles.text}>
-                      {questions.data.instructions}
-                    </Text>
-                  ) : (
-                    <Text style={styles.text}>No data found</Text>
-                  )}
-                </CardItem>
-                <CustomButton text="Continue" onPress={this.handlePress} />
+                {questions.data !== undefined ? (
+                  <Fragment>
+                    <CardItem>
+                      <Text style={styles.text}>
+                        {questions.data.instructions}
+                      </Text>
+                    </CardItem>
+                    <CustomButton text="Continue" onPress={this.handlePress} />
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <CardItem>
+                      <Text style={styles.text}>
+                        Hi {name}, you are applying for the job profile for
+                        which there is no online interview process. Please
+                        contact hr for the same so this issue can be sorted out
+                      </Text>
+                    </CardItem>
+                    <CustomButton
+                      text="Click Here"
+                      onPress={() =>
+                        this.props.navigation.navigate("InterviewLogin")
+                      }
+                    />
+                  </Fragment>
+                )}
               </Fragment>
             ) : (
               <Spinner color="#2196f3" />
