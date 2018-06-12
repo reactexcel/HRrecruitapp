@@ -9,7 +9,7 @@ import {
   Input,
   Spinner
 } from "native-base";
-import { NetInfo } from 'react-native'
+import { NetInfo, AsyncStorage } from "react-native";
 import { Grid, Row } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
@@ -20,6 +20,7 @@ import { connect } from "react-redux";
 import { verifyingOTP, connectionState } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
+import { getItem, setItem } from "../helper/storage";
 
 class OTPpage extends Component {
   constructor(props) {
@@ -29,20 +30,24 @@ class OTPpage extends Component {
       fb_id: props.fb_id,
       email: props.email,
       errors: {},
+      isconnect:true
     };
   }
   static navigationOptions = {
     title: "Enter OTP"
   };
-  componentDidMount() {
-    NetInfo.isConnected.fetch().done((isConnected) => {
+ async componentDidMount() {
       NetInfo.isConnected.addEventListener(
         "connectionChange",
-        this.handleNetworks(isConnected)
+        this.handleNetworks
       );
-    });
+      const get_email = await getItem("email");
+    if (get_email !== undefined && get_email.email !== this.state.email) {
+      AsyncStorage.removeItem("solution");
+      AsyncStorage.removeItem("remaining_time");
+    }
+    setItem("email", JSON.stringify({ email: this.state.email }));
   }
-
   handleNetworks = async (isconnect) => {
     await this.props.connectionState(isconnect);
   };
@@ -50,7 +55,7 @@ class OTPpage extends Component {
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
-      this.handleNetworks()
+      this.handleNetworks
     );
   }
 
@@ -67,7 +72,7 @@ class OTPpage extends Component {
     const errors = this.validate(this.state.otp);
 
     if (Object.keys(errors).length === 0) { 
-      if(this.props.isConnected){
+      if(this.state.isconnect){
         await this.props.verifyingOTP(this.state.email, this.state.otp, this.state.fb_id);
         if (this.props.otp.data !== undefined) {
           const { status, data } = this.props.otp.data;
@@ -80,7 +85,7 @@ class OTPpage extends Component {
               fb_id: data.fb_id,
               profile_pic: data.profile_pic,
               name: data.name,
-              email:this.state.email
+              email: this.state.email
             });
             this.textInput._root.clear();
           }
@@ -95,7 +100,7 @@ class OTPpage extends Component {
     if (success !== undefined && !success) {
       notify("Something went wrong");
     }
-    if (msg !== undefined ){
+    if (msg !== undefined) {
       alert(msg);
     }
     return null;
@@ -104,7 +109,7 @@ class OTPpage extends Component {
     const {
       otp: { registering, message }
     } = this.props;
-
+console.log(this.props,"otppros")
     return (
       <Container style={styles.container}>
         <Content padder>
