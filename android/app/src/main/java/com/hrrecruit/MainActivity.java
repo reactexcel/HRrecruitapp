@@ -12,4 +12,14 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "HRrecruit";
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        RNBranchModule.initSession(getIntent().getData(), this);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        setIntent(intent);
+    }
 }
