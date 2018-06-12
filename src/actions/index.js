@@ -22,6 +22,9 @@ import {
   SUBMIT_TEST_SUCCESS,
   SUBMIT_TEST_FAILURE
 } from "./types";
+import {
+  CHANGE_CONNECTION_STATUS
+} from "./types";
 import API_URL from "../config/dev";
 import PubSub from 'pubsub-js';
 
@@ -158,3 +161,7 @@ export const submitTest = (email,data) => async dispatch => {
     
   }
 };
+
+export const connectionState = (isConnected) => async dispatch => {
+  dispatch({ type: CHANGE_CONNECTION_STATUS, payload: isConnected });
+}

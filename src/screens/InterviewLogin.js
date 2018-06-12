@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert } from "react-native";
+import { BackHandler, Alert, NetInfo } from "react-native";
 import {
   Container,
   Content,
@@ -12,7 +12,6 @@ import {
   Spinner,
   Toast
 } from "native-base";
-import { NetInfo } from "react-native";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
@@ -21,25 +20,24 @@ import styles from "../styles";
 import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
-import { signUp } from "../actions";
+import { signUp, connectionState } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
-import { getItem, setItem } from "../helper/storage";
+import { getItem } from "../helper/storage";
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      isOnline: false
     };
   }
   static navigationOptions = {
     header: null
   };
-
-  static getDerivedStateFromProps(nextProps) {
+  
+  static getDerivedStateFromProps (nextProps) {
     const { error, success, msg } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
       alert("Please ask HR to assign a Job Profile and round");
@@ -51,28 +49,29 @@ class InterviewLogin extends Component {
       alert(msg);
     }
     return null;
-  }
-
-  handleNetwork = isconnect => {
-    this.setState({ isOnline: isconnect });
-  };
-
-  componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener(
-      "connectionChange",
-      this.handleNetwork
-    );
-  }
+  }  
 
   async componentDidMount() {
     NetInfo.isConnected.addEventListener(
       "connectionChange",
-      this.handleNetwork
+      this.handleNetworks
     );
     const status = await getItem("status");
     if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
       this.backPressed();
     }
+  }
+
+  handleNetworks = async (isconnect) => {
+    console.log(isconnect)
+    await this.props.connectionState(isconnect);
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetworks
+    );
   }
   backPressed = () => {
     Alert.alert(
@@ -88,10 +87,10 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-      if (this.state.isOnline) {
+    NetInfo.isConnected.fetch().done(async (isConnected)  => {
+     if(isConnected) {
         GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
         await this.props.signUp(this.state.email);
-        setItem("email", JSON.stringify({ email: this.state.email }));
         const {
           interviewSignUp: { status, fb_id }
         } = this.props;
@@ -113,6 +112,7 @@ class InterviewLogin extends Component {
       } else {
         alert("Please connect to internet");
       }
+    });      
     }
   };
 
@@ -199,9 +199,11 @@ class InterviewLogin extends Component {
   }
 }
 
-const mapStateToProps = ({ interviewSignUp }) => ({ interviewSignUp });
-
+const mapStateToProps = state => ({
+  interviewSignUp: state.interviewSignUp,
+  isConnected: state.network.isConnected,
+});
 export default connect(
   mapStateToProps,
-  { signUp }
+  { signUp,connectionState }
 )(InterviewLogin);
