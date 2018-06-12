@@ -6,6 +6,7 @@ import addCandidateReducer from "./addCandidateReducer";
 import questionsReducer from "./questionsReducer";
 import callHelpReducer from "./callHelpReducer";
 import testReducer from "./testReducer";
+import netInfoReducer from "./netInfo"
 
 export default combineReducers({
   form: formReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
   addCandidate: addCandidateReducer,
   questions: questionsReducer,
   callHelp: callHelpReducer,
-  test: testReducer
+  test: testReducer,
+  network: netInfoReducer,
 });

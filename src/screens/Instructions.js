@@ -35,6 +35,9 @@ class Instructions extends Component {
     }
     return null;
   }
+  navigateToTop = () => {
+    this.props.navigation.navigate('InterviewLogin',{check:true})
+  }
   componentDidUpdate() {
     const { error, message } = this.props.questions;
     if (error !== undefined) {
@@ -45,7 +48,7 @@ class Instructions extends Component {
           [
             {
               text: "OK",
-              onPress: () => this.props.navigation.popToTop()
+              onPress: () => {this.navigateToTop()}
             }
           ],
           { cancelable: false }

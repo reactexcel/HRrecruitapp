@@ -32,14 +32,13 @@ class InterviewLogin extends Component {
     super();
     this.state = {
       email: "",
-      isOnline: false
     };
   }
   static navigationOptions = {
     header: null
   };
-
-  static getDerivedStateFromProps(nextProps) {
+  
+  static getDerivedStateFromProps (nextProps) {
     const { error, success, msg } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
       alert("Please ask HR to assign a Job Profile and round");
@@ -51,29 +50,15 @@ class InterviewLogin extends Component {
       alert(msg);
     }
     return null;
-  }
-
-  handleNetwork = isconnect => {
-    this.setState({ isOnline: isconnect });
-  };
-
-  componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener(
-      "connectionChange",
-      this.handleNetwork
-    );
-  }
+  }  
 
   async componentDidMount() {
-    NetInfo.isConnected.addEventListener(
-      "connectionChange",
-      this.handleNetwork
-    );
     const status = await getItem("status");
     if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
       this.backPressed();
     }
   }
+
   backPressed = () => {
     Alert.alert(
       "Thank You",
@@ -88,7 +73,8 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-      if (this.state.isOnline) {
+    NetInfo.isConnected.fetch().done(async (isConnected)  => {
+     if(isConnected) {
         GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
         await this.props.signUp(this.state.email);
         setItem("email", JSON.stringify({ email: this.state.email }));
@@ -113,6 +99,7 @@ class InterviewLogin extends Component {
       } else {
         alert("Please connect to internet");
       }
+    });      
     }
   };
 
@@ -199,8 +186,9 @@ class InterviewLogin extends Component {
   }
 }
 
-const mapStateToProps = ({ interviewSignUp }) => ({ interviewSignUp });
-
+const mapStateToProps = state => ({
+  interviewSignUp: state.interviewSignUp
+});
 export default connect(
   mapStateToProps,
   { signUp }
