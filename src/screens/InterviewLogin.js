@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert } from "react-native";
+import { BackHandler, Alert, NetInfo } from "react-native";
 import {
   Container,
   Content,
@@ -12,7 +12,6 @@ import {
   Spinner,
   Toast
 } from "native-base";
-import { NetInfo } from "react-native";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
@@ -25,7 +24,7 @@ import { signUp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
-import { getItem, setItem } from "../helper/storage";
+import { getItem } from "../helper/storage";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -91,7 +90,6 @@ class InterviewLogin extends Component {
       if (this.state.isOnline) {
         GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
         await this.props.signUp(this.state.email);
-        setItem("email", JSON.stringify({ email: this.state.email }));
         const {
           interviewSignUp: { status, fb_id }
         } = this.props;
