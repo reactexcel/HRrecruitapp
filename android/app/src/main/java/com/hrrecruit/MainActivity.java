@@ -1,6 +1,9 @@
 package com.hrrecruit;
 
 import com.facebook.react.ReactActivity;
+import io.branch.rnbranch.*; // <-- add this
+import android.content.Intent; // <-- and this
+
 
 public class MainActivity extends ReactActivity {
 
