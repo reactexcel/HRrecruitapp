@@ -10,6 +10,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
     <application
+      android:name="com.eneff.hrrecruit.CustomApplicationClass"
       android:name=".MainApplication"
       android:label="@string/app_name"
       android:icon="@mipmap/ic_launcher"
@@ -17,15 +18,39 @@
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
+        android:launchMode="singleTask"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="stateUnspecified|adjustPan">
+        <intent-filter>
+            <data android:scheme="hrrecruit" />
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+        </intent-filter>
+
+        <intent-filter android:autoVerify="true">
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="https" android:host="etech.app.link" />
+        </intent-filter>
+
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+      <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_eetXrV4jUPUuIBQ1qhq1EbdiAEjeF8Iz" />
+      <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_emy8EQ5hLNItHvV8qds7GcppuvnkF2UN" />
+      <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+
+      <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
+        <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+        </intent-filter>
+      </receiver>
     </application>
 
 </manifest>
