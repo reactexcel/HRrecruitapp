@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hrrecruit">
+    package="com.hrrecruits">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
@@ -21,7 +21,7 @@
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="stateUnspecified|adjustPan">
         <intent-filter>
-            <data android:scheme="hrrecruit" />
+            <data android:scheme="hrrecruits" android:host="open"/>
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
@@ -31,7 +31,7 @@
             <action android:name="android.intent.action.VIEW" />
             <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="https" android:host="etech.app.link" />
+            <data android:scheme="https" android:host="hrrecruit.app.link" />
         </intent-filter>
 
         <intent-filter>

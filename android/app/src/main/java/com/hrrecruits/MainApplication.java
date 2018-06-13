@@ -1,4 +1,4 @@
-package com.hrrecruit;
+package com.hrrecruits;
 
 import android.app.Application;
 

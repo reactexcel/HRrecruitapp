@@ -1,4 +1,4 @@
-package com.hrrecruit;
+package com.hrrecruits;
 
 import com.facebook.react.ReactActivity;
 import io.branch.rnbranch.*; // <-- add this
