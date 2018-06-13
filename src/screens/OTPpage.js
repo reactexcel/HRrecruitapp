@@ -17,7 +17,7 @@ import styles from "../styles";
 import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
-import { verifyingOTP } from "../actions";
+import { verifyingOTP, connectionState } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem, setItem } from "../helper/storage";
@@ -30,7 +30,7 @@ class OTPpage extends Component {
       fb_id: props.fb_id,
       email: props.email,
       errors: {},
-      isOnline: true
+      isconnect: true
     };
   }
   static navigationOptions = {
@@ -39,7 +39,7 @@ class OTPpage extends Component {
   async componentDidMount() {
     NetInfo.isConnected.addEventListener(
       "connectionChange",
-      this.handleNetwork
+      this.handleNetworks
     );
     const get_email = await getItem("email");
     if (get_email !== undefined && get_email.email !== this.state.email) {
@@ -48,15 +48,14 @@ class OTPpage extends Component {
     }
     setItem("email", JSON.stringify({ email: this.state.email }));
   }
-
-  handleNetwork = isconnect => {
-    this.setState({ isOnline: isconnect });
+  handleNetworks = async isconnect => {
+    await this.props.connectionState(isconnect);
   };
 
   componentWillUnmount() {
     NetInfo.isConnected.removeEventListener(
       "connectionChange",
-      this.handleNetwork
+      this.handleNetworks
     );
   }
 
@@ -73,13 +72,12 @@ class OTPpage extends Component {
     const errors = this.validate(this.state.otp);
 
     if (Object.keys(errors).length === 0) {
-      if (this.state.isOnline) {
+      if (this.state.isconnect) {
         await this.props.verifyingOTP(
           this.state.email,
           this.state.otp,
           this.state.fb_id
         );
-
         if (this.props.otp.data !== undefined) {
           const { status, data } = this.props.otp.data;
           if (status === SUCCESS_STATUS) {
@@ -96,6 +94,8 @@ class OTPpage extends Component {
             this.textInput._root.clear();
           }
         }
+      } else {
+        alert("Please connect to internet");
       }
     }
   };
@@ -113,7 +113,6 @@ class OTPpage extends Component {
     const {
       otp: { registering, message }
     } = this.props;
-console.log(this.props,"otppros")
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -166,9 +165,10 @@ console.log(this.props,"otppros")
 const mapStateToProps = state => ({
   fb_id: state.interviewSignUp.fb_id,
   email: state.interviewSignUp.email,
-  otp: state.otp
+  otp: state.otp,
+  isConnected: state.network.isConnected
 });
 export default connect(
   mapStateToProps,
-  { verifyingOTP }
+  { verifyingOTP, connectionState }
 )(OTPpage);

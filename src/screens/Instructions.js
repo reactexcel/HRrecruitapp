@@ -35,24 +35,7 @@ class Instructions extends Component {
     }
     return null;
   }
-  // componentDidUpdate() {
-  //   const { error, message } = this.props.questions;
-  //   if (error !== undefined) {
-  //     if (error === 1) {
-  //       Alert.alert(
-  //         "Alert",
-  //         `${message}`,
-  //         [
-  //           {
-  //             text: "OK",
-  //             onPress: () => this.props.navigation.popToTop()
-  //           }
-  //         ],
-  //         { cancelable: false }
-  //       );
-  //     }
-  //   }
-  // }
+
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
