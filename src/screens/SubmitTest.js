@@ -51,18 +51,13 @@ class SubmitTest extends Component {
   async componentDidUpdate() {
     if (this.props.test.data !== undefined) {
       if (this.props.test.data.status === SUCCESS_STATUS) {
-        const email = this.props.navigation.getParam("email");
-        const stored_email = await getItem("email");
-        if (stored_email.email === email) {
-          setItem("status", JSON.stringify({ submit_status: SUCCESS_STATUS }));
-        }
         Alert.alert(
           "Thank You",
           "Your response has been recorded. Please contact HR for for further instructions.",
           [
             {
               text: "OK",
-              onPress: () => BackHandler.exitApp()
+              onPress: () => this.props.navigation.popToTop()
             }
           ],
           { cancelable: false }
@@ -114,7 +109,7 @@ class SubmitTest extends Component {
       questionIds: questionIds,
       taken_time_minutes: taken_time_minutes
     };
-    this.props.submitTest(email,data);
+    this.props.submitTest(email, data);
   };
 
   render() {
