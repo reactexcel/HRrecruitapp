@@ -30,14 +30,14 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
+      email: ""
     };
   }
   static navigationOptions = {
     header: null
   };
-  
-  static getDerivedStateFromProps (nextProps) {
+
+  static getDerivedStateFromProps(nextProps) {
     const { error, success, msg } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
       alert("Please ask HR to assign a Job Profile and round");
@@ -49,7 +49,7 @@ class InterviewLogin extends Component {
       alert(msg);
     }
     return null;
-  }  
+  }
 
   async componentDidMount() {
     NetInfo.isConnected.addEventListener(
@@ -62,8 +62,7 @@ class InterviewLogin extends Component {
     }
   }
 
-  handleNetworks = async (isconnect) => {
-    console.log(isconnect)
+  handleNetworks = async isconnect => {
     await this.props.connectionState(isconnect);
   };
 
@@ -76,7 +75,7 @@ class InterviewLogin extends Component {
   backPressed = () => {
     Alert.alert(
       "Thank You",
-      "You have submitted your test.",
+      "You have submitted your test. Contact HR to proceed further.",
       [{ text: "Ok", onPress: () => BackHandler.exitApp() }],
       { cancelable: false }
     );
@@ -87,32 +86,35 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-    NetInfo.isConnected.fetch().done(async (isConnected)  => {
-     if(isConnected) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
-        await this.props.signUp(this.state.email);
-        const {
-          interviewSignUp: { status, fb_id }
-        } = this.props;
-        if (status === 0) {
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if (isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            this.state.email,
-            status.toString()
+            "INTERVIEWLOGIN",
+            this.state.email
           );
-          this.props.navigation.navigate("VerifyingCandidate");
-          this.setState({ email: "" });
-        } else if (status === SUCCESS_STATUS) {
-          GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            this.state.email,
-            status.toString()
-          );
-          this.props.navigation.navigate("OTPpage");
-          this.setState({ email: "" });
+          await this.props.signUp(this.state.email);
+          const {
+            interviewSignUp: { status, fb_id }
+          } = this.props;
+          if (status === 0) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.email,
+              status.toString()
+            );
+            this.props.navigation.navigate("VerifyingCandidate");
+            this.setState({ email: "" });
+          } else if (status === SUCCESS_STATUS) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.email,
+              status.toString()
+            );
+            this.props.navigation.navigate("OTPpage");
+            this.setState({ email: "" });
+          }
+        } else {
+          alert("Please connect to internet");
         }
-      } else {
-        alert("Please connect to internet");
-      }
-    });      
+      });
     }
   };
 
@@ -201,9 +203,9 @@ class InterviewLogin extends Component {
 
 const mapStateToProps = state => ({
   interviewSignUp: state.interviewSignUp,
-  isConnected: state.network.isConnected,
+  isConnected: state.network.isConnected
 });
 export default connect(
   mapStateToProps,
-  { signUp,connectionState }
+  { signUp, connectionState }
 )(InterviewLogin);

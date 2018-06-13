@@ -30,25 +30,25 @@ class OTPpage extends Component {
       fb_id: props.fb_id,
       email: props.email,
       errors: {},
-      isconnect:true
+      isconnect: true
     };
   }
   static navigationOptions = {
     title: "Enter OTP"
   };
- async componentDidMount() {
-      NetInfo.isConnected.addEventListener(
-        "connectionChange",
-        this.handleNetworks
-      );
-      const get_email = await getItem("email");
+  async componentDidMount() {
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this.handleNetworks
+    );
+    const get_email = await getItem("email");
     if (get_email !== undefined && get_email.email !== this.state.email) {
       AsyncStorage.removeItem("solution");
       AsyncStorage.removeItem("remaining_time");
     }
     setItem("email", JSON.stringify({ email: this.state.email }));
   }
-  handleNetworks = async (isconnect) => {
+  handleNetworks = async isconnect => {
     await this.props.connectionState(isconnect);
   };
 
@@ -71,9 +71,13 @@ class OTPpage extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.otp);
 
-    if (Object.keys(errors).length === 0) { 
-      if(this.state.isconnect){
-        await this.props.verifyingOTP(this.state.email, this.state.otp, this.state.fb_id);
+    if (Object.keys(errors).length === 0) {
+      if (this.state.isconnect) {
+        await this.props.verifyingOTP(
+          this.state.email,
+          this.state.otp,
+          this.state.fb_id
+        );
         if (this.props.otp.data !== undefined) {
           const { status, data } = this.props.otp.data;
           if (status === SUCCESS_STATUS) {
@@ -90,7 +94,7 @@ class OTPpage extends Component {
             this.textInput._root.clear();
           }
         }
-      }else {
+      } else {
         alert("Please connect to internet");
       }
     }
@@ -109,7 +113,6 @@ class OTPpage extends Component {
     const {
       otp: { registering, message }
     } = this.props;
-console.log(this.props,"otppros")
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -163,7 +166,7 @@ const mapStateToProps = state => ({
   fb_id: state.interviewSignUp.fb_id,
   email: state.interviewSignUp.email,
   otp: state.otp,
-  isConnected: state.network.isConnected,
+  isConnected: state.network.isConnected
 });
 export default connect(
   mapStateToProps,
