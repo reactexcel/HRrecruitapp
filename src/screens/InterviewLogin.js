@@ -20,7 +20,7 @@ import styles from "../styles";
 import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
-import { signUp } from "../actions";
+import { signUp, connectionState } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
@@ -30,8 +30,7 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
-      isOnline: false
+      email: ""
     };
   }
   static navigationOptions = {
@@ -52,31 +51,31 @@ class InterviewLogin extends Component {
     return null;
   }
 
-  handleNetwork = isconnect => {
-    this.setState({ isOnline: isconnect });
-  };
-
-  componentWillUnmount() {
-    NetInfo.isConnected.removeEventListener(
-      "connectionChange",
-      this.handleNetwork
-    );
-  }
-
   async componentDidMount() {
     NetInfo.isConnected.addEventListener(
       "connectionChange",
-      this.handleNetwork
+      this.handleNetworks
     );
     const status = await getItem("status");
     if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
       this.backPressed();
     }
   }
+
+  handleNetworks = async isconnect => {
+    await this.props.connectionState(isconnect);
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetworks
+    );
+  }
   backPressed = () => {
     Alert.alert(
       "Thank You",
-      "You have submitted your test.",
+      "You have submitted your test. Contact HR to proceed further.",
       [{ text: "Ok", onPress: () => BackHandler.exitApp() }],
       { cancelable: false }
     );
@@ -87,30 +86,35 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if (Object.keys(errors).length === 0) {
-      if (this.state.isOnline) {
-        GOOGLE_ANALYTICS_TRACKER.trackEvent("INTERVIEWLOGIN", this.state.email);
-        await this.props.signUp(this.state.email);
-        const {
-          interviewSignUp: { status, fb_id }
-        } = this.props;
-        if (status === 0) {
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if (isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            this.state.email,
-            status.toString()
+            "INTERVIEWLOGIN",
+            this.state.email
           );
-          this.props.navigation.navigate("VerifyingCandidate");
-          this.setState({ email: "" });
-        } else if (status === SUCCESS_STATUS) {
-          GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            this.state.email,
-            status.toString()
-          );
-          this.props.navigation.navigate("OTPpage");
-          this.setState({ email: "" });
+          await this.props.signUp(this.state.email);
+          const {
+            interviewSignUp: { status, fb_id }
+          } = this.props;
+          if (status === 0) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.email,
+              status.toString()
+            );
+            this.props.navigation.navigate("VerifyingCandidate");
+            this.setState({ email: "" });
+          } else if (status === SUCCESS_STATUS) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.email,
+              status.toString()
+            );
+            this.props.navigation.navigate("OTPpage");
+            this.setState({ email: "" });
+          }
+        } else {
+          alert("Please connect to internet");
         }
-      } else {
-        alert("Please connect to internet");
-      }
+      });
     }
   };
 
@@ -197,9 +201,11 @@ class InterviewLogin extends Component {
   }
 }
 
-const mapStateToProps = ({ interviewSignUp }) => ({ interviewSignUp });
-
+const mapStateToProps = state => ({
+  interviewSignUp: state.interviewSignUp,
+  isConnected: state.network.isConnected
+});
 export default connect(
   mapStateToProps,
-  { signUp }
+  { signUp, connectionState }
 )(InterviewLogin);

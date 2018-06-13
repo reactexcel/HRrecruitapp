@@ -40,7 +40,9 @@ const Questions = props => {
                         <Text style={{ opacity: 0.8 }}>{ques.description}</Text>
                       </View>
                     ) : null}
-                    <Text style = {_styles.optText}>Options : </Text>
+                    {ques.options.length !== 0 ? (
+                      <Text style={_styles.optText}>Options : </Text>
+                    ) : null}
                     {map(ques.options, (values, index) => {
                       let isSolution =
                         solution[0] != undefined

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert, NetInfo, BackHandler } from "react-native";
+import { Alert, NetInfo, BackHandler, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -62,6 +62,9 @@ class TestPage extends Component {
     ) {
       this.setState({ solution: ans.solution });
     }
+    if (this.props.questions.data.roundType === "Subjective") {
+      AsyncStorage.removeItem("remaining_time");
+    }
   }
 
   componentWillUnmount() {
@@ -88,6 +91,8 @@ class TestPage extends Component {
       navigation.state.params.time !== undefined
         ? navigation.state.params.time
         : navigation.state.params.data.timeForExam;
+    const round = navigation.state.params.data.round;
+
     return {
       title: name,
       headerLeft: (
@@ -118,12 +123,34 @@ class TestPage extends Component {
                         );
                       }
                     }}
-                    onTimeElapsed={() => {
-                      navigation.navigate("SubmitTest", {
-                        ...navigation.state.params,
-                        taken_time_minutes:
-                          navigation.state.params.data.timeForExam
-                      });
+                    onTimeElapsed={async () => {
+                      if (round === "First Round") {
+                        navigation.navigate("SubmitTest", {
+                          ...navigation.state.params,
+                          taken_time_minutes:
+                            navigation.state.params.data.timeForExam
+                        });
+                      } else if (round == "Second Round") {
+                        const email = navigation.getParam("email");
+                        const stored_email = await getItem("email");
+                        if (stored_email.email === email) {
+                          setItem(
+                            "status",
+                            JSON.stringify({ submit_status: SUCCESS_STATUS })
+                          );
+                        }
+                        Alert.alert(
+                          "Alert",
+                          "Your time has finished. Contact HR to proceed further.\nClick Ok to exit application.",
+                          [
+                            {
+                              text: "OK",
+                              onPress: () => BackHandler.exitApp()
+                            }
+                          ],
+                          { cancelable: false }
+                        );
+                      }
                     }}
                     allowFontScaling={true}
                     style={{ fontSize: 15 }}
@@ -212,6 +239,33 @@ class TestPage extends Component {
       );
     }
   };
+  confirmSecondRoundSubmit = () => {
+    Alert.alert(
+      "Confirm Please",
+      "Are you sure, you want to submit your Test?\nIf Yes, Click OK to exit application and Contact HR to proceed further.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => {},
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: async () => {
+            const email = this.props.navigation.getParam("email");
+            const stored_email = await getItem("email");
+            if (stored_email.email === email) {
+              setItem(
+                "status",
+                JSON.stringify({ submit_status: SUCCESS_STATUS })
+              );
+            }
+            BackHandler.exitApp();
+          }
+        }
+      ]
+    );
+  };
 
   handleStartTest = async () => {
     this.setState({ show: true });
@@ -244,7 +298,7 @@ class TestPage extends Component {
   render() {
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
-
+    const { roundType } = this.props.questions.data;
     return (
       <Container style={styles.container}>
         {show ? (
@@ -253,10 +307,14 @@ class TestPage extends Component {
               <CardItem>
                 <Text style={styles.headerText}> Test Questions </Text>
               </CardItem>
-              <Text style={styles.text}>
-                Questions Attempted : {`${solution.length}/`}
-                {count}{" "}
-              </Text>
+              {roundType !== "Subjective" ? (
+                <Text style={styles.text}>
+                  Questions Attempted : {`${solution.length}/`}
+                  {count}{" "}
+                </Text>
+              ) : (
+                <Text style={styles.text}>Total Questions : {count}</Text>
+              )}
             </Card>
             <Card>
               <Questions
@@ -265,7 +323,14 @@ class TestPage extends Component {
                 handleSubmit={this.handleSubmit}
               />
             </Card>
-            <CustomButton text="Submit Test" onPress={this.confirmSubmit} />
+            {roundType !== "Subjective" ? (
+              <CustomButton text="Submit Test" onPress={this.confirmSubmit} />
+            ) : (
+              <CustomButton
+                text="Submit Test"
+                onPress={this.confirmSecondRoundSubmit}
+              />
+            )}
           </Content>
         ) : (
           <StartTest
