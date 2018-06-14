@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert, NetInfo } from "react-native";
+import { BackHandler, Alert, NetInfo,View } from "react-native";
 import {
   Container,
   Content,
@@ -61,13 +61,13 @@ class InterviewLogin extends Component {
       }
       if(params.$deeplink_path !== undefined){
         let fb_id = params.$deeplink_path;
-        await this.props.getCandidateDetails(email, fb_id);
+        await this.props.getCandidateDetails(fb_id);
         const { data, message, error, status } = this.props.interviewSignUp;
         if (status == SUCCESS_STATUS) {
           this.setState({linkOpening:false})
           this.props.navigation.navigate("Instructions", {
             fb_id: fb_id,
-            profile_pic: '',
+            profile_pic: `https://pikmail.herokuapp.com/${data.sender_mail}?size=60`,
             name: data.from,
             email: data.sender_mail,
           });
@@ -219,7 +219,9 @@ class InterviewLogin extends Component {
                   <CustomButton onPress={this.handleSubmit} text="Submit" />
                 )}
               </Card>:
-              <Spinner color="#2196f3" />
+              <View style={{flex:1,justifyContent:'center',flexDirection:'column',}}>
+                <Spinner color="#2196f3" />
+              </View>
             }
             </Row>
           </Grid>

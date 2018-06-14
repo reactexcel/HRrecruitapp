@@ -38,9 +38,14 @@ class Instructions extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const name = navigation.getParam("name");
-    // const profile_pic = navigation.getParam("profile_pic");
+    const profile_pic = navigation.getParam("profile_pic");
     return {
       title: name,
+      headerLeft: (
+        <Content padder>
+          <Thumbnail small source={{ uri: profile_pic }} />
+        </Content>
+      )
     };
   };
   handlePress = () => {

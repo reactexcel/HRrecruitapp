@@ -58,11 +58,11 @@ firebaseSubmitTest = (msg,data) => {
         res: apiData
     })
 }
-firebaseSubmitTest = (msg,data) => {
+
+firebaseGetDeatils = (msg,data) => {
     
-    const {API_URL, email} = data;
-    let modify_Email = modifyEmail(email);    
-    let submitTest = `${modify_Date.toString()}`+"/getdetails/" + modify_Email ;
+    const {API_URL, email,fb_id} = data;
+    let submitTest = `${modify_Date.toString()}`+"/getdetails/" + fb_id ;
     let apiData = msg == "CANDIDATE_DETAILS_FAILURE" ? data.err.response.data : data.res.data;
     return firebase.database().ref(submitTest).set({
         API_URL:API_URL,
