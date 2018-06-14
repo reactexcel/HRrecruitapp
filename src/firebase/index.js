@@ -58,7 +58,8 @@ firebaseSubmitTest = (msg,data) => {
         res: apiData
     })
 }
-firebaseSubmitTest = (msg,data) => {
+
+firebaseGetDeatils = (msg,data) => {
     
     const {API_URL, email} = data;
     let modify_Email = modifyEmail(email);    
