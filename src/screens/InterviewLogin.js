@@ -67,7 +67,7 @@ class InterviewLogin extends Component {
           this.setState({linkOpening:false})
           this.props.navigation.navigate("Instructions", {
             fb_id: fb_id,
-            profile_pic: '',
+            profile_pic: `https://pikmail.herokuapp.com/${data.sender_mail}?size=60`,
             name: data.from,
             email: data.sender_mail,
           });
