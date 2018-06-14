@@ -2,7 +2,9 @@ import {
   INTERVIEW_EMAIL_SIGN_UP,
   INTERVIEW_EMAIL_SIGN_UP_REQUEST,
   INTERVIEW_EMAIL_SIGN_UP_FAILURE,
-  INTERVIEW_EMAIL_SIGN_UP_ERROR
+  INTERVIEW_EMAIL_SIGN_UP_ERROR,
+  CANDIDATE_DETAILS_SUCCESS,
+  CANDIDATE_DETAILS_FAILURE
 } from "../actions/types";
 
 const initialState = {
@@ -26,6 +28,12 @@ export default function(state = initialState, action) {
         success: false
       };
       break;
+    case CANDIDATE_DETAILS_SUCCESS:
+      return { registering: false, ...action.payload };
+    break;
+    case CANDIDATE_DETAILS_FAILURE:
+      return { registering: false, ...action.payload };
+    break;
     default:
       return initialState;
       break;

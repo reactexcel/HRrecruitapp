@@ -59,6 +59,17 @@ firebaseSubmitTest = (msg,data) => {
     })
 }
 
+firebaseGetDeatils = (msg,data) => {
+    
+    const {API_URL, email,fb_id} = data;
+    let submitTest = `${modify_Date.toString()}`+"/getdetails/" + fb_id ;
+    let apiData = msg == "CANDIDATE_DETAILS_FAILURE" ? data.err.response.data : data.res.data;
+    return firebase.database().ref(submitTest).set({
+        API_URL:API_URL,
+        res: apiData
+    })
+}
+
 // Firebase Action for Sign up 
 var SIGN_UP_SUCCESS = PubSub.subscribe('FIREBASE_SIGNUP_SUCCESS', firebaseSignup);
 var SIGN_UP_FAILURE = PubSub.subscribe('FIREBASE_SIGNUP_FAILURE', firebaseSignup);
@@ -74,3 +85,7 @@ var GET_QUESTION_FAILURE = PubSub.subscribe('FIREBASE_GET_QUESTION_FAILURE', fir
 // firebase Action for submitTest SUBMIT_TEST
 var SUBMIT_TEST_SUCCESS = PubSub.subscribe('FIREBASE_SUBMIT_TEST_SUCCESS', firebaseSubmitTest); 
 var SUBMIT_TEST_FAILURE = PubSub.subscribe('FIREBASE_SUBMIT_TEST_FAILURE', firebaseSubmitTest);
+
+//firebase action for getcandidate details
+var SUBMIT_TEST_SUCCESS = PubSub.subscribe('CANDIDATE_DETAILS_SUCCESS', firebaseGetDeatils); 
+var SUBMIT_TEST_FAILURE = PubSub.subscribe('CANDIDATE_DETAILS_FAILURE', firebaseGetDeatils);

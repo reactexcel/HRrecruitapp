@@ -58,6 +58,8 @@
 		552BAF03495D400A8F6AF153 /* AppCenter-Config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 537D437AA0364641AF799CC7 /* AppCenter-Config.plist */; };
 		804C1DA3DC614737B078E09A /* libAppCenterReactNativeAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B22AE41FC4CF45FAB768A0C2 /* libAppCenterReactNativeAnalytics.a */; };
 		CE9732A9CEB54083A773105D /* libAppCenterReactNativeCrashes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4D79B7E9FB49D2B0DF63A0 /* libAppCenterReactNativeCrashes.a */; };
+		45FDCBFD0CDD481FBE2EB276 /* libreact-native-branch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34020080A66F43C58593BD54 /* libreact-native-branch.a */; };
+		008FE53223954F83A62B0902 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = 029B89AB508C44A88DB6D0A2 /* branch.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -388,6 +390,9 @@
 		B22AE41FC4CF45FAB768A0C2 /* libAppCenterReactNativeAnalytics.a */ = {isa = PBXFileReference; name = "libAppCenterReactNativeAnalytics.a"; path = "libAppCenterReactNativeAnalytics.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		B8FDA8C4C6844F33A7528F78 /* AppCenterReactNativeCrashes.xcodeproj */ = {isa = PBXFileReference; name = "AppCenterReactNativeCrashes.xcodeproj"; path = "../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		AC4D79B7E9FB49D2B0DF63A0 /* libAppCenterReactNativeCrashes.a */ = {isa = PBXFileReference; name = "libAppCenterReactNativeCrashes.a"; path = "libAppCenterReactNativeCrashes.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		3A932EDA3F7D4F648ED730F7 /* RNBranch.xcodeproj */ = {isa = PBXFileReference; name = "RNBranch.xcodeproj"; path = "../node_modules/react-native-branch/ios/RNBranch.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		34020080A66F43C58593BD54 /* libreact-native-branch.a */ = {isa = PBXFileReference; name = "libreact-native-branch.a"; path = "libreact-native-branch.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		029B89AB508C44A88DB6D0A2 /* branch.json */ = {isa = PBXFileReference; name = "branch.json"; path = "../branch.json"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -424,6 +429,7 @@
 				CC7923956F1E4655827F3BBF /* libAppCenterReactNative.a in Frameworks */,
 				804C1DA3DC614737B078E09A /* libAppCenterReactNativeAnalytics.a in Frameworks */,
 				CE9732A9CEB54083A773105D /* libAppCenterReactNativeCrashes.a in Frameworks */,
+				45FDCBFD0CDD481FBE2EB276 /* libreact-native-branch.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +548,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				029B89AB508C44A88DB6D0A2 /* branch.json */,
 			);
 			name = HRrecruit;
 			sourceTree = "<group>";
@@ -618,6 +625,7 @@
 				53334EA7EEBD4B9A88E3BE2F /* AppCenterReactNative.xcodeproj */,
 				730F0335502B4F148F4CBE58 /* AppCenterReactNativeAnalytics.xcodeproj */,
 				B8FDA8C4C6844F33A7528F78 /* AppCenterReactNativeCrashes.xcodeproj */,
+				3A932EDA3F7D4F648ED730F7 /* RNBranch.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1146,6 +1154,7 @@
 				887569C2F382433A9316D236 /* SimpleLineIcons.ttf in Resources */,
 				8A5DD92618A84288A94B7D36 /* Zocial.ttf in Resources */,
 				552BAF03495D400A8F6AF153 /* AppCenter-Config.plist in Resources */,
+				008FE53223954F83A62B0902 /* branch.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1283,6 +1292,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1290,6 +1300,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Debug;
@@ -1314,6 +1325,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1321,6 +1333,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Release;
@@ -1346,6 +1359,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Debug;
@@ -1370,6 +1384,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Release;
@@ -1403,6 +1418,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1410,6 +1426,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Debug;
@@ -1443,6 +1460,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1450,6 +1468,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Release;
@@ -1482,6 +1501,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1489,6 +1509,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Debug;
@@ -1521,6 +1542,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1528,6 +1550,7 @@
 					"$(SRCROOT)/../node_modules/appcenter/ios/AppCenterReactNative",
 					"$(SRCROOT)/../node_modules/appcenter-analytics/ios/AppCenterReactNativeAnalytics",
 					"$(SRCROOT)/../node_modules/appcenter-crashes/ios/AppCenterReactNativeCrashes",
+					"$(SRCROOT)/../node_modules/react-native-branch/ios/**",
 				);
 			};
 			name = Release;

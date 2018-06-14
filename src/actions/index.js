@@ -25,6 +25,11 @@ import {
 import {
   CHANGE_CONNECTION_STATUS
 } from "./types";
+import {
+  CANDIDATE_DETAILS_SUCCESS,
+  CANDIDATE_DETAILS_FAILURE
+} from "./types";
+
 import API_URL from "../config/dev";
 import PubSub from 'pubsub-js';
 
@@ -165,3 +170,18 @@ export const submitTest = (email,data) => async dispatch => {
 export const connectionState = (isConnected) => async dispatch => {
   dispatch({ type: CHANGE_CONNECTION_STATUS, payload: isConnected });
 }
+
+export const getCandidateDetails = (fb_id) => async dispatch => {
+  try {
+    const res = await _axios().get(`candidateDetails/${fb_id}`);
+    PubSub.publish('CANDIDATE_DETAILS_SUCCESS', {API_URL,fb_id,res});
+    dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
+  } catch (err) {
+    if(err.message == 'timeout of 10000ms exceeded' ){ // Show alert about timeout to user
+      dispatch({ type: CANDIDATE_DETAILS_FAILURE, payload: {msg:err.message} });
+    }else {
+      PubSub.publish('CANDIDATE_DETAILS_FAILURE', {API_URL,email,fb_id,err});
+      dispatch({ type: CANDIDATE_DETAILS_FAILURE, payload: err.response.data });
+    }
+  }
+};
