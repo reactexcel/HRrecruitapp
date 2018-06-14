@@ -98,10 +98,10 @@ android {
     buildToolsVersion "26.0.1"
 
     defaultConfig {
-        applicationId "com.hrrecruit"
+        applicationId "com.hrrecruits"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 11
+        versionCode 12
         versionName "1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-branch')
     compile project(':react-native-version-number')
     compile project(':appcenter-crashes')
     compile project(':appcenter-analytics')

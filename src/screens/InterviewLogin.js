@@ -20,17 +20,19 @@ import styles from "../styles";
 import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
-import { signUp, connectionState } from "../actions";
+import { signUp, connectionState, getCandidateDetails } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
+import branch from 'react-native-branch';
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: ""
+      email: "",
+      linkOpening:true
     };
   }
   static navigationOptions = {
@@ -38,9 +40,9 @@ class InterviewLogin extends Component {
   };
 
   static getDerivedStateFromProps(nextProps) {
-    const { error, success, msg } = nextProps.interviewSignUp;
+    const { error, success, msg,message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
-      alert("Please ask HR to assign a Job Profile and round");
+      alert(message)
     }
     if (success !== undefined && !success) {
       notify("Something went wrong");
@@ -52,6 +54,30 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
+    branch.subscribe(async ({ errors, params })  => {
+      if (errors) {
+        alert('Error from Branch: ' + errors);
+        return
+      }
+      if(params.$deeplink_path !== undefined){
+        let fb_id = params.$deeplink_path;
+        await this.props.getCandidateDetails(email, fb_id);
+        const { data, message, error, status } = this.props.interviewSignUp;
+        if (status == SUCCESS_STATUS) {
+          this.setState({linkOpening:false})
+          this.props.navigation.navigate("Instructions", {
+            fb_id: fb_id,
+            profile_pic: '',
+            name: data.from,
+            email: data.sender_mail,
+          });
+        }else if (error == 1){
+          this.setState({linkOpening:false})
+        }
+      }else{
+        this.setState({linkOpening:false})
+      }
+    })
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
@@ -137,7 +163,7 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-
+    const { linkOpening } = this.state;
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
@@ -150,7 +176,7 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              <Card style={styles.blockView}>
+              {!linkOpening?<Card style={styles.blockView}>
                 {!appliedBefore ? (
                   <Fragment>
                     <CardItem header>
@@ -192,7 +218,9 @@ class InterviewLogin extends Component {
                 ) : (
                   <CustomButton onPress={this.handleSubmit} text="Submit" />
                 )}
-              </Card>
+              </Card>:
+              <Spinner color="#2196f3" />
+            }
             </Row>
           </Grid>
         </Content>
@@ -207,5 +235,5 @@ const mapStateToProps = state => ({
 });
 export default connect(
   mapStateToProps,
-  { signUp, connectionState }
+  { signUp, connectionState, getCandidateDetails }
 )(InterviewLogin);
