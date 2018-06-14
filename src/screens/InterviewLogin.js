@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert, NetInfo } from "react-native";
+import { BackHandler, Alert, NetInfo,View } from "react-native";
 import {
   Container,
   Content,
@@ -219,7 +219,9 @@ class InterviewLogin extends Component {
                   <CustomButton onPress={this.handleSubmit} text="Submit" />
                 )}
               </Card>:
-              <Spinner color="#2196f3" />
+              <View style={{flex:1,justifyContent:'center',flexDirection:'column',}}>
+                <Spinner color="#2196f3" />
+              </View>
             }
             </Row>
           </Grid>
