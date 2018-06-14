@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image, Alert } from "react-native";
+import { Image, Alert, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -14,14 +14,20 @@ import { getQuestions } from "../actions";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
-import { setItem } from "../helper/storage";
+import { setItem, getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 
 class Instructions extends Component {
-  componentDidMount() {
+  async componentDidMount() {
     const fb_id = this.props.navigation.getParam("fb_id");
     const email = this.props.navigation.getParam("email");
     this.props.getQuestions(email, fb_id);
+    const get_email = await getItem("email");
+    if (get_email !== undefined && get_email.email !== email) {
+      AsyncStorage.removeItem("solution");
+      AsyncStorage.removeItem("remaining_time");
+    }
+    setItem("email", JSON.stringify({ email }));
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
