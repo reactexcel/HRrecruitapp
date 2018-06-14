@@ -171,10 +171,10 @@ export const connectionState = (isConnected) => async dispatch => {
   dispatch({ type: CHANGE_CONNECTION_STATUS, payload: isConnected });
 }
 
-export const getCandidateDetails = (email,fb_id) => async dispatch => {
+export const getCandidateDetails = (fb_id) => async dispatch => {
   try {
     const res = await _axios().get(`candidateDetails/${fb_id}`);
-    PubSub.publish('CANDIDATE_DETAILS_SUCCESS', {API_URL,email,fb_id,res});
+    PubSub.publish('CANDIDATE_DETAILS_SUCCESS', {API_URL,fb_id,res});
     dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
   } catch (err) {
     if(err.message == 'timeout of 10000ms exceeded' ){ // Show alert about timeout to user

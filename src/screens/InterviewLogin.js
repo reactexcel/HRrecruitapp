@@ -61,7 +61,7 @@ class InterviewLogin extends Component {
       }
       if(params.$deeplink_path !== undefined){
         let fb_id = params.$deeplink_path;
-        await this.props.getCandidateDetails(email, fb_id);
+        await this.props.getCandidateDetails(fb_id);
         const { data, message, error, status } = this.props.interviewSignUp;
         if (status == SUCCESS_STATUS) {
           this.setState({linkOpening:false})
