@@ -94,7 +94,7 @@ class TestPage extends Component {
     const round = navigation.state.params.data.round;
 
     return {
-      title: name,
+      title: name.split(" ")[0],
       headerLeft: (
         <Content padder>
           <Thumbnail small source={{ uri: profile_pic }} />
