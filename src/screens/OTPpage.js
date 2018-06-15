@@ -9,7 +9,7 @@ import {
   Input,
   Spinner
 } from "native-base";
-import { NetInfo, AsyncStorage } from "react-native";
+import { NetInfo } from "react-native";
 import { Grid, Row } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
@@ -20,7 +20,6 @@ import { connect } from "react-redux";
 import { verifyingOTP, connectionState } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
-import { getItem, setItem } from "../helper/storage";
 
 class OTPpage extends Component {
   constructor(props) {
@@ -41,12 +40,6 @@ class OTPpage extends Component {
       "connectionChange",
       this.handleNetworks
     );
-    const get_email = await getItem("email");
-    if (get_email !== undefined && get_email.email !== this.state.email) {
-      AsyncStorage.removeItem("solution");
-      AsyncStorage.removeItem("remaining_time");
-    }
-    setItem("email", JSON.stringify({ email: this.state.email }));
   }
   handleNetworks = async isconnect => {
     await this.props.connectionState(isconnect);

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert, NetInfo,View } from "react-native";
+import { BackHandler, Alert, NetInfo, View } from "react-native";
 import {
   Container,
   Content,
@@ -25,14 +25,14 @@ import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
-import branch from 'react-native-branch';
+import branch from "react-native-branch";
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      linkOpening:true
+      linkOpening: true
     };
   }
   static navigationOptions = {
@@ -40,9 +40,9 @@ class InterviewLogin extends Component {
   };
 
   static getDerivedStateFromProps(nextProps) {
-    const { error, success, msg,message } = nextProps.interviewSignUp;
+    const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
-      alert(message)
+      alert(message);
     }
     if (success !== undefined && !success) {
       notify("Something went wrong");
@@ -54,30 +54,32 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
-    branch.subscribe(async ({ errors, params })  => {
+    branch.subscribe(async ({ errors, params }) => {
       if (errors) {
-        alert('Error from Branch: ' + errors);
-        return
+        alert("Error from Branch: " + errors);
+        return;
       }
-      if(params.$deeplink_path !== undefined){
+      if (params.$deeplink_path !== undefined) {
         let fb_id = params.$deeplink_path;
         await this.props.getCandidateDetails(fb_id);
         const { data, message, error, status } = this.props.interviewSignUp;
         if (status == SUCCESS_STATUS) {
-          this.setState({linkOpening:false})
+          this.setState({ linkOpening: false });
           this.props.navigation.navigate("Instructions", {
             fb_id: fb_id,
-            profile_pic: `https://pikmail.herokuapp.com/${data.sender_mail}?size=60`,
+            profile_pic: `https://pikmail.herokuapp.com/${
+              data.sender_mail
+            }?size=60`,
             name: data.from,
-            email: data.sender_mail,
+            email: data.sender_mail
           });
-        }else if (error == 1){
-          this.setState({linkOpening:false})
+        } else if (error == 1) {
+          this.setState({ linkOpening: false });
         }
-      }else{
-        this.setState({linkOpening:false})
+      } else {
+        this.setState({ linkOpening: false });
       }
-    })
+    });
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
@@ -176,53 +178,61 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              {!linkOpening?<Card style={styles.blockView}>
-                {!appliedBefore ? (
-                  <Fragment>
-                    <CardItem header>
-                      <Text style={styles.headerText}>
-                        Interview Test Papers
-                      </Text>
-                    </CardItem>
-                    <HorizontalLine />
-                    <CardItem>
-                      <Body>
-                        <Text style={styles.text}>
-                          Login with your Email-Id to take interview test paper,
-                          in case of any questions please contact HR
+              {!linkOpening ? (
+                <Card style={styles.blockView}>
+                  {!appliedBefore ? (
+                    <Fragment>
+                      <CardItem header>
+                        <Text style={styles.headerText}>
+                          Interview Test Papers
                         </Text>
-                      </Body>
+                      </CardItem>
+                      <HorizontalLine />
+                      <CardItem>
+                        <Body>
+                          <Text style={styles.text}>
+                            Login with your Email-Id to take interview test
+                            paper, in case of any questions please contact HR
+                          </Text>
+                        </Body>
+                      </CardItem>
+                    </Fragment>
+                  ) : (
+                    <CardItem>
+                      <Text style={styles.text}>{appliedText}</Text>
                     </CardItem>
-                  </Fragment>
-                ) : (
-                  <CardItem>
-                    <Text style={styles.text}>{appliedText}</Text>
-                  </CardItem>
-                )}
-                <Item style={styles.inputTextView}>
-                  <Input
-                    style={styles.inputText}
-                    placeholder="Email"
-                    placeholderTextColor={COLOR.Grey}
-                    name="email"
-                    value={this.state.email}
-                    keyboardType="email-address"
-                    selectionColor={COLOR.Grey}
-                    underlineColorAndroid={COLOR.Grey}
-                    onChangeText={text => this.setState({ email: text })}
-                    autoCapitalize="none"
-                  />
-                </Item>
-                {registering ? (
+                  )}
+                  <Item style={styles.inputTextView}>
+                    <Input
+                      style={styles.inputText}
+                      placeholder="Email"
+                      placeholderTextColor={COLOR.Grey}
+                      name="email"
+                      value={this.state.email}
+                      keyboardType="email-address"
+                      selectionColor={COLOR.Grey}
+                      underlineColorAndroid={COLOR.Grey}
+                      onChangeText={text => this.setState({ email: text })}
+                      autoCapitalize="none"
+                    />
+                  </Item>
+                  {registering ? (
+                    <Spinner color="#2196f3" />
+                  ) : (
+                    <CustomButton onPress={this.handleSubmit} text="Submit" />
+                  )}
+                </Card>
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    flexDirection: "column"
+                  }}
+                >
                   <Spinner color="#2196f3" />
-                ) : (
-                  <CustomButton onPress={this.handleSubmit} text="Submit" />
-                )}
-              </Card>:
-              <View style={{flex:1,justifyContent:'center',flexDirection:'column',}}>
-                <Spinner color="#2196f3" />
-              </View>
-            }
+                </View>
+              )}
             </Row>
           </Grid>
         </Content>
