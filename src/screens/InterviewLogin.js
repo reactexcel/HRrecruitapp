@@ -32,7 +32,7 @@ class InterviewLogin extends Component {
     super();
     this.state = {
       email: "",
-      linkOpening: true
+      // linkOpening: true Deeplink code for android
     };
   }
   static navigationOptions = {
@@ -165,7 +165,7 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-    const { linkOpening } = this.state;
+    // const { linkOpening } = this.state;
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
@@ -178,7 +178,7 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              {!linkOpening ? (
+              {true ? (
                 <Card style={styles.blockView}>
                   {!appliedBefore ? (
                     <Fragment>
