@@ -80,7 +80,7 @@ class SubmitTest extends Component {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
     return {
-      title: name,
+      title: name.split(" ")[0],
       headerLeft: (
         <Content padder>
           <Thumbnail small source={{ uri: profile_pic }} />

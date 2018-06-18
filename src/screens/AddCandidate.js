@@ -28,8 +28,8 @@ class AddCandidate extends Component {
     header: null
   };
   static getDerivedStateFromProps(nextProps) {
-    const { msg } = nextProps.addCandidate; 
-    if (msg !== undefined ){
+    const { msg } = nextProps.addCandidate;
+    if (msg !== undefined) {
       alert(msg);
     }
     return null;
@@ -107,7 +107,7 @@ class AddCandidate extends Component {
             <Row>
               <Card style={styles.blockView}>
                 <CardItem>
-                  <Text style={styles.headerText}>Add Candidate</Text>
+                  <Text style={styles.headerText}>Register Candidate</Text>
                 </CardItem>
                 <HorizontalLine />
                 <Field
@@ -162,13 +162,10 @@ validate = values => {
     errors.from = "Cannot be Empty";
   }
 
-  if (!values.sender_email) {
-    errors.sender_email = "Cannot be Empty";
-  } else if (
-    !isEmail(values.sender_email) ||
-    !isLowercase(values.sender_email)
-  ) {
-    errors.sender_email = "Enter a valid email and must be in lowercase";
+  if (!values.sender_mail) {
+    errors.sender_mail = "Cannot be Empty";
+  } else if (!isEmail(values.sender_mail) || !isLowercase(values.sender_mail)) {
+    errors.sender_mail = "Enter a valid email and must be in lowercase";
   }
   if (!values.gender) errors.gender = "Select a gender";
   if (!values.source) errors.source = "Cannot be Empty";
@@ -184,4 +181,9 @@ const mapStateToProps = ({ addCandidate }) => ({ addCandidate });
 export default reduxForm({
   form: "AddCandidate",
   validate
-})(connect(mapStateToProps, { addCandidate })(AddCandidate));
+})(
+  connect(
+    mapStateToProps,
+    { addCandidate }
+  )(AddCandidate)
+);
