@@ -259,6 +259,8 @@ class TestPage extends Component {
                 "status",
                 JSON.stringify({ submit_status: SUCCESS_STATUS })
               );
+              const finish_time = Date.now();
+              setItem("finish_time", JSON.stringify({ finish_time }));
             }
             BackHandler.exitApp();
           }

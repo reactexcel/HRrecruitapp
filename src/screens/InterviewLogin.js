@@ -85,8 +85,17 @@ class InterviewLogin extends Component {
       this.handleNetworks
     );
     const status = await getItem("status");
-    if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
-      this.backPressed();
+    const open_time = Date.now();
+    const finish_time = await getItem("finish_time");
+    if (finish_time !== undefined) {
+      const time_diff = Math.floor(
+        (open_time - finish_time.finish_time) / 60000
+      );
+      if (time_diff < 30) {
+        if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
+          this.backPressed();
+        }
+      }
     }
   }
 
