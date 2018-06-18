@@ -19,7 +19,6 @@ import { submitTest } from "../actions";
 import { getItem, setItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { notify } from "../helper/notify";
-import TimerCountdown from "react-native-timer-countdown";
 
 class SubmitTest extends Component {
   constructor() {
@@ -48,20 +47,47 @@ class SubmitTest extends Component {
     );
   }
 
-  async componentDidUpdate() {
+  componentDidUpdate() {
     if (this.props.test.data !== undefined) {
       if (this.props.test.data.status === SUCCESS_STATUS) {
-        Alert.alert(
-          "Thank You",
-          "Your response has been recorded. Please contact HR for for further instructions.",
-          [
-            {
-              text: "OK",
-              onPress: () => this.props.navigation.popToTop()
-            }
-          ],
-          { cancelable: false }
-        );
+        const { roundType } = this.props.navigation.state.params.data;
+        if (roundType === "Subjective") {
+          Alert.alert(
+            "Thank You",
+            "Click OK to exit application and Contact HR to proceed further.",
+            [
+              {
+                text: "OK",
+                onPress: async () => {
+                  const email = this.props.navigation.getParam("email");
+                  const stored_email = await getItem("email");
+                  if (stored_email.email === email) {
+                    setItem(
+                      "status",
+                      JSON.stringify({ submit_status: SUCCESS_STATUS })
+                    );
+                    const finish_time = Date.now();
+                    setItem("finish_time", JSON.stringify({ finish_time }));
+                  }
+                  BackHandler.exitApp();
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+        } else {
+          Alert.alert(
+            "Thank You",
+            "Your response has been recorded. Please contact HR for for further instructions.",
+            [
+              {
+                text: "OK",
+                onPress: () => this.props.navigation.popToTop()
+              }
+            ],
+            { cancelable: false }
+          );
+        }
       }
     }
     const { success } = this.props.test;
@@ -95,6 +121,7 @@ class SubmitTest extends Component {
     const { params } = this.props.navigation.state;
     const fb_id = params.fb_id;
     const job_profile = params.data.job_profile;
+    const roundType = params.data.roundType;
     const questionIds = [];
     forEach(params.data.data, value => {
       forEach(value.questions, value => {
@@ -102,13 +129,22 @@ class SubmitTest extends Component {
       });
     });
     const taken_time_minutes = params.taken_time_minutes;
-    const data = {
-      answers: ans.solution,
-      fb_id: fb_id,
-      job_profile: job_profile,
-      questionIds: questionIds,
-      taken_time_minutes: taken_time_minutes
-    };
+    let data;
+    if (roundType === "Objective") {
+      data = {
+        answers: ans.solution,
+        fb_id,
+        job_profile,
+        questionIds,
+        taken_time_minutes,
+        roundType
+      };
+    } else if (roundType === "Subjective") {
+      data = {
+        fb_id,
+        roundType
+      };
+    }
     this.props.submitTest(email, data);
   };
 

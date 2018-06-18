@@ -41,11 +41,14 @@ export const signUp = email => async dispatch => {
       appliedEmail,
       profile_pic
     });
-    PubSub.publish('FIREBASE_SIGNUP_SUCCESS', {API_URL,email,res});
-    dispatch({ type: INTERVIEW_EMAIL_SIGN_UP, payload: { email, ...res.data } });
+    PubSub.publish("FIREBASE_SIGNUP_SUCCESS", { API_URL, email, res });
+    dispatch({
+      type: INTERVIEW_EMAIL_SIGN_UP,
+      payload: { email, ...res.data }
+    });
   } catch (err) {
-    if(err.response){
-      PubSub.publish('FIREBASE_SIGNUP_FAILURE', {API_URL,email,err});
+    if (err.response) {
+      PubSub.publish("FIREBASE_SIGNUP_FAILURE", { API_URL, email, err });
       if (err.response.data.error === 1) {
         dispatch({
           type: INTERVIEW_EMAIL_SIGN_UP_FAILURE,
@@ -54,8 +57,11 @@ export const signUp = email => async dispatch => {
       } else {
         dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_ERROR });
       }
-    }else if(err.message) {
-        dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_FAILURE, payload: {msg:err.message} });
+    } else if (err.message) {
+      dispatch({
+        type: INTERVIEW_EMAIL_SIGN_UP_FAILURE,
+        payload: { msg: err.message }
+      });
     }
   }
 };

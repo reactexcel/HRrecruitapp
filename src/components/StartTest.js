@@ -37,7 +37,7 @@ const StartTest = props => {
               To Call Help, Internet connection must be on.
             </Text>
           </CardItem>
-          {calling ? (
+          {!isOnline || calling ? (
             <Button disabled block>
               <Text uppercase={false} style={_styles.Button}>
                 Call for Help
