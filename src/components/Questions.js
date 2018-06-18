@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Content, Card, CardItem, Text, Radio } from "native-base";
-import { View } from "react-native";
+import { View, TouchableOpacity } from "react-native";
 import { Col, Row } from "react-native-easy-grid";
 import map from "lodash/map";
 import findIndex from "lodash/findIndex";
@@ -65,11 +65,19 @@ const Questions = props => {
                                 onPress={() => {
                                   handleSubmit(ques._id, values.opt_id);
                                 }}
+                                activeOpacity={1}
                                 selected={selected}
                               />
                             </Col>
                             <Col>
-                              <Text>{values.option}</Text>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  handleSubmit(ques._id, values.opt_id);
+                                }}
+                                activeOpacity={1}
+                              >
+                                <Text>{values.option}</Text>
+                              </TouchableOpacity>
                             </Col>
                           </Row>
                         </Content>
