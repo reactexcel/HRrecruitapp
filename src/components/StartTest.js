@@ -41,7 +41,8 @@ class StartTest extends Component {
             <CardItem />
             <CardItem>
               <Text style={styles.text}>
-                To Call Help, Internet connection must be on.
+                To Call Help during Test, Switch on your Internet connection and
+                click here.
               </Text>
             </CardItem>
             <Modal
