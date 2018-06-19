@@ -242,7 +242,7 @@ class TestPage extends Component {
   confirmSecondRoundSubmit = () => {
     Alert.alert(
       "Confirm Please",
-      "Are you sure, you want to submit your Test?\nIf Yes, Click OK to exit application and Contact HR to proceed further.",
+      "Are you sure, you want to submit your Test?",
       [
         {
           text: "Cancel",
@@ -251,16 +251,10 @@ class TestPage extends Component {
         },
         {
           text: "OK",
-          onPress: async () => {
-            const email = this.props.navigation.getParam("email");
-            const stored_email = await getItem("email");
-            if (stored_email.email === email) {
-              setItem(
-                "status",
-                JSON.stringify({ submit_status: SUCCESS_STATUS })
-              );
-            }
-            BackHandler.exitApp();
+          onPress: () => {
+            this.props.navigation.navigate("SubmitTest", {
+              ...this.props.navigation.state.params
+            });
           }
         }
       ]
