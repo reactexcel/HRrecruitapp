@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Modal } from "react-native";
+import { StyleSheet, Modal, View } from "react-native";
 import { Container, Content, Text, Button, Card, CardItem } from "native-base";
 import HorizontalLine from "./HorizontalLine";
 import CustomButton from "./CustomButton";
@@ -48,20 +48,13 @@ class StartTest extends Component {
               animationType="slide"
               transparent={false}
               visible={this.state.modalVisible}
+              onRequestClose={() => {}}
             >
-              <Card style={styles.blockView}>
+              <View style={_styles.modalView}>
                 <CardItem>
                   <Text style={styles.headerText}>
                     To Call Help, Internet connection must be on.
                   </Text>
-                </CardItem>
-                <CardItem>
-                  <CustomButton
-                    onPress={() =>
-                      this.setModalVisible(!this.state.modalVisible)
-                    }
-                    text="Close"
-                  />
                 </CardItem>
                 <CardItem>
                   {!isOnline ? (
@@ -72,27 +65,30 @@ class StartTest extends Component {
                     </Button>
                   ) : (
                     <CustomButton
-                      onPress={handleCallHelp}
+                      onPress={() => {
+                        handleCallHelp();
+                        this.setModalVisible(!this.state.modalVisible);
+                      }}
                       text="Call for Help"
                     />
                   )}
                 </CardItem>
-              </Card>
+                <CardItem>
+                  <CustomButton
+                    onPress={() =>
+                      this.setModalVisible(!this.state.modalVisible)
+                    }
+                    text="Close"
+                  />
+                </CardItem>
+              </View>
             </Modal>
-            {/* {!isOnline || calling ? (
-              <Button disabled block>
-                <Text uppercase={false} style={_styles.Button}>
-                  Call for Help
-                </Text>
-              </Button>
-            ) : ( */}
             <CustomButton
               onPress={() => {
                 this.setModalVisible(true);
               }}
               text="Call for Help"
             />
-            {/* )} */}
           </Card>
         </Content>
       </Container>
@@ -105,6 +101,11 @@ const _styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "300",
     letterSpacing: 1
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
