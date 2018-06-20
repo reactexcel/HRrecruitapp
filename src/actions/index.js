@@ -157,6 +157,7 @@ export const submitTest = (email,data) => async dispatch => {
     PubSub.publish('FIREBASE_SUBMIT_TEST_SUCCESS', {API_URL,email,data,res});
     dispatch({ type: SUBMIT_TEST_SUCCESS, payload: res });
   } catch (err) {
+    console.log(err)
     if(err.message){ // Show alert about timeout to user
       dispatch({ type: SUBMIT_TEST_FAILURE, payload: {msg:err.message} });
     }else {

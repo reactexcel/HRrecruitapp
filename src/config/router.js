@@ -1,4 +1,5 @@
 import { createStackNavigator } from "react-navigation";
+import { Platform } from "react-native";
 import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
 import OTPpage from "../screens/OTPpage";
@@ -32,7 +33,7 @@ const Rootstack = createStackNavigator(
     }
   },
   {
-    initialScreen: "InterviewLogin"
+    initialScreen: "InterviewLogin",
   }
 );
 

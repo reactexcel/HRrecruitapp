@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { COLOR } from "./color";
 
 export default StyleSheet.create({
@@ -6,7 +6,7 @@ export default StyleSheet.create({
     backgroundColor: COLOR.BGCOLOR
   },
   logoView: {
-    height: 125,
+    height: Platform.OS === "ios" ? 170 : 125,
     justifyContent: "center",
     alignItems: "center"
   },
@@ -17,20 +17,20 @@ export default StyleSheet.create({
   },
   headerText: {
     color: COLOR.Black,
-    fontSize: 20,
-    fontWeight: "500",
+    fontSize: Platform.OS === "ios" ? 22 : 20,
+    fontWeight: Platform.OS === "ios" ? "700" : "500",
     letterSpacing: 1,
     textAlign: "center"
   },
   text: {
     letterSpacing: 1,
     textAlign: "center",
-    fontSize: 14,
+    fontSize: Platform.OS === "ios" ? 16 : 14,
     color: COLOR.DarkGrey
   },
   inputText: {
     color: COLOR.Black,
-    fontSize: 15,
+    fontSize: Platform.OS === "ios" ? 17 : 15,
     fontWeight: "400",
     letterSpacing: 1
   },

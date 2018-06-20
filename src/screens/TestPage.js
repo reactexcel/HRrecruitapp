@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Alert, NetInfo, BackHandler, AsyncStorage } from "react-native";
+import {
+  Alert,
+  NetInfo,
+  BackHandler,
+  AsyncStorage,
+  Platform
+} from "react-native";
 import {
   Container,
   Content,
@@ -96,7 +102,7 @@ class TestPage extends Component {
     return {
       title: name,
       headerLeft: (
-        <Content padder>
+        <Content style={{ paddingHorizontal: 10 }}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       ),
@@ -105,7 +111,20 @@ class TestPage extends Component {
           {navigation.state.params.show !== undefined ? (
             navigation.state.params.show ? (
               <React.Fragment>
-                <Text style={styles.text}>Remaining Time : </Text>
+                <Text
+                  style={
+                    Platform.OS === "ios"
+                      ? {
+                          letterSpacing: 1,
+                          textAlign: "center",
+                          fontSize: 13,
+                          color: COLOR.DarkGrey
+                        }
+                      : styles.text
+                  }
+                >
+                  Remaining Time :
+                </Text>
                 <Text style={{ color: COLOR.Red }}>
                   <TimerCountdown
                     initialSecondsRemaining={counter}
@@ -153,7 +172,7 @@ class TestPage extends Component {
                       }
                     }}
                     allowFontScaling={true}
-                    style={{ fontSize: 15 }}
+                    style={{ fontSize: Platform.OS === "ios" ? 13 : 15 }}
                   />
                 </Text>
               </React.Fragment>
@@ -260,6 +279,7 @@ class TestPage extends Component {
                 JSON.stringify({ submit_status: SUCCESS_STATUS })
               );
             }
+            Platform.OS === "ios" ? this.props.navigation.popToTop() :
             BackHandler.exitApp();
           }
         }

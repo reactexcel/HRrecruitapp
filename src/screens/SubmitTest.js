@@ -82,7 +82,7 @@ class SubmitTest extends Component {
     return {
       title: name,
       headerLeft: (
-        <Content padder>
+        <Content style = {{paddingHorizontal : 10}}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       )
@@ -95,6 +95,7 @@ class SubmitTest extends Component {
     const { params } = this.props.navigation.state;
     const fb_id = params.fb_id;
     const job_profile = params.data.job_profile;
+    const roundType = params.data.roundType;
     const questionIds = [];
     forEach(params.data.data, value => {
       forEach(value.questions, value => {
@@ -104,10 +105,11 @@ class SubmitTest extends Component {
     const taken_time_minutes = params.taken_time_minutes;
     const data = {
       answers: ans.solution,
-      fb_id: fb_id,
-      job_profile: job_profile,
-      questionIds: questionIds,
-      taken_time_minutes: taken_time_minutes
+      fb_id,
+      job_profile,
+      questionIds,
+      taken_time_minutes,
+      roundType
     };
     this.props.submitTest(email, data);
   };

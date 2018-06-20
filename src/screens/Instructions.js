@@ -48,7 +48,7 @@ class Instructions extends Component {
     return {
       title: name,
       headerLeft: (
-        <Content padder>
+        <Content style = {{paddingHorizontal : 10}}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       )

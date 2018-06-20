@@ -9,6 +9,7 @@ target 'HRrecruit' do
   pod 'AppCenter/Crashes', '~> 1.6.1'
   pod 'AppCenter/Analytics', '~> 1.6.1'
   pod 'AppCenterReactNativeShared', '~> 1.5.1'
+  pod 'Appboy-iOS-SDK', '~> 3.0.2'
 
   
 

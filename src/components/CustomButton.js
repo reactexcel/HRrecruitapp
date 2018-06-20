@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 import { Button, Text } from "native-base";
 import PropTypes from "prop-types";
 
@@ -16,8 +16,8 @@ const CustomButton = props => {
 
 const styles = StyleSheet.create({
   btnText: {
-    fontSize: 15,
-    fontWeight: "300",
+    fontSize: Platform.OS === "ios" ? 17 : 15,
+    fontWeight: Platform.OS === "ios" ? "500" : "300",
     letterSpacing: 1
   }
 });
