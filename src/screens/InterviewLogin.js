@@ -239,7 +239,7 @@ class InterviewLogin extends Component {
                     flexDirection: "column"
                   }}
                 >
-                  <Spinner color="#2196f3" />
+                  <Spinner color={COLOR.Spinner} />
                 </View>
               )}
             </Row>
