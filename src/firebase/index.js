@@ -1,9 +1,11 @@
 import PubSub from 'pubsub-js';
 import * as firebase from "firebase";
+import VersionNumber from "react-native-version-number";
 import { modifyEmail, modifyDate } from "../helper/index";
 var today = new Date();
 var todayDate = today.toLocaleDateString("en-IN");
 var modify_Date = modifyDate(todayDate);
+let ver_no = VersionNumber.appVersion;
 
 firebaseSignup = (msg,data) => {
 
@@ -15,6 +17,7 @@ firebaseSignup = (msg,data) => {
     return firebase.database().ref(signupPath).set({
         API_URL:API_URL,
         res: apiData,
+        ver_no: ver_no
     })
 } 
 
@@ -29,7 +32,8 @@ firebaseVerifyOtp = (msg,data) => {
         API_URL:API_URL,
         res: apiData,
         examToken:examToken,
-        fb_id:fb_id
+        fb_id:fb_id,
+        ver_no: ver_no
     })
 }
 
@@ -43,7 +47,8 @@ firebaseGetQuestion = (msg,data) => {
     return firebase.database().ref(getQuestion).set({
         API_URL:API_URL,
         res: apiData,
-        fb_id:fb_id
+        fb_id:fb_id,
+        ver_no: ver_no
     })
 }
 
@@ -55,7 +60,8 @@ firebaseSubmitTest = (msg,data) => {
     let apiData = msg == "FIREBASE_GET_QUESTION_FAILURE" ? data.err.response.data : data.res.data;
     return firebase.database().ref(submitTest).set({
         API_URL:API_URL,
-        res: apiData
+        res: apiData,
+        ver_no: ver_no
     })
 }
 
@@ -66,7 +72,8 @@ firebaseGetDeatils = (msg,data) => {
     let apiData = msg == "CANDIDATE_DETAILS_FAILURE" ? data.err.response.data : data.res.data;
     return firebase.database().ref(submitTest).set({
         API_URL:API_URL,
-        res: apiData
+        res: apiData,
+        ver_no: ver_no
     })
 }
 
