@@ -12,7 +12,7 @@ export default combineReducers({
   form: formReducer,
   interviewSignUp: interviewReducer,
   otp: otpReducer,
-  addCandidate: addCandidateReducer,
+  candidate: addCandidateReducer,
   questions: questionsReducer,
   callHelp: callHelpReducer,
   test: testReducer,
