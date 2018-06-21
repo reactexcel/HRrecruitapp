@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image, Alert, AsyncStorage, WebView } from "react-native";
+import { Image, Alert, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
