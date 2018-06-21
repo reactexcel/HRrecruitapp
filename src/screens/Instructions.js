@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image, Alert, AsyncStorage } from "react-native";
+import { Image, Alert, AsyncStorage, WebView } from "react-native";
 import {
   Container,
   Content,
@@ -17,6 +17,7 @@ import HorizontalLine from "../components/HorizontalLine";
 import { setItem, getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
+import HTML from "react-native-render-html";
 
 class Instructions extends Component {
   async componentDidMount() {
@@ -77,9 +78,7 @@ class Instructions extends Component {
                 {questions.data !== undefined ? (
                   <Fragment>
                     <CardItem>
-                      <Text style={styles.text}>
-                        {questions.data.instructions}
-                      </Text>
+                      <HTML html={questions.data.instructions} />
                     </CardItem>
                     <CustomButton text="Continue" onPress={this.handlePress} />
                   </Fragment>
