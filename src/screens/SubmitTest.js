@@ -13,6 +13,7 @@ import {
 import HorizontalLine from "../components/HorizontalLine";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
+import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import forEach from "lodash/forEach";
 import { submitTest } from "../actions";
@@ -172,7 +173,7 @@ class SubmitTest extends Component {
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (
-              <Spinner color="#2196f3" />
+              <Spinner color={COLOR.Spinner} />
             ) : (
               <CustomButton text="Click Here" onPress={this.handleTestSubmit} />
             )}

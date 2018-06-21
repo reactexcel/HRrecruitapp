@@ -39,7 +39,7 @@ class AddCandidate extends Component {
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
-      if (candidate.data.__v === 0) {
+      if (candidate.data.candidate_status === false) {
         Alert.alert(
           "Thank You",
           "Wait for the confirmation of your registration from HR.",
@@ -173,7 +173,7 @@ class AddCandidate extends Component {
                 />
                 <CardItem />
                 {adding ? (
-                  <Spinner color="#2196f3" />
+                  <Spinner color={COLOR.Spinner} />
                 ) : (
                   <CustomButton
                     text="Add"
