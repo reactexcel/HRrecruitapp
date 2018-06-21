@@ -16,6 +16,7 @@ import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
 import { setItem, getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
+import { COLOR } from "../styles/color";
 
 class Instructions extends Component {
   async componentDidMount() {
@@ -101,7 +102,7 @@ class Instructions extends Component {
                 )}
               </Fragment>
             ) : (
-              <Spinner color="#2196f3" />
+              <Spinner color={COLOR.Spinner} />
             )}
           </Card>
         </Content>
