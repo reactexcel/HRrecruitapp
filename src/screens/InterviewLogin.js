@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert, NetInfo, View } from "react-native";
+import { BackHandler, Alert, NetInfo, View, AsyncStorage } from "react-native";
 import {
   Container,
   Content,
@@ -102,6 +102,10 @@ class InterviewLogin extends Component {
         appearedInFirstRound,
         appearedInSecondRound
       } = this.props.candidateInfo.data;
+      if (appearedInFirstRound) {
+        AsyncStorage.removeItem("solution");
+        AsyncStorage.removeItem("remaining_time");
+      }
       const roundType =
         currentRound === "First Round" ? "Objective" : "Subjective";
       if (currentRound === round.round) {
