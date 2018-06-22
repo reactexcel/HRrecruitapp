@@ -24,6 +24,10 @@ import {
 } from "./types";
 import { CHANGE_CONNECTION_STATUS } from "./types";
 import { CANDIDATE_DETAILS_SUCCESS, CANDIDATE_DETAILS_FAILURE } from "./types";
+import {
+  CANDIDATE_ROUND_DETAILS_SUCCESS,
+  CANDIDATE_ROUND_DETAILS_FAILURE
+} from "./types";
 
 import API_URL from "../config/dev";
 import PubSub from "pubsub-js";
@@ -225,6 +229,27 @@ export const getCandidateDetails = fb_id => async dispatch => {
         err
       });
       dispatch({ type: CANDIDATE_DETAILS_FAILURE, payload: err.response.data });
+    }
+  }
+};
+
+export const getCandidateRoundDetails = fb_id => async dispatch => {
+  try {
+    const res = await _axios().get(`candidateExamRoundDetails/${fb_id}`);
+    dispatch({ type: CANDIDATE_ROUND_DETAILS_SUCCESS, payload: res.data });
+  } catch (err) {
+    console.log(err);
+    if (err.message == "timeout of 10000ms exceeded") {
+      // Show alert about timeout to user
+      dispatch({
+        type: CANDIDATE_ROUND_DETAILS_FAILURE,
+        payload: { msg: err.message }
+      });
+    } else {
+      dispatch({
+        type: CANDIDATE_ROUND_DETAILS_FAILURE,
+        payload: err.response.data
+      });
     }
   }
 };

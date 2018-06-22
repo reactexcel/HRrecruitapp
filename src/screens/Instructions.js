@@ -30,6 +30,7 @@ class Instructions extends Component {
       AsyncStorage.removeItem("remaining_time");
     }
     setItem("email", JSON.stringify({ email }));
+    setItem("fb_id", JSON.stringify({fb_id}));
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {

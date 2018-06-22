@@ -9,6 +9,7 @@ import _styles from "../styles/TestPage";
 import Accordion from "react-native-collapsible/Accordion";
 import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
+import HTML from "react-native-render-html";
 
 const Questions = props => {
   const { question, solution, handleSubmit } = props;
@@ -37,7 +38,8 @@ const Questions = props => {
                     </Text>
                     {ques.description ? (
                       <View style={_styles.descriptionView}>
-                        <Text style={{ opacity: 0.8 }}>{ques.description}</Text>
+                        {/* <Text style={{ opacity: 0.8 }}>{ques.description}</Text> */}
+                        <HTML html={ques.description} />
                       </View>
                     ) : null}
                     {ques.options.length !== 0 ? (
