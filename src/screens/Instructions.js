@@ -17,7 +17,7 @@ import HorizontalLine from "../components/HorizontalLine";
 import { setItem, getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
-import HTML from "react-native-render-html";
+import HTMLView from "react-native-htmlview";
 
 class Instructions extends Component {
   async componentDidMount() {
@@ -30,6 +30,7 @@ class Instructions extends Component {
       AsyncStorage.removeItem("remaining_time");
     }
     setItem("email", JSON.stringify({ email }));
+    setItem("fb_id", JSON.stringify({ fb_id }));
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
@@ -78,7 +79,7 @@ class Instructions extends Component {
                 {questions.data !== undefined ? (
                   <Fragment>
                     <CardItem>
-                      <HTML html={questions.data.instructions} />
+                      <HTMLView value={questions.data.instructions} />
                     </CardItem>
                     <CustomButton text="Continue" onPress={this.handlePress} />
                   </Fragment>
