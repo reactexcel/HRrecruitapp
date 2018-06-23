@@ -52,6 +52,7 @@ class SubmitTest extends Component {
     if (this.props.test.data !== undefined) {
       if (this.props.test.data.status === SUCCESS_STATUS) {
         const { roundType } = this.props.navigation.state.params.data;
+        const { round } = this.props.navigation.state.params.data;
         if (roundType === "Subjective") {
           Alert.alert(
             "Thank You",
@@ -63,12 +64,7 @@ class SubmitTest extends Component {
                   const email = this.props.navigation.getParam("email");
                   const stored_email = await getItem("email");
                   if (stored_email.email === email) {
-                    setItem(
-                      "status",
-                      JSON.stringify({ submit_status: SUCCESS_STATUS })
-                    );
-                    const finish_time = Date.now();
-                    setItem("finish_time", JSON.stringify({ finish_time }));
+                    setItem("round", JSON.stringify({ round }));
                   }
                   BackHandler.exitApp();
                 }
@@ -83,7 +79,14 @@ class SubmitTest extends Component {
             [
               {
                 text: "OK",
-                onPress: () => this.props.navigation.popToTop()
+                onPress: async () => {
+                  const email = this.props.navigation.getParam("email");
+                  const stored_email = await getItem("email");
+                  if (stored_email.email === email) {
+                    setItem("round", JSON.stringify({ round }));
+                  }
+                  BackHandler.exitApp();
+                }
               }
             ],
             { cancelable: false }

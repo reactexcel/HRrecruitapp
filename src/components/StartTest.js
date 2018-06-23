@@ -84,12 +84,20 @@ class StartTest extends Component {
                 </CardItem>
               </View>
             </Modal>
-            <CustomButton
-              onPress={() => {
-                this.setModalVisible(true);
-              }}
-              text="Call for Help"
-            />
+            {!calling ? (
+              <CustomButton
+                onPress={() => {
+                  isOnline ? handleCallHelp() : this.setModalVisible(true);
+                }}
+                text="Call for Help"
+              />
+            ) : (
+              <Button disabled block>
+                <Text uppercase={false} style={_styles.Button}>
+                  Call for Help
+                </Text>
+              </Button>
+            )}
           </Card>
         </Content>
       </Container>
