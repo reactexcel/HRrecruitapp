@@ -123,34 +123,12 @@ class TestPage extends Component {
                         );
                       }
                     }}
-                    onTimeElapsed={async () => {
-                      if (round === "First Round") {
-                        navigation.navigate("SubmitTest", {
-                          ...navigation.state.params,
-                          taken_time_minutes:
-                            navigation.state.params.data.timeForExam
-                        });
-                      } else if (round == "Second Round") {
-                        const email = navigation.getParam("email");
-                        const stored_email = await getItem("email");
-                        if (stored_email.email === email) {
-                          setItem(
-                            "status",
-                            JSON.stringify({ submit_status: SUCCESS_STATUS })
-                          );
-                        }
-                        Alert.alert(
-                          "Alert",
-                          "Your time has finished. Contact HR to proceed further.\nClick Ok to exit application.",
-                          [
-                            {
-                              text: "OK",
-                              onPress: () => BackHandler.exitApp()
-                            }
-                          ],
-                          { cancelable: false }
-                        );
-                      }
+                    onTimeElapsed={() => {
+                      navigation.navigate("SubmitTest", {
+                        ...navigation.state.params,
+                        taken_time_minutes:
+                          navigation.state.params.data.timeForExam
+                      });
                     }}
                     allowFontScaling={true}
                     style={{ fontSize: 15 }}
