@@ -141,16 +141,6 @@ class InterviewLogin extends Component {
       this.handleNetworks
     );
   }
-  // backPressed = () => {
-  //   Alert.alert(
-  //     "Thank You",
-  //     "You have submitted your test. Contact HR to proceed further.",
-  //     [{ text: "Ok", onPress: () => BackHandler.exitApp() }],
-  //     { cancelable: false }
-  //   );
-
-  //   return true;
-  // };
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);

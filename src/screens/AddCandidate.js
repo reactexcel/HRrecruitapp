@@ -124,7 +124,6 @@ class AddCandidate extends Component {
   render() {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
-    console.log(this.props, "props");
     return (
       <Container style={styles.container}>
         <Content padder>
