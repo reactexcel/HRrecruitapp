@@ -1,5 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert, NetInfo, View } from "react-native";
+import {
+  BackHandler,
+  Alert,
+  NetInfo,
+  View,
+  AsyncStorage,
+  Platform
+} from "react-native";
 import {
   Container,
   Content,
@@ -20,7 +27,12 @@ import styles from "../styles";
 import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
-import { signUp, connectionState, getCandidateDetails } from "../actions";
+import {
+  signUp,
+  connectionState,
+  getCandidateDetails,
+  getCandidateRoundDetails
+} from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
@@ -31,7 +43,7 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
+      email: ""
       // linkOpening: true Deeplink code for android
     };
   }
@@ -84,9 +96,46 @@ class InterviewLogin extends Component {
       "connectionChange",
       this.handleNetworks
     );
-    const status = await getItem("status");
-    if (status !== undefined && status.submit_status === SUCCESS_STATUS) {
-      this.backPressed();
+    const fb_id = await getItem("fb_id");
+
+    if (fb_id !== undefined) {
+      await this.props.getCandidateRoundDetails(fb_id.fb_id);
+    }
+    const round = await getItem("round");
+
+    if (round !== undefined) {
+      const {
+        currentRound,
+        appearedInFirstRound,
+        appearedInSecondRound
+      } = this.props.candidateInfo.data;
+      if (appearedInFirstRound) {
+        AsyncStorage.removeItem("solution");
+        AsyncStorage.removeItem("remaining_time");
+      }
+      const roundType =
+        currentRound === "First Round" ? "Objective" : "Subjective";
+      if (currentRound === round.round) {
+        Alert.alert(
+          "Info",
+          `You have submitted your ${roundType} paper. Please contact HR to proceed further.`,
+          [
+            {
+              text: "Ok",
+              onPress:
+                Platform.OS === "ios" ? () => {} : () => BackHandler.exitApp()
+            }
+          ],
+          { cancelable: false }
+        );
+      } else if (currentRound !== round.round) {
+        Alert.alert("Info", `You have been moved to ${roundType} round.`, [
+          {
+            text: "Ok",
+            onPress: () => {}
+          }
+        ]);
+      }
     }
   }
 
@@ -100,16 +149,6 @@ class InterviewLogin extends Component {
       this.handleNetworks
     );
   }
-  backPressed = () => {
-    Alert.alert(
-      "Thank You",
-      "You have submitted your test. Contact HR to proceed further.",
-      [{ text: "Ok", onPress: () => BackHandler.exitApp() }],
-      { cancelable: false }
-    );
-
-    return true;
-  };
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
@@ -136,6 +175,17 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
+            if (this.state.email === "test_123@gmail.com") {
+              this.props.navigation.navigate("Instructions", {
+                fb_id: fb_id,
+                profile_pic: `https://pikmail.herokuapp.com/${
+                  this.state.email
+                }?size=60`,
+                name: "Test",
+                email: this.state.email
+              });
+              return;
+            }
             this.props.navigation.navigate("OTPpage");
             this.setState({ email: "" });
           }
@@ -230,7 +280,7 @@ class InterviewLogin extends Component {
                     flexDirection: "column"
                   }}
                 >
-                  <Spinner color="#2196f3" />
+                  <Spinner color={COLOR.Spinner} />
                 </View>
               )}
             </Row>
@@ -243,9 +293,10 @@ class InterviewLogin extends Component {
 
 const mapStateToProps = state => ({
   interviewSignUp: state.interviewSignUp,
-  isConnected: state.network.isConnected
+  isConnected: state.network.isConnected,
+  candidateInfo: state.candidateInfo
 });
 export default connect(
   mapStateToProps,
-  { signUp, connectionState, getCandidateDetails }
+  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails }
 )(InterviewLogin);

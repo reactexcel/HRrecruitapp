@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View } from "react-native";
+import { View, Alert } from "react-native";
 import {
   Container,
   Content,
@@ -9,7 +9,8 @@ import {
   CardItem,
   Item,
   Input,
-  Picker
+  Picker,
+  Spinner
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
@@ -20,6 +21,7 @@ import HorizontalLine from "../components/HorizontalLine";
 import styles from "../styles";
 import _styles from "../styles/AddCandidate";
 import { COLOR } from "../styles/color";
+import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { addCandidate } from "../actions";
 
@@ -28,11 +30,35 @@ class AddCandidate extends Component {
     header: null
   };
   static getDerivedStateFromProps(nextProps) {
-    const { msg } = nextProps.addCandidate; 
-    if (msg !== undefined ){
+    const { msg } = nextProps.candidate;
+    if (msg !== undefined) {
       alert(msg);
     }
     return null;
+  }
+  componentDidUpdate() {
+    const { candidate } = this.props;
+    if (candidate.data !== undefined) {
+      if (candidate.data.candidate_status === false) {
+        Alert.alert(
+          "Thank You",
+          "Wait for the confirmation of your registration from HR.",
+          [
+            {
+              text: "OK",
+              onPress: () => this.props.navigation.popToTop()
+            }
+          ],
+          { cancelable: false }
+        );
+      }
+    }
+    const { success } = this.props.candidate;
+    if (success !== undefined) {
+      if (success === false) {
+        notify("Something went wrong");
+      }
+    }
   }
   renderField(props) {
     const { input, ...inputProps } = props;
@@ -97,6 +123,7 @@ class AddCandidate extends Component {
 
   render() {
     const { handleSubmit } = this.props;
+    const { adding } = this.props.candidate;
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -107,7 +134,7 @@ class AddCandidate extends Component {
             <Row>
               <Card style={styles.blockView}>
                 <CardItem>
-                  <Text style={styles.headerText}>Add Candidate</Text>
+                  <Text style={styles.headerText}>Register Candidate</Text>
                 </CardItem>
                 <HorizontalLine />
                 <Field
@@ -144,10 +171,14 @@ class AddCandidate extends Component {
                   keyboardType="numeric"
                 />
                 <CardItem />
-                <CustomButton
-                  text="Add"
-                  onPress={handleSubmit(this.onSubmit)}
-                />
+                {adding ? (
+                  <Spinner color={COLOR.Spinner} />
+                ) : (
+                  <CustomButton
+                    text="Add"
+                    onPress={handleSubmit(this.onSubmit)}
+                  />
+                )}
               </Card>
             </Row>
           </Grid>
@@ -162,13 +193,10 @@ validate = values => {
     errors.from = "Cannot be Empty";
   }
 
-  if (!values.sender_email) {
-    errors.sender_email = "Cannot be Empty";
-  } else if (
-    !isEmail(values.sender_email) ||
-    !isLowercase(values.sender_email)
-  ) {
-    errors.sender_email = "Enter a valid email and must be in lowercase";
+  if (!values.sender_mail) {
+    errors.sender_mail = "Cannot be Empty";
+  } else if (!isEmail(values.sender_mail) || !isLowercase(values.sender_mail)) {
+    errors.sender_mail = "Enter a valid email and must be in lowercase";
   }
   if (!values.gender) errors.gender = "Select a gender";
   if (!values.source) errors.source = "Cannot be Empty";
@@ -180,8 +208,13 @@ validate = values => {
   return errors;
 };
 
-const mapStateToProps = ({ addCandidate }) => ({ addCandidate });
+const mapStateToProps = ({ candidate }) => ({ candidate });
 export default reduxForm({
   form: "AddCandidate",
   validate
-})(connect(mapStateToProps, { addCandidate })(AddCandidate));
+})(
+  connect(
+    mapStateToProps,
+    { addCandidate }
+  )(AddCandidate)
+);

@@ -1,62 +1,120 @@
 import React, { Component } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Modal, View } from "react-native";
 import { Container, Content, Text, Button, Card, CardItem } from "native-base";
 import HorizontalLine from "./HorizontalLine";
 import CustomButton from "./CustomButton";
 import styles from "../styles";
 import PropTypes from "prop-types";
 
-const StartTest = props => {
-  const { isOnline, handleStartTest, handleCallHelp } = props;
-  const { calling } = props.callHelp;
-  return (
-    <Container>
-      <Content padder>
-        <Card style={styles.blockView}>
-          <CardItem>
-            <Text style={styles.headerText}>Start Test</Text>
-          </CardItem>
-          <HorizontalLine />
-          <CardItem>
-            <Text style={styles.text}>
-              To Start Test, please turn off your Internet connection.
-            </Text>
-          </CardItem>
-          {isOnline ? (
-            <Button disabled block>
-              <Text uppercase={false} style={_styles.Button}>
-                Click Here
+class StartTest extends Component {
+  state = {
+    modalVisible: false
+  };
+  setModalVisible = visible => {
+    this.setState({ modalVisible: visible });
+  };
+  render() {
+    const { isOnline, handleStartTest, handleCallHelp } = this.props;
+    const { calling } = this.props.callHelp;
+    return (
+      <Container>
+        <Content padder>
+          <Card style={styles.blockView}>
+            <CardItem>
+              <Text style={styles.headerText}>Start Test</Text>
+            </CardItem>
+            <HorizontalLine />
+            <CardItem>
+              <Text style={styles.text}>
+                To Start Test, please turn off your Internet connection.
               </Text>
-            </Button>
-          ) : (
-            <CustomButton text="Click Here" onPress={handleStartTest} />
-          )}
-          <CardItem />
-          <CardItem>
-            <Text style={styles.text}>
-              To Call Help, Internet connection must be on.
-            </Text>
-          </CardItem>
-          {calling ? (
-            <Button disabled block>
-              <Text uppercase={false} style={_styles.Button}>
-                Call for Help
+            </CardItem>
+            {isOnline ? (
+              <Button disabled block>
+                <Text uppercase={false} style={_styles.Button}>
+                  Click Here
+                </Text>
+              </Button>
+            ) : (
+              <CustomButton text="Click Here" onPress={handleStartTest} />
+            )}
+            <CardItem />
+            <CardItem>
+              <Text style={styles.text}>
+                To Call Help during Test, Switch on your Internet connection and
+                click here.
               </Text>
-            </Button>
-          ) : (
-            <CustomButton onPress={handleCallHelp} text="Call for Help" />
-          )}
-        </Card>
-      </Content>
-    </Container>
-  );
-};
+            </CardItem>
+            <Modal
+              animationType="slide"
+              transparent={false}
+              visible={this.state.modalVisible}
+              onRequestClose={() => {}}
+            >
+              <View style={_styles.modalView}>
+                <CardItem>
+                  <Text style={styles.headerText}>
+                    To Call Help, Internet connection must be on.
+                  </Text>
+                </CardItem>
+                <CardItem>
+                  {!isOnline ? (
+                    <Button disabled block>
+                      <Text uppercase={false} style={_styles.Button}>
+                        Call for Help
+                      </Text>
+                    </Button>
+                  ) : (
+                    <CustomButton
+                      onPress={() => {
+                        handleCallHelp();
+                        this.setModalVisible(!this.state.modalVisible);
+                      }}
+                      text="Call for Help"
+                    />
+                  )}
+                </CardItem>
+                <CardItem>
+                  <CustomButton
+                    onPress={() =>
+                      this.setModalVisible(!this.state.modalVisible)
+                    }
+                    text="Close"
+                  />
+                </CardItem>
+              </View>
+            </Modal>
+            {!calling ? (
+              <CustomButton
+                onPress={() => {
+                  isOnline ? handleCallHelp() : this.setModalVisible(true);
+                }}
+                text="Call for Help"
+              />
+            ) : (
+              <Button disabled block>
+                <Text uppercase={false} style={_styles.Button}>
+                  Call for Help
+                </Text>
+              </Button>
+            )}
+          </Card>
+        </Content>
+      </Container>
+    );
+  }
+}
 
 const _styles = StyleSheet.create({
   helpButton: {
     fontSize: 15,
     fontWeight: "300",
     letterSpacing: 1
+  },
+  modalView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 

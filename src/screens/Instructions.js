@@ -16,6 +16,8 @@ import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
 import { setItem, getItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
+import { COLOR } from "../styles/color";
+import HTMLView from "react-native-htmlview";
 
 class Instructions extends Component {
   async componentDidMount() {
@@ -28,6 +30,7 @@ class Instructions extends Component {
       AsyncStorage.removeItem("remaining_time");
     }
     setItem("email", JSON.stringify({ email }));
+    setItem("fb_id", JSON.stringify({ fb_id }));
   }
   static getDerivedStateFromProps(nxtprops) {
     if (nxtprops.questions !== null && nxtprops.questions !== undefined) {
@@ -46,7 +49,7 @@ class Instructions extends Component {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
     return {
-      title: name,
+      title: name.split(" ")[0],
       headerLeft: (
         <Content style = {{paddingHorizontal : 10}}>
           <Thumbnail small source={{ uri: profile_pic }} />
@@ -76,9 +79,7 @@ class Instructions extends Component {
                 {questions.data !== undefined ? (
                   <Fragment>
                     <CardItem>
-                      <Text style={styles.text}>
-                        {questions.data.instructions}
-                      </Text>
+                      <HTMLView value={questions.data.instructions} />
                     </CardItem>
                     <CustomButton text="Continue" onPress={this.handlePress} />
                   </Fragment>
@@ -101,7 +102,7 @@ class Instructions extends Component {
                 )}
               </Fragment>
             ) : (
-              <Spinner color="#2196f3" />
+              <Spinner color={COLOR.Spinner} />
             )}
           </Card>
         </Content>

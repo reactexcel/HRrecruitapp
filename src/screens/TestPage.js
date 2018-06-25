@@ -100,7 +100,7 @@ class TestPage extends Component {
     const round = navigation.state.params.data.round;
 
     return {
-      title: name,
+      title: name.split(" ")[0],
       headerLeft: (
         <Content style={{ paddingHorizontal: 10 }}>
           <Thumbnail small source={{ uri: profile_pic }} />
@@ -142,34 +142,12 @@ class TestPage extends Component {
                         );
                       }
                     }}
-                    onTimeElapsed={async () => {
-                      if (round === "First Round") {
-                        navigation.navigate("SubmitTest", {
-                          ...navigation.state.params,
-                          taken_time_minutes:
-                            navigation.state.params.data.timeForExam
-                        });
-                      } else if (round == "Second Round") {
-                        const email = navigation.getParam("email");
-                        const stored_email = await getItem("email");
-                        if (stored_email.email === email) {
-                          setItem(
-                            "status",
-                            JSON.stringify({ submit_status: SUCCESS_STATUS })
-                          );
-                        }
-                        Alert.alert(
-                          "Alert",
-                          "Your time has finished. Contact HR to proceed further.\nClick Ok to exit application.",
-                          [
-                            {
-                              text: "OK",
-                              onPress: () => BackHandler.exitApp()
-                            }
-                          ],
-                          { cancelable: false }
-                        );
-                      }
+                    onTimeElapsed={() => {
+                      navigation.navigate("SubmitTest", {
+                        ...navigation.state.params,
+                        taken_time_minutes:
+                          navigation.state.params.data.timeForExam
+                      });
                     }}
                     allowFontScaling={true}
                     style={{ fontSize: Platform.OS === "ios" ? 13 : 15 }}
@@ -261,7 +239,7 @@ class TestPage extends Component {
   confirmSecondRoundSubmit = () => {
     Alert.alert(
       "Confirm Please",
-      "Are you sure, you want to submit your Test?\nIf Yes, Click OK to exit application and Contact HR to proceed further.",
+      "Are you sure, you want to submit your Test?",
       [
         {
           text: "Cancel",
@@ -270,17 +248,10 @@ class TestPage extends Component {
         },
         {
           text: "OK",
-          onPress: async () => {
-            const email = this.props.navigation.getParam("email");
-            const stored_email = await getItem("email");
-            if (stored_email.email === email) {
-              setItem(
-                "status",
-                JSON.stringify({ submit_status: SUCCESS_STATUS })
-              );
-            }
-            Platform.OS === "ios" ? this.props.navigation.popToTop() :
-            BackHandler.exitApp();
+          onPress: () => {
+            this.props.navigation.navigate("SubmitTest", {
+              ...this.props.navigation.state.params
+            });
           }
         }
       ]

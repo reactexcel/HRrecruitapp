@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, NetInfo, Alert } from "react-native";
+import { BackHandler, NetInfo, Alert, Platform } from "react-native";
 import {
   Container,
   Content,
@@ -13,13 +13,13 @@ import {
 import HorizontalLine from "../components/HorizontalLine";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
+import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import forEach from "lodash/forEach";
 import { submitTest } from "../actions";
 import { getItem, setItem } from "../helper/storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { notify } from "../helper/notify";
-import TimerCountdown from "react-native-timer-countdown";
 
 class SubmitTest extends Component {
   constructor() {
@@ -48,20 +48,54 @@ class SubmitTest extends Component {
     );
   }
 
-  async componentDidUpdate() {
+  componentDidUpdate() {
     if (this.props.test.data !== undefined) {
       if (this.props.test.data.status === SUCCESS_STATUS) {
-        Alert.alert(
-          "Thank You",
-          "Your response has been recorded. Please contact HR for for further instructions.",
-          [
-            {
-              text: "OK",
-              onPress: () => this.props.navigation.popToTop()
-            }
-          ],
-          { cancelable: false }
-        );
+        const { roundType } = this.props.navigation.state.params.data;
+        const { round } = this.props.navigation.state.params.data;
+        if (roundType === "Subjective") {
+          Alert.alert(
+            "Thank You",
+            "Click OK to exit application and Contact HR to proceed further.",
+            [
+              {
+                text: "OK",
+                onPress: async () => {
+                  const email = this.props.navigation.getParam("email");
+                  const stored_email = await getItem("email");
+                  if (stored_email.email === email) {
+                    setItem("round", JSON.stringify({ round }));
+                  }
+                  Platform.OS === "ios"
+                    ? this.props.navigation.popToTop()
+                    : BackHandler.exitApp();
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+        } else {
+          Alert.alert(
+            "Thank You",
+            "Your response has been recorded. Please contact HR for for further instructions.",
+            [
+              {
+                text: "OK",
+                onPress: async () => {
+                  const email = this.props.navigation.getParam("email");
+                  const stored_email = await getItem("email");
+                  if (stored_email.email === email) {
+                    setItem("round", JSON.stringify({ round }));
+                  }
+                  Platform.OS === "ios"
+                    ? this.props.navigation.popToTop()
+                    : BackHandler.exitApp();
+                }
+              }
+            ],
+            { cancelable: false }
+          );
+        }
       }
     }
     const { success } = this.props.test;
@@ -80,9 +114,9 @@ class SubmitTest extends Component {
     const name = navigation.getParam("name");
     const profile_pic = navigation.getParam("profile_pic");
     return {
-      title: name,
+      title: name.split(" ")[0],
       headerLeft: (
-        <Content style = {{paddingHorizontal : 10}}>
+        <Content style={{ paddingHorizontal: 10 }}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       )
@@ -103,14 +137,22 @@ class SubmitTest extends Component {
       });
     });
     const taken_time_minutes = params.taken_time_minutes;
-    const data = {
-      answers: ans.solution,
-      fb_id,
-      job_profile,
-      questionIds,
-      taken_time_minutes,
-      roundType
-    };
+    let data;
+    if (roundType === "Objective") {
+      data = {
+        answers: ans.solution,
+        fb_id,
+        job_profile,
+        questionIds,
+        taken_time_minutes,
+        roundType
+      };
+    } else if (roundType === "Subjective") {
+      data = {
+        fb_id,
+        roundType
+      };
+    }
     this.props.submitTest(email, data);
   };
 
@@ -138,7 +180,7 @@ class SubmitTest extends Component {
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (
-              <Spinner color="#2196f3" />
+              <Spinner color={COLOR.Spinner} />
             ) : (
               <CustomButton text="Click Here" onPress={this.handleTestSubmit} />
             )}

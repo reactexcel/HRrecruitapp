@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Content, Card, CardItem, Text, Radio } from "native-base";
-import { View } from "react-native";
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { Col, Row } from "react-native-easy-grid";
 import map from "lodash/map";
 import findIndex from "lodash/findIndex";
@@ -9,6 +9,7 @@ import _styles from "../styles/TestPage";
 import Accordion from "react-native-collapsible/Accordion";
 import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
+import HTMLView from "react-native-htmlview";
 
 const Questions = props => {
   const { question, solution, handleSubmit } = props;
@@ -37,7 +38,10 @@ const Questions = props => {
                     </Text>
                     {ques.description ? (
                       <View style={_styles.descriptionView}>
-                        <Text style={{ opacity: 0.8 }}>{ques.description}</Text>
+                        <HTMLView
+                          value={`<p>${ques.description}</p>`}
+                          stylesheet={styles_p}
+                        />
                       </View>
                     ) : null}
                     {ques.options.length !== 0 ? (
@@ -65,11 +69,19 @@ const Questions = props => {
                                 onPress={() => {
                                   handleSubmit(ques._id, values.opt_id);
                                 }}
+                                activeOpacity={1}
                                 selected={selected}
                               />
                             </Col>
                             <Col>
-                              <Text>{values.option}</Text>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  handleSubmit(ques._id, values.opt_id);
+                                }}
+                                activeOpacity={1}
+                              >
+                                <Text>{values.option}</Text>
+                              </TouchableOpacity>
                             </Col>
                           </Row>
                         </Content>
@@ -85,6 +97,13 @@ const Questions = props => {
     </Content>
   );
 };
+const styles_p = StyleSheet.create({
+  p: {
+    fontSize: 16,
+    color: "black",
+    opacity: 0.8
+  }
+});
 Questions.propTypes = {
   question: PropTypes.object,
   solution: PropTypes.array,
