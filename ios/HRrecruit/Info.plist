@@ -26,11 +26,13 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/> 
 		<key>NSExceptionDomains</key>
 		<dict>
 			<key>localhost</key>
-			<key>http://5.9.144.226:3000/exams/</key>
 			<key>http://api.recruit.excellencetechnologies.in/exams/</key>
+			<key>http://5.9.144.226:3000/exams/</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
