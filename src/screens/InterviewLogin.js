@@ -184,6 +184,7 @@ class InterviewLogin extends Component {
                 name: "Test",
                 email: this.state.email
               });
+              this.setState({email : ""})
               return;
             }
             this.props.navigation.navigate("OTPpage");
