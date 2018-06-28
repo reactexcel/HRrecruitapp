@@ -35,15 +35,15 @@ class HomePage extends Component {
           return(
                 <Container style={[styles.container,{flex:1,justifyContent:'center',flexDirection:'row'}]}>
                     <View style={{flex:1,justifyContent:'space-between',alignItems:'center'}} >
-                    <View style={{justifyContent:'space-between',alignItems:'center',marginTop:80}} >
-                        <View style={styles.logoView} >
+                    <View style={{justifyContent:'space-between',alignItems:'center',marginTop:70}} >
+                        {/* <View style={styles.logoView} >
                             <Logo />
-                        </View>
-                        {/* <Image style={{height:90,width:90}} source={require('../images/icon.png')} /> */}
+                        </View> */}
+                        <Image style={{height:90,width:90,marginBottom:20}} source={require('../images/icon.png')} />
                         {/* <Text style={{color:'white',fontSize:20,fontWeight:'600',textAlign:'center'}} >Welcome to Excellence Technologies Careers </Text> */}
-                        <Text style={{color:'white',fontSize:24,fontWeight:'600',textAlign:'center'}} >Welcome to</Text>
+                        <Text style={{color:'white',fontSize:20,fontWeight:'600',textAlign:'center'}} >Welcome to</Text>
                         <Text style={{color:'white',fontSize:28,fontWeight:'600',textAlign:'center'}} >Excellence Technologies</Text>
-                        <Text style={{color:'white',fontSize:25,fontWeight:'600',textAlign:'center'}} >Careers</Text>
+                        <Text style={{color:'white',fontSize:25,fontWeight:'800',textAlign:'center'}} >Careers</Text>
                     </View>
                     <View style={{marginBottom:100,justifyContent:'space-between'}} >
                         <TouchableOpacity style={{margin:10}} onPress={this.handleApply} >
