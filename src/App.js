@@ -12,7 +12,7 @@ import AppFooter from "./components/AppFooter";
 firebase.initializeApp(FIREBASE_CONFIG);
 export default class App extends Component {
   componentDidMount() {
-    Platform.OS === "Android"
+    Platform.OS === "android"
       ? StatusBar.setBackgroundColor(COLOR.BGCOLOR)
       : StatusBar.setBarStyle("dark-content");
   }
