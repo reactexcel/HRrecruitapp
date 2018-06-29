@@ -87,7 +87,7 @@ class SubmitTest extends Component {
                   if (stored_email.email === email) {
                     setItem("round", JSON.stringify({ round }));
                   }
-                  Platform.OS === "ios"
+                  Platform.OS === "ios" 
                     ? this.props.navigation.popToTop()
                     : BackHandler.exitApp();
                 }
