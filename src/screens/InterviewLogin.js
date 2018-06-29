@@ -102,6 +102,7 @@ class InterviewLogin extends Component {
       await this.props.getCandidateRoundDetails(fb_id.fb_id);
     }
     const round = await getItem("round");
+    const email =await getItem("email")
 
     if (round !== undefined) {
       const {
@@ -123,7 +124,9 @@ class InterviewLogin extends Component {
             {
               text: "Ok",
               onPress:
-                Platform.OS === "ios" ? () => {} : () => BackHandler.exitApp()
+                Platform.OS === "ios" || email.email === "test_123@gmail.com"
+                  ? () => {}
+                  : () => BackHandler.exitApp()
             }
           ],
           { cancelable: false }
@@ -184,7 +187,7 @@ class InterviewLogin extends Component {
                 name: "Test",
                 email: this.state.email
               });
-              this.setState({email : ""})
+              this.setState({ email: "" });
               return;
             }
             this.props.navigation.navigate("OTPpage");
