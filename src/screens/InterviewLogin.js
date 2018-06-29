@@ -1,5 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { BackHandler, Alert, NetInfo, View, AsyncStorage } from "react-native";
+import {
+  BackHandler,
+  Alert,
+  NetInfo,
+  View,
+  AsyncStorage,
+  Platform
+} from "react-native";
 import {
   Container,
   Content,
@@ -36,8 +43,8 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
-      linkOpening: true
+      email: ""
+      // linkOpening: true Deeplink code for android
     };
   }
   static navigationOptions = {
@@ -115,7 +122,8 @@ class InterviewLogin extends Component {
           [
             {
               text: "Ok",
-              onPress: () => BackHandler.exitApp()
+              onPress:
+                Platform.OS === "ios" ? () => {} : () => BackHandler.exitApp()
             }
           ],
           { cancelable: false }
@@ -167,6 +175,18 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
+            if (this.state.email === "test_123@gmail.com") {
+              this.props.navigation.navigate("Instructions", {
+                fb_id: fb_id,
+                profile_pic: `https://pikmail.herokuapp.com/${
+                  this.state.email
+                }?size=60`,
+                name: "Test",
+                email: this.state.email
+              });
+              this.setState({email : ""})
+              return;
+            }
             this.props.navigation.navigate("OTPpage");
             this.setState({ email: "" });
           }
@@ -196,7 +216,7 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-    const { linkOpening } = this.state;
+    // const { linkOpening } = this.state;
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
@@ -209,7 +229,7 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              {!linkOpening ? (
+              {true ? (
                 <Card style={styles.blockView}>
                   {!appliedBefore ? (
                     <Fragment>

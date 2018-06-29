@@ -25,5 +25,15 @@ export default StyleSheet.create({
   radio: {
     height: 35,
     width: 35
+  },
+  radio_ios : {
+    borderWidth : 2,
+    borderRadius : 12,
+    height : 20,
+    width :20,
+    alignItems : 'center',
+    justifyContent : 'center',
+    paddingBottom : 5,
+    borderColor : COLOR.DarkGrey
   }
 });

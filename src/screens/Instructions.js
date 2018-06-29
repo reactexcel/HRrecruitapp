@@ -51,7 +51,7 @@ class Instructions extends Component {
     return {
       title: name.split(" ")[0],
       headerLeft: (
-        <Content padder>
+        <Content style = {{paddingHorizontal : 10}}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       )
