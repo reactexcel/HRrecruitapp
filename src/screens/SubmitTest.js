@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, NetInfo, Alert } from "react-native";
+import { BackHandler, NetInfo, Alert, Platform } from "react-native";
 import {
   Container,
   Content,
@@ -66,7 +66,9 @@ class SubmitTest extends Component {
                   if (stored_email.email === email) {
                     setItem("round", JSON.stringify({ round }));
                   }
-                  BackHandler.exitApp();
+                  Platform.OS === "ios"
+                    ? this.props.navigation.popToTop()
+                    : BackHandler.exitApp();
                 }
               }
             ],
@@ -85,7 +87,9 @@ class SubmitTest extends Component {
                   if (stored_email.email === email) {
                     setItem("round", JSON.stringify({ round }));
                   }
-                  BackHandler.exitApp();
+                  Platform.OS === "ios"
+                    ? this.props.navigation.popToTop()
+                    : BackHandler.exitApp();
                 }
               }
             ],
@@ -112,7 +116,7 @@ class SubmitTest extends Component {
     return {
       title: name.split(" ")[0],
       headerLeft: (
-        <Content padder>
+        <Content style={{ paddingHorizontal: 10 }}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       )

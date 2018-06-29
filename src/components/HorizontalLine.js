@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Platform } from "react-native";
 
 const HorizontalLine = () => {
   return <View style={styles.horizontalLine} />;
@@ -7,7 +7,7 @@ const HorizontalLine = () => {
 
 const styles = StyleSheet.create({
   horizontalLine: {
-    borderBottomWidth: 1,
+    borderBottomWidth: Platform.OS === "ios" ? 2 : 1,
     borderBottomColor: "#eeeeef",
     width: "100%"
   }

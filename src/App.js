@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StatusBar } from "react-native";
+import { StatusBar, Platform } from "react-native";
 import { Root, Footer, Text } from "native-base";
 import Rootstack from "./config/router";
 import '../src/firebase/index'
@@ -12,7 +12,9 @@ import AppFooter from "./components/AppFooter";
 firebase.initializeApp(FIREBASE_CONFIG);
 export default class App extends Component {
   componentDidMount() {
-    StatusBar.setBackgroundColor(COLOR.BGCOLOR);
+    Platform.OS === "Android"
+      ? StatusBar.setBackgroundColor(COLOR.BGCOLOR)
+      : StatusBar.setBarStyle("dark-content");
   }
   render() {
     return (

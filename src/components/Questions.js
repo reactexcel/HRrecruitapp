@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Content, Card, CardItem, Text, Radio } from "native-base";
-import { View, TouchableOpacity, StyleSheet } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import { Col, Row } from "react-native-easy-grid";
 import map from "lodash/map";
 import findIndex from "lodash/findIndex";
@@ -61,11 +61,15 @@ const Questions = props => {
                             : false
                           : false;
                       return (
-                        <Content key={index} style={{ padding: 5 }}>
+                        <Content key={index} style={{ padding: Platform.OS === "ios" ? 7 : 5 }}>
                           <Row>
                             <Col style={{ width: "10%" }}>
                               <Radio
-                                style={_styles.radio}
+                                style={
+                                  Platform.OS === "ios"
+                                    ? _styles.radio_ios
+                                    : _styles.radio
+                                }
                                 onPress={() => {
                                   handleSubmit(ques._id, values.opt_id);
                                 }}

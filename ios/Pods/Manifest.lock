@@ -1,0 +1,44 @@
+PODS:
+  - Appboy-iOS-SDK (3.0.2):
+    - Appboy-iOS-SDK/UI (= 3.0.2)
+  - Appboy-iOS-SDK/Core (3.0.2)
+  - Appboy-iOS-SDK/UI (3.0.2):
+    - Appboy-iOS-SDK/Core
+    - SDWebImage/GIF (~> 4.0)
+  - AppCenter/Analytics (1.6.1):
+    - AppCenter/Core
+  - AppCenter/Core (1.6.1)
+  - AppCenter/Crashes (1.6.1):
+    - AppCenter/Core
+  - AppCenterReactNativeShared (1.5.1):
+    - AppCenter/Core (= 1.6.1)
+  - FLAnimatedImage (1.0.12)
+  - SDWebImage/Core (4.4.1)
+  - SDWebImage/GIF (4.4.1):
+    - FLAnimatedImage (~> 1.0)
+    - SDWebImage/Core
+
+DEPENDENCIES:
+  - Appboy-iOS-SDK (~> 3.0.2)
+  - AppCenter/Analytics (~> 1.6.1)
+  - AppCenter/Crashes (~> 1.6.1)
+  - AppCenterReactNativeShared (~> 1.5.1)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Appboy-iOS-SDK
+    - AppCenter
+    - AppCenterReactNativeShared
+    - FLAnimatedImage
+    - SDWebImage
+
+SPEC CHECKSUMS:
+  Appboy-iOS-SDK: e23e1ce284ff810998111d9ba50dfd2dd85f0cd3
+  AppCenter: f9eb653a45cece34549232f295aec05260dfc24f
+  AppCenterReactNativeShared: 5b40dc5bbaf891697d1982e0ae0e9b1120dd4274
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
+  SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
+
+PODFILE CHECKSUM: 09882b5fa87438e5b377e81e92a572b0f2e70de2
+
+COCOAPODS: 1.5.3
