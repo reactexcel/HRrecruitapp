@@ -1,5 +1,12 @@
 import React, { Component, Fragment } from "react";
-import { View, Alert } from "react-native";
+import {
+  View,
+  Alert,
+  CameraRoll,
+  PermissionsAndroid,
+  Image,
+  TouchableOpacity
+} from "react-native";
 import {
   Container,
   Content,
@@ -26,6 +33,9 @@ import { connect } from "react-redux";
 import { addCandidate } from "../actions";
 
 class AddCandidate extends Component {
+  state = {
+    photos: []
+  };
   static navigationOptions = {
     header: null
   };
@@ -36,6 +46,15 @@ class AddCandidate extends Component {
     }
     return null;
   }
+  takePicture() {
+    const options = {};
+    //options.location = ...
+    this.camera
+      .capture({ metadata: options })
+      .then(data => console.log(data))
+      .catch(err => console.error(err));
+  }
+
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
@@ -122,6 +141,7 @@ class AddCandidate extends Component {
   };
 
   render() {
+    console.log(this.state, "sadiufyh");
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
     return (
@@ -170,6 +190,68 @@ class AddCandidate extends Component {
                   component={this.renderField}
                   keyboardType="numeric"
                 />
+                <CustomButton
+                  text="Photos Add"
+                  onPress={async () => {
+                    // var photo = {
+                    //   uri: "file:///sdcard/img.png",
+                    //   type: "image/jpeg",
+                    //   name: "photo.jpg"
+                    // };
+                    try {
+                      const granted = await PermissionsAndroid.request(
+                        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                        {
+                          title: "Cool Photo App Camera Permission",
+                          message:
+                            "Cool Photo App needs access to your camera " +
+                            "so you can take awesome pictures."
+                        }
+                      );
+                      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                        CameraRoll.getPhotos({
+                          first: 20,
+                          assetType: "Photos"
+                        }).then(res => {
+                          console.log(res, "Sade");
+                          this.setState({ photos: res.edges });
+                        });
+                      } else {
+                        console.log("Camera permission denied");
+                      }
+                    } catch (err) {
+                      console.warn(err);
+                    }
+                  }}
+                />
+                {/* <Camera
+                  ref={cam => {
+                    this.camera = cam;
+                  }}
+                  style={{
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    alignItems: "center"
+                  }}
+                  aspect={Camera.constants.Aspect.fill}
+                >
+                  <CustomButton
+                    onPress={this.takePicture}
+                    text="Click Resume"
+                  />
+                </Camera> */}
+                {this.state.photos.length === 0 ? null : (
+                  <TouchableOpacity
+                    onPress={() =>
+                      console.log(this.state.photos[0].node.image.uri)
+                    }
+                  >
+                    <Image
+                      source={{ uri: this.state.photos[0].node.image.uri }}
+                      style={{ width: 40, height: 40 }}
+                    />
+                  </TouchableOpacity>
+                )}
                 <CardItem />
                 {adding ? (
                   <Spinner color={COLOR.Spinner} />

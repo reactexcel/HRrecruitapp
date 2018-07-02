@@ -21,7 +21,7 @@ global.fetch = function(uri, options, ...args) {
   });
 };
 
-global.FormData = global.originalFormData;
+// global.FormData = global.originalFormData;
 
 export default class HRrecruit extends Component {
   render() {
