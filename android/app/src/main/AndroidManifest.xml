@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
     <uses-feature android:name="android.hardware.camera.autofocus" android:required="false"/>
 
@@ -17,7 +20,7 @@
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
-        android:launchMode="singleTask"
+        android:launchMode="singleTop"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:windowSoftInputMode="stateUnspecified|adjustPan">
         <intent-filter>
@@ -43,6 +46,26 @@
       <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_eetXrV4jUPUuIBQ1qhq1EbdiAEjeF8Iz" />
       <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_emy8EQ5hLNItHvV8qds7GcppuvnkF2UN" />
       <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+
+      <meta-data android:name="com.google.firebase.messaging.default_notification_icon"
+        android:resource="@mipmap/ic_launcher" />
+  <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+       notification message. See README(https://goo.gl/6BKBk7) for more. -->
+      <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+      android:resource="@color/colorAccent" />
+
+      <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
+      android:value="@string/default_notification_channel_id"/>
+
+      <receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
+        <receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+      </receiver>
 
       <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
         <intent-filter>
