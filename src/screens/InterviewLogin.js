@@ -43,8 +43,8 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: ""
-      // linkOpening: true Deeplink code for android
+      email: "",
+      linkOpening: true //Deeplink code for android
     };
   }
   static navigationOptions = {
@@ -102,9 +102,9 @@ class InterviewLogin extends Component {
       await this.props.getCandidateRoundDetails(fb_id.fb_id);
     }
     const round = await getItem("round");
-    const email =await getItem("email")
 
     if (round !== undefined) {
+      const email = await getItem("email");
       const {
         currentRound,
         appearedInFirstRound,
@@ -219,11 +219,10 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-    // const { linkOpening } = this.state;
+    const { linkOpening } = this.state;
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
-
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -232,7 +231,7 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              {true ? (
+              {!linkOpening ? (
                 <Card style={styles.blockView}>
                   {!appliedBefore ? (
                     <Fragment>
