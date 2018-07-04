@@ -38,6 +38,7 @@ import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
+import firebase from "react-native-firebase";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -66,6 +67,7 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
+    //Deep linking
     branch.subscribe(async ({ errors, params }) => {
       if (errors) {
         alert("Error from Branch: " + errors);
@@ -92,10 +94,14 @@ class InterviewLogin extends Component {
         this.setState({ linkOpening: false });
       }
     });
+
+    //Connection Check
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
     );
+
+    //Alert for round information
     const fb_id = await getItem("fb_id");
 
     if (fb_id !== undefined) {
@@ -140,6 +146,36 @@ class InterviewLogin extends Component {
         ]);
       }
     }
+
+    //firebase notification
+    const enabled = await firebase.messaging().hasPermission();
+    if (enabled) {
+      console.log("permission yes");
+    } else {
+      console.log("permission no");
+      // user doesn't have permission
+    }
+    try {
+      await firebase.messaging().requestPermission();
+      // User has authorised
+    } catch (error) {
+      // User has rejected permissions
+    }
+
+    const fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      console.log(fcmToken, "token hu mai");
+      // user has a device token
+    } else {
+      // user doesn't have a device token yet
+    }
+
+    this.onTokenRefreshListener = firebase
+      .messaging()
+      .onTokenRefresh(fcmToken => {
+        // Process your token as required
+        console.log(fcmToken, "naya token");
+      });
   }
 
   handleNetworks = async isconnect => {
@@ -274,6 +310,25 @@ class InterviewLogin extends Component {
                   ) : (
                     <CustomButton onPress={this.handleSubmit} text="Submit" />
                   )}
+                  <CustomButton
+                    onPress={() => {
+                      const notification = new firebase.notifications.Notification()
+                        .setNotificationId("notificationId")
+                        .setTitle("My notification title")
+                        .setBody("My notification body")
+                        .setData({
+                          key1: "value1",
+                          key2: "value2"
+                        });
+                      notification.android
+                        .setChannelId("channelId")
+                        .android.setSmallIcon("ic_launcher");
+                      firebase
+                        .notifications()
+                        .displayNotification(notification);
+                    }}
+                    text="Notification"
+                  />
                 </Card>
               ) : (
                 <View

@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-feature android:name="android.hardware.camera" android:required="false"/>
@@ -51,11 +50,11 @@
         android:resource="@mipmap/ic_launcher" />
   <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
        notification message. See README(https://goo.gl/6BKBk7) for more. -->
-      <meta-data android:name="com.google.firebase.messaging.default_notification_color"
+      <!-- <meta-data android:name="com.google.firebase.messaging.default_notification_color"
       android:resource="@color/colorAccent" />
 
       <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id"
-      android:value="@string/default_notification_channel_id"/>
+      android:value="@string/default_notification_channel_id"/> -->
 
       <receiver android:name="io.invertase.firebase.notifications.RNFirebaseNotificationReceiver"/>
         <receiver android:enabled="true" android:exported="true"  android:name="io.invertase.firebase.notifications.RNFirebaseNotificationsRebootReceiver">
