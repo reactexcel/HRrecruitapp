@@ -5,7 +5,8 @@ import {
   NetInfo,
   View,
   AsyncStorage,
-  Platform
+  Platform,
+  PermissionsAndroid
 } from "react-native";
 import {
   Container,
@@ -44,13 +45,13 @@ class InterviewLogin extends Component {
     super();
     this.state = {
       email: "",
-      linkOpening: true //Deeplink code for android
+      linkOpening: true //Deeplink code for android,
     };
   }
   static navigationOptions = {
     header: null
   };
-
+  
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1) {
@@ -64,8 +65,11 @@ class InterviewLogin extends Component {
     }
     return null;
   }
-
+  
   async componentDidMount() {
+    if(Platform.OS === 'ios' ){
+      this.setState({linkOpening:false})
+    }
     branch.subscribe(async ({ errors, params }) => {
       if (errors) {
         alert("Error from Branch: " + errors);

@@ -109,13 +109,9 @@ export const verifyingOTP = (email, otp, fb_id) => async dispatch => {
 
 //Action for adding new component
 export const addCandidate = data => async dispatch => {
-  const formData = new FormData();
-  for (let key in data) {
-    formData.append(key, data[key]);
-  }
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
-    const res = await _axios().post("addNewCandidate", formData);
+    const res = await _axios().post("addCandidateWithBase64File", {...data});
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
     if (err.message) {

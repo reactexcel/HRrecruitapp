@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Alert } from "react-native";
+import { View, Alert, Platform, PermissionsAndroid } from "react-native";
 import {
   Container,
   Content,
@@ -10,7 +10,9 @@ import {
   Item,
   Input,
   Picker,
-  Spinner
+  Spinner,
+  Button,
+  Icon
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
@@ -24,8 +26,22 @@ import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { addCandidate } from "../actions";
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 class AddCandidate extends Component {
+    constructor(){
+      super()
+      this.requestCameraPermission();
+      this.state = {
+        checkPermission: false,
+        converting:false,
+        resumeData:[],
+        currentType:'',
+        resumeError:null,
+      }      
+    }
+      
   static navigationOptions = {
     header: null
   };
@@ -36,6 +52,26 @@ class AddCandidate extends Component {
     }
     return null;
   }
+
+  async requestCameraPermission() {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+        {
+          'title': 'Allow External Storage Permission',
+          'message': 'So, that you can upload your resume'
+        }
+      )
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        this.setState({ checkPermission: true })
+      } else {
+        this.setState({ checkPermission: false})
+      }
+    } catch (err) {
+      console.warn(err)
+    }
+  }
+
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
@@ -111,19 +147,101 @@ class AddCandidate extends Component {
           </Picker>
         </View>
         <View style={_styles.errorTextView}>
-          {touched && error && <Text style={_styles.errorText}>{error}</Text>}
+          {touched && error && <Text style={_styles.errorText}>{  error}</Text>}
         </View>
       </Fragment>
     );
   }
-
+  renderButtonField(props) {
+    const { onPress, resumeError, input, onClosePress }=props;
+    const resumeContainer = input.map((data,i)=>{
+      return (
+        <View key={i} style={_styles.uploadSection} >
+          <Text numberOfLines={1} style={_styles.fileName}>{data.fileName}</Text>
+          <Button transparent onPress={() => { onClosePress(i)}} style={{ marginTop: 5 }}>
+            <Icon style={_styles.closeIcon} name='close' />
+          </Button>
+        </View>
+      )
+    })
+    return (
+      <View >
+        <View style={_styles.uploadSection}>
+          <Text numberOfLines={1} style={_styles.text}>Upload Resume</Text>
+          <Button transparent onPress={onPress} style={{marginTop:5}}>
+            <Icon style={_styles.uploadIcon} name='cloud-upload' />
+          </Button>
+        </View>
+        {resumeContainer}
+        <View style={_styles.errorTextView}>
+          {resumeError && <Text style={[_styles.errorText,{marginLeft:8}]}>{  resumeError}</Text>}
+        </View>
+      </View>
+    );
+  }
   onSubmit = values => {
-    this.props.addCandidate(values);
+    values["fileNames"] = [];
+    if (this.state.resumeData.length >=1) {
+      console.log(values,"dasdsadsdsINSIDETHESECTION")
+      this.state.resumeData.map((data,i)=>{
+        values[`file${i + 1}`] = data.dataBase64;
+        values["extention"] = data.filetype;
+        values["fileNames"].push(`file${i+1}`)
+      })
+      this.props.addCandidate(values);
+    }else{
+      this.setState({ resumeError:'Upload your resume'})
+    }
   };
 
+  onResumeAdd = () => {
+    this.props.change({ resume_file: [] })
+    let resumeData = this.state.resumeData;
+    this.setState({converting:true})
+    if (Platform.OS !== "ios" && this.state.checkPermission && !this.state.converting){ //Android Only
+      DocumentPicker.show({
+        filetype: [DocumentPickerUtil.allFiles()],
+      }, (error, res) => {
+        if (res) {
+          let check = this.state.resumeData.length >= 1 ? this.state.currentType == res.type : true
+          if (check){
+            let type = res.type.split("/")
+            RNFetchBlob.fs.readFile(res.uri, 'base64')
+              .then((data) => {
+                console.log(data,"data")
+                resumeData.push({
+                  fileName: res.fileName,
+                  dataBase64: data,
+                  filetype: type[1]
+                })
+                this.setState({ converting: false, resumeData, currentType: res.type})
+              }, error => {
+                this.setState({ converting: false })
+              })
+          }else{
+            this.setState({ converting: false, resumeError:null })
+            alert('Please select same format for all files');
+          }          
+        } else {
+          this.setState({ converting: false, resumeError: null })
+        }
+      });
+    }else {
+      alert ('Please allow access to storage');
+      this.setState({ converting: false, resumeError: null })
+    }
+  }
+  onClosePress = (i) => {
+    if (!this.state.converting){
+    let resumeData = this.state.resumeData;
+    resumeData.splice(i, 1);
+    this.setState({resumeData});
+    }
+  }
   render() {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
+    const { converting, resumeData, resumeError } = this.state;
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -170,8 +288,17 @@ class AddCandidate extends Component {
                   component={this.renderField}
                   keyboardType="numeric"
                 />
+                <Field
+                  name="resume_file"
+                  placeholder="Mobile number"
+                  onPress={() => { this.onResumeAdd()}}
+                  onClosePress={(i)=>{this.onClosePress(i)}}
+                  component={this.renderButtonField}
+                  input={resumeData}
+                  resumeError={resumeError}
+                />
                 <CardItem />
-                {adding ? (
+                {adding || converting ? (
                   <Spinner color={COLOR.Spinner} />
                 ) : (
                   <CustomButton
