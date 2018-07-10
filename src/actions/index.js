@@ -224,11 +224,10 @@ export const getCandidateDetails = fb_id => async dispatch => {
     } else {
       PubSub.publish("CANDIDATE_DETAILS_FAILURE", {
         API_URL,
-        email,
         fb_id,
         err
       });
-      dispatch({ type: CANDIDATE_DETAILS_FAILURE, payload: err.response.data });
+      dispatch({ type: CANDIDATE_DETAILS_FAILURE, payload: { msg: err.response.data.message, error: err.response.data.error} });
     }
   }
 };
