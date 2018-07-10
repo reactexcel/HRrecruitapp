@@ -32,9 +32,7 @@ import RNFetchBlob from 'rn-fetch-blob';
 class AddCandidate extends Component {
     constructor(){
       super()
-      this.requestCameraPermission();
       this.state = {
-        checkPermission: false,
         converting:false,
         resumeData:[],
         currentType:'',
@@ -53,24 +51,6 @@ class AddCandidate extends Component {
     return null;
   }
 
-  async requestCameraPermission() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          'title': 'Allow External Storage Permission',
-          'message': 'So, that you can upload your resume'
-        }
-      )
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.setState({ checkPermission: true })
-      } else {
-        this.setState({ checkPermission: false})
-      }
-    } catch (err) {
-      console.warn(err)
-    }
-  }
 
   componentDidUpdate() {
     const { candidate } = this.props;
@@ -182,7 +162,6 @@ class AddCandidate extends Component {
   onSubmit = values => {
     values["fileNames"] = [];
     if (this.state.resumeData.length >=1) {
-      console.log(values,"dasdsadsdsINSIDETHESECTION")
       this.state.resumeData.map((data,i)=>{
         values[`file${i + 1}`] = data.dataBase64;
         values["extention"] = data.filetype;
@@ -198,7 +177,7 @@ class AddCandidate extends Component {
     this.props.change({ resume_file: [] })
     let resumeData = this.state.resumeData;
     this.setState({converting:true})
-    if (Platform.OS !== "ios" && this.state.checkPermission && !this.state.converting){ //Android Only
+    if (Platform.OS !== "ios"){ //Android Only
       DocumentPicker.show({
         filetype: [DocumentPickerUtil.allFiles()],
       }, (error, res) => {
@@ -208,7 +187,6 @@ class AddCandidate extends Component {
             let type = res.type.split("/")
             RNFetchBlob.fs.readFile(res.uri, 'base64')
               .then((data) => {
-                console.log(data,"data")
                 resumeData.push({
                   fileName: res.fileName,
                   dataBase64: data,
@@ -220,14 +198,14 @@ class AddCandidate extends Component {
               })
           }else{
             this.setState({ converting: false, resumeError:null })
-            alert('Please select same format for all files');
+            alert('Please select same format for files');
           }          
         } else {
           this.setState({ converting: false, resumeError: null })
         }
       });
     }else {
-      alert ('Please allow access to storage');
+      alert ('Not implemented in IOS');
       this.setState({ converting: false, resumeError: null })
     }
   }
