@@ -17,7 +17,7 @@ class HomePage extends Component {
       
 
     handleApply = () => {
-        this.props.navigation.navigate("AddCandidate");
+        this.props.navigation.navigate("JobList");
     }
     handleInterview = () => {
         this.props.navigation.navigate("InterviewLogin");

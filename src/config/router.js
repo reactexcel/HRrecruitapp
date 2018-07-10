@@ -7,6 +7,7 @@ import AddCandidate from "../screens/AddCandidate";
 import Instructions from "../screens/Instructions";
 import TestPage from "../screens/TestPage";
 import SubmitTest from "../screens/SubmitTest";
+import JobList from '../screens/JobList';
 
 const Rootstack = createStackNavigator(
   {
@@ -33,10 +34,13 @@ const Rootstack = createStackNavigator(
     },
     SubmitTest: {
       screen: SubmitTest
+    },
+    JobList: {
+      screen: JobList
     }
   },
   {
-    initialScreen: "HomePage"
+    initialScreen: "JobList"
   }
 );
 
