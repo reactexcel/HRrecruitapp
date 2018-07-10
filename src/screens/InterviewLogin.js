@@ -54,7 +54,7 @@ class InterviewLogin extends Component {
   
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1) {
+    if (error !== undefined && error === 1 && message !== message) {
       alert(message);
     }
     if (success !== undefined && !success) {
