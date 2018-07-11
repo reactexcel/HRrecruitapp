@@ -116,10 +116,10 @@ export const addCandidate = data => async dispatch => {
     const res = await _axios().post("exams/addCandidateWithBase64File", {...data});
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
-    if (err.message) {
+    if (err.response.data.message) {
       dispatch({
         type: ADD_CANDIDATE_FAILURE,
-        payload: { msg: err.message }
+        payload: { msg: err.response.data.message }
       });
     } else {
       dispatch({ type: ADD_CANDIDATE_FAILURE });

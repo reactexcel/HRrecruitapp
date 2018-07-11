@@ -46,7 +46,7 @@ class AddCandidate extends Component {
   static getDerivedStateFromProps(nextProps) {
     const { msg } = nextProps.candidate;
     if (msg !== undefined) {
-      alert(msg);
+      // alert(msg);
     }
     return null;
   }
@@ -54,7 +54,7 @@ class AddCandidate extends Component {
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
-      if (candidate.data.candidate_status === false) {
+      if (candidate.data.candidate_status === false || candidate.data.candidate_status === true ) {
         Alert.alert(
           "Thank You",
           "Wait for the confirmation of your registration from HR.",
@@ -68,10 +68,20 @@ class AddCandidate extends Component {
         );
       }
     }
-    const { success } = this.props.candidate;
-    if (success !== undefined) {
-      if (success === false) {
-        notify("Something went wrong");
+    const { success, msg } = this.props.candidate;
+    if (success !== undefined && msg !== undefined) {
+      if (success === false ) {
+        Alert.alert(
+          "Alert",
+          msg,
+          [
+            {
+              text: "OK",
+              onPress: () => this.props.navigation.popToTop()
+            }
+          ],
+          { cancelable: false }
+        );
       }
     }
   }

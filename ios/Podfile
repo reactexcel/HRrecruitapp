@@ -16,6 +16,8 @@ target 'HRrecruit' do
   platform :ios, '9.0'
   pod 'react-native-version-number', :path => '../node_modules/react-native-version-number'
 
+  pod 'RNShare', :path => '../node_modules/react-native-share'
+
   target 'HRrecruitTests' do
     inherit! :search_paths
     # Pods for testing
