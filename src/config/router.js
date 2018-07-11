@@ -40,7 +40,7 @@ const Rootstack = createStackNavigator(
     }
   },
   {
-    initialScreen: "JobList"
+    initialScreen: "HomePage"
   }
 );
 

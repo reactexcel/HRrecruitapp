@@ -51,7 +51,6 @@ class AddCandidate extends Component {
     return null;
   }
 
-
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
@@ -160,12 +159,17 @@ class AddCandidate extends Component {
     );
   }
   onSubmit = values => {
+    const {
+      params
+    } = this.props.navigation.state;
     values["fileNames"] = [];
     if (this.state.resumeData.length >=1) {
       this.state.resumeData.map((data,i)=>{
         values[`file${i + 1}`] = data.dataBase64;
         values["extention"] = data.filetype;
         values["fileNames"].push(`file${i+1}`)
+        values["default_tag"] = params.jobDetail.default_id
+        values["tag_id"] = params.jobDetail.id
       })
       this.props.addCandidate(values);
     }else{
@@ -209,6 +213,7 @@ class AddCandidate extends Component {
       this.setState({ converting: false, resumeError: null })
     }
   }
+
   onClosePress = (i) => {
     if (!this.state.converting){
     let resumeData = this.state.resumeData;
@@ -216,6 +221,7 @@ class AddCandidate extends Component {
     this.setState({resumeData});
     }
   }
+
   render() {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
