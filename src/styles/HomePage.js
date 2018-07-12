@@ -32,7 +32,7 @@ export default StyleSheet.create({
         borderRadius:75,
     },
     btnContainer:{
-        marginTop:height*0.040,
+        marginTop:height*0.055,
         marginBottom:8,
         alignItems:'center'
     },
@@ -54,6 +54,7 @@ export default StyleSheet.create({
         marginLeft: 10,
         marginRight: 10,
         marginTop: 8,
+        marginBottom:8
      },
     logoCnt :{
         top:0,

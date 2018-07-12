@@ -69,18 +69,11 @@ class HomePage extends Component {
                   </View>
                   <View style={styles.btnContainer}>
                         <Text >User ID</Text>
-                        <CustomButton
-                            onPress={()=>{console.log("cusntomer")}}
-                            btnStyle={styles.btnStyle}
-                            type="rounded"
-                            text='Join now'
-                        />
                   </View>
                   {renderCustomView}
                 </Container>
           )
       }
-
 }
 
 const mapStateToProps = ({ candidate }) => ({ candidate });
