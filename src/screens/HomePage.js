@@ -2,63 +2,81 @@ import React, { Component, Fragment } from "react";
 import { View, Alert, Image, Linking, Platform, TouchableOpacity } from "react-native";
 import {
   Container,
-  Text
+  Text,
+    ListItem,
+    Thumbnail,
+    Body,
+    Right,
+    Left,
+    Icon,
+    List
 } from "native-base";
 import { connect } from "react-redux";
-import styles from "../styles";
+import styles from "../styles/HomePage";
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
+import { pageDeatils } from '../helper/json';
 
 class HomePage extends Component {
     static navigationOptions = {
         header: null
       };
       
-
-    handleApply = () => {
-        this.props.navigation.navigate("JobList");
-    }
-    handleInterview = () => {
-        this.props.navigation.navigate("InterviewLogin");
-    }
-    handleLocate = () => {
-        let url = '';
-        if (Platform.OS === 'ios') {
-            url = `http://maps.apple.com/maps?q=${28.5965789},${77.3287437}`;
-        } else if (Platform.OS === 'android') {
-            url = `geo:${28.5965789},${77.3287437}`;
+    handleViewClick = (data) => {
+        if(data) {
+            this.props.navigation.navigate(data);
         }
-        Linking.openURL(url);
     }
+
       render(){
+          let renderCustomView = pageDeatils.map((data,k)=>{
+              return(
+                  <View  key={k} style={styles.listContainer}>
+                      <List>
+                          <ListItem onPress={() => { this.handleViewClick(data.route) }} avatar>
+                              <Left>
+                                  <Thumbnail source={data.image} />
+                              </Left>
+                              <Body style={{ borderBottomWidth: 0 }}>
+                                  <Text>{data.name}</Text>
+                              </Body>
+                              <Right style={{ borderBottomWidth: 0,marginTop:7 }}>
+                                  <Icon active name={data.icon} />
+                              </Right>
+                          </ListItem>
+                      </List>
+                  </View>
+              )
+          })
           return(
-                <Container style={[styles.container,{flex:1,justifyContent:'center',flexDirection:'row'}]}>
-                    <View style={{flex:1,justifyContent:'space-between',alignItems:'center'}} >
-                    <View style={{justifyContent:'space-between',alignItems:'center',marginTop:70}} >
-                        <Image style={{height:90,width:90,marginBottom:20}} source={require('../images/icon.png')} />
-                        <Text style={{color:'white',fontSize:20,fontWeight:'600',textAlign:'center'}} >Welcome to</Text>
-                        <Text style={{color:'white',fontSize:28,fontWeight:'600',textAlign:'center'}} >Excellence Technologies</Text>
-                        <Text style={{color:'white',fontSize:25,fontWeight:'800',textAlign:'center'}} >Careers</Text>
-                    </View>
-                    <View style={{marginBottom:100,justifyContent:'space-between'}} >
-                        <TouchableOpacity style={{margin:10}} onPress={this.handleApply} >
-                            <View style={{borderWidth:1,borderColor:'white',width:250,borderRadius:10}} >
-                                <Text style={{color:'white',fontSize:19,fontWeight:'500',textAlign:'center'}} >Apply For Job</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{margin:10}} onPress={this.handleInterview} >
-                            <View style={{borderWidth:1,borderColor:'white',width:250,borderRadius:10}} >                        
-                                <Text style={{color:'white',fontSize:19,fontWeight:'500',textAlign:'center'}} >Proceed To Interview</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{margin:10}} onPress={this.handleLocate} >
-                            <View style={{borderWidth:1,borderColor:'white',width:250,borderRadius:10}} >
-                                <Text style={{color:'white',fontSize:19,fontWeight:'500',textAlign:'center'}} >Locate Us</Text>
-                            </View>
-                        </TouchableOpacity>
+                <Container style={styles.container}>
+                  <Image
+                    resizeMode='contain'
+                    style={styles.bckgndImage} 
+                    source={require('../images/navbg.png')} 
+                    />
+                  <View style={styles.logoCnt}>
+                    <View style={styles.logoView}>
+                          <Logo />
                     </View>
                   </View>
+                  <View style={styles.avatar}>
+                      <Image
+                        style={styles.avatarImage}
+                        source={require('../images/profilepic.png')}
+                      />
+                  </View>
+                  <View style={styles.btnContainer}>
+                        <Text >User ID</Text>
+                        <CustomButton
+                            onPress={()=>{console.log("cusntomer")}}
+                            btnStyle={styles.btnStyle}
+                            type="rounded"
+                            text='Join now'
+                        />
+                  </View>
+                  {renderCustomView}
                 </Container>
           )
       }
