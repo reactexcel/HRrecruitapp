@@ -5,7 +5,8 @@ import {
   NetInfo,
   View,
   AsyncStorage,
-  Platform
+  Platform,
+  PermissionsAndroid
 } from "react-native";
 import {
   Container,
@@ -45,7 +46,7 @@ class InterviewLogin extends Component {
     super();
     this.state = {
       email: "",
-      linkOpening: true //Deeplink code for android
+      linkOpening: true //Deeplink code for android,
     };
   }
   static navigationOptions = {
@@ -54,7 +55,7 @@ class InterviewLogin extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1) {
+    if (error !== undefined && error === 1 && message !== message) {
       alert(message);
     }
     if (success !== undefined && !success) {
@@ -68,6 +69,9 @@ class InterviewLogin extends Component {
 
   async componentDidMount() {
     //Deep linking
+    if (Platform.OS === "ios") {
+      this.setState({ linkOpening: false });
+    }
     branch.subscribe(async ({ errors, params }) => {
       if (errors) {
         alert("Error from Branch: " + errors);
@@ -310,12 +314,14 @@ class InterviewLogin extends Component {
                   ) : (
                     <CustomButton onPress={this.handleSubmit} text="Submit" />
                   )}
+                  <CardItem />
                   <CustomButton
                     onPress={() => {
                       const notification = new firebase.notifications.Notification()
                         .setNotificationId("notificationId")
                         .setTitle("My notification title")
                         .setBody("My notification body")
+                        .setSound("default")
                         .setData({
                           key1: "value1",
                           key2: "value2"

@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Alert } from "react-native";
+import { View, Alert, Platform, PermissionsAndroid } from "react-native";
 import {
   Container,
   Content,
@@ -10,7 +10,9 @@ import {
   Item,
   Input,
   Picker,
-  Spinner
+  Spinner,
+  Button,
+  Icon
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
@@ -24,22 +26,35 @@ import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { addCandidate } from "../actions";
+import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
 
 class AddCandidate extends Component {
+    constructor(){
+      super()
+      this.state = {
+        converting:false,
+        resumeData:[],
+        currentType:'',
+        resumeError:null,
+      }      
+    }
+      
   static navigationOptions = {
     header: null
   };
   static getDerivedStateFromProps(nextProps) {
     const { msg } = nextProps.candidate;
     if (msg !== undefined) {
-      alert(msg);
+      // alert(msg);
     }
     return null;
   }
+
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
-      if (candidate.data.candidate_status === false) {
+      if (candidate.data.candidate_status === false || candidate.data.candidate_status === true ) {
         Alert.alert(
           "Thank You",
           "Wait for the confirmation of your registration from HR.",
@@ -53,10 +68,20 @@ class AddCandidate extends Component {
         );
       }
     }
-    const { success } = this.props.candidate;
-    if (success !== undefined) {
-      if (success === false) {
-        notify("Something went wrong");
+    const { success, msg } = this.props.candidate;
+    if (success !== undefined && msg !== undefined) {
+      if (success === false ) {
+        Alert.alert(
+          "Alert",
+          msg,
+          [
+            {
+              text: "OK",
+              onPress: () => this.props.navigation.popToTop()
+            }
+          ],
+          { cancelable: false }
+        );
       }
     }
   }
@@ -111,19 +136,106 @@ class AddCandidate extends Component {
           </Picker>
         </View>
         <View style={_styles.errorTextView}>
-          {touched && error && <Text style={_styles.errorText}>{error}</Text>}
+          {touched && error && <Text style={_styles.errorText}>{  error}</Text>}
         </View>
       </Fragment>
     );
   }
-
+  renderButtonField(props) {
+    const { onPress, resumeError, input, onClosePress }=props;
+    const resumeContainer = input.map((data,i)=>{
+      return (
+        <View key={i} style={_styles.uploadSection} >
+          <Text numberOfLines={1} style={_styles.fileName}>{data.fileName}</Text>
+          <Button transparent onPress={() => { onClosePress(i)}} style={{ marginTop: 5 }}>
+            <Icon style={_styles.closeIcon} name='close' />
+          </Button>
+        </View>
+      )
+    })
+    return (
+      <View >
+        <View style={_styles.uploadSection}>
+          <Text numberOfLines={1} style={_styles.text}>Upload Resume</Text>
+          <Button transparent onPress={onPress} style={{marginTop:5}}>
+            <Icon style={_styles.uploadIcon} name='cloud-upload' />
+          </Button>
+        </View>
+        {resumeContainer}
+        <View style={_styles.errorTextView}>
+          {resumeError && <Text style={[_styles.errorText,{marginLeft:8}]}>{  resumeError}</Text>}
+        </View>
+      </View>
+    );
+  }
   onSubmit = values => {
-    this.props.addCandidate(values);
+    const {
+      params
+    } = this.props.navigation.state;
+    values["fileNames"] = [];
+    if (this.state.resumeData.length >=1) {
+      this.state.resumeData.map((data,i)=>{
+        values[`file${i + 1}`] = data.dataBase64;
+        values["extention"] = data.filetype;
+        values["fileNames"].push(`file${i+1}`)
+        values["default_tag"] = params.jobDetail.default_id
+        values["tag_id"] = params.jobDetail.id
+      })
+      this.props.addCandidate(values);
+    }else{
+      this.setState({ resumeError:'Upload your resume'})
+    }
   };
+
+  onResumeAdd = () => {
+    this.props.change({ resume_file: [] })
+    let resumeData = this.state.resumeData;
+    this.setState({converting:true})
+    if (Platform.OS !== "ios"){ //Android Only
+      DocumentPicker.show({
+        filetype: [DocumentPickerUtil.allFiles()],
+      }, (error, res) => {
+        if (res) {
+          let check = this.state.resumeData.length >= 1 ? this.state.currentType == res.type : true
+          if (check){
+            let type = res.type.split("/")
+            RNFetchBlob.fs.readFile(res.uri, 'base64')
+              .then((data) => {
+                resumeData.push({
+                  fileName: res.fileName,
+                  dataBase64: data,
+                  filetype: type[1]
+                })
+                this.setState({ converting: false, resumeData, currentType: res.type})
+              }, error => {
+                this.setState({ converting: false })
+              })
+          }else{
+            this.setState({ converting: false, resumeError:null })
+            alert('Please select same format for files');
+          }          
+        } else {
+          this.setState({ converting: false, resumeError: null })
+        }
+      });
+    }else {
+      alert ('Not implemented in IOS');
+      this.setState({ converting: false, resumeError: null })
+    }
+  }
+
+  onClosePress = (i) => {
+    if (!this.state.converting){
+    let resumeData = this.state.resumeData;
+    resumeData.splice(i, 1);
+    this.setState({resumeData});
+    }
+  }
 
   render() {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
+    const { converting, resumeData, resumeError } = this.state;
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -170,8 +282,17 @@ class AddCandidate extends Component {
                   component={this.renderField}
                   keyboardType="numeric"
                 />
+                <Field
+                  name="resume_file"
+                  placeholder="Mobile number"
+                  onPress={() => { this.onResumeAdd()}}
+                  onClosePress={(i)=>{this.onClosePress(i)}}
+                  component={this.renderButtonField}
+                  input={resumeData}
+                  resumeError={resumeError}
+                />
                 <CardItem />
-                {adding ? (
+                {adding || converting ? (
                   <Spinner color={COLOR.Spinner} />
                 ) : (
                   <CustomButton

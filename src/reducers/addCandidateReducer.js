@@ -17,7 +17,7 @@ export default function(state = initialState, action) {
       return { adding: false, ...action.payload };
       break;
     case ADD_CANDIDATE_FAILURE:
-      return { success: false };
+      return { success: false, ...action.payload };
       break;
     default:
       return state;
