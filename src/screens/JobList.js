@@ -25,24 +25,41 @@ class JobList extends Component {
         this.state = {
             jobList:[],
             visible: false,
-            shareOptions:{}
+            shareOptions:{},
+            appliedJobDetails:null,
+            isLoading:true,
+            userLogin:false
+
         }
     }
-    componentDidMount = async() =>{
-        await this.props.getJobLists();
-        const { data, error } = this.props.joblist;
-        if(data){
-            this.setState({joblist:data})
+    componentDidMount = async () =>{
+        const {
+            params
+        } = this.props.navigation.state;
+        if (params.appliedJob!==undefined ){
+           console.log(params,"params")
+            this.setState({ appliedJobDetails: params.appliedJob, isLoading:false, userLogin:true})
+        }else{
+            await this.props.getJobLists();
+            const { data, error } = this.props.joblist;
+            if (data) {
+                this.setState({ joblist: data, isLoading:false })
+            }
         }
     }
-    static navigationOptions = {
-        title: "Apply For Jobs"
+    
+    static navigationOptions = ({ navigation }) => {
+        const { params = {} } = navigation.state;
+        return {
+            title: params.title,
+        };
     };
 
     onApplyJob = (item) => {
-        this.props.navigation.navigate("AddCandidate",{
-            jobDetail: item
-        });
+        // this.props.navigation.navigate("AddCandidate",{
+        //     jobDetail: item
+        // });
+        this.props.navigation.popToTop({test:"check this will play them"})
     }
     onCancel() {
         console.log("CANCEL")
@@ -84,24 +101,43 @@ class JobList extends Component {
             </Card>
     )
     render() {
-        const { joblist, shareOptions } = this.state;
+        const { joblist, shareOptions, isLoading, appliedJobDetails, userLogin } = this.state;
         return (
             <Container >
-                <Content padder>
-                    {joblist && joblist.length >=1 ?<FlatList
+                {!isLoading ?<Content padder>
+                    {!isLoading && joblist && joblist.length >= 1 ?<FlatList
                         data={joblist}
                         keyExtractor ={(item, index) => item.id.toString()}
                         renderItem={this.renderCardItem}
-                    /> : <View
+                    /> : null}
+                    {
+                        !isLoading && userLogin ? <Content padder>
+                            <Card>
+                                <CardItem style={{ justifyContent: 'space-between' }}>
+                                    <Text>{appliedJobDetails.job_profile}</Text>
+                                </CardItem>
+                                <HorizontalLine />
+                                <CardItem>
+                                    <Body>
+                                        <Text style={[styles.text, { textAlign: 'auto' }]} >
+                                            {appliedJobDetails.job_description ? appliedJobDetails.job_description : ''}
+                                        </Text>
+                                    </Body>
+                                </CardItem>
+                            </Card>
+                        </Content>:null  
+                    }
+                </Content>:
+                    <View
                         style={{
                             flex: 1,
                             justifyContent: "center",
                             flexDirection: "column"
                         }}
                     >
-                            <Spinner color={COLOR.Spinner} />
-                        </View>}
-                </Content>
+                        <Spinner color={COLOR.Spinner} />
+                    </View>
+                }
                 <ShareSheet visible={this.state.visible} onCancel={this.onCancel.bind(this)}>
                     <Button iconSrc={require('../images/twitter.png')}
                         onPress={() => {

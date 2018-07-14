@@ -28,6 +28,8 @@ import { connect } from "react-redux";
 import { addCandidate } from "../actions";
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
+import { setItem, getItem } from "../helper/storage";
+
 
 class AddCandidate extends Component {
     constructor(){
@@ -54,7 +56,8 @@ class AddCandidate extends Component {
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
-      if (candidate.data.candidate_status === false || candidate.data.candidate_status === true ) {
+      if (candidate.data.candidate_status === true ) {
+        setItem("mongo_id", JSON.stringify({candidate}));
         Alert.alert(
           "Thank You",
           "Wait for the confirmation of your registration from HR.",

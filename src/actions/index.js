@@ -31,6 +31,11 @@ import {
   GET_JOBLIST_FAILURE
 } from "./types";
 
+import {
+  CANDIDATE_JOB_SUCCESS,
+  CANDIDATE_JOB_FAILURE
+} from './types';
+
 import API_URL from "../config/dev";
 import PubSub from "pubsub-js";
 
@@ -271,3 +276,23 @@ export const getJobLists = () => async dispatch => {
     }
   }
 };
+
+export const getCandidateJobDetails = (_id) => async dispatch => {
+  try {
+    const res = await _axios().get(`/exams/candidateJobDetails/${_id}`);
+    dispatch({ type: CANDIDATE_JOB_SUCCESS, payload: res.data });
+  } catch (err) {
+    if (err.message == "timeout of 10000ms exceeded") {
+      // Show alert about timeout to user
+      dispatch({
+        type: CANDIDATE_JOB_FAILURE,
+        payload: { msg: err.message }
+      });
+    } else {
+      dispatch({
+        type: CANDIDATE_JOB_FAILURE,
+        payload: err.response.data
+      });
+    }
+  }
+}
