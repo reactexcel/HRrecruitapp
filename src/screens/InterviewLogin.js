@@ -151,35 +151,6 @@ class InterviewLogin extends Component {
       }
     }
 
-    //firebase notification
-    const enabled = await firebase.messaging().hasPermission();
-    if (enabled) {
-      console.log("permission yes");
-    } else {
-      console.log("permission no");
-      // user doesn't have permission
-    }
-    try {
-      await firebase.messaging().requestPermission();
-      // User has authorised
-    } catch (error) {
-      // User has rejected permissions
-    }
-
-    const fcmToken = await firebase.messaging().getToken();
-    if (fcmToken) {
-      console.log(fcmToken, "token hu mai");
-      // user has a device token
-    } else {
-      // user doesn't have a device token yet
-    }
-
-    this.onTokenRefreshListener = firebase
-      .messaging()
-      .onTokenRefresh(fcmToken => {
-        // Process your token as required
-        console.log(fcmToken, "naya token");
-      });
   }
 
   handleNetworks = async isconnect => {
@@ -315,26 +286,6 @@ class InterviewLogin extends Component {
                     <CustomButton onPress={this.handleSubmit} text="Submit" />
                   )}
                   <CardItem />
-                  <CustomButton
-                    onPress={() => {
-                      const notification = new firebase.notifications.Notification()
-                        .setNotificationId("notificationId")
-                        .setTitle("My notification title")
-                        .setBody("My notification body")
-                        .setSound("default")
-                        .setData({
-                          key1: "value1",
-                          key2: "value2"
-                        });
-                      notification.android
-                        .setChannelId("channelId")
-                        .android.setSmallIcon("ic_launcher");
-                      firebase
-                        .notifications()
-                        .displayNotification(notification);
-                    }}
-                    text="Notification"
-                  />
                 </Card>
               ) : (
                 <View

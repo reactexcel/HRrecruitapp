@@ -9,6 +9,7 @@ import testReducer from "./testReducer";
 import netInfoReducer from "./netInfo"
 import candidateRoundReducer from "./candidateRoundReducer";
 import joblist from './joblistReducer';
+import candidateAppliedJob from './candidateAppliedJob';
 
 export default combineReducers({
   form: formReducer,
@@ -21,4 +22,5 @@ export default combineReducers({
   network: netInfoReducer,
   candidateInfo : candidateRoundReducer,
   joblist: joblist,
+  appliedJob: candidateAppliedJob
 });
