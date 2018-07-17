@@ -64,7 +64,9 @@ class AddCandidate extends Component {
           [
             {
               text: "OK",
-              onPress: () => this.props.navigation.popToTop()
+              onPress: () => this.props.navigation.navigate("HomePage",{
+                setUser : true
+              })
             }
           ],
           { cancelable: false }

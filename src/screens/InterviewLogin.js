@@ -136,7 +136,7 @@ class InterviewLogin extends Component {
               onPress:
                 Platform.OS === "ios" || email.email === "test_123@gmail.com"
                   ? () => {}
-                  : () => BackHandler.exitApp()
+                  : () => this.props.navigation.goBack()
             }
           ],
           { cancelable: false }

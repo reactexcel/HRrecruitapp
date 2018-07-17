@@ -36,7 +36,6 @@ class HomePage extends Component {
     header: null
   };
   setCandidateProfile = async () => {
-    console.log("working function")
     const candidateJob = await getItem("mongo_id");
     if (candidateJob) {
       let email = candidateJob.candidate.data.sender_mail;
@@ -59,48 +58,19 @@ class HomePage extends Component {
       this.props.navigation.navigate(data, { title: "Apply for Jobs" });
     }
   }
-  componentDidMount = async () => {
+  componentDidMount = async (prevProps, prevState) => {
     await this.setCandidateProfile();
-    console.log("didmount")
   };
   componentDidUpdate = async (prevProps, prevState) => {
-    console.log("working")
-    console.log(prevState,"prevStatee");
-    console.log(this.state,"state")
-    console.log(this.props,"props");
-    console.log(prevProps,"prevprops");
-    console.log(this.state.userName === null ||
-      prevState.userName !== this.state.userName,"condition")
-      console.log(prevState.isChecking !== this.state.isChecking,"ischeck condition")
-    const candidateJob = await getItem("mongo_id");
-    console.log(candidateJob,"jguufvj")
-    if (candidateJob) {
-      let email = candidateJob.candidate.data.sender_mail;
-      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
-      let userName = candidateJob.candidate.data.from;
-      if (
-        this.state.userName === null ||
-        prevState.userName !== this.state.userName
-      )
-      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      console.log("running state")
-        this.setState({
-          candidateJob,
-          profile_pic,
-          userName,
-          isChecking: false
-        });
-    } else {
-      if (prevState.isChecking !== this.state.isChecking) {
-        console.log("running isCHecking state")
-
-        this.setState({ isChecking: false });
-      }
+    const setUser = this.props.navigation.getParam("setUser");
+    if (setUser) {
+      await this.setCandidateProfile();
+      this.props.navigation.setParams({ setUser: false });
     }
   };
 
   render() {
-    console.log("render running")
+    const setUser = this.props.navigation.getParam("setUser");
     let { isChecking, profile_pic, userName } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
@@ -155,10 +125,18 @@ class HomePage extends Component {
               </View>
             </View>
             <View style={styles.avatar}>
-              <Image style={styles.avatarImage} source={profilepic} />
+              {setUser ? (
+                <Spinner small color={COLOR.Spinner} />
+              ) : (
+                <Image style={styles.avatarImage} source={profilepic} />
+              )}
             </View>
             <View style={styles.btnContainer}>
-              <Text>{userNames}</Text>
+              {setUser ? (
+                <Spinner small color={COLOR.Spinner} />
+              ) : (
+                <Text>{userNames}</Text>
+              )}
             </View>
             {renderCustomView}
           </View>
