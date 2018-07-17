@@ -63,12 +63,15 @@ class HomePage extends Component {
     componentDidMount = async () => {
         await this.setCandidateProfile();
     }
-    componentDidUpdate(){
-        console.log("tteteteteteeet")
-    }
-    componentWillReceiveProps(nextProps){
-        console.log(nextProps,"nextprops")
-    }
+
+    componentDidUpdate = async (prevProps, prevState) => {
+        const setUser = this.props.navigation.getParam("setUser");
+        if (setUser) {
+            await this.setCandidateProfile();
+            this.props.navigation.setParams({ setUser: false });
+        }
+    };
+
       render(){
           let { isChecking, profile_pic, userName } = this.state;
           console.log(profile_pic,"isChecking")

@@ -56,10 +56,9 @@ class JobList extends Component {
     };
 
     onApplyJob = (item) => {
-        // this.props.navigation.navigate("AddCandidate",{
-        //     jobDetail: item
-        // });
-        this.props.navigation.popToTop({test:"check this will play them"})
+        this.props.navigation.navigate("AddCandidate",{
+            jobDetail: item
+        });
     }
     onCancel() {
         console.log("CANCEL")
