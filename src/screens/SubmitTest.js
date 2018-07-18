@@ -87,9 +87,9 @@ class SubmitTest extends Component {
                   if (stored_email.email === email) {
                     setItem("round", JSON.stringify({ round }));
                   }
-                  Platform.OS === "ios" 
-                    ? this.props.navigation.popToTop()
-                    : BackHandler.exitApp();
+                  this.props.navigation.navigate("HomePage", {
+                      setUser: true
+                  })
                 }
               }
             ],

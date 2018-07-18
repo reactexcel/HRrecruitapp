@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Alert, Image, Linking, Platform, TouchableOpacity } from "react-native";
+import { View, Alert, Image, Linking, Platform, TouchableOpacity, BackHandler } from "react-native";
 import {
   Container,
   Text,
@@ -20,15 +20,20 @@ import Logo from "../components/Logo";
 import { pageDeatils } from '../helper/json';
 import { setItem, getItem } from "../helper/storage";
 import {
-    getCandidateJobDetails
+    getCandidateJobDetails,
+    getCandidateDetails
 } from "../actions";
+import branch from "react-native-branch";
+import { SUCCESS_STATUS } from "../helper/constant";
+
+
 
 class HomePage extends Component {
     constructor(props){
         super(props)
         this.setCandidateProfile();
         this.state = {
-            isChecking: true,
+            linkOpening:true,
             candidateJob:null,
             profile_pic:null,
             userName:null
@@ -38,6 +43,19 @@ class HomePage extends Component {
     static navigationOptions = {
         header: null,
       };
+    static getDerivedStateFromProps(nextProps) {
+        const { error, success, msg, message } = nextProps.interviewSignUp;
+        if (error !== undefined && error === 1 && message !== message) {
+            alert(message);
+        }
+        if (success !== undefined && !success) {
+            notify("Something went wrong");
+        }
+        if (msg !== undefined) {
+            alert(msg);
+        }
+        return null;
+    }
     setCandidateProfile = async() => {
         const candidateJob = await getItem("mongo_id");
         if (candidateJob) {
@@ -45,9 +63,9 @@ class HomePage extends Component {
             let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
             let userName = candidateJob.candidate.data.from
             await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-            this.setState({ candidateJob, profile_pic, userName, isChecking: false })
+            this.setState({ candidateJob, profile_pic, userName, linkOpening: false  })
         } else {
-            this.setState({ isChecking: false })
+            this.setState({ linkOpening: false })
         }
     }
      async handleViewClick (data) {
@@ -61,7 +79,39 @@ class HomePage extends Component {
         }
     }
     componentDidMount = async () => {
-        await this.setCandidateProfile();
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
+        if (Platform.OS === 'ios') {
+            this.setState({ linkOpening: false })
+        }
+        branch.subscribe(async ({ errors, params }) => {
+            if (errors) {
+                alert("Error from Branch: " + errors);
+                return;
+            }
+            if (params.$deeplink_path !== undefined) {
+                let fb_id = params.$deeplink_path;
+                await this.props.getCandidateDetails(fb_id);
+                const { data, message, error, status } = this.props.interviewSignUp;
+
+                setItem("mongo_id", JSON.stringify({ candidate: {data:data} }));
+                if (status == SUCCESS_STATUS) {
+                    this.setState({ linkOpening: false });
+                    this.props.navigation.navigate("Instructions", {
+                        fb_id: fb_id,
+                        profile_pic: `https://pikmail.herokuapp.com/${
+                            data.sender_mail
+                            }?size=60`,
+                        name: data.from,
+                        email: data.sender_mail
+                    });
+                } else if (error == 1) {
+                    this.setState({ linkOpening: false  });
+                }
+            } else {
+                await this.setCandidateProfile();
+                this.setState({ linkOpening: false,  });
+            }
+        });
     }
 
     componentDidUpdate = async (prevProps, prevState) => {
@@ -72,9 +122,14 @@ class HomePage extends Component {
         }
     };
 
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackPress);
+    }
+    handleBackPress = () => {
+        BackHandler.exitApp(); // works best when the goBack is async
+    }
       render(){
-          let { isChecking, profile_pic, userName } = this.state;
-          console.log(profile_pic,"isChecking")
+          let { linkOpening, profile_pic, userName } = this.state;
           let profilepic = profile_pic ?  { uri: profile_pic } :require('../images/profilepic.png')
           let userNames = userName ? userName :"User Id"
           let renderCustomView = pageDeatils.map((data,k)=>{
@@ -98,7 +153,7 @@ class HomePage extends Component {
           })
           return(
                 <Container style={styles.container}>
-                  {isChecking ?
+                  {linkOpening ?
                       <View
                           style={{
                               flex: 1,
@@ -136,5 +191,8 @@ class HomePage extends Component {
       }
 }
 
-const mapStateToProps = ({ appliedJob }) => ({ appliedJob });
-export default connect(mapStateToProps, { getCandidateJobDetails })(HomePage);
+const mapStateToProps = state => ({ 
+    appliedJob: state.appliedJob, 
+    interviewSignUp: state.interviewSignUp
+ })
+export default connect(mapStateToProps, { getCandidateJobDetails, getCandidateDetails })(HomePage);

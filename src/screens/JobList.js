@@ -37,7 +37,6 @@ class JobList extends Component {
             params
         } = this.props.navigation.state;
         if (params.appliedJob!==undefined ){
-           console.log(params,"params")
             this.setState({ appliedJobDetails: params.appliedJob, isLoading:false, userLogin:true})
         }else{
             await this.props.getJobLists();
