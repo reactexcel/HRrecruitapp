@@ -79,6 +79,7 @@ class HomePage extends Component {
         }
     }
     componentDidMount = async () => {
+        await this.setCandidateProfile();
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
         if (Platform.OS === 'ios') {
             this.setState({ linkOpening: false })
@@ -95,7 +96,6 @@ class HomePage extends Component {
 
                 setItem("mongo_id", JSON.stringify({ candidate: {data:data} }));
                 if (status == SUCCESS_STATUS) {
-                    this.setState({ linkOpening: false });
                     this.props.navigation.navigate("Instructions", {
                         fb_id: fb_id,
                         profile_pic: `https://pikmail.herokuapp.com/${
@@ -104,11 +104,14 @@ class HomePage extends Component {
                         name: data.from,
                         email: data.sender_mail
                     });
+                    this.setState({ linkOpening: false });
                 } else if (error == 1) {
                     this.setState({ linkOpening: false  });
                 }
-            } else {
-                await this.setCandidateProfile();
+            } else if (params.$share_data !== undefined){
+                this.props.navigation.navigate("JobList", { title: 'Apply for Jobs' });
+            }
+            else {
                 this.setState({ linkOpening: false,  });
             }
         });
@@ -130,6 +133,7 @@ class HomePage extends Component {
     }
       render(){
           let { linkOpening, profile_pic, userName } = this.state;
+          console.log(linkOpening,"linkOpening")
           let profilepic = profile_pic ?  { uri: profile_pic } :require('../images/profilepic.png')
           let userNames = userName ? userName :"User Id"
           let renderCustomView = pageDeatils.map((data,k)=>{
