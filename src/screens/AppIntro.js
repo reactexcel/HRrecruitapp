@@ -25,6 +25,9 @@ class AppIntro extends Component {
             this.props.navigation.navigate("HomePage");
         }
     }
+    _onSkip = () => {
+        this.props.navigation.navigate("HomePage");
+    }
     _renderItem = ({item,index}) => {
         return (
             <Grid>
@@ -41,7 +44,7 @@ class AppIntro extends Component {
                     <ProgressBar items={AppDetails} index={index}/>
                 </Col>
                 <Row style={[styles.bottomContainer, { backgroundColor: item.bkGrndClr}]}>
-                    <Text style={styles.text} >Skip</Text>
+                    <Text style={styles.text} onPress={() => { this._onSkip() }} >{index == 3 ? "" :"Skip"}</Text>
                     <Text style={styles.text} onPress={()=>{this._onNext(item,index)}}>Next</Text>
                 </Row>
             </Grid>
