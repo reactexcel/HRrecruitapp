@@ -5,7 +5,8 @@ import {
   NetInfo,
   View,
   AsyncStorage,
-  Platform
+  Platform,
+  PermissionsAndroid
 } from "react-native";
 import {
   Container,
@@ -37,20 +38,18 @@ import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
-import branch from "react-native-branch";
 
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
       email: "",
-      linkOpening: true //Deeplink code for android
     };
   }
   static navigationOptions = {
     header: null
   };
-
+  
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1 && message !== message) {
@@ -64,34 +63,8 @@ class InterviewLogin extends Component {
     }
     return null;
   }
-
+  
   async componentDidMount() {
-    branch.subscribe(async ({ errors, params }) => {
-      if (errors) {
-        alert("Error from Branch: " + errors);
-        return;
-      }
-      if (params.$deeplink_path !== undefined) {
-        let fb_id = params.$deeplink_path;
-        await this.props.getCandidateDetails(fb_id);
-        const { data, message, error, status } = this.props.interviewSignUp;
-        if (status == SUCCESS_STATUS) {
-          this.setState({ linkOpening: false });
-          this.props.navigation.navigate("Instructions", {
-            fb_id: fb_id,
-            profile_pic: `https://pikmail.herokuapp.com/${
-              data.sender_mail
-            }?size=60`,
-            name: data.from,
-            email: data.sender_mail
-          });
-        } else if (error == 1) {
-          this.setState({ linkOpening: false });
-        }
-      } else {
-        this.setState({ linkOpening: false });
-      }
-    });
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
@@ -219,7 +192,6 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-    const { linkOpening } = this.state;
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
@@ -231,7 +203,6 @@ class InterviewLogin extends Component {
               <Logo />
             </Row>
             <Row>
-              {!linkOpening ? (
                 <Card style={styles.blockView}>
                   {!appliedBefore ? (
                     <Fragment>
@@ -275,17 +246,7 @@ class InterviewLogin extends Component {
                     <CustomButton onPress={this.handleSubmit} text="Submit" />
                   )}
                 </Card>
-              ) : (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    flexDirection: "column"
-                  }}
-                >
-                  <Spinner color={COLOR.Spinner} />
-                </View>
-              )}
+              )
             </Row>
           </Grid>
         </Content>

@@ -26,8 +26,15 @@ import { CHANGE_CONNECTION_STATUS } from "./types";
 import { CANDIDATE_DETAILS_SUCCESS, CANDIDATE_DETAILS_FAILURE } from "./types";
 import {
   CANDIDATE_ROUND_DETAILS_SUCCESS,
-  CANDIDATE_ROUND_DETAILS_FAILURE
+  CANDIDATE_ROUND_DETAILS_FAILURE,
+  GET_JOBLIST_SUCCESS,
+  GET_JOBLIST_FAILURE
 } from "./types";
+
+import {
+  CANDIDATE_JOB_SUCCESS,
+  CANDIDATE_JOB_FAILURE
+} from './types';
 
 import API_URL from "../config/dev";
 import PubSub from "pubsub-js";
@@ -40,7 +47,7 @@ export const signUp = email => async dispatch => {
   const appliedEmail = email;
   dispatch({ type: INTERVIEW_EMAIL_SIGN_UP_REQUEST });
   try {
-    const res = await _axios().post("signup_login_fb", {
+    const res = await _axios().post("exams/signup_login_fb", {
       email,
       appliedEmail,
       profile_pic
@@ -75,7 +82,7 @@ export const verifyingOTP = (email, otp, fb_id) => async dispatch => {
   const examToken = otp;
   dispatch({ type: OTP_REQUEST });
   try {
-    const res = await _axios().post("verifyExamToken", {
+    const res = await _axios().post("exams/verifyExamToken", {
       fb_id,
       examToken
     });
@@ -109,19 +116,15 @@ export const verifyingOTP = (email, otp, fb_id) => async dispatch => {
 
 //Action for adding new component
 export const addCandidate = data => async dispatch => {
-  const formData = new FormData();
-  for (let key in data) {
-    formData.append(key, data[key]);
-  }
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
-    const res = await _axios().post("addNewCandidate", formData);
+    const res = await _axios().post("exams/addCandidateWithBase64File", {...data});
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
-    if (err.message) {
+    if (err.response.data.message) {
       dispatch({
         type: ADD_CANDIDATE_FAILURE,
-        payload: { msg: err.message }
+        payload: { msg: err.response.data.message }
       });
     } else {
       dispatch({ type: ADD_CANDIDATE_FAILURE });
@@ -132,7 +135,7 @@ export const addCandidate = data => async dispatch => {
 //Action for getting questions for candidate
 export const getQuestions = (email, fb_id) => async dispatch => {
   try {
-    const res = await _axios().get(`getQuestinsForCandidate/${fb_id}`);
+    const res = await _axios().get(`exams/getQuestinsForCandidate/${fb_id}`);
     PubSub.publish("FIREBASE_GET_QUESTION_SUCCESS", {
       API_URL,
       email,
@@ -161,7 +164,7 @@ export const getQuestions = (email, fb_id) => async dispatch => {
 export const callingHelp = (accessToken, fb_id) => async dispatch => {
   dispatch({ type: CALL_HELP_REQUEST });
   try {
-    const res = await _axios().post("askHrForHelp?accessToken=${accessToken}", {
+    const res = await _axios().post("exams/askHrForHelp?accessToken=${accessToken}", {
       fb_id
     });
     dispatch({ type: CALL_HELP_SUCCESS, payload: res });
@@ -179,7 +182,7 @@ export const callingHelp = (accessToken, fb_id) => async dispatch => {
 export const submitTest = (email, data) => async dispatch => {
   dispatch({ type: SUBMIT_TEST_REQUEST });
   try {
-    const res = await _axios().post("submitExam", {
+    const res = await _axios().post("exams/submitExam", {
       ...data
     });
     PubSub.publish("FIREBASE_SUBMIT_TEST_SUCCESS", {
@@ -211,7 +214,7 @@ export const connectionState = isConnected => async dispatch => {
 
 export const getCandidateDetails = fb_id => async dispatch => {
   try {
-    const res = await _axios().get(`candidateDetails/${fb_id}`);
+    const res = await _axios().get(`exams/candidateDetails/${fb_id}`);
     PubSub.publish("CANDIDATE_DETAILS_SUCCESS", { API_URL, fb_id, res });
     dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
   } catch (err) {
@@ -234,7 +237,7 @@ export const getCandidateDetails = fb_id => async dispatch => {
 
 export const getCandidateRoundDetails = fb_id => async dispatch => {
   try {
-    const res = await _axios().get(`candidateExamRoundDetails/${fb_id}`);
+    const res = await _axios().get(`exams/candidateExamRoundDetails/${fb_id}`);
     dispatch({ type: CANDIDATE_ROUND_DETAILS_SUCCESS, payload: res.data });
   } catch (err) {
     console.log(err);
@@ -252,3 +255,44 @@ export const getCandidateRoundDetails = fb_id => async dispatch => {
     }
   }
 };
+
+export const getJobLists = () => async dispatch => {
+  try {
+    const res = await _axios().get(`tag/jobProfile`);
+    dispatch({ type: GET_JOBLIST_SUCCESS, payload: res.data });
+  } catch (err) {
+    console.log(err);
+    if (err.message == "timeout of 10000ms exceeded") {
+      // Show alert about timeout to user
+      dispatch({
+        type: GET_JOBLIST_FAILURE,
+        payload: { msg: err.message }
+      });
+    } else {
+      dispatch({
+        type: GET_JOBLIST_FAILURE,
+        payload: err.response.data
+      });
+    }
+  }
+};
+
+export const getCandidateJobDetails = (_id) => async dispatch => {
+  try {
+    const res = await _axios().get(`/exams/candidateJobDetails/${_id}`);
+    dispatch({ type: CANDIDATE_JOB_SUCCESS, payload: res.data });
+  } catch (err) {
+    if (err.message == "timeout of 10000ms exceeded") {
+      // Show alert about timeout to user
+      dispatch({
+        type: CANDIDATE_JOB_FAILURE,
+        payload: { msg: err.message }
+      });
+    } else {
+      dispatch({
+        type: CANDIDATE_JOB_FAILURE,
+        payload: err.response.data
+      });
+    }
+  }
+}

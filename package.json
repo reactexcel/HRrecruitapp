@@ -20,8 +20,10 @@
     "react-native": "0.55.4",
     "react-native-branch": "^2.3.0",
     "react-native-collapsible": "^0.11.3",
+    "react-native-document-picker": "^2.1.0",
     "react-native-google-analytics-bridge": "^5.6.3",
     "react-native-htmlview": "^0.12.1",
+    "react-native-share": "^1.0.27",
     "react-native-timer-countdown": "^1.1.0",
     "react-native-version-number": "^0.3.4",
     "react-navigation": "^2.0.1",
@@ -29,6 +31,7 @@
     "redux": "^4.0.0",
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.2.0",
+    "rn-fetch-blob": "^0.10.11",
     "validator": "^10.2.0"
   },
   "devDependencies": {
@@ -38,6 +41,11 @@
     "react-test-renderer": "16.3.1"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "setupFiles": [
+      "./node_modules/appcenter/test/AppCenterMock.js",
+      "./node_modules/appcenter-analytics/test/AppCenterAnalyticsMock.js",
+      "./node_modules/appcenter-crashes/test/AppCenterCrashesMock.js"
+    ]
   }
 }

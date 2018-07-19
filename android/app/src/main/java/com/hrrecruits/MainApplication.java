@@ -3,6 +3,8 @@ package com.hrrecruits;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cl.json.RNSharePackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import io.branch.rnbranch.RNBranchPackage;
 import com.microsoft.appcenter.reactnative.crashes.AppCenterReactNativeCrashesPackage;
 import com.microsoft.appcenter.reactnative.analytics.AppCenterReactNativeAnalyticsPackage;
@@ -14,7 +16,7 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import io.branch.referral.Branch;
-
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 
 import java.util.Arrays;
 import java.util.List;
@@ -31,12 +33,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSharePackage(),
+            new RNFetchBlobPackage(),
             new RNBranchPackage(),
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
             new AppCenterReactNativePackage(MainApplication.this),
             new GoogleAnalyticsBridgePackage(),
-            new RNVersionNumberPackage()
+            new RNVersionNumberPackage(),
+            new ReactNativeDocumentPicker()
       );
     }
 

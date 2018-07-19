@@ -48,5 +48,8 @@ export default StyleSheet.create({
     textAlign: "left",
     fontSize: 10,
     color: "#fff"
+  },
+  buttonPadder:{
+    margin:10,
   }
 });

@@ -8,13 +8,15 @@ target 'HRrecruit' do
   # Pods for HRrecruit
   pod 'AppCenter/Crashes', '~> 1.6.1'
   pod 'AppCenter/Analytics', '~> 1.6.1'
-  pod 'AppCenterReactNativeShared', '~> 1.5.1'
+  pod 'AppCenterReactNativeShared', '~> 1.6.0'
   pod 'Appboy-iOS-SDK', '~> 3.0.2'
-
-  
+  pod 'react-native-document-picker', :path => '../node_modules/react-native-document-picker`
+  pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
 
   platform :ios, '9.0'
   pod 'react-native-version-number', :path => '../node_modules/react-native-version-number'
+
+  pod 'RNShare', :path => '../node_modules/react-native-share'
 
   target 'HRrecruitTests' do
     inherit! :search_paths
