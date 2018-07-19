@@ -135,7 +135,7 @@ class HomePage extends Component {
           let { linkOpening, profile_pic, userName } = this.state;
           console.log(linkOpening,"linkOpening")
           let profilepic = profile_pic ?  { uri: profile_pic } :require('../images/profilepic.png')
-          let userNames = userName ? userName :"User Id"
+          let userNames = userName ? userName :""
           let renderCustomView = pageDeatils.map((data,k)=>{
               return(
                   <View  key={k} style={styles.listContainer}>
