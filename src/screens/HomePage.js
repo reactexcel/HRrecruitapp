@@ -3,21 +3,21 @@ import { View, Alert, Image, Linking, Platform, TouchableOpacity, BackHandler } 
 import {
   Container,
   Text,
-    ListItem,
-    Thumbnail,
-    Body,
-    Right,
-    Left,
-    Icon,
-    List,
-    Spinner
+  ListItem,
+  Thumbnail,
+  Body,
+  Right,
+  Left,
+  Icon,
+  List,
+  Spinner
 } from "native-base";
 import { connect } from "react-redux";
 import styles from "../styles/HomePage";
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
-import { pageDeatils } from '../helper/json';
+import { pageDeatils } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import {
     getCandidateJobDetails,

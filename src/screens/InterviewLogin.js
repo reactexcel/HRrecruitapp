@@ -38,6 +38,8 @@ import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
+import branch from "react-native-branch";
+import firebase from "react-native-firebase";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -49,7 +51,7 @@ class InterviewLogin extends Component {
   static navigationOptions = {
     header: null
   };
-  
+
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1 && message !== message) {
@@ -63,12 +65,14 @@ class InterviewLogin extends Component {
     }
     return null;
   }
-  
+
   async componentDidMount() {
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
     );
+
+    //Alert for round information
     const fb_id = await getItem("fb_id");
 
     if (fb_id !== undefined) {
@@ -99,7 +103,7 @@ class InterviewLogin extends Component {
               onPress:
                 Platform.OS === "ios" || email.email === "test_123@gmail.com"
                   ? () => {}
-                  : () => BackHandler.exitApp()
+                  : () => this.props.navigation.goBack()
             }
           ],
           { cancelable: false }
@@ -113,6 +117,7 @@ class InterviewLogin extends Component {
         ]);
       }
     }
+
   }
 
   handleNetworks = async isconnect => {
@@ -245,6 +250,7 @@ class InterviewLogin extends Component {
                   ) : (
                     <CustomButton onPress={this.handleSubmit} text="Submit" />
                   )}
+                  <CardItem />
                 </Card>
               )
             </Row>

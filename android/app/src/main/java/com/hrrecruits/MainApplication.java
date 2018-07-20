@@ -3,6 +3,8 @@ package com.hrrecruits;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import io.invertase.firebase.RNFirebasePackage;
 import cl.json.RNSharePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.branch.rnbranch.RNBranchPackage;
@@ -16,6 +18,8 @@ import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import io.branch.referral.Branch;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 
 import java.util.Arrays;
@@ -33,6 +37,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNDeviceInfo(),
+            new RNFirebasePackage(),
+            new RNFirebaseNotificationsPackage(),
+            new RNFirebaseMessagingPackage(),
             new RNSharePackage(),
             new RNFetchBlobPackage(),
             new RNBranchPackage(),

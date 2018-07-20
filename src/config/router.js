@@ -1,5 +1,5 @@
 import { createStackNavigator } from "react-navigation";
-import HomePage from '../screens/HomePage';
+import HomePage from "../screens/HomePage";
 import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
 import OTPpage from "../screens/OTPpage";
@@ -9,6 +9,8 @@ import TestPage from "../screens/TestPage";
 import SubmitTest from "../screens/SubmitTest";
 import JobList from '../screens/JobList';
 import AppIntro from '../screens/AppIntro';
+import AboutUs from "../screens/AboutUs";
+
 
 const Rootstack = createStackNavigator(
   {
@@ -42,6 +44,9 @@ const Rootstack = createStackNavigator(
     JobList: {
       screen: JobList
     },
+    AboutUs : {
+      screen : AboutUs
+    }
   },
   {
     initialScreen: "AppIntro"
