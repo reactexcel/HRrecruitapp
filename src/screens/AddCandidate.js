@@ -29,6 +29,7 @@ import { addCandidate } from "../actions";
 import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import { setItem, getItem } from "../helper/storage";
+import firebaseRN from "react-native-firebase";
 
 
 class AddCandidate extends Component {
@@ -173,7 +174,23 @@ class AddCandidate extends Component {
       </View>
     );
   }
-  onSubmit = values => {
+  onSubmit = async values => {
+    const fcmToken = await firebaseRN.messaging().getToken();
+    if (fcmToken) {
+      // user has a device token
+      values["device_token"] = fcmToken
+      console.log(fcmToken);
+    } else {
+      // user doesn't have a device token yet
+      console.log("no token");
+    }
+    this.onTokenRefreshListener = firebaseRN
+      .messaging()
+      .onTokenRefresh(fcmToken => {
+        // Process your token as required
+        values["device_token"] = fcmToken
+        console.log(fcmToken);
+      });
     const {
       params
     } = this.props.navigation.state;
