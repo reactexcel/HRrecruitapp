@@ -3,6 +3,7 @@ package com.hrrecruits;
 import com.facebook.react.ReactActivity;
 import io.branch.rnbranch.*; // <-- add this
 import android.content.Intent; // <-- and this
+import org.devio.rn.splashscreen.SplashScreen;
 
 
 public class MainActivity extends ReactActivity {
@@ -17,10 +18,10 @@ public class MainActivity extends ReactActivity {
     }
     @Override
     protected void onStart() {
+        SplashScreen.show(this);  // here
         super.onStart();
         RNBranchModule.initSession(getIntent().getData(), this);
     }
-
     @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);

@@ -10,11 +10,20 @@ import HomePage from "./HomePage";
 var { height, width } = Dimensions.get('window');
 import LinearGradient from 'react-native-linear-gradient';
 import { AppDetails } from '../helper/json';
+import { getItem } from "../helper/storage";
+import SplashScreen from 'react-native-splash-screen';
 
 class AppIntro extends Component {
     static navigationOptions = {
         header: null
     };
+    componentDidMount = async () => {
+        const candidateJob = await getItem("mongo_id");
+        if (candidateJob) {
+            this.props.navigation.navigate("HomePage");
+        } 
+        SplashScreen.hide()
+    }
     _onNext = (item,index) => {
         let items = AppDetails;
         console.log(items.length - 1 <= index,"items.length - 1")
@@ -39,7 +48,7 @@ class AppIntro extends Component {
             //['#642B73', '#C6426E',]
             <Grid>
                 <Col size={9} style={[styles.container]} >
-                <LinearGradient colors={['#DA4453', '#89216B']} style={[styles.container,{flex:1}]}>
+                <LinearGradient colors={[item.bkGrndClr,item.bkGrndClr]} style={[styles.container,{flex:1}]}>
                    <Image
                         resizeMode='contain'
                         style={styles.images} 
@@ -56,7 +65,7 @@ class AppIntro extends Component {
                     </View> 
                 </LinearGradient>    
                 </Col>
-                <Row style={[styles.bottomContainer,{backgroundColor:'#89216B'}]}>
+                <Row style={[styles.bottomContainer,{backgroundColor:item.bkGrndClr}]}>
                     <Text style={styles.text} onPress={() => { this._onSkip() }} >{index == 3 ? "" :"Skip"}</Text>
                     <ProgressBar items={AppDetails} index={index}/>
                     <View onPress={()=>{this._onNext(item,index)}} style={{marginRight:7,marginTop:-10}}>

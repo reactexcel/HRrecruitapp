@@ -33,20 +33,20 @@ export const AppDetails = [
         boldText: 'Jobs',
         headerText: '',
         rawText: 'Apply',
-        bkGrndClr: COLOR.YELLOW
+        bkGrndClr: COLOR.DARKBLUE
     },
     {
         image: require('../images/test.png'),
         boldText: 'Online Test',
         headerText: '',
         rawText: 'Take',
-        bkGrndClr: COLOR.RED
+        bkGrndClr: COLOR.DARKBLUE
     },
     {
         image: require('../images/status.png'),
         boldText: 'Application Status',
         headerText: '',
         rawText: 'Check',
-        bkGrndClr: COLOR.GREEN
+        bkGrndClr: COLOR.DARKBLUE
     },
 ]
