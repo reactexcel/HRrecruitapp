@@ -23,8 +23,6 @@ import {
     getCandidateJobDetails,
     getCandidateDetails
 } from "../actions";
-import branch from "react-native-branch";
-import { SUCCESS_STATUS } from "../helper/constant";
 
 
 
@@ -33,7 +31,7 @@ class HomePage extends Component {
         super(props)
         this.setCandidateProfile();
         this.state = {
-            linkOpening:true,
+            linkOpening:false,
             candidateJob:null,
             profile_pic:null,
             userName:null
@@ -74,47 +72,14 @@ class HomePage extends Component {
         } = this.props;
         if (data == 'JobList' && this.state.candidateJob) {
             this.props.navigation.navigate(data, { appliedJob:appliedJob,title:'Your Applied Jobs' });
+        }else if(data == 'InterviewLogin'){
+            this.props.navigation.navigate("InterviewLogin")
         }else{
             this.props.navigation.navigate(data, { title: 'Apply for Jobs'});
         }
     }
     componentDidMount = async () => {
-        await this.setCandidateProfile();
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-        if (Platform.OS === 'ios') {
-            this.setState({ linkOpening: false })
-        }
-        branch.subscribe(async ({ errors, params }) => {
-            if (errors) {
-                alert("Error from Branch: " + errors);
-                return;
-            }
-            if (params.$deeplink_path !== undefined) {
-                let fb_id = params.$deeplink_path;
-                await this.props.getCandidateDetails(fb_id);
-                const { data, message, error, status } = this.props.interviewSignUp;
-
-                setItem("mongo_id", JSON.stringify({ candidate: {data:data} }));
-                if (status == SUCCESS_STATUS) {
-                    this.props.navigation.navigate("Instructions", {
-                        fb_id: fb_id,
-                        profile_pic: `https://pikmail.herokuapp.com/${
-                            data.sender_mail
-                            }?size=60`,
-                        name: data.from,
-                        email: data.sender_mail
-                    });
-                    this.setState({ linkOpening: false });
-                } else if (error == 1) {
-                    this.setState({ linkOpening: false  });
-                }
-            } else if (params.$share_data !== undefined){
-                this.props.navigation.navigate("JobList", { title: 'Apply for Jobs' });
-            }
-            else {
-                this.setState({ linkOpening: false,  });
-            }
-        });
+        await this.setCandidateProfile()
     }
 
     componentDidUpdate = async (prevProps, prevState) => {
@@ -133,7 +98,6 @@ class HomePage extends Component {
     }
       render(){
           let { linkOpening, profile_pic, userName } = this.state;
-          console.log(linkOpening,"linkOpening")
           let profilepic = profile_pic ?  { uri: profile_pic } :require('../images/profilepic.png')
           let userNames = userName ? userName :""
           let renderCustomView = pageDeatils.map((data,k)=>{

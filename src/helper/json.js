@@ -23,28 +23,28 @@ export const pageDeatils = [
 export const AppDetails = [
     {
         image: require('../images/hello.png'),
-        boldText:'Career App',
+        boldText:'   Career App',
         headerText:'Hey there',
         rawText :'Welcome to Excellence Technologies',
         bkGrndClr: COLOR.DARKBLUE
     }, 
     {
         image: require('../images/jobs.png'),
-        boldText: 'Jobs',
+        boldText: '  Jobs',
         headerText: '',
         rawText: 'Apply',
         bkGrndClr: COLOR.DARKBLUE
     },
     {
         image: require('../images/test.png'),
-        boldText: 'Online Test',
+        boldText: '  Online Test',
         headerText: '',
         rawText: 'Take',
         bkGrndClr: COLOR.DARKBLUE
     },
     {
         image: require('../images/status.png'),
-        boldText: 'Application Status',
+        boldText: '   Application Status',
         headerText: '',
         rawText: 'Check',
         bkGrndClr: COLOR.DARKBLUE

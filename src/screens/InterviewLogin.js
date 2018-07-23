@@ -201,7 +201,7 @@ class InterviewLogin extends Component {
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
     return (
-      <Container style={styles.container}>
+      <Container style={[styles.container,{justifyContent:'center'}]}>
         <Content padder>
           <Grid>
             <Row style={styles.logoView}>
@@ -252,7 +252,6 @@ class InterviewLogin extends Component {
                   )}
                   <CardItem />
                 </Card>
-              )
             </Row>
           </Grid>
         </Content>
