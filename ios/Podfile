@@ -20,6 +20,8 @@ target 'HRrecruit' do
 
   pod 'RNDeviceInfo', :path => '../node_modules/react-native-device-info'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'HRrecruitTests' do
     inherit! :search_paths
     # Pods for testing

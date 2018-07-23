@@ -149,7 +149,7 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-device-info')
+    compile project(':react-native-linear-gradient')
     implementation(project(':react-native-firebase')) {
         transitive = false
     }

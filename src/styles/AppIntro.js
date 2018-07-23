@@ -23,5 +23,14 @@ export default StyleSheet.create({
         alignItems: 'center', 
         paddingLeft: 15, 
         paddingRight: 15 
+    },
+    btnBack:{ 
+        position: 'absolute', 
+        height: 45, 
+        width: 45, 
+        borderRadius: 30, 
+        opacity: 0.1,
+        backgroundColor: 'black', 
+        right:-12 
     }
 });

@@ -3,9 +3,10 @@ import { Text, StyleSheet, View, Platform } from "react-native";
 
 const ProgressBar = ({items,index}) => {
     let renderBar = items.map((item,k)=>{
-        let Css = index == k ? 1 : 0.3;
+        let Css = index == k ? 1 : 0.2;
+        let backGrndColr = index == k ? 'white': 'black'
         return(
-            <View key={k} style={[styles.block, { opacity: Css}]} />
+            <View key={k} style={[styles.block, { opacity: Css, backgroundColor:backGrndColr}]} />
         )
     })
     return (
@@ -17,16 +18,15 @@ const ProgressBar = ({items,index}) => {
 
 const styles = StyleSheet.create({
     container: { 
-        marginTop: 50, 
         flexDirection: 'row', 
         justifyContent: 'center' 
     },
     block: { 
-        width: 30, 
-        height: 3, 
-        backgroundColor: 'white', 
+        width: 7, 
+        height: 7, 
         alignSelf: 'center', 
-        marginLeft: 5 
+        marginLeft: 5,
+        borderRadius:20 
     }
 });
 
