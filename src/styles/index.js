@@ -1,5 +1,6 @@
-import { StyleSheet, Platform } from "react-native";
+import { StyleSheet, Platform, Dimensions } from "react-native";
 import { COLOR } from "./color";
+var {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {
@@ -11,6 +12,7 @@ export default StyleSheet.create({
     alignItems: "center"
   },
   blockView: {
+    width:width - 20,
     alignItems: "center",
     borderRadius: 5,
     padding: 10
