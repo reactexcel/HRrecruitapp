@@ -53,7 +53,7 @@ class InterviewLogin extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1) {
+    if (error !== undefined && error === 1 && message !== message) {
       alert(message);
     }
     if (success !== undefined && !success) {
@@ -66,19 +66,20 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
-    branch.subscribe(async ({ errors, params }) => {
-      if (errors) {
-        alert("Error from Branch: " + errors);
-        return;
-      }
-      if (params.$deeplink_path !== undefined) {
-        let fb_id = params.$deeplink_path;
-        await this.props.getCandidateDetails(fb_id);
+    const ans = await getItem("solution");
+    const email = await getItem("email");
+    const fb_id = await getItem("fb_id")
+    if(ans !== undefined && email !== undefined && fb_id !== undefined){
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        console.log(isConnected,"isConnected")
+      if(isConnected){
+        console.log(fb_id,"fb_id")
+        await this.props.getCandidateDetails(fb_id.fb_id);
         const { data, message, error, status } = this.props.interviewSignUp;
         if (status == SUCCESS_STATUS) {
           this.setState({ linkOpening: false });
           this.props.navigation.navigate("Instructions", {
-            fb_id: fb_id,
+            fb_id: fb_id.fb_id,
             profile_pic: `https://pikmail.herokuapp.com/${
               data.sender_mail
             }?size=60`,
@@ -88,16 +89,55 @@ class InterviewLogin extends Component {
         } else if (error == 1) {
           this.setState({ linkOpening: false });
         }
-      } else {
-        this.setState({ linkOpening: false });
+      }else{
+        Alert.alert(
+          "Info",
+          `Please connect to internet and then Re-Open the App`,
+          [
+            {
+              text: "Ok",
+              onPress:
+                Platform.OS === "ios" || email.email === "test_123@gmail.com"
+                  ? () => {}
+                  : () => BackHandler.exitApp()
+            }
+          ],
+          { cancelable: false }
+        );
       }
     });
+    }else {
+        branch.subscribe(async ({ errors, params }) => {
+        if (errors) {
+          alert("Error from Branch: " + errors);
+          return;
+        }
+        if (params.$deeplink_path !== undefined) {
+          let fb_id = params.$deeplink_path;
+          await this.props.getCandidateDetails(fb_id);
+          const { data, message, error, status } = this.props.interviewSignUp;
+          if (status == SUCCESS_STATUS) {
+            this.setState({ linkOpening: false });
+            this.props.navigation.navigate("Instructions", {
+              fb_id: fb_id,
+              profile_pic: `https://pikmail.herokuapp.com/${
+                data.sender_mail
+              }?size=60`,
+              name: data.from,
+              email: data.sender_mail
+            });
+          } else if (error == 1) {
+            this.setState({ linkOpening: false });
+          }
+        } else {
+          this.setState({ linkOpening: false });
+        }
+      });
+    }
     NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
     );
-    const fb_id = await getItem("fb_id");
-
     if (fb_id !== undefined) {
       await this.props.getCandidateRoundDetails(fb_id.fb_id);
     }
