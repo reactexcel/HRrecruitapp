@@ -30,3 +30,12 @@ allprojects {
         }
     }
 }
+ext {
+    googlePlayServicesVersion = "+" // default: "+"
+    firebaseVersion = "4.3.7" 
+    compileSdkVersion = 26 // default: 23
+    buildToolsVersion = "26.0.1" // default: "23.0.1"
+    targetSdkVersion = 26 // default: 23
+    supportLibVersion = "23.1.1" // default: 23.1.1
+}
+
