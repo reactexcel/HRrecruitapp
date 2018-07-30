@@ -26,23 +26,32 @@ import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { addCandidate } from "../actions";
-import { DocumentPicker, DocumentPickerUtil } from 'react-native-document-picker';
-import RNFetchBlob from 'rn-fetch-blob';
+import {
+  DocumentPicker,
+  DocumentPickerUtil
+} from "react-native-document-picker";
+import RNFetchBlob from "rn-fetch-blob";
 import { setItem, getItem } from "../helper/storage";
-import firebaseRN from "react-native-firebase";
+// import firebaseRN from "react-native-firebase";
+import NotifService from "../helper/NotifService";
+import appConfig from "../helper/notif.json";
+import SplashScreen from 'react-native-splash-screen';
+
 
 
 class AddCandidate extends Component {
-    constructor(){
-      super()
-      this.state = {
-        converting:false,
-        resumeData:[],
-        currentType:'',
-        resumeError:null,
-      }      
-    }
-      
+  constructor() {
+    super();
+    this.state = {
+      converting: false,
+      resumeData: [],
+      currentType: "",
+      resumeError: null,
+      registerToken: ""
+    };
+    this.notif = new NotifService(this.onRegister, this.onNotif);
+  }
+
   static navigationOptions = {
     header: null
   };
@@ -53,22 +62,22 @@ class AddCandidate extends Component {
     }
     return null;
   }
-  
-  
+
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
-      if (candidate.data.candidate_status === true ) {
-        setItem("mongo_id", JSON.stringify({candidate}));
+      if (candidate.data.candidate_status === true) {
+        setItem("mongo_id", JSON.stringify({ candidate }));
         Alert.alert(
           "Thank You",
           "Wait for the confirmation of your registration from HR.",
           [
             {
               text: "OK",
-              onPress: () => this.props.navigation.navigate("HomePage",{
-                setUser : true
-              })
+              onPress: () =>
+                this.props.navigation.navigate("HomePage", {
+                  setUser: true
+                })
             }
           ],
           { cancelable: false }
@@ -77,7 +86,7 @@ class AddCandidate extends Component {
     }
     const { success, msg } = this.props.candidate;
     if (success !== undefined && msg !== undefined) {
-      if (success === false ) {
+      if (success === false) {
         Alert.alert(
           "Alert",
           msg,
@@ -143,122 +152,147 @@ class AddCandidate extends Component {
           </Picker>
         </View>
         <View style={_styles.errorTextView}>
-          {touched && error && <Text style={_styles.errorText}>{  error}</Text>}
+          {touched && error && <Text style={_styles.errorText}>{error}</Text>}
         </View>
       </Fragment>
     );
   }
   renderButtonField(props) {
-    const { onPress, resumeError, input, onClosePress }=props;
-    const resumeContainer = input.map((data,i)=>{
+    const { onPress, resumeError, input, onClosePress } = props;
+    const resumeContainer = input.map((data, i) => {
       return (
-        <View key={i} style={_styles.uploadSection} >
-          <Text numberOfLines={1} style={_styles.fileName}>{data.fileName}</Text>
-          <Button transparent onPress={() => { onClosePress(i)}} style={{ marginTop: 5 }}>
-            <Icon style={_styles.closeIcon} name='close' />
+        <View key={i} style={_styles.uploadSection}>
+          <Text numberOfLines={1} style={_styles.fileName}>
+            {data.fileName}
+          </Text>
+          <Button
+            transparent
+            onPress={() => {
+              onClosePress(i);
+            }}
+            style={{ marginTop: 5 }}
+          >
+            <Icon style={_styles.closeIcon} name="close" />
           </Button>
         </View>
-      )
-    })
+      );
+    });
     return (
-      <View >
+      <View>
         <View style={_styles.uploadSection}>
-          <Text numberOfLines={1} style={_styles.text}>Upload Resume</Text>
-          <Button transparent onPress={onPress} style={{marginTop:5}}>
-            <Icon style={_styles.uploadIcon} name='cloud-upload' />
+          <Text numberOfLines={1} style={_styles.text}>
+            Upload Resume
+          </Text>
+          <Button transparent onPress={onPress} style={{ marginTop: 5 }}>
+            <Icon style={_styles.uploadIcon} name="cloud-upload" />
           </Button>
         </View>
         {resumeContainer}
         <View style={_styles.errorTextView}>
-          {resumeError && <Text style={[_styles.errorText,{marginLeft:8}]}>{  resumeError}</Text>}
+          {resumeError && (
+            <Text style={[_styles.errorText, { marginLeft: 8 }]}>
+              {resumeError}
+            </Text>
+          )}
         </View>
       </View>
     );
   }
+  onRegister = token => {
+    alert(JSON.stringify(token));
+    // this.setState({ registerToken: token.token });
+    setItem("token", JSON.stringify({ token : token.token }));
+  };
+  onNotif = notif => {
+    console.log(notif);
+  };
   onSubmit = async values => {
-    const fcmToken = await firebaseRN.messaging().getToken();
-    if (fcmToken) {
-      // user has a device token
-      values["device_token"] = fcmToken
-      console.log(fcmToken);
-    } else {
-      // user doesn't have a device token yet
-      console.log("no token");
-    }
-    this.onTokenRefreshListener = firebaseRN
-      .messaging()
-      .onTokenRefresh(fcmToken => {
-        // Process your token as required
-        values["device_token"] = fcmToken
-        console.log(fcmToken);
-      });
-    const {
-      params
-    } = this.props.navigation.state;
+    this.notif.configure(this.onRegister, this.onNotif, appConfig.senderID);
+    const { params } = this.props.navigation.state;
     values["fileNames"] = [];
-    if (this.state.resumeData.length >=1) {
-      this.state.resumeData.map((data,i)=>{
+    if (this.state.resumeData.length >= 1) {
+      this.state.resumeData.map((data, i) => {
         values[`file${i + 1}`] = data.dataBase64;
         values["extention"] = data.filetype;
-        values["fileNames"].push(`file${i+1}`)
-        values["default_tag"] = params.jobDetail.default_id
-        values["tag_id"] = params.jobDetail.id
-      })
+        values["fileNames"].push(`file${i + 1}`);
+        values["default_tag"] = params.jobDetail.default_id;
+        values["tag_id"] = params.jobDetail.id;
+      });
+      // values["device_token"] = this.state.registerToken;
+      const token = await getItem("token");
+      console.log(token.token,"token")
+      values["device_token"] = token.token
+      console.log(values,"values")
       this.props.addCandidate(values);
-    }else{
-      this.setState({ resumeError:'Upload your resume'})
+    } else {
+      this.setState({ resumeError: "Upload your resume" });
     }
   };
 
   onResumeAdd = () => {
-    this.props.change({ resume_file: [] })
+    this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
-    this.setState({converting:true})
-    if (Platform.OS !== "ios"){ //Android Only
-      DocumentPicker.show({
-        filetype: [DocumentPickerUtil.allFiles()],
-      }, (error, res) => {
-        if (res) {
-          let check = this.state.resumeData.length >= 1 ? this.state.currentType == res.type : true
-          if (check){
-            let type = res.type.split("/")
-            RNFetchBlob.fs.readFile(res.uri, 'base64')
-              .then((data) => {
-                resumeData.push({
-                  fileName: res.fileName,
-                  dataBase64: data,
-                  filetype: type[1]
-                })
-                this.setState({ converting: false, resumeData, currentType: res.type})
-              }, error => {
-                this.setState({ converting: false })
-              })
-          }else{
-            this.setState({ converting: false, resumeError:null })
-            alert('Please select same format for files');
-          }          
-        } else {
-          this.setState({ converting: false, resumeError: null })
+    this.setState({ converting: true });
+    if (Platform.OS !== "ios") {
+      //Android Only
+      DocumentPicker.show(
+        {
+          filetype: [DocumentPickerUtil.allFiles()]
+        },
+        (error, res) => {
+          SplashScreen.hide()
+          if (res) {
+            let check =
+              this.state.resumeData.length >= 1
+                ? this.state.currentType == res.type
+                : true;
+            if (check) {
+              let type = res.type.split("/");
+              RNFetchBlob.fs.readFile(res.uri, "base64").then(
+                data => {
+                  resumeData.push({
+                    fileName: res.fileName,
+                    dataBase64: data,
+                    filetype: type[1]
+                  });
+                  this.setState({
+                    converting: false,
+                    resumeData,
+                    currentType: res.type
+                  });
+                },
+                error => {
+                  this.setState({ converting: false });
+                }
+              );
+            } else {
+              this.setState({ converting: false, resumeError: null });
+              alert("Please select same format for files");
+            }
+          } else {
+            this.setState({ converting: false, resumeError: null });
+          }
         }
-      });
-    }else {
-      alert ('Not implemented in IOS');
-      this.setState({ converting: false, resumeError: null })
+      );
+    } else {
+      alert("Not implemented in IOS");
+      this.setState({ converting: false, resumeError: null });
     }
-  }
+  };
 
-  onClosePress = (i) => {
-    if (!this.state.converting){
-    let resumeData = this.state.resumeData;
-    resumeData.splice(i, 1);
-    this.setState({resumeData});
+  onClosePress = i => {
+    if (!this.state.converting) {
+      let resumeData = this.state.resumeData;
+      resumeData.splice(i, 1);
+      this.setState({ resumeData });
     }
-  }
+  };
 
   render() {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
     const { converting, resumeData, resumeError } = this.state;
+    console.log(this.state.registerToken, "sdhjugh");
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -308,8 +342,12 @@ class AddCandidate extends Component {
                 <Field
                   name="resume_file"
                   placeholder="Mobile number"
-                  onPress={() => { this.onResumeAdd()}}
-                  onClosePress={(i)=>{this.onClosePress(i)}}
+                  onPress={() => {
+                    this.onResumeAdd();
+                  }}
+                  onClosePress={i => {
+                    this.onClosePress(i);
+                  }}
                   component={this.renderButtonField}
                   input={resumeData}
                   resumeError={resumeError}
