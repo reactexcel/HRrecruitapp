@@ -9,13 +9,17 @@ import pubsub from "pubsub-js";
 import { COLOR } from "./styles/color";
 import AppFooter from "./components/AppFooter";
 require("core-js/es6/array"); // USE FOR BACK HANDLER NOT WORKING IN RELEASE MODE IF REMOVED
+import PushNotification from "react-native-push-notification";
+import { pushnotification } from "./helper/pushnotification";
 
 firebase.initializeApp(FIREBASE_CONFIG);
+
 export default class App extends Component {
   async componentDidMount() {
     Platform.OS === "android"
       ? StatusBar.setBackgroundColor(COLOR.BGCOLOR)
       : StatusBar.setBarStyle("dark-content");
+    pushnotification();
   }
   render() {
     return (

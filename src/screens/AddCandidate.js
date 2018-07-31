@@ -35,9 +35,7 @@ import { setItem, getItem } from "../helper/storage";
 // import firebaseRN from "react-native-firebase";
 import NotifService from "../helper/NotifService";
 import appConfig from "../helper/notif.json";
-import SplashScreen from 'react-native-splash-screen';
-
-
+import SplashScreen from "react-native-splash-screen";
 
 class AddCandidate extends Component {
   constructor() {
@@ -201,7 +199,7 @@ class AddCandidate extends Component {
   onRegister = token => {
     alert(JSON.stringify(token));
     // this.setState({ registerToken: token.token });
-    setItem("token", JSON.stringify({ token : token.token }));
+    setItem("token", JSON.stringify({ token: token.token }));
   };
   onNotif = notif => {
     console.log(notif);
@@ -220,10 +218,12 @@ class AddCandidate extends Component {
       });
       // values["device_token"] = this.state.registerToken;
       const token = await getItem("token");
-      console.log(token.token,"token")
-      values["device_token"] = token.token
-      console.log(values,"values")
-      this.props.addCandidate(values);
+      console.log(token.token, "token");
+      // if (token !== undefined) {
+        values["device_token"] = token.token;
+        console.log(values, "values");
+        this.props.addCandidate(values);
+      // }
     } else {
       this.setState({ resumeError: "Upload your resume" });
     }
@@ -240,7 +240,7 @@ class AddCandidate extends Component {
           filetype: [DocumentPickerUtil.allFiles()]
         },
         (error, res) => {
-          SplashScreen.hide()
+          SplashScreen.hide();
           if (res) {
             let check =
               this.state.resumeData.length >= 1

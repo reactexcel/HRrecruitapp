@@ -39,13 +39,11 @@ import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
-import firebase from "react-native-firebase";
-
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
+      email: ""
     };
   }
   static navigationOptions = {
@@ -117,7 +115,6 @@ class InterviewLogin extends Component {
         ]);
       }
     }
-
   }
 
   handleNetworks = async isconnect => {
@@ -201,57 +198,57 @@ class InterviewLogin extends Component {
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
     return (
-      <Container style={[styles.container,{justifyContent:'center'}]}>
+      <Container style={[styles.container, { justifyContent: "center" }]}>
         <Content padder>
           <Grid>
             <Row style={styles.logoView}>
               <Logo />
             </Row>
             <Row>
-                <Card style={styles.blockView}>
-                  {!appliedBefore ? (
-                    <Fragment>
-                      <CardItem header>
-                        <Text style={styles.headerText}>
-                          Interview Test Papers
-                        </Text>
-                      </CardItem>
-                      <HorizontalLine />
-                      <CardItem>
-                        <Body>
-                          <Text style={styles.text}>
-                            Login with your Email-Id to take interview test
-                            paper, in case of any questions please contact HR
-                          </Text>
-                        </Body>
-                      </CardItem>
-                    </Fragment>
-                  ) : (
-                    <CardItem>
-                      <Text style={styles.text}>{appliedText}</Text>
+              <Card style={styles.blockView}>
+                {!appliedBefore ? (
+                  <Fragment>
+                    <CardItem header>
+                      <Text style={styles.headerText}>
+                        Interview Test Papers
+                      </Text>
                     </CardItem>
-                  )}
-                  <Item style={styles.inputTextView}>
-                    <Input
-                      style={styles.inputText}
-                      placeholder="Email"
-                      placeholderTextColor={COLOR.Grey}
-                      name="email"
-                      value={this.state.email}
-                      keyboardType="email-address"
-                      selectionColor={COLOR.Grey}
-                      underlineColorAndroid={COLOR.Grey}
-                      onChangeText={text => this.setState({ email: text })}
-                      autoCapitalize="none"
-                    />
-                  </Item>
-                  {registering ? (
-                    <Spinner color="#2196f3" />
-                  ) : (
-                    <CustomButton onPress={this.handleSubmit} text="Submit" />
-                  )}
-                  <CardItem />
-                </Card>
+                    <HorizontalLine />
+                    <CardItem>
+                      <Body>
+                        <Text style={styles.text}>
+                          Login with your Email-Id to take interview test paper,
+                          in case of any questions please contact HR
+                        </Text>
+                      </Body>
+                    </CardItem>
+                  </Fragment>
+                ) : (
+                  <CardItem>
+                    <Text style={styles.text}>{appliedText}</Text>
+                  </CardItem>
+                )}
+                <Item style={styles.inputTextView}>
+                  <Input
+                    style={styles.inputText}
+                    placeholder="Email"
+                    placeholderTextColor={COLOR.Grey}
+                    name="email"
+                    value={this.state.email}
+                    keyboardType="email-address"
+                    selectionColor={COLOR.Grey}
+                    underlineColorAndroid={COLOR.Grey}
+                    onChangeText={text => this.setState({ email: text })}
+                    autoCapitalize="none"
+                  />
+                </Item>
+                {registering ? (
+                  <Spinner color="#2196f3" />
+                ) : (
+                  <CustomButton onPress={this.handleSubmit} text="Submit" />
+                )}
+                <CardItem />
+              </Card>
             </Row>
           </Grid>
         </Content>
