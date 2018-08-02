@@ -32,9 +32,6 @@ import {
 } from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
 import { setItem, getItem } from "../helper/storage";
-// import firebaseRN from "react-native-firebase";
-import NotifService from "../helper/NotifService";
-import appConfig from "../helper/notif.json";
 import SplashScreen from "react-native-splash-screen";
 
 class AddCandidate extends Component {
@@ -196,16 +193,8 @@ class AddCandidate extends Component {
       </View>
     );
   }
-  onRegister = token => {
-    alert(JSON.stringify(token));
-    // this.setState({ registerToken: token.token });
-    setItem("token", JSON.stringify({ token: token.token }));
-  };
-  onNotif = notif => {
-    console.log(notif);
-  };
+
   onSubmit = async values => {
-    this.notif.configure(this.onRegister, this.onNotif, appConfig.senderID);
     const { params } = this.props.navigation.state;
     values["fileNames"] = [];
     if (this.state.resumeData.length >= 1) {
@@ -216,14 +205,7 @@ class AddCandidate extends Component {
         values["default_tag"] = params.jobDetail.default_id;
         values["tag_id"] = params.jobDetail.id;
       });
-      // values["device_token"] = this.state.registerToken;
-      const token = await getItem("token");
-      console.log(token.token, "token");
-      // if (token !== undefined) {
-        values["device_token"] = token.token;
-        console.log(values, "values");
-        this.props.addCandidate(values);
-      // }
+      this.props.addCandidate(values);
     } else {
       this.setState({ resumeError: "Upload your resume" });
     }

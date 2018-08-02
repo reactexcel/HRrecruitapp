@@ -23,7 +23,6 @@ import {
     getCandidateJobDetails,
     getCandidateDetails
 } from "../actions";
-import { pushnotification } from "../helper/pushnotification";
 
 
 
@@ -81,7 +80,6 @@ class HomePage extends Component {
     }
     componentDidMount = async () => {
         await this.setCandidateProfile()
-        pushnotification();
     }
 
     componentDidUpdate = async (prevProps, prevState) => {

@@ -1,98 +1,298 @@
-import React, { Component } from 'react';
-import { TextInput, StyleSheet, Text, View, TouchableOpacity, Alert } from 'react-native';
-import NotifService from '../helper/NotifService';
-import appConfig from '../helper/notif.json';
+import React, { Component } from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Clipboard,
+  Platform,
+  ScrollView
+} from "react-native";
 
-// type Props = {};
-class AboutUs extends Component {
+import FCM, { NotificationActionType } from "react-native-fcm";
+import { registerKilledListener, registerAppListener } from "../helper/Listeners";
+import firebaseClient from "../helper/FirebaseClient";
 
+registerKilledListener();
+
+export default class AboutUs extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      senderId: appConfig.senderID
+      token: "",
+      tokenCopyFeedback: ""
+    };
+  }
+
+  async componentDidMount() {
+    FCM.createNotificationChannel({
+      id: "default",
+      name: "Default",
+      description: "used for example",
+      priority: "high"
+    });
+    registerAppListener(this.props.navigation);
+    FCM.getInitialNotification().then(notif => {
+      this.setState({
+        initNotif: notif
+      });
+      if (notif && notif.targetScreen === "detail") {
+        setTimeout(() => {
+          this.props.navigation.navigate("HomePage");
+        }, 500);
+      }
+    });
+
+    try {
+      let result = await FCM.requestPermissions({
+        badge: false,
+        sound: true,
+        alert: true
+      });
+    } catch (e) {
+      console.error(e);
+    }
+
+    FCM.getFCMToken().then(token => {
+      console.log("TOKEN (getFCMToken)", token);
+      this.setState({ token: token || "" });
+    });
+
+    if (Platform.OS === "ios") {
+      FCM.getAPNSToken().then(token => {
+        console.log("APNS TOKEN (getFCMToken)", token);
+      });
+    }
+
+    // topic example
+    // FCM.subscribeToTopic('sometopic')
+    // FCM.unsubscribeFromTopic('sometopic')
+  }
+
+  showLocalNotification() {
+    FCM.presentLocalNotification({
+      channel: "default",
+      id: new Date().valueOf().toString(), // (optional for instant notification)
+      title: "Test Notification with action", // as FCM payload
+      body: "Force touch to reply", // as FCM payload (required)
+      sound: "bell.mp3", // "default" or filename
+      priority: "high", // as FCM payload
+      click_action: "com.myapp.MyCategory", // as FCM payload - this is used as category identifier on iOS.
+      badge: 10, // as FCM payload IOS only, set 0 to clear badges
+      number: 10, // Android only
+      ticker: "My Notification Ticker", // Android only
+      auto_cancel: true, // Android only (default true)
+      large_icon:
+        "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg", // Android only
+      icon: "ic_launcher", // as FCM payload, you can relace this with custom icon you put in mipmap
+      big_text: "Show when notification is expanded", // Android only
+      sub_text: "This is a subText", // Android only
+      color: "red", // Android only
+      vibrate: 300, // Android only default: 300, no vibration if you pass 0
+      wake_screen: true, // Android only, wake up screen when notification arrives
+      group: "group", // Android only
+      picture:
+        "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_150x54dp.png", // Android only bigPicture style
+      ongoing: true, // Android only
+      my_custom_data: "my_custom_field_value", // extra data you want to throw
+      lights: true, // Android only, LED blinking (default false)
+      show_in_foreground: true // notification when app is in foreground (local & remote)
+    });
+  }
+
+  scheduleLocalNotification() {
+    FCM.scheduleLocalNotification({
+      id: "testnotif",
+      fire_date: new Date().getTime() + 5000,
+      vibrate: 500,
+      title: "Hello",
+      body: "Test Scheduled Notification",
+      sub_text: "sub text",
+      priority: "high",
+      large_icon:
+        "https://image.freepik.com/free-icon/small-boy-cartoon_318-38077.jpg",
+      show_in_foreground: true,
+      picture:
+        "https://firebase.google.com/_static/af7ae4b3fc/images/firebase/lockup.png",
+      wake_screen: true,
+      extra1: { a: 1 },
+      extra2: 1
+    });
+  }
+
+  sendRemoteNotification(token) {
+    let body;
+
+    if (Platform.OS === "android") {
+      body = {
+        to: token,
+        data: {
+          custom_notification: {
+            title: "Simple FCM Client",
+            body: "Click me to go to detail",
+            sound: "default",
+            priority: "high",
+            show_in_foreground: true,
+            targetScreen: "detail"
+          }
+        },
+        priority: 10
+      };
+    } else {
+      body = {
+        to: token,
+        notification: {
+          title: "Simple FCM Client",
+          body: "Click me to go to detail",
+          sound: "default"
+        },
+        data: {
+          targetScreen: "detail"
+        },
+        priority: 10
+      };
+    }
+
+    firebaseClient.send(JSON.stringify(body), "notification");
+  }
+
+  sendRemoteData(token) {
+    let body = {
+      to: token,
+      data: {
+        title: "Simple FCM Client",
+        body: "This is a notification with only DATA.",
+        sound: "default"
+      },
+      priority: "normal"
     };
 
-    this.notif = new NotifService(this.onRegister.bind(this), this.onNotif.bind(this));
+    firebaseClient.send(JSON.stringify(body), "data");
+  }
+
+  showLocalNotificationWithAction() {
+    FCM.presentLocalNotification({
+      title: "Test Notification with action",
+      body: "Force touch to reply",
+      priority: "high",
+      show_in_foreground: true,
+      click_action: "com.myidentifi.fcm.text", // for ios
+      android_actions: JSON.stringify([
+        {
+          id: "view",
+          title: "view"
+        },
+        {
+          id: "dismiss",
+          title: "dismiss"
+        }
+      ]) // for android, take syntax similar to ios's. only buttons are supported
+    });
   }
 
   render() {
+    let { token, tokenCopyFeedback } = this.state;
+    console.log(this.state.token,'token')
+
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Example app react-native-push-notification</Text>
-        <View style={styles.spacer}></View>
-        <TextInput style={styles.textField} value={this.state.registerToken} placeholder="Register token" />
-        <View style={styles.spacer}></View>
+        <ScrollView style={{ paddingHorizontal: 20 }}>
+          <Text style={styles.welcome}>Welcome to Simple Fcm Client!</Text>
 
-        <TouchableOpacity style={styles.button} onPress={() => { this.notif.localNotif() }}><Text>Local Notification (now)</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => { this.notif.scheduleNotif() }}><Text>Schedule Notification in 30s</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => { this.notif.cancelNotif() }}><Text>Cancel last notification (if any)</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => { this.notif.cancelAll() }}><Text>Cancel all notifications</Text></TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => { this.notif.checkPermission(this.handlePerm.bind(this)) }}><Text>Check Permission</Text></TouchableOpacity>
+          <Text style={styles.feedback}>{this.state.tokenCopyFeedback}</Text>
 
-        <View style={styles.spacer}></View>
-        <TextInput style={styles.textField} value={this.state.senderId} onChangeText={(e) => {this.setState({ senderId: e })}} placeholder="GCM ID" />
-        <TouchableOpacity style={styles.button} onPress={() => { this.notif.configure(this.onRegister.bind(this), this.onNotif.bind(this), this.state.senderId) }}><Text>Configure Sender ID</Text></TouchableOpacity>
-        {this.state.gcmRegistered && <Text>GCM Configured !</Text>}
-
-        <View style={styles.spacer}></View>
+          <Text style={styles.feedback}>
+            Remote notif won't be available to iOS emulators
+          </Text>
+          <TouchableOpacity
+            onPress={() => this.sendRemoteNotification(token)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Send Remote Notification</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.sendRemoteData(token)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Send Remote Data</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.showLocalNotification()}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Show Local Notification</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.showLocalNotificationWithAction(token)}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>
+              Show Local Notification with Action
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.scheduleLocalNotification()}
+            style={styles.button}
+          >
+            <Text style={styles.buttonText}>Schedule Notification in 5s</Text>
+          </TouchableOpacity>
+          <Text style={styles.instructions}>Init notif:</Text>
+          <Text>{JSON.stringify(this.state.initNotif)}</Text>
+          <Text style={styles.instructions}>Token:</Text>
+          <Text
+            selectable={true}
+            onPress={() => this.setClipboardContent(this.state.token)}
+          >
+            {this.state.token}
+          </Text>
+        </ScrollView>
       </View>
     );
   }
-
-  onRegister(token) {
-    Alert.alert("Registered !", JSON.stringify(token));
-    console.log(token);
-    this.setState({ registerToken: token.token, gcmRegistered: true });
+  setClipboardContent(text) {
+    Clipboard.setString(text);
+    this.setState({ tokenCopyFeedback: "Token copied to clipboard." });
+    setTimeout(() => {
+      this.clearTokenCopyFeedback();
+    }, 2000);
   }
-
-  onNotif(notif) {
-    console.log(notif,"notif");
-    Alert.alert(notif.title, notif.message);
-  }
-
-  handlePerm(perms) {
-    Alert.alert("Permissions", JSON.stringify(perms));
+  clearTokenCopyFeedback() {
+    this.setState({ tokenCopyFeedback: "" });
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF"
   },
   welcome: {
     fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+    textAlign: "center",
+    margin: 10
+  },
+  instructions: {
+    textAlign: "center",
+    color: "#333333",
+    marginBottom: 2
+  },
+  feedback: {
+    textAlign: "center",
+    color: "#996633",
+    marginBottom: 3
   },
   button: {
-    borderWidth: 1,
-    borderColor: "#000000",
-    margin: 5,
-    padding: 5,
-    width: "70%",
-    backgroundColor: "#DDDDDD",
-    borderRadius: 5,
+    backgroundColor: "teal",
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    marginVertical: 10,
+    borderRadius: 10
   },
-  textField: {
-    borderWidth: 1,
-    borderColor: "#AAAAAA",
-    margin: 5,
-    padding: 5,
-    width: "70%"
-  },
-  spacer: {
-    height: 10,
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 20,
-    textAlign: "center",
+  buttonText: {
+    color: "white",
+    backgroundColor: "transparent"
   }
 });
-
-
-export default AboutUs;

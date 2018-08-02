@@ -94,13 +94,13 @@ def enableSeparateBuildPerCPUArchitecture = false
 def enableProguardInReleaseBuilds = false
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.hrrecruits"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 23
         versionName "1.23"
         ndk {
@@ -149,10 +149,10 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-fcm')
     implementation "com.google.android.gms:play-services-base:15.0.1"
     implementation "com.google.firebase:firebase-core:16.0.1"
     implementation 'com.google.firebase:firebase-messaging:17.0.0'
-    implementation project(':react-native-push-notification')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-share')

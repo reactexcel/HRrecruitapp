@@ -24,6 +24,8 @@ target 'HRrecruit' do
 
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
 
+  pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
+
   target 'HRrecruitTests' do
     inherit! :search_paths
     # Pods for testing
