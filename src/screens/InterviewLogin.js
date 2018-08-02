@@ -18,7 +18,8 @@ import {
   Item,
   Input,
   Spinner,
-  Toast
+  Toast,
+  Button
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CustomButton from "../components/CustomButton";
@@ -39,6 +40,7 @@ import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
+import LinearGradient from "react-native-linear-gradient";
 class InterviewLogin extends Component {
   constructor() {
     super();
@@ -65,49 +67,48 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
-
     const ans = await getItem("solution");
     const email = await getItem("email");
-    const fb_id = await getItem("fb_id")
-    if(ans !== undefined && email !== undefined && fb_id !== undefined){
+    const fb_id = await getItem("fb_id");
+    if (ans !== undefined && email !== undefined && fb_id !== undefined) {
       NetInfo.isConnected.fetch().done(async isConnected => {
-        console.log(isConnected,"isConnected")
-      if(isConnected){
-        console.log(fb_id,"fb_id")
-        await this.props.getCandidateDetails(fb_id.fb_id);
-        const { data, message, error, status } = this.props.interviewSignUp;
-        if (status == SUCCESS_STATUS) {
-          this.setState({ linkOpening: false });
-          this.props.navigation.navigate("Instructions", {
-            fb_id: fb_id.fb_id,
-            profile_pic: `https://pikmail.herokuapp.com/${
-              data.sender_mail
-            }?size=60`,
-            name: data.from,
-            email: data.sender_mail
-          });
-        } else if (error == 1) {
-          this.setState({ linkOpening: false });
+        console.log(isConnected, "isConnected");
+        if (isConnected) {
+          console.log(fb_id, "fb_id");
+          await this.props.getCandidateDetails(fb_id.fb_id);
+          const { data, message, error, status } = this.props.interviewSignUp;
+          if (status == SUCCESS_STATUS) {
+            this.setState({ linkOpening: false });
+            this.props.navigation.navigate("Instructions", {
+              fb_id: fb_id.fb_id,
+              profile_pic: `https://pikmail.herokuapp.com/${
+                data.sender_mail
+              }?size=60`,
+              name: data.from,
+              email: data.sender_mail
+            });
+          } else if (error == 1) {
+            this.setState({ linkOpening: false });
+          }
+        } else {
+          Alert.alert(
+            "Info",
+            `Please connect to internet and then Re-Open the App`,
+            [
+              {
+                text: "Ok",
+                onPress:
+                  Platform.OS === "ios" || email.email === "test_123@gmail.com"
+                    ? () => {}
+                    : () => BackHandler.exitApp()
+              }
+            ],
+            { cancelable: false }
+          );
         }
-      }else{
-        Alert.alert(
-          "Info",
-          `Please connect to internet and then Re-Open the App`,
-          [
-            {
-              text: "Ok",
-              onPress:
-                Platform.OS === "ios" || email.email === "test_123@gmail.com"
-                  ? () => {}
-                  : () => BackHandler.exitApp()
-            }
-          ],
-          { cancelable: false }
-        );
-      }
-    });
-    }else {
-        branch.subscribe(async ({ errors, params }) => {
+      });
+    } else {
+      branch.subscribe(async ({ errors, params }) => {
         if (errors) {
           alert("Error from Branch: " + errors);
           return;
@@ -140,7 +141,6 @@ class InterviewLogin extends Component {
     );
 
     //Alert for round information
-    const fb_id = await getItem("fb_id");
 
     if (fb_id !== undefined) {
       await this.props.getCandidateRoundDetails(fb_id.fb_id);
@@ -267,61 +267,52 @@ class InterviewLogin extends Component {
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
     return (
-      <Container style={[styles.container, { justifyContent: "center" }]}>
-        <Content padder>
-          <Grid>
-            <Row style={styles.logoView}>
-              <Logo />
-            </Row>
-            <Row>
-              <Card style={styles.blockView}>
-                {!appliedBefore ? (
-                  <Fragment>
-                    <CardItem header>
-                      <Text style={styles.headerText}>
-                        Interview Test Papers
-                      </Text>
-                    </CardItem>
-                    <HorizontalLine />
-                    <CardItem>
-                      <Body>
-                        <Text style={styles.text}>
-                          Login with your Email-Id to take interview test paper,
-                          in case of any questions please contact HR
-                        </Text>
-                      </Body>
-                    </CardItem>
-                  </Fragment>
-                ) : (
-                  <CardItem>
-                    <Text style={styles.text}>{appliedText}</Text>
-                  </CardItem>
-                )}
-                <Item style={styles.inputTextView}>
-                  <Input
-                    style={styles.inputText}
-                    placeholder="Email"
-                    placeholderTextColor={COLOR.Grey}
-                    name="email"
-                    value={this.state.email}
-                    keyboardType="email-address"
-                    selectionColor={COLOR.Grey}
-                    underlineColorAndroid={COLOR.Grey}
-                    onChangeText={text => this.setState({ email: text })}
-                    autoCapitalize="none"
-                  />
-                </Item>
-                {registering ? (
-                  <Spinner color="#2196f3" />
-                ) : (
-                  <CustomButton onPress={this.handleSubmit} text="Submit" />
-                )}
-                <CardItem />
-              </Card>
-            </Row>
-          </Grid>
-        </Content>
-      </Container>
+      <LinearGradient
+        colors={["#2a365f", "#131931"]}
+        style={{ flex: 1, justifyContent: "flex-start" }}
+      >
+        <View style={styles.logoView}>
+          <Logo />
+        </View>
+        <View style={{ marginHorizontal: 20 }}>
+          <Item style={styles.inputTextView}>
+            <Input
+              style={styles.inputText}
+              placeholder="Email"
+              placeholderTextColor={"#7d7885"}
+              name="email"
+              value={this.state.email}
+              keyboardType="email-address"
+              selectionColor={"#7d7885"}
+              underlineColorAndroid={"#566cc4"}
+              onChangeText={text => this.setState({ email: text })}
+              autoCapitalize="none"
+            />
+          </Item>
+        </View>
+        <View
+          style={{
+            flex: 1,
+            flexDirection: "row",
+            justifyContent: "center"
+          }}
+        >
+          {registering ? (
+            <Spinner color="#f69f3c" />
+          ) : (
+            <Button
+              onPress={this.handleSubmit}
+              rounded
+              style={{ backgroundColor: "#f69f3c" }}
+            >
+              <Text>Submit</Text>
+            </Button>
+          )}
+        </View>
+        {/* </Grid> */}
+      </LinearGradient>
+      //   </Content>
+      // </Container>
     );
   }
 }
