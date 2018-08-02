@@ -5,7 +5,8 @@ import {
   NetInfo,
   View,
   AsyncStorage,
-  Platform
+  Platform,
+  PermissionsAndroid
 } from "react-native";
 import {
   Container,
@@ -38,13 +39,11 @@ import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
-
 class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: "",
-      linkOpening: true //Deeplink code for android
+      email: ""
     };
   }
   static navigationOptions = {
@@ -66,6 +65,7 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
+
     const ans = await getItem("solution");
     const email = await getItem("email");
     const fb_id = await getItem("fb_id")
@@ -138,6 +138,10 @@ class InterviewLogin extends Component {
       "connectionChange",
       this.handleNetworks
     );
+
+    //Alert for round information
+    const fb_id = await getItem("fb_id");
+
     if (fb_id !== undefined) {
       await this.props.getCandidateRoundDetails(fb_id.fb_id);
     }
@@ -166,7 +170,7 @@ class InterviewLogin extends Component {
               onPress:
                 Platform.OS === "ios" || email.email === "test_123@gmail.com"
                   ? () => {}
-                  : () => BackHandler.exitApp()
+                  : () => this.props.navigation.goBack()
             }
           ],
           { cancelable: false }
@@ -259,73 +263,61 @@ class InterviewLogin extends Component {
     const {
       interviewSignUp: { registering, success }
     } = this.props;
-    const { linkOpening } = this.state;
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
     return (
-      <Container style={styles.container}>
+      <Container style={[styles.container, { justifyContent: "center" }]}>
         <Content padder>
           <Grid>
             <Row style={styles.logoView}>
               <Logo />
             </Row>
             <Row>
-              {!linkOpening ? (
-                <Card style={styles.blockView}>
-                  {!appliedBefore ? (
-                    <Fragment>
-                      <CardItem header>
-                        <Text style={styles.headerText}>
-                          Interview Test Papers
-                        </Text>
-                      </CardItem>
-                      <HorizontalLine />
-                      <CardItem>
-                        <Body>
-                          <Text style={styles.text}>
-                            Login with your Email-Id to take interview test
-                            paper, in case of any questions please contact HR
-                          </Text>
-                        </Body>
-                      </CardItem>
-                    </Fragment>
-                  ) : (
-                    <CardItem>
-                      <Text style={styles.text}>{appliedText}</Text>
+              <Card style={styles.blockView}>
+                {!appliedBefore ? (
+                  <Fragment>
+                    <CardItem header>
+                      <Text style={styles.headerText}>
+                        Interview Test Papers
+                      </Text>
                     </CardItem>
-                  )}
-                  <Item style={styles.inputTextView}>
-                    <Input
-                      style={styles.inputText}
-                      placeholder="Email"
-                      placeholderTextColor={COLOR.Grey}
-                      name="email"
-                      value={this.state.email}
-                      keyboardType="email-address"
-                      selectionColor={COLOR.Grey}
-                      underlineColorAndroid={COLOR.Grey}
-                      onChangeText={text => this.setState({ email: text })}
-                      autoCapitalize="none"
-                    />
-                  </Item>
-                  {registering ? (
-                    <Spinner color="#2196f3" />
-                  ) : (
-                    <CustomButton onPress={this.handleSubmit} text="Submit" />
-                  )}
-                </Card>
-              ) : (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    flexDirection: "column"
-                  }}
-                >
-                  <Spinner color={COLOR.Spinner} />
-                </View>
-              )}
+                    <HorizontalLine />
+                    <CardItem>
+                      <Body>
+                        <Text style={styles.text}>
+                          Login with your Email-Id to take interview test paper,
+                          in case of any questions please contact HR
+                        </Text>
+                      </Body>
+                    </CardItem>
+                  </Fragment>
+                ) : (
+                  <CardItem>
+                    <Text style={styles.text}>{appliedText}</Text>
+                  </CardItem>
+                )}
+                <Item style={styles.inputTextView}>
+                  <Input
+                    style={styles.inputText}
+                    placeholder="Email"
+                    placeholderTextColor={COLOR.Grey}
+                    name="email"
+                    value={this.state.email}
+                    keyboardType="email-address"
+                    selectionColor={COLOR.Grey}
+                    underlineColorAndroid={COLOR.Grey}
+                    onChangeText={text => this.setState({ email: text })}
+                    autoCapitalize="none"
+                  />
+                </Item>
+                {registering ? (
+                  <Spinner color="#2196f3" />
+                ) : (
+                  <CustomButton onPress={this.handleSubmit} text="Submit" />
+                )}
+                <CardItem />
+              </Card>
             </Row>
           </Grid>
         </Content>

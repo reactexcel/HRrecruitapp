@@ -110,9 +110,9 @@ class Instructions extends Component {
     );
   }
 }
-const mapStatetoProps = ({ questions }) => ({ questions });
+const mapStateToProps = ({ questions }) => ({ questions });
 
 export default connect(
-  mapStatetoProps,
+  mapStateToProps,
   { getQuestions }
 )(Instructions);

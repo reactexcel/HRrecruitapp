@@ -6,6 +6,8 @@
  */
 
 #import "AppDelegate.h"
+#import "RNFirebaseNotifications.h"
+#import "RNFirebaseMessaging.h"
 #import <AppCenterReactNativeCrashes/AppCenterReactNativeCrashes.h>
 #import <AppCenterReactNativeAnalytics/AppCenterReactNativeAnalytics.h>
 #import <AppCenterReactNative/AppCenterReactNative.h>
@@ -24,6 +26,21 @@
   [AppCenterReactNativeAnalytics registerWithInitiallyEnabled:true];  // Initialize AppCenter analytics
 
   [AppCenterReactNative register];  // Initialize AppCenter 
+
+  [RNFirebaseNotifications configure];
+
+  - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+  [[RNFirebaseNotifications instance] didReceiveLocalNotification:notification];
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
+                                                       fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler{
+  [[RNFirebaseNotifications instance] didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+  [[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
+}
 
   jsCodeLocation = [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index" fallbackResource:nil];
 
