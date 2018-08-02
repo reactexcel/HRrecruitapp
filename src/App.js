@@ -10,6 +10,7 @@ import { COLOR } from "./styles/color";
 import AppFooter from "./components/AppFooter";
 require("core-js/es6/array"); // USE FOR BACK HANDLER NOT WORKING IN RELEASE MODE IF REMOVED
 
+
 firebase.initializeApp(FIREBASE_CONFIG);
 
 export default class App extends Component {

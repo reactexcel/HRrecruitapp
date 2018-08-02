@@ -1,6 +1,8 @@
 import { StyleSheet, Platform, Dimensions } from "react-native";
 var { height, width } = Dimensions.get('window');
+
 import { COLOR } from "./color";
+var {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {
