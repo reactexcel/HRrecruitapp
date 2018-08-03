@@ -3,19 +3,19 @@ import { COLOR } from '../styles/color';
 export const pageDeatils = [
     {
         image: require('../images/job.png'),
-        name:'View Job',
+        name:'JOB OPENINGS',
         icon:'ios-arrow-forward-outline',
         route:'JobList'
     },
     {
         image: require('../images/company.png'),
-        name: 'Excellence Technologies',
+        name: 'EXCELLENCE TECHNOLOGIES',
         icon: 'ios-arrow-forward-outline',
         route: 'AboutUs'
     },
     {
         image: require('../images/interview.png'),
-        name: 'Start InterView',
+        name: 'START INTERVIEW',
         icon: 'ios-arrow-forward-outline',
         route: 'InterviewLogin'
     }

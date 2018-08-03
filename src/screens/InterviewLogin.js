@@ -140,7 +140,6 @@ class InterviewLogin extends Component {
     );
 
     //Alert for round information
-    const fb_id = await getItem("fb_id");
 
     if (fb_id !== undefined) {
       await this.props.getCandidateRoundDetails(fb_id.fb_id);

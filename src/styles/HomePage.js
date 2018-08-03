@@ -6,55 +6,46 @@ var { height, width } = Dimensions.get('window');
 export default StyleSheet.create({
     container : {
         flex:1,
-        backgroundColor:'white'
-    },
-    bckgndImage: {
-        marginTop:-35,
-        height: height * 0.42, 
-        width : width 
-    },
-    avatar:{
-        padding:10,
-        position: 'absolute',
-        top: 130,
-        left: (width / 2) - 60,
-        alignItems: 'center',
-        width: 120,
-        height: 120,
-        borderRadius: 100,
-        backgroundColor:"white",
-        elevation:4
-    },
-    avatarImage:{
-        alignSelf: 'center',
-        height: 100,
-        width : 100 ,
-        borderRadius:75,
+        backgroundColor:'#131931'
     },
     btnContainer:{
-        marginTop:height*0.055,
-        marginBottom:8,
+        flexDirection:'row',
+        justifyContent:"center",
+        marginTop:height*0.20,
+        marginBottom:15,
         alignItems:'center'
+    },
+    subContainer : {
+        marginTop: height * 0.02,
     },
     btnStyle:{
         marginTop:8,
-        marginLeft:0,
+        marginLeft:0, 
         alignSelf:'center',
         paddingLeft:28,
         paddingRight:28,
         opacity:0.9,
         backgroundColor:'#254B70'
     },
+    btn: {
+        height: 36,
+        backgroundColor: "#f69f3c", 
+        paddingLeft: 14,
+        paddingRight: 14
+    },
     listContainer: {
+        borderWidth:1,
+        height: height*0.1567,
         paddingTop:10,
-        paddingBottom:8,
         borderRadius: 3,
         borderBottomWidth: 0,
         elevation: 2,
         marginLeft: 10,
         marginRight: 10,
         marginTop: 8,
-        marginBottom:8
+        marginTop:25,
+        borderRadius:10,
+        backgroundColor:"#fefefe"
      },
     logoCnt :{
         top:0,
@@ -67,5 +58,32 @@ export default StyleSheet.create({
         height: Platform.OS === "ios" ? 170 : 135,
         justifyContent: "center",
         alignItems: "center"
+    },
+    listItem: { 
+        height:height*0.16,
+        borderWidth: 1, 
+        marginLeft: 0,
+        marginBottom:0 
+    },
+    textView :{
+        flexDirection: 'column', 
+        width: width * 0.68, 
+        justifyContent: 'center', 
+        marginTop: -34,
+        
+    },
+    text: { 
+        color: "#f71735", 
+        alignSelf: 'center', 
+        fontWeight: "600" 
+    },
+    image: { 
+        width: 90, 
+        height: 90
+     },
+    listSubContainer: { 
+        flex: 0.87, 
+        flexDirection: 'row', 
+        marginBottom: -36 
     }
 });
