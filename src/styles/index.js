@@ -2,7 +2,6 @@ import { StyleSheet, Platform, Dimensions } from "react-native";
 var { height, width } = Dimensions.get("window");
 
 import { COLOR } from "./color";
-var { height, width } = Dimensions.get("window");
 
 export default StyleSheet.create({
   container: {
@@ -35,11 +34,11 @@ export default StyleSheet.create({
   },
   inputText: {
     color: "#7d7885",
-    fontSize: Platform.OS === "ios" ? 17 : 15,
+    fontSize: Platform.OS === "ios" ? 19 : 17,
     fontWeight: "400",
     letterSpacing: 1,
   },
-  inputTextView: {
+  itemView: {
     paddingVertical: 10,
     borderBottomWidth: 0
   },

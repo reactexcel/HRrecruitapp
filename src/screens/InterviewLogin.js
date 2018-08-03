@@ -6,7 +6,8 @@ import {
   View,
   AsyncStorage,
   Platform,
-  PermissionsAndroid
+  PermissionsAndroid,
+  StatusBar
 } from "react-native";
 import {
   Container,
@@ -19,16 +20,15 @@ import {
   Input,
   Spinner,
   Toast,
-  Button
+  Button,
+  Header
 } from "native-base";
-import { Col, Row, Grid } from "react-native-easy-grid";
-import CustomButton from "../components/CustomButton";
-import HorizontalLine from "../components/HorizontalLine";
+import { connect } from "react-redux";
 import Logo from "../components/Logo";
 import styles from "../styles";
+import _styles from "../styles/InterviewLogin";
 import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
-import { connect } from "react-redux";
 import {
   signUp,
   connectionState,
@@ -41,6 +41,7 @@ import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
 import LinearGradient from "react-native-linear-gradient";
+
 class InterviewLogin extends Component {
   constructor() {
     super();
@@ -49,7 +50,11 @@ class InterviewLogin extends Component {
     };
   }
   static navigationOptions = {
-    header: null
+    headerStyle: {
+      backgroundColor: COLOR.LGONE,
+      elevation: 0
+    },
+    headerTintColor: COLOR.PINK
   };
 
   static getDerivedStateFromProps(nextProps) {
@@ -67,6 +72,7 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
+    StatusBar.setBackgroundColor(COLOR.LGONE);
     const ans = await getItem("solution");
     const email = await getItem("email");
     const fb_id = await getItem("fb_id");
@@ -268,51 +274,42 @@ class InterviewLogin extends Component {
     const appliedText = navigation.getParam("appliedText");
     return (
       <LinearGradient
-        colors={["#2a365f", "#131931"]}
-        style={{ flex: 1, justifyContent: "flex-start" }}
+        colors={[COLOR.LGONE, COLOR.LGTWO]}
+        style={_styles.lgView}
       >
         <View style={styles.logoView}>
           <Logo />
         </View>
-        <View style={{ marginHorizontal: 20 }}>
-          <Item style={styles.inputTextView}>
+        <View style={_styles.textInputView}>
+          <Item style={styles.itemView}>
             <Input
               style={styles.inputText}
               placeholder="Email"
-              placeholderTextColor={"#7d7885"}
+              placeholderTextColor={COLOR.DARKGREY}
               name="email"
               value={this.state.email}
               keyboardType="email-address"
-              selectionColor={"#7d7885"}
-              underlineColorAndroid={"#566cc4"}
+              selectionColor={COLOR.DARKGREY}
+              underlineColorAndroid={COLOR.PURPLE}
               onChangeText={text => this.setState({ email: text })}
               autoCapitalize="none"
             />
           </Item>
         </View>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            justifyContent: "center"
-          }}
-        >
+        <View style={_styles.btnView}>
           {registering ? (
-            <Spinner color="#f69f3c" />
+            <Spinner color={COLOR.MUSTARD} />
           ) : (
             <Button
               onPress={this.handleSubmit}
               rounded
-              style={{ backgroundColor: "#f69f3c" }}
+              style={_styles.btnStyle}
             >
-              <Text>Submit</Text>
+              <Text style={_styles.textStyle}>Submit</Text>
             </Button>
           )}
         </View>
-        {/* </Grid> */}
       </LinearGradient>
-      //   </Content>
-      // </Container>
     );
   }
 }

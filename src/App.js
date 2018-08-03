@@ -23,7 +23,7 @@ export default class App extends Component {
     return (
       <Root>
         <Rootstack />
-        <AppFooter />
+        {/* <AppFooter /> */}
       </Root>
     );
   }

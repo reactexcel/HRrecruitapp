@@ -11,7 +11,7 @@ export const pageDeatils = [
         image: require('../images/company.png'),
         name: 'Excellence Technologies',
         icon: 'ios-arrow-forward-outline',
-        route: 'AboutUs'
+        route: 'Profile'
     },
     {
         image: require('../images/interview.png'),
