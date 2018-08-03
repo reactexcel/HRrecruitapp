@@ -5,7 +5,7 @@ import {
   Image,
   Linking,
   Platform,
-  TouchableOpacity,
+  TouchableHighlight,
   BackHandler,
   Dimensions
 } from "react-native";
@@ -116,7 +116,13 @@ class HomePage extends Component {
     let userNames = userName ? userName : "";
     let renderCustomView = pageDeatils.map((data, k) => {
       return (
-        <View key={k} style={[styles.listContainer, k == 2 ? { backgroundColor:'#2a365f'}:{}]}>
+        <TouchableHighlight 
+          key={k}
+          onPress={() => {
+            this.handleViewClick(data.route);
+          }}
+        >
+        <View  style={[styles.listContainer, k == 2 ? { backgroundColor:'#2a365f'}:{}]}>
           <View style={styles.listSubContainer}>
             <View>
               <Image
@@ -130,6 +136,7 @@ class HomePage extends Component {
             </View>
           </View>
         </View>
+        </TouchableHighlight>
       );
     });
     return (
