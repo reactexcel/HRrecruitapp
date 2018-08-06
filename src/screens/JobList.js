@@ -19,6 +19,7 @@ import HorizontalLine from "../components/HorizontalLine";
 import Share, { ShareSheet, Button } from 'react-native-share';
 import { SHAREURL } from '../config/dev';
 import LinearGradient from "react-native-linear-gradient";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 class JobList extends Component {
   constructor(props) {
@@ -76,20 +77,31 @@ class JobList extends Component {
   }
   renderCardItem = ({ item }) => (
     <Card padder>
-      <CardItem style={{ justifyContent: 'space-between'}} >
+      <CardItem style={{ justifyContent: 'space-between',padding:0}} >
         <View style={{ flexDirection: 'column' }}>
-          <Text style={{fontSize:13}}>{item.subject}</Text>
-          <View style={{ flexDirection: 'row' }}>
-            <Text>0-1 years</Text>
-            <Text>Noida</Text>
-            <Text>1,25,000 - 2,00,000 PA</Text>
+          <Text style={{ fontSize: 14, color: COLOR.TURQUOISE}}>{item.subject}</Text>
+          <View style={{ flexDirection: 'row', marginTop:10 }}>
+            <View style={{flexDirection:'row'}}>
+              <FontAwesome name="briefcase" color={COLOR.Red} style={{marginTop:1}} />
+              <Text style={{ fontSize: 10, marginLeft:2 ,marginRight:10 }}>0-1 years</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <FontAwesome name="map-pin" color={COLOR.Red} style={{ marginTop: 1 }} />
+              <Text style={{ fontSize: 10, marginLeft: 2, marginRight: 10}}>Noida</Text>
+            </View>
+            <View style={{ flexDirection: 'row' }}>
+              <FontAwesome name="map-pin" color={COLOR.Red} style={{ marginTop: 1 }} />
+              <Text style={{ fontSize: 10, marginLeft: 2, marginRight: 10}}>1,25,000 - 2,00,000 PA</Text>
+            </View>
           </View>
         </View>
-          <Button
+        <CustomButton
             onPress={() => { console.log() }}
-            style={{ marginRight: -10 }} transparent primary>
-            <Text>APPLIED</Text>
-          </Button>
+            type="rounded"
+            btnStyle={{paddingTop:0,paddingBottom:0,paddingRight:1,paddingLeft:1, width:80,height:27, marginRight:10,backgroundColor:COLOR.YELLOW,justifyContent:'center',}}
+            btnTextStyle={{fontSize:9,alignSelf:'center',textAlign:'center'}}
+            text="APPLY">
+        </CustomButton>
       </CardItem>
       <HorizontalLine />
       <CardItem>
@@ -101,9 +113,12 @@ class JobList extends Component {
       </CardItem>
       <CustomButton
         btnStyle={styles.buttonPadder}
-        text="Apply for Job"
+        
+        type="rounded"
+        text="View Description"
         onPress={() => { this.onApplyJob(item) }}
       />
+
     </Card>
   )
   render() {
@@ -132,7 +147,6 @@ class JobList extends Component {
                 <CardItem style={{ justifyContent: 'space-between' }}>
                   <Text>{appliedJobDetails.job_profile}</Text>
                 </CardItem>
-                <HorizontalLine />
                 <CardItem>
                   <Body>
                     <Text style={[styles.text, { textAlign: 'auto' }]} >

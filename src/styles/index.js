@@ -57,6 +57,7 @@ export default StyleSheet.create({
   },
   buttonPadder:{
     margin:10,
+    backgroundColor: COLOR.LGONE
   },
   descriptionText: {
     width: width * 0.88
