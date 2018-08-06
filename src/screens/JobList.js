@@ -18,6 +18,7 @@ import CustomButton from '../components/CustomButton';
 import HorizontalLine from "../components/HorizontalLine";
 import Share, { ShareSheet, Button } from 'react-native-share';
 import { SHAREURL } from '../config/dev';
+import LinearGradient from "react-native-linear-gradient";
 
 class JobList extends Component {
   constructor(props) {
@@ -75,13 +76,20 @@ class JobList extends Component {
   }
   renderCardItem = ({ item }) => (
     <Card padder>
-      <CardItem style={{ justifyContent: 'space-between' }}>
-        <Text>{item.subject}</Text>
-        <Button
-          onPress={() => { this.onShareClick(item) }}
-          style={{ marginRight: -10 }} transparent primary>
-          <Icon name='share' />
-        </Button>
+      <CardItem style={{ justifyContent: 'space-between'}} >
+        <View style={{ flexDirection: 'column' }}>
+          <Text style={{fontSize:13}}>{item.subject}</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>0-1 years</Text>
+            <Text>Noida</Text>
+            <Text>1,25,000 - 2,00,000 PA</Text>
+          </View>
+        </View>
+          <Button
+            onPress={() => { console.log() }}
+            style={{ marginRight: -10 }} transparent primary>
+            <Text>APPLIED</Text>
+          </Button>
       </CardItem>
       <HorizontalLine />
       <CardItem>
@@ -102,12 +110,22 @@ class JobList extends Component {
     const { joblist, shareOptions, isLoading, appliedJobDetails, userLogin } = this.state;
     return (
       <Container >
-        {!isLoading ? <Content padder>
-          {!isLoading && joblist && joblist.length >= 1 ? <FlatList
-            data={joblist}
-            keyExtractor={(item, index) => item.id.toString()}
-            renderItem={this.renderCardItem}
-          /> : null}
+        {!isLoading ? 
+          <View style={{ flex: 1 }}>
+          <View>
+            
+          </View>
+          {!isLoading && joblist && joblist.length >= 1 ? 
+          <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={{flex:1}} >
+            <Content padder>
+            <FlatList
+              data={joblist}
+              keyExtractor={(item, index) => item.id.toString()}
+              renderItem={this.renderCardItem}
+            />
+          </Content> 
+          </LinearGradient>
+           : null}
           {
             !isLoading && userLogin ? <Content padder>
               <Card>
@@ -125,7 +143,8 @@ class JobList extends Component {
               </Card>
             </Content> : null
           }
-        </Content> :
+          </View>
+        :
           <View
             style={{
               flex: 1,
