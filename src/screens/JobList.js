@@ -149,7 +149,7 @@ class JobList extends Component {
     } = this.state;
     return (
       <Container>
-                  <JobOpeningAboutUs />
+        <JobOpeningAboutUs />
         {!isLoading ? (
           <View style={{ flex: 1 }}>
             <View />
