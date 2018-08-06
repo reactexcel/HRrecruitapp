@@ -1,25 +1,25 @@
 import { COLOR } from "../styles/color";
 
 export const pageDeatils = [
-  {
-    image: require("../images/job.png"),
-    name: "View Job",
-    icon: "ios-arrow-forward-outline",
-    route: "JobList"
-  },
-  {
-    image: require("../images/company.png"),
-    name: "Excellence Technologies",
-    icon: "ios-arrow-forward-outline",
-    route: "Profile"
-  },
-  {
-    image: require("../images/interview.png"),
-    name: "Start InterView",
-    icon: "ios-arrow-forward-outline",
-    route: "InterviewLogin"
-  }
-];
+    {
+        image: require('../images/job.png'),
+        name:'JOB OPENINGS',
+        icon:'ios-arrow-forward-outline',
+        route:'JobList'
+    },
+    {
+        image: require('../images/company.png'),
+        name: 'EXCELLENCE TECHNOLOGIES',
+        icon: 'ios-arrow-forward-outline',
+        route: 'Profile'
+    },
+    {
+        image: require('../images/interview.png'),
+        name: 'START INTERVIEW',
+        icon: 'ios-arrow-forward-outline',
+        route: 'InterviewLogin'
+    }
+]
 export const AppDetails = [
   {
     image: require("../images/new_hello.png"),

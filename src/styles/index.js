@@ -13,11 +13,13 @@ export default StyleSheet.create({
     alignItems: "center"
   },
   blockView: {
-    justifyContent: "center",
-    alignItems: "center",
+    backgroundColor:'transparent',
+    justifyContent:'center',
+    alignItems: 'center',
     width: width * 0.93,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
+    borderWidth:0
   },
   headerText: {
     color: COLOR.Black,
@@ -53,7 +55,10 @@ export default StyleSheet.create({
     fontSize: 10,
     color: "#fff"
   },
-  buttonPadder: {
-    margin: 10
+  buttonPadder:{
+    margin:10,
+  },
+  descriptionText: {
+    width: width * 0.88
   }
 });

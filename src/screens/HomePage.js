@@ -5,8 +5,9 @@ import {
   Image,
   Linking,
   Platform,
-  TouchableOpacity,
-  BackHandler
+  TouchableHighlight,
+  BackHandler,
+  Dimensions
 } from "react-native";
 import {
   Container,
@@ -28,6 +29,9 @@ import Logo from "../components/Logo";
 import { pageDeatils } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
+var { height, width } = Dimensions.get('window');
+import LinearGradient from "react-native-linear-gradient";
+
 
 class HomePage extends Component {
   constructor(props) {
@@ -84,7 +88,7 @@ class HomePage extends Component {
     } else if (data == "InterviewLogin") {
       this.props.navigation.navigate("InterviewLogin");
     } else {
-      this.props.navigation.navigate(data, { title: "Apply for Jobs" });
+      this.props.navigation.navigate(data, { title: "Job Opening" });
     }
   }
   componentDidMount = async () => {
@@ -113,30 +117,31 @@ class HomePage extends Component {
     let userNames = userName ? userName : "";
     let renderCustomView = pageDeatils.map((data, k) => {
       return (
-        <View key={k} style={styles.listContainer}>
-          <List>
-            <ListItem
-              onPress={() => {
-                this.handleViewClick(data.route);
-              }}
-              avatar
-            >
-              <Left>
-                <Thumbnail source={data.image} />
-              </Left>
-              <Body style={{ borderBottomWidth: 0 }}>
-                <Text>{data.name}</Text>
-              </Body>
-              <Right style={{ borderBottomWidth: 0, marginTop: 7 }}>
-                <Icon active name={data.icon} />
-              </Right>
-            </ListItem>
-          </List>
+        <TouchableHighlight 
+          key={k}
+          onPress={() => {
+            this.handleViewClick(data.route);
+          }}
+        >
+        <View  style={[styles.listContainer, k == 2 ? { backgroundColor:'#2a365f'}:{}]}>
+          <View style={styles.listSubContainer}>
+            <View>
+              <Image
+                resizeMode="contain"
+                style={[styles.image,k==2 ? {marginLeft:-15 }:{}]}
+                source={data.image}
+              />            
+            </View>
+            <View style={styles.textView}>
+                <Text style={[styles.text, k == 2 ? { color: COLOR.WHITE }:{}]}>{data.name}</Text>
+            </View>
+          </View>
         </View>
+        </TouchableHighlight>
       );
     });
     return (
-      <Container style={styles.container}>
+      <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={styles.container}>
         {linkOpening ? (
           <View
             style={{
@@ -148,27 +153,25 @@ class HomePage extends Component {
             <Spinner color={COLOR.Spinner} />
           </View>
         ) : (
-          <View>
-            <Image
-              resizeMode="contain"
-              style={styles.bckgndImage}
-              source={require("../images/navbg.png")}
-            />
+          <View style={styles.subContainer}>
             <View style={styles.logoCnt}>
               <View style={styles.logoView}>
                 <Logo />
               </View>
             </View>
-            <View style={styles.avatar}>
-              <Image style={styles.avatarImage} source={profilepic} />
-            </View>
             <View style={styles.btnContainer}>
-              <Text>{userNames}</Text>
+                <CustomButton
+                  onPress={()=>{console.log()}}
+                  btnStyle={styles.btn}
+                  btnTextStyle={{ fontSize: 14, fontWeight: "100", color:'black'}}
+                  text={"JOIN NOW"}
+                  type={"rounded"}
+                />
             </View>
             {renderCustomView}
           </View>
         )}
-      </Container>
+      </LinearGradient>
     );
   }
 }

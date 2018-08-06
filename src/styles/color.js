@@ -18,5 +18,7 @@ export const COLOR = {
   TURQUOISE : "#3b9baa",
   //for linear gradient
   LGONE: "#2a365f",
-  LGTWO: "#131931"
+  LGTWO: "#131931",
+  WHITE:"#fefefe",
+  LTONE:"#109aaa"
 };

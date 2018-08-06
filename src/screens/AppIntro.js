@@ -92,7 +92,6 @@ class AppIntro extends Component {
   _onSkip = () => {
     this._linkCheck();
   };
-
   _linkCheck = () => {
     const { deepLink, sharing, fb_id } = this.state;
     if (deepLink) {
@@ -102,7 +101,7 @@ class AppIntro extends Component {
         fb_id: fb_id,
         profile_pic: `https://pikmail.herokuapp.com/${
           data.sender_mail
-        }?size=60`,
+          }?size=60`,
         name: data.from,
         email: data.sender_mail
       });
@@ -251,7 +250,6 @@ class AppIntro extends Component {
     );
   }
 }
-
 const mapStateToProps = state => ({
   appliedJob: state.appliedJob,
   interviewSignUp: state.interviewSignUp
