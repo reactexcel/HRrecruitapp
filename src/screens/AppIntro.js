@@ -114,6 +114,20 @@ class AppIntro extends Component {
   };
   _renderItem = ({ item, index }) => {
     let iconName = index == 3 ? "checkmark" : "arrow-forward";
+    let imgMargin;
+    switch (index) {
+      case 0:
+        imgMargin = -13;
+        break;
+      case 2:
+        imgMargin = -32;
+        break;
+      default:
+        imgMargin = -10;
+        break;
+    }
+    let font_size = index === 0 || index === 3 ? 16 : 25;
+
     return (
       <Grid>
         <Col size={9} style={[styles.container]}>
@@ -130,18 +144,41 @@ class AppIntro extends Component {
                 width: "85%",
                 flex: index === 0 ? 0.85 : 0.7,
                 borderRadius: 10,
-                marginTop: 0
+                marginTop: 0,
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center"
               }}
             >
               <Image
                 resizeMode="contain"
-                style={styles.images}
+                style={[
+                  index === 0
+                    ? {
+                        height: 110,
+                        width: 140,
+                        position: "absolute",
+                        top: "20%"
+                      }
+                    : styles.images,
+                  {
+                    marginLeft: imgMargin
+                  }
+                ]}
                 source={item.image}
               />
-              <View style={styles.margin}>
+              <View
+                style={[
+                  { marginLeft: index === 0 ? "20%" : 0 },
+                  index === 1 ? { flexDirection: "row" } : {},
+                  index === 3
+                    ? { position: "relative", top: 25, right: 30 }
+                    : {}
+                ]}
+              >
                 <Text
                   style={{
-                    fontSize: 25,
+                    fontSize: font_size,
                     color: "#263051",
                     fontWeight: "900"
                   }}
@@ -150,7 +187,7 @@ class AppIntro extends Component {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 25,
+                    fontSize: font_size,
                     color: COLOR.MUSTARD,
                     fontWeight: "900"
                   }}
