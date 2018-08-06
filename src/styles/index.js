@@ -1,15 +1,14 @@
 import { StyleSheet, Platform, Dimensions } from "react-native";
-var { height, width } = Dimensions.get('window');
+var { height, width } = Dimensions.get("window");
 
 import { COLOR } from "./color";
-var {height, width} = Dimensions.get('window');
 
 export default StyleSheet.create({
   container: {
     backgroundColor: COLOR.BGCOLOR
   },
   logoView: {
-    height: Platform.OS === "ios" ? 170 : 125,
+    flexBasis: "25%",
     justifyContent: "center",
     alignItems: "center"
   },
@@ -36,12 +35,12 @@ export default StyleSheet.create({
     color: COLOR.DarkGrey
   },
   inputText: {
-    color: "#fefefe",
-    fontSize: Platform.OS === "ios" ? 17 : 15,
+    color: "#7d7885",
+    fontSize: Platform.OS === "ios" ? 19 : 17,
     fontWeight: "400",
-    letterSpacing: 1
+    letterSpacing: 1,
   },
-  inputTextView: {
+  itemView: {
     paddingVertical: 10,
     borderBottomWidth: 0
   },

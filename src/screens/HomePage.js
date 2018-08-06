@@ -166,7 +166,6 @@ class HomePage extends Component {
                   text={"JOIN NOW"}
                   type={"rounded"}
                 />
-              <Text>{userNames}</Text>
             </View>
             {renderCustomView}
           </View>

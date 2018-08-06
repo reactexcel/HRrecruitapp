@@ -35,7 +35,7 @@ export default function(state = initialState, action) {
       return { registering: false, ...action.payload };
     break;
     default:
-      return initialState;
+      return state;
       break;
   }
 }
