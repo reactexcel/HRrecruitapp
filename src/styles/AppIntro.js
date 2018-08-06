@@ -16,7 +16,7 @@ export default StyleSheet.create({
          marginTop: 20 
     },
     text: { 
-        color:'white' 
+        color:'black' 
     },
     bottomContainer: {  
         justifyContent: 'space-between', 

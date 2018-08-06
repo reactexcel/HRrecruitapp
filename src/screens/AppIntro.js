@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
-import { Container, Text, Button, Icon } from "native-base";
+import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
@@ -23,6 +23,7 @@ import { connect } from "react-redux";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
+import CardTrail from "../components/CardTrail";
 
 class AppIntro extends Component {
   constructor(props) {
@@ -118,29 +119,51 @@ class AppIntro extends Component {
         <Col size={9} style={[styles.container]}>
           <LinearGradient
             colors={[COLOR.LGONE, COLOR.LGTWO]}
-            style={[styles.container, { flex: 1 }]}
+            style={[
+              styles.container,
+              { flex: 1, justifyContent: "center", alignItems: "center" }
+            ]}
           >
-            <Image
-              resizeMode="contain"
-              style={styles.images}
-              source={item.image}
-            />
-            <View style={styles.margin}>
-              <Text style={[styles.text, { alignSelf: "center" }]}>
-                {item.headerText}
-              </Text>
-              <Text style={[styles.text, { alignSelf: "center" }]}>
-                {item.rawText}
-                <Text style={[styles.text, { fontWeight: "900" }]}>
+            {index !== 0 ? <CardTrail /> : null}
+            <Card
+              style={{
+                width: "85%",
+                flex: index === 0 ? 0.85 : 0.7,
+                borderRadius: 10,
+                marginTop: 0
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={styles.images}
+                source={item.image}
+              />
+              <View style={styles.margin}>
+                <Text
+                  style={{
+                    fontSize: 25,
+                    color: "#263051",
+                    fontWeight: "900"
+                  }}
+                >
+                  {item.rawText}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 25,
+                    color: COLOR.MUSTARD,
+                    fontWeight: "900"
+                  }}
+                >
                   {item.boldText}
                 </Text>
-              </Text>
-            </View>
+              </View>
+            </Card>
           </LinearGradient>
         </Col>
         <Row style={[styles.bottomContainer, { backgroundColor: COLOR.LGTWO }]}>
           <Text
-            style={styles.text}
+            style={{ color: "white" }}
             onPress={() => {
               this._onSkip();
             }}
