@@ -16,7 +16,7 @@ const CustomButton = props => {
   } else {   
     return (
       <Button onPress={props.onPress} style={btnStyle}  block info>
-      <Text uppercase={false} style={styles.btnText}>
+        <Text uppercase={false} style={[styles.btnText, btnTextStyle]}>
         {text}
       </Text>
     </Button>

@@ -25,9 +25,9 @@ export default StyleSheet.create({
     marginRight:10,
     letterSpacing: 1,
     alignSelf: "center",
-    fontSize: Platform.OS === "ios" ? 16 : 15,
-    color: COLOR.Black,
-    fontWeight: Platform.OS === "ios" ? "700" : "500",
+    fontSize: Platform.OS === "ios" ? 15 : 15,
+    color: '#109aaa',
+    fontWeight: Platform.OS === "ios" ? "500" : "400",
   },
   fileName: {
     width:width*0.70,
@@ -47,11 +47,29 @@ export default StyleSheet.create({
   },
   uploadIcon: { 
     fontSize: 35, 
-    color: COLOR.Spinner 
+    color: "#f69f3c" 
   },
   closeIcon: { 
     color: 'red', 
     fontSize: 30,
     paddingRight:8 
+  },
+  jobTitleBtn: { 
+    paddingLeft: 0, 
+    paddingTop: 0, 
+    paddingBottom: 0, 
+    marginBottom: 10, 
+    marginRight: 10, 
+    backgroundColor: '#f69f3c' 
+  },
+  defaultJobBtn:{
+    paddingLeft: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginBottom: 10,
+    marginRight: 10,
+    backgroundColor: '#131931',
+    borderWidth:3,
+    borderColor:'#19203e'
   }
 });

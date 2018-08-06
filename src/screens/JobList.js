@@ -56,7 +56,7 @@ class JobList extends Component {
 
   onApplyJob = (item) => {
     this.props.navigation.navigate("AddCandidate", {
-      jobDetail: item
+      jobDetail: item, currentJob: this.state.joblist
     });
   }
   onCancel() {

@@ -14,11 +14,13 @@ export default StyleSheet.create({
     alignItems: "center"
   },
   blockView: {
+    backgroundColor:'transparent',
     justifyContent:'center',
     alignItems: 'center',
     width: width * 0.93,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
+    borderWidth:0
   },
   headerText: {
     color: COLOR.Black,
@@ -34,7 +36,7 @@ export default StyleSheet.create({
     color: COLOR.DarkGrey
   },
   inputText: {
-    color: COLOR.Black,
+    color: "#fefefe",
     fontSize: Platform.OS === "ios" ? 17 : 15,
     fontWeight: "400",
     letterSpacing: 1
@@ -56,5 +58,8 @@ export default StyleSheet.create({
   },
   buttonPadder:{
     margin:10,
+  },
+  descriptionText: {
+    width: width * 0.88
   }
 });

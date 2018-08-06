@@ -12,7 +12,9 @@ import {
   Picker,
   Spinner,
   Button,
-  Icon
+  Icon,
+  Label,
+  Form
 } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
@@ -33,6 +35,7 @@ import {
 import RNFetchBlob from "rn-fetch-blob";
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
+var _ = require('lodash');
 
 class AddCandidate extends Component {
   constructor() {
@@ -97,11 +100,13 @@ class AddCandidate extends Component {
   renderField(props) {
     const { input, ...inputProps } = props;
     const {
-      meta: { touched, error }
+      meta: { touched, error, active }
     } = props;
+    const underLineColor = active ? "#f69f3c" :"#566cc4"
     return (
       <Fragment>
-        <Item style={_styles.inputTextView}>
+        <Item stackedLabel style={_styles.inputTextView}>
+          <Label style={{ color: "#109aaa"}}>{props.labelName}</Label>
           <Input
             style={styles.inputText}
             {...inputProps}
@@ -109,13 +114,47 @@ class AddCandidate extends Component {
             onBlur={input.onBlur}
             onFocus={input.onFocus}
             value={input.value}
-            placeholderTextColor={COLOR.Grey}
+            placeholderTextColor={"#fefefe"}
             selectionColor={COLOR.Grey}
-            underlineColorAndroid={COLOR.Grey}
+            underlineColorAndroid={underLineColor}
           />
         </Item>
         <View style={_styles.errorTextView}>
           {touched && error && <Text style={_styles.errorText}>{error}</Text>}
+        </View>
+      </Fragment>
+    );
+  }
+  renderJobField(props) {
+    const { input, ...inputProps, } = props;
+    const {
+      meta: { touched, error, active }
+    } = props;
+    let renderJobTitle = props.params.currentJob.map((title,i)=>{
+      let check;
+      if (title.title == props.params.jobDetail.title){
+        check = true;
+      }
+      return (
+        <CustomButton
+          btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
+          btnTextStyle={check ? { fontSize: 11, color: 'black' } : { fontSize: 11, color:"#fefefe" }}
+          key={i}
+          onPress={()=>{console.log()}}
+          text={title.title}
+          type="rounded"
+        />
+      )
+    })
+    return (
+      <Fragment>
+        <View style={{margin: 6, marginBottom:10}}>
+          <Text numberOfLines={1} style={[_styles.text,{alignSelf:'flex-start'}]}>
+            JOB TITLE
+          </Text>
+        </View>
+        <View style={{ flexDirection: 'row', flexWrap:'wrap', marginLeft:15}}>
+          {renderJobTitle}
         </View>
       </Fragment>
     );
@@ -171,10 +210,11 @@ class AddCandidate extends Component {
       );
     });
     return (
-      <View>
+      <Fragment>
+      <View style={{marginLeft:8}}>
         <View style={_styles.uploadSection}>
           <Text numberOfLines={1} style={_styles.text}>
-            Upload Resume
+            Resume
           </Text>
           <Button transparent onPress={onPress} style={{ marginTop: 5 }}>
             <Icon style={_styles.uploadIcon} name="cloud-upload" />
@@ -189,6 +229,7 @@ class AddCandidate extends Component {
           )}
         </View>
       </View>
+      </Fragment>
     );
   }
 
@@ -272,7 +313,6 @@ class AddCandidate extends Component {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
     const { converting, resumeData, resumeError } = this.state;
-    console.log(this.state.registerToken, "sdhjugh");
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -280,25 +320,33 @@ class AddCandidate extends Component {
             <Row style={styles.logoView}>
               <Logo />
             </Row>
+            <Row style={{justifyContent:'center',marginTop:-10}}>
+              <View style={styles.descriptionText}>
+                <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "600", color: '#fff'}}>Let's get acquainted</Text>
+                <Text style={{ textAlign: 'center', fontWeight: "500", color:'#fff',fontSize:9.67}}>
+                    Let’s get acquainted Excellence Technologies gathers data to ensure 
+                    the accuracy of the information we are providing for you as well as 
+                    the security of business for employers and workers.
+                </Text>
+              </View>
+            </Row>
             <Row>
-              <Card style={styles.blockView}>
-                <CardItem>
-                  <Text style={styles.headerText}>Register Candidate</Text>
-                </CardItem>
-                <HorizontalLine />
+              <View style={styles.blockView}>
+                <Form>
+                  
                 <Field
                   name="sender_mail"
-                  placeholder="Email"
+                  labelName="EMAIL"
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
                 />
                 <Field
                   name="from"
-                  placeholder="Full Name"
+                  labelName="NAME"
                   component={this.renderField}
                 />
-                <Field
+                {/* <Field
                   name="gender"
                   component={this.renderPicker}
                   mode="dropdown"
@@ -306,18 +354,25 @@ class AddCandidate extends Component {
                   <Item label="Select gender" value="" />
                   <Item label="Female" value="female" />
                   <Item label="Male" value="male" />
-                </Field>
+                </Field> */}
 
                 <Field
                   name="source"
-                  placeholder="Source"
+                  labelName="SOURCE"
                   component={this.renderField}
                 />
                 <Field
                   name="mobile_no"
-                  placeholder="Mobile number"
+                  labelName="PHONE"
                   component={this.renderField}
                   keyboardType="numeric"
+                />
+                <Field
+                  name="mobile_no"
+                  labelName="JOB TITLE"
+                  component={this.renderJobField}
+                  keyboardType="numeric"
+                  params={this.props.navigation.state.params}
                 />
                 <Field
                   name="resume_file"
@@ -332,19 +387,21 @@ class AddCandidate extends Component {
                   input={resumeData}
                   resumeError={resumeError}
                 />
-                <CardItem />
-                {adding || converting ? (
-                  <Spinner color={COLOR.Spinner} />
-                ) : (
-                  <CustomButton
-                    text="Add"
-                    onPress={handleSubmit(this.onSubmit)}
-                  />
-                )}
-              </Card>
+                </Form>
+              </View>
             </Row>
           </Grid>
         </Content>
+        {adding || converting ? (
+          <Spinner color={COLOR.Spinner} />
+        ) : (
+            <CustomButton
+              btnStyle={{ backgroundColor:'#f69f3c'}}
+              btnTextStyle={{color:'black'}}
+              text="JOIN NOW"
+              onPress={handleSubmit(this.onSubmit)}
+            />
+          )}
       </Container>
     );
   }

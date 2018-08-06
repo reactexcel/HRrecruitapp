@@ -1,5 +1,5 @@
 export const COLOR = {
-    BGCOLOR : "#2e3e4d",
+    BGCOLOR: "#131931",
     Black : "#333333",
     Red : "#ed1040",
     DarkGrey: "#818181",
