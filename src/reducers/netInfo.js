@@ -13,7 +13,7 @@ import {
             isConnected: action.payload
         };
       default:
-        return initialState;
+        return state;
         break;
     }
   }

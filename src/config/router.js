@@ -1,3 +1,5 @@
+import React from "react";
+import { Easing, Animated } from "react-native";
 import { createStackNavigator } from "react-navigation";
 import HomePage from "../screens/HomePage";
 import InterviewLogin from "../screens/InterviewLogin";
@@ -7,17 +9,43 @@ import AddCandidate from "../screens/AddCandidate";
 import Instructions from "../screens/Instructions";
 import TestPage from "../screens/TestPage";
 import SubmitTest from "../screens/SubmitTest";
-import JobList from '../screens/JobList';
-import AppIntro from '../screens/AppIntro';
+import JobList from "../screens/JobList";
+import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
+import Profile from "../screens/Profile";
 
+const transitionConfig = () => {
+  return {
+    transitionSpec: {
+      duration: 700,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+      useNativeDriver: true
+    },
+    screenInterpolator: sceneProps => {
+      const { position, layout, scene } = sceneProps;
+
+      const thisSceneIndex = scene.index;
+      const width = layout.initWidth;
+
+      const translateX = position.interpolate({
+        inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
+        outputRange: [width, 0, 0]
+      });
+
+      const slideFromRight = { transform: [{ translateX }] };
+
+      return slideFromRight;
+    }
+  };
+};
 
 const Rootstack = createStackNavigator(
   {
-    AppIntro:{
+    AppIntro: {
       screen: AppIntro
     },
-    HomePage:{
+    HomePage: {
       screen: HomePage
     },
     InterviewLogin: {
@@ -44,12 +72,16 @@ const Rootstack = createStackNavigator(
     JobList: {
       screen: JobList
     },
-    AboutUs : {
-      screen : AboutUs
+    AboutUs: {
+      screen: AboutUs
+    },
+    Profile: {
+      screen: Profile
     }
   },
   {
-    initialScreen: "AppIntro"
+    initialScreen: "AppIntro",
+    transitionConfig
   }
 );
 

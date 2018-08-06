@@ -25,7 +25,7 @@ export default function(state = initialState, action) {
         success: false
       };
     default:
-      return initialState;
+      return state;
       break;
   }
 }
