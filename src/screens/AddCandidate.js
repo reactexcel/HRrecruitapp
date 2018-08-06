@@ -36,6 +36,8 @@ import RNFetchBlob from "rn-fetch-blob";
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
 var _ = require('lodash');
+import LinearGradient from "react-native-linear-gradient";
+
 
 class AddCandidate extends Component {
   constructor() {
@@ -102,11 +104,11 @@ class AddCandidate extends Component {
     const {
       meta: { touched, error, active }
     } = props;
-    const underLineColor = active ? "#f69f3c" :"#566cc4"
+    const underLineColor = active ? COLOR.MUSTARD : COLOR.PURPLE
     return (
       <Fragment>
         <Item stackedLabel style={_styles.inputTextView}>
-          <Label style={{ color: "#109aaa"}}>{props.labelName}</Label>
+          <Label style={{ color: COLOR.LTONE}}>{props.labelName}</Label>
           <Input
             style={styles.inputText}
             {...inputProps}
@@ -114,7 +116,7 @@ class AddCandidate extends Component {
             onBlur={input.onBlur}
             onFocus={input.onFocus}
             value={input.value}
-            placeholderTextColor={"#fefefe"}
+            placeholderTextColor={COLOR.WHITE}
             selectionColor={COLOR.Grey}
             underlineColorAndroid={underLineColor}
           />
@@ -138,7 +140,7 @@ class AddCandidate extends Component {
       return (
         <CustomButton
           btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
-          btnTextStyle={check ? { fontSize: 11, color: 'black' } : { fontSize: 11, color:"#fefefe" }}
+          btnTextStyle={check ? { fontSize: 11, color: 'black' } : { fontSize: 11, color:COLOR.White }}
           key={i}
           onPress={()=>{console.log()}}
           text={title.title}
@@ -315,15 +317,16 @@ class AddCandidate extends Component {
     const { converting, resumeData, resumeError } = this.state;
     return (
       <Container style={styles.container}>
-        <Content padder>
+        <LinearGradient style={{flex:1}} colors={[COLOR.LGONE, COLOR.LGTWO]} >
+          <Content padder>
           <Grid>
             <Row style={styles.logoView}>
               <Logo />
             </Row>
             <Row style={{justifyContent:'center',marginTop:-10}}>
               <View style={styles.descriptionText}>
-                <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "600", color: '#fff'}}>Let's get acquainted</Text>
-                <Text style={{ textAlign: 'center', fontWeight: "500", color:'#fff',fontSize:9.67}}>
+                <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "600", color: COLOR.WHITE}}>Let's get acquainted</Text>
+                  <Text style={{ textAlign: 'center', fontWeight: "500", color: COLOR.WHITE,fontSize:9.67}}>
                     Let’s get acquainted Excellence Technologies gathers data to ensure 
                     the accuracy of the information we are providing for you as well as 
                     the security of business for employers and workers.
@@ -391,12 +394,13 @@ class AddCandidate extends Component {
               </View>
             </Row>
           </Grid>
-        </Content>
+          </Content>
+        </LinearGradient>
         {adding || converting ? (
           <Spinner color={COLOR.Spinner} />
         ) : (
             <CustomButton
-              btnStyle={{ backgroundColor:'#f69f3c'}}
+              btnStyle={{ backgroundColor: COLOR.MUSTARD}}
               btnTextStyle={{color:'black'}}
               text="JOIN NOW"
               onPress={handleSubmit(this.onSubmit)}

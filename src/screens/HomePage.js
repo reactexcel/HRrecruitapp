@@ -30,6 +30,7 @@ import { pageDeatils } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 var { height, width } = Dimensions.get('window');
+import LinearGradient from "react-native-linear-gradient";
 
 
 class HomePage extends Component {
@@ -132,7 +133,7 @@ class HomePage extends Component {
               />            
             </View>
             <View style={styles.textView}>
-              <Text style={[styles.text, k == 2 ? { color:'#fefefe'}:{}]}>{data.name}</Text>
+                <Text style={[styles.text, k == 2 ? { color: COLOR.WHITE }:{}]}>{data.name}</Text>
             </View>
           </View>
         </View>
@@ -140,7 +141,7 @@ class HomePage extends Component {
       );
     });
     return (
-      <Container style={styles.container}>
+      <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={styles.container}>
         {linkOpening ? (
           <View
             style={{
@@ -170,7 +171,7 @@ class HomePage extends Component {
             {renderCustomView}
           </View>
         )}
-      </Container>
+      </LinearGradient>
     );
   }
 }
