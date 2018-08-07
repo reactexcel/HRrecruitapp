@@ -6,7 +6,13 @@ const ProfileBlock = props => {
   return (
     <Fragment>
       <View style={{ paddingVertical: 15, paddingLeft: 15 }}>
-        <Text style={{ color: COLOR.TURQUOISE, fontSize: 18 }}>
+        <Text
+          style={{
+            color: COLOR.TURQUOISE,
+            fontSize: 18,
+            fontFamily: "Montserrat-Medium"
+          }}
+        >
           {props.title}
         </Text>
         {props.children}

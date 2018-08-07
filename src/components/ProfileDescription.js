@@ -69,12 +69,15 @@ const ProfileDescription = props => {
               type="FontAwesome"
               style={{ color: COLOR.PINK }}
             />
-            <Text>Location</Text>
+            <Text uppercase={false} style={styles.btnText}>
+              Location
+            </Text>
           </Button>
           <Button iconLeft rounded style={styles.aboutBtn}>
             <Icon name="volume-up" style={{ color: COLOR.PINK }} />
-
-            <Text>About Us</Text>
+            <Text uppercase={false} style={styles.btnText}>
+              About Us
+            </Text>
           </Button>
         </View>
       </ProfileBlock>
@@ -89,7 +92,7 @@ const styles = StyleSheet.create({
   textStyle: {
     color: "white",
     marginTop: 6,
-    fontFamily : "Montserrat-Regular"
+    fontFamily: "Montserrat-Regular"
   },
   btnView: {
     flex: 1,
@@ -99,6 +102,9 @@ const styles = StyleSheet.create({
   aboutBtn: {
     backgroundColor: "transparent",
     marginHorizontal: 10
+  },
+  btnText: {
+    fontFamily: "Montserrat-SemiBold"
   }
 });
 export default ProfileDescription;

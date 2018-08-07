@@ -18,7 +18,8 @@ export default class Profile extends Component {
       color: "black",
       textAlign: "center",
       alignSelf: "center",
-      flex: 1
+      flex: 1,
+      fontFamily: "Montserrat-SemiBold"
     },
     headerTintColor: COLOR.PINK,
     headerRight: (

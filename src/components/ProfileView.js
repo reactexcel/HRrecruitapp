@@ -41,10 +41,11 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 20,
-    letterSpacing: 1
+    fontFamily: "Montserrat-Medium"
   },
   number: {
-    color: COLOR.TURQUOISE
+    color: COLOR.TURQUOISE,
+    fontFamily: "Montserrat-Medium"
   }
 });
 export default ProfileView;

@@ -125,7 +125,7 @@ class AppIntro extends Component {
         imgMargin = -10;
         break;
     }
-    let font_size = index === 0 || index === 3 ? 16 : 25;
+    let font_size = index === 0 || index === 3 ? 15 : 24;
 
     return (
       <Grid>
@@ -169,7 +169,7 @@ class AppIntro extends Component {
               <View
                 style={[
                   { marginLeft: index === 0 ? "20%" : 0 },
-                  index === 1 ? { flexDirection: "row" } : {},
+                  index === 1 ? { flexDirection: "row", marginLeft: -15 } : {},
                   index === 3
                     ? { position: "relative", top: 25, right: 30 }
                     : {}
@@ -179,7 +179,7 @@ class AppIntro extends Component {
                   style={{
                     fontSize: font_size,
                     color: "#263051",
-                    fontWeight: "900"
+                    fontFamily: "Montserrat-Bold"
                   }}
                 >
                   {item.rawText}
@@ -188,7 +188,7 @@ class AppIntro extends Component {
                   style={{
                     fontSize: font_size,
                     color: COLOR.MUSTARD,
-                    fontWeight: "900"
+                    fontFamily: "Montserrat-Bold"
                   }}
                 >
                   {item.boldText}
@@ -199,7 +199,7 @@ class AppIntro extends Component {
         </Col>
         <Row style={[styles.bottomContainer, { backgroundColor: COLOR.LGTWO }]}>
           <Text
-            style={{ color: "white" }}
+            style={{ color: "white", fontFamily: "Montserrat-Regular" }}
             onPress={() => {
               this._onSkip();
             }}
