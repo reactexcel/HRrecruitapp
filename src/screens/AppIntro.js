@@ -243,7 +243,7 @@ class AppIntro extends Component {
           }}
           data={AppDetails}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => item.bkGrndClr}
+          keyExtractor={(item, index) => item.rawText}
         />
       </Container>
     );
