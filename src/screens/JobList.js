@@ -142,7 +142,7 @@ class JobList extends Component {
         </View>
         <CustomButton
           onPress={() => {
-            console.log();
+            this.onApplyJob(item);
           }}
           type="rounded"
           btnStyle={styles.applyBtn}
@@ -160,9 +160,9 @@ class JobList extends Component {
       <CustomButton
         btnStyle={styles.buttonPadder}
         type="rounded"
-        text="View Description"
+        text="Full Description"
         onPress={() => {
-          this.onApplyJob(item);
+          console.log()
         }}
       />
     </Card>

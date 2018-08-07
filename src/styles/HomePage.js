@@ -73,7 +73,7 @@ export default StyleSheet.create({
         
     },
     text: { 
-        color: "#f71735", 
+        color: COLOR.LGONE, 
         alignSelf: 'center', 
         fontWeight: "600" 
     },
@@ -85,5 +85,10 @@ export default StyleSheet.create({
         flex: 0.87, 
         flexDirection: 'row', 
         marginBottom: -36 
+    },
+    joinBtnStyles:{ 
+        fontSize: 14, 
+        fontWeight: "100", 
+        color: COLOR.LGONE 
     }
 });

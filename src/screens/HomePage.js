@@ -171,7 +171,7 @@ class HomePage extends Component {
                 <CustomButton
                   onPress={()=>{console.log()}}
                   btnStyle={styles.btn}
-                  btnTextStyle={{ fontSize: 14, fontWeight: "100", color:'black'}}
+                  btnTextStyle={styles.joinBtnStyles}
                   text={"JOIN NOW"}
                   type={"rounded"}
                 />

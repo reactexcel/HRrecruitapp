@@ -51,7 +51,11 @@ class AddCandidate extends Component {
   }
 
   static navigationOptions = {
-    header: null
+    headerStyle: {
+      backgroundColor: COLOR.LGONE,
+      elevation: 0
+    },
+    headerTintColor: COLOR.PINK
   };
   static getDerivedStateFromProps(nextProps) {
     const { msg } = nextProps.candidate;
@@ -140,7 +144,7 @@ class AddCandidate extends Component {
       return (
         <CustomButton
           btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
-          btnTextStyle={check ? { fontSize: 11, color: 'black' } : { fontSize: 11, color:COLOR.White }}
+          btnTextStyle={check ? { fontSize: 11, color: 'black' } : { fontSize: 11, color:COLOR.WHITE }}
           key={i}
           onPress={()=>{console.log()}}
           text={title.title}
@@ -320,10 +324,10 @@ class AddCandidate extends Component {
         <LinearGradient style={{flex:1}} colors={[COLOR.LGONE, COLOR.LGTWO]} >
           <Content padder>
           <Grid>
-            <Row style={styles.logoView}>
+            <Row style={[styles.logoView,{marginTop:-40}]}>
               <Logo />
             </Row>
-            <Row style={{justifyContent:'center',marginTop:-10}}>
+            <Row style={{justifyContent:'center',marginTop:-30, marginBottom:25}}>
               <View style={styles.descriptionText}>
                 <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "600", color: COLOR.WHITE}}>Let's get acquainted</Text>
                   <Text style={{ textAlign: 'center', fontWeight: "500", color: COLOR.WHITE,fontSize:9.67}}>
@@ -336,7 +340,6 @@ class AddCandidate extends Component {
             <Row>
               <View style={styles.blockView}>
                 <Form>
-                  
                 <Field
                   name="sender_mail"
                   labelName="EMAIL"

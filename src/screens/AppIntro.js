@@ -237,7 +237,6 @@ class AppIntro extends Component {
         <FlatList
           pagingEnabled
           horizontal
-          scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           ref={ref => {
             this.flatListRef = ref;

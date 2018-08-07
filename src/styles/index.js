@@ -63,7 +63,8 @@ export default StyleSheet.create({
     marginBottom:15
   },
   descriptionText: {
-    width: width * 0.88
+    width: width * 0.88,
+    marginBottom:-20
   },
   cardItem: { 
     justifyContent: "space-between", 
