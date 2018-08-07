@@ -102,39 +102,39 @@ class JobList extends Component {
   };
   renderCardItem = ({ item }) => (
     <Card padder>
-      <CardItem style={{ justifyContent: "space-between", padding: 0 }}>
-        <View style={{ flexDirection: "column" }}>
-          <Text style={{ fontSize: 14, color: COLOR.TURQUOISE }}>
+      <CardItem style={styles.cardItem}>
+        <View style={styles.viewDesign}>
+          <Text style={styles.viewText}>
             {item.subject}
           </Text>
-          <View style={{ flexDirection: "row", marginTop: 10 }}>
-            <View style={{ flexDirection: "row" }}>
+          <View style={styles.iconView}>
+            <View style={styles.viewRow}>
               <FontAwesome
                 name="briefcase"
                 color={COLOR.Red}
-                style={{ marginTop: 1 }}
+                style={styles.viewIcon}
               />
-              <Text style={{ fontSize: 10, marginLeft: 2, marginRight: 10 }}>
-                0-1 years
+              <Text style={styles.rowText}>
+                0 - 1 years
               </Text>
             </View>
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.viewRow}>
               <FontAwesome
                 name="map-pin"
                 color={COLOR.Red}
-                style={{ marginTop: 1 }}
+                style={styles.viewIcon}
               />
-              <Text style={{ fontSize: 10, marginLeft: 2, marginRight: 10 }}>
+              <Text style={styles.rowText}>
                 Noida
               </Text>
             </View>
-            <View style={{ flexDirection: "row" }}>
+            <View style={styles.viewRow}>
               <FontAwesome
                 name="map-pin"
                 color={COLOR.Red}
-                style={{ marginTop: 1 }}
+                style={styles.viewIcon}
               />
-              <Text style={{ fontSize: 10, marginLeft: 2, marginRight: 10 }}>
+              <Text style={styles.rowText}>
                 1,25,000 - 2,00,000 PA
               </Text>
             </View>
@@ -145,22 +145,8 @@ class JobList extends Component {
             console.log();
           }}
           type="rounded"
-          btnStyle={{
-            paddingTop: 0,
-            paddingBottom: 0,
-            paddingRight: 1,
-            paddingLeft: 1,
-            width: 80,
-            height: 27,
-            marginRight: 10,
-            backgroundColor: COLOR.YELLOW,
-            justifyContent: "center"
-          }}
-          btnTextStyle={{
-            fontSize: 9,
-            alignSelf: "center",
-            textAlign: "center"
-          }}
+          btnStyle={styles.applyBtn}
+          btnTextStyle={styles.applyBtnText}
           text="APPLY"
         />
       </CardItem>

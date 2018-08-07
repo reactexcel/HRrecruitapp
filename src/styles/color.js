@@ -20,5 +20,6 @@ export const COLOR = {
   LGONE: "#2a365f",
   LGTWO: "#131931",
   WHITE:"#fefefe",
-  LTONE:"#109aaa"
+  LTONE:"#109aaa",
+  TEXTCOLOR:"#253055"
 };

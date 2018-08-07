@@ -36,9 +36,13 @@ const styles = StyleSheet.create({
   },
   aboutUs: {
     textAlign: "center",
-    color: "#253055"
+    letterSpacing:0.4,
+    color: COLOR.TEXTCOLOR,
+    fontSize:12.3
   },
   btnStyle: {
+    marginBottom:15,
+    height:35,
     backgroundColor: COLOR.MUSTARD,
     marginBottom: 10
   }
