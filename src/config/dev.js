@@ -4,7 +4,7 @@ export const GOOGLE_ANALYTICS_TRACKER = new GoogleAnalyticsTracker(
 );
 export const SHAREURL = 'https://hrrecruit.app.link/9gvVNNaqIN?$share_data=yes';
 let API_URL;
-if (__DEV__) {
+if (false) {
   API_URL = "http://5.9.144.226:3000/";
 } else {
   API_URL = "http://api.recruit.excellencetechnologies.in/";
