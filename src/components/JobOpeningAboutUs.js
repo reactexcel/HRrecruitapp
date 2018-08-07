@@ -22,7 +22,7 @@ const ProfileView = props => {
 
 const styles = StyleSheet.create({
   descriptionView: {
-    flexBasis: "45%",
+    flexBasis: "50%",
     backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     color: "#253055"
   },
   btnStyle: {
-    backgroundColor: COLOR.MUSTARD
+    backgroundColor: COLOR.MUSTARD,
+    marginBottom: 10
   }
 });
 export default ProfileView;
