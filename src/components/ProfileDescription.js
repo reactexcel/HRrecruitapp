@@ -88,7 +88,8 @@ ProfileDescription.defaultProps = {
 const styles = StyleSheet.create({
   textStyle: {
     color: "white",
-    marginTop: 6
+    marginTop: 6,
+    fontFamily : "Montserrat-Regular"
   },
   btnView: {
     flex: 1,
