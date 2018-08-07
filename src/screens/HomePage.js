@@ -89,7 +89,7 @@ class HomePage extends Component {
     } else if (data == "InterviewLogin") {
       this.props.navigation.navigate("InterviewLogin");
     } else {
-      this.props.navigation.navigate(data, { title: "Job Opening" });
+      this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
   componentDidMount = async () => {

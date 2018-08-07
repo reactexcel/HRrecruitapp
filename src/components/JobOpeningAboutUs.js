@@ -13,7 +13,7 @@ const ProfileView = props => {
       </View>
       <View style={{ alignContent: "center" }}>
         <Button rounded style={styles.btnStyle}>
-          <Text style={{ color: "#253055" }}>Login To Apply</Text>
+          <Text style={{ color: "#253055", fontFamily: "Montserrat-Bold" }}>Login To Apply</Text>
         </Button>
       </View>
     </View>
@@ -29,16 +29,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   textStyle: {
+    fontFamily: "Montserrat-SemiBold", 
     color: COLOR.TURQUOISE
   },
   aboutUsView: {
     marginVertical: 10
   },
   aboutUs: {
+    fontFamily: "Montserrat-SemiBold", 
     textAlign: "center",
-    letterSpacing:0.4,
+    // letterSpacing:0.5,
     color: COLOR.TEXTCOLOR,
-    fontSize:12.3
+    fontSize:12.3,
+    textAlignVertical:'center'
   },
   btnStyle: {
     marginBottom:15,

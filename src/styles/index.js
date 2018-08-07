@@ -30,10 +30,11 @@ export default StyleSheet.create({
     textAlign: "center"
   },
   text: {
+    fontFamily: "Montserrat-Medium", 
     textAlign: "center",
-    letterSpacing: 0.4,
+    // letterSpacing: 0.4,
     color: COLOR.TEXTCOLOR,
-    fontSize: 12.3
+    fontSize: 12
   },
   inputText: {
     color: "#7d7885",
@@ -74,8 +75,8 @@ export default StyleSheet.create({
     flexDirection: "column" 
   },
   viewText:{ 
-    fontSize: 13, 
-    fontWeight:"400",
+    fontFamily: "Montserrat-SemiBold", 
+    fontSize: 12.8, 
     color: COLOR.TURQUOISE 
   },
   iconView: { 
@@ -89,8 +90,9 @@ export default StyleSheet.create({
     marginTop: 1 
   },
   rowText: { 
+    fontFamily: "Montserrat-Medium", 
     color:COLOR.TEXTCOLOR,
-    fontSize: 10, 
+    fontSize: 9, 
     marginLeft: 2, 
     marginRight: 10 
   },
@@ -106,6 +108,7 @@ export default StyleSheet.create({
     justifyContent: "center"
   },
   applyBtnText: {
+    fontFamily: "Montserrat-Bold", 
     fontSize: 9,
     alignSelf: "center",
     textAlign: "center"

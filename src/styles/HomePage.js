@@ -73,9 +73,10 @@ export default StyleSheet.create({
         
     },
     text: { 
+        fontSize: 15, 
+        fontFamily: "Montserrat-Bold", 
         color: COLOR.LGONE, 
         alignSelf: 'center', 
-        fontWeight: "600" 
     },
     image: { 
         width: 90, 
@@ -86,9 +87,10 @@ export default StyleSheet.create({
         flexDirection: 'row', 
         marginBottom: -36 
     },
-    joinBtnStyles:{ 
+    joinBtnStyles:{
+        fontFamily: "Montserrat-Bold", 
         fontSize: 14, 
         fontWeight: "100", 
-        color: COLOR.LGONE 
+        color: COLOR.LGONE,
     }
 });

@@ -70,6 +70,7 @@ class JobList extends Component {
         backgroundColor: "white"
       },
       headerTitleStyle: {
+        fontFamily: "Montserrat-Bold",
         color: "black",
         flex: 1,
         textAlign: "center",
@@ -159,6 +160,7 @@ class JobList extends Component {
       </CardItem>
       <CustomButton
         btnStyle={styles.buttonPadder}
+        btnTextStyle={{ fontFamily: "Montserrat-Bold", fontSize:13}}
         type="rounded"
         text="Full Description"
         onPress={() => {
