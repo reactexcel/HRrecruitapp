@@ -1,6 +1,6 @@
 import { StyleSheet, Platform, Dimensions } from "react-native";
-var { height, width } = Dimensions.get('window');
-import {COLOR} from './color'
+var { height, width } = Dimensions.get("window");
+import { COLOR } from "./color";
 
 export default StyleSheet.create({
   picker: {
@@ -18,19 +18,20 @@ export default StyleSheet.create({
   },
   errorText: {
     color: COLOR.Red,
-    fontSize: 12
+    fontSize: 12,
+    fontFamily: "Montserrat-SemiBold"
   },
   text: {
-    marginLeft:10,
-    marginRight:10,
+    marginLeft: 10,
+    marginRight: 10,
     letterSpacing: 1,
     alignSelf: "center",
     fontSize: Platform.OS === "ios" ? 15 : 15,
-    color: '#109aaa',
-    fontWeight: Platform.OS === "ios" ? "500" : "400",
+    color: "#109aaa",
+    fontWeight: Platform.OS === "ios" ? "500" : "400"
   },
   fileName: {
-    width:width*0.70,
+    width: width * 0.7,
     marginLeft: 10,
     marginRight: 10,
     letterSpacing: 1,
@@ -38,38 +39,39 @@ export default StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 16 : 14,
     color: COLOR.DarkGrey,
     fontWeight: Platform.OS === "ios" ? "400" : "400",
+    fontFamily : "Montserrat-SemiBold"
   },
-  uploadSection: { 
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
-    width: width * 0.92, 
-    marginTop: 10 
+  uploadSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: width * 0.92,
+    marginTop: 10
   },
-  uploadIcon: { 
-    fontSize: 35, 
-    color: "#f69f3c" 
+  uploadIcon: {
+    fontSize: 35,
+    color: "#f69f3c"
   },
-  closeIcon: { 
-    color: 'red', 
+  closeIcon: {
+    color: "red",
     fontSize: 30,
-    paddingRight:8 
+    paddingRight: 8
   },
-  jobTitleBtn: { 
-    paddingLeft: 0, 
-    paddingTop: 0, 
-    paddingBottom: 0, 
-    marginBottom: 10, 
-    marginRight: 10, 
-    backgroundColor: '#f69f3c' 
-  },
-  defaultJobBtn:{
+  jobTitleBtn: {
     paddingLeft: 0,
     paddingTop: 0,
     paddingBottom: 0,
     marginBottom: 10,
     marginRight: 10,
-    backgroundColor: '#131931',
-    borderWidth:3,
-    borderColor:'#19203e'
+    backgroundColor: "#f69f3c"
+  },
+  defaultJobBtn: {
+    paddingLeft: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginBottom: 10,
+    marginRight: 10,
+    backgroundColor: "#131931",
+    borderWidth: 3,
+    borderColor: "#19203e"
   }
 });

@@ -16,7 +16,8 @@ export default StyleSheet.create({
   btnStyle: {
     backgroundColor: COLOR.MUSTARD
   },
-  textStyle : {
-      color : COLOR.LGONE
+  textStyle: {
+    color: COLOR.LGONE,
+    fontFamily: "Montserrat-Bold"
   }
 });

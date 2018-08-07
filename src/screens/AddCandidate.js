@@ -112,7 +112,7 @@ class AddCandidate extends Component {
     return (
       <Fragment>
         <Item stackedLabel style={_styles.inputTextView}>
-          <Label style={{ color: COLOR.LTONE}}>{props.labelName}</Label>
+          <Label style={{ color: COLOR.LTONE,fontFamily:"Montserrat-Medium"}}>{props.labelName}</Label>
           <Input
             style={styles.inputText}
             {...inputProps}
@@ -144,7 +144,7 @@ class AddCandidate extends Component {
       return (
         <CustomButton
           btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
-          btnTextStyle={check ? { fontSize: 11, color: 'black' } : { fontSize: 11, color:COLOR.WHITE }}
+          btnTextStyle={check ? { fontSize: 11, color: 'black',fontFamily:"Montserrat-Medium" } : { fontSize: 11, color:COLOR.WHITE,fontFamily:"Montserrat-Medium" }}
           key={i}
           onPress={()=>{console.log()}}
           text={title.title}
@@ -155,7 +155,7 @@ class AddCandidate extends Component {
     return (
       <Fragment>
         <View style={{margin: 6, marginBottom:10}}>
-          <Text numberOfLines={1} style={[_styles.text,{alignSelf:'flex-start'}]}>
+          <Text numberOfLines={1} style={[_styles.text,{alignSelf:'flex-start',fontFamily:"Montserrat-Medium"}]}>
             JOB TITLE
           </Text>
         </View>
@@ -219,8 +219,8 @@ class AddCandidate extends Component {
       <Fragment>
       <View style={{marginLeft:8}}>
         <View style={_styles.uploadSection}>
-          <Text numberOfLines={1} style={_styles.text}>
-            Resume
+          <Text numberOfLines={1} style={[_styles.text,{fontFamily:"Montserrat-Medium"}]}>
+            RESUME
           </Text>
           <Button transparent onPress={onPress} style={{ marginTop: 5 }}>
             <Icon style={_styles.uploadIcon} name="cloud-upload" />
@@ -329,8 +329,8 @@ class AddCandidate extends Component {
             </Row>
             <Row style={{justifyContent:'center',marginTop:-30, marginBottom:25}}>
               <View style={styles.descriptionText}>
-                <Text style={{ textAlign: "center", fontSize: 12, fontWeight: "600", color: COLOR.WHITE}}>Let's get acquainted</Text>
-                  <Text style={{ textAlign: 'center', fontWeight: "500", color: COLOR.WHITE,fontSize:9.67}}>
+                <Text style={{ textAlign: "center", fontSize: 13,  color: COLOR.WHITE,fontFamily:"Montserrat-SemiBold"}}>Let's get acquainted</Text>
+                  <Text style={{ textAlign: 'center', color: COLOR.WHITE,fontSize:11.5,fontFamily:"Montserrat-Regular"}}>
                     Let’s get acquainted Excellence Technologies gathers data to ensure 
                     the accuracy of the information we are providing for you as well as 
                     the security of business for employers and workers.
@@ -404,7 +404,7 @@ class AddCandidate extends Component {
         ) : (
             <CustomButton
               btnStyle={{ backgroundColor: COLOR.MUSTARD}}
-              btnTextStyle={{color:'black'}}
+              btnTextStyle={{color:'black',fontFamily:"Montserrat-Bold"}}
               text="JOIN NOW"
               onPress={handleSubmit(this.onSubmit)}
             />

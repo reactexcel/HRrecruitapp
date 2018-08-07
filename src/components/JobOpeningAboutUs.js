@@ -11,11 +11,11 @@ const ProfileView = props => {
       <View style={styles.aboutUsView}>
         <Text style={styles.aboutUs}>{ABOUT_US}</Text>
       </View>
-      <View style={{ alignContent: "center" }}>
+      {/* <View style={{ alignContent: "center" }}>
         <Button rounded style={styles.btnStyle}>
           <Text style={{ color: "#253055", fontFamily: "Montserrat-Bold" }}>Login To Apply</Text>
         </Button>
-      </View>
+      </View> */}
     </View>
   );
 };

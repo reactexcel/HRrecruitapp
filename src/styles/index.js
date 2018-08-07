@@ -40,7 +40,7 @@ export default StyleSheet.create({
     color: "#7d7885",
     fontSize: Platform.OS === "ios" ? 19 : 17,
     fontWeight: "400",
-    letterSpacing: 1
+    fontFamily: "Montserrat-Regular"
   },
   itemView: {
     paddingVertical: 10,
@@ -61,33 +61,33 @@ export default StyleSheet.create({
     margin: 10,
     height: 35,
     backgroundColor: COLOR.LGONE,
-    marginBottom:15
+    marginBottom: 15
   },
   descriptionText: {
     width: width * 0.88,
-    marginBottom:-20
+    marginBottom: -20
   },
-  cardItem: { 
-    justifyContent: "space-between", 
-    padding: 0 
+  cardItem: {
+    justifyContent: "space-between",
+    padding: 0
   },
-  viewDesign: { 
-    flexDirection: "column" 
+  viewDesign: {
+    flexDirection: "column"
   },
   viewText:{ 
     fontFamily: "Montserrat-SemiBold", 
     fontSize: 12.8, 
     color: COLOR.TURQUOISE 
   },
-  iconView: { 
-    flexDirection: "row", 
-    marginTop: 10 
+  iconView: {
+    flexDirection: "row",
+    marginTop: 10
   },
-  viewRow: { 
-    flexDirection: "row" 
+  viewRow: {
+    flexDirection: "row"
   },
-  viewIcon: { 
-    marginTop: 1 
+  viewIcon: {
+    marginTop: 1
   },
   rowText: { 
     fontFamily: "Montserrat-Medium", 
