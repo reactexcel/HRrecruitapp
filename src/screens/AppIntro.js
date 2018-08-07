@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
-import { Container, Text, Button, Icon } from "native-base";
+import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
@@ -23,6 +23,8 @@ import { connect } from "react-redux";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
+import CardTrail from "../components/CardTrail";
+
 class AppIntro extends Component {
   constructor(props) {
     super(props);
@@ -111,34 +113,93 @@ class AppIntro extends Component {
   };
   _renderItem = ({ item, index }) => {
     let iconName = index == 3 ? "checkmark" : "arrow-forward";
+    let imgMargin;
+    switch (index) {
+      case 0:
+        imgMargin = -13;
+        break;
+      case 2:
+        imgMargin = -32;
+        break;
+      default:
+        imgMargin = -10;
+        break;
+    }
+    let font_size = index === 0 || index === 3 ? 16 : 25;
+
     return (
       <Grid>
         <Col size={9} style={[styles.container]}>
           <LinearGradient
             colors={[COLOR.LGONE, COLOR.LGTWO]}
-            style={[styles.container, { flex: 1 }]}
+            style={[
+              styles.container,
+              { flex: 1, justifyContent: "center", alignItems: "center" }
+            ]}
           >
-            <Image
-              resizeMode="contain"
-              style={styles.images}
-              source={item.image}
-            />
-            <View style={styles.margin}>
-              <Text style={[styles.text, { alignSelf: "center" }]}>
-                {item.headerText}
-              </Text>
-              <Text style={[styles.text, { alignSelf: "center" }]}>
-                {item.rawText}
-                <Text style={[styles.text, { fontWeight: "900" }]}>
+            {index !== 0 ? <CardTrail /> : null}
+            <Card
+              style={{
+                width: "85%",
+                flex: index === 0 ? 0.85 : 0.7,
+                borderRadius: 10,
+                marginTop: 0,
+                flexDirection: "row",
+                justifyContent: "flex-start",
+                alignItems: "center"
+              }}
+            >
+              <Image
+                resizeMode="contain"
+                style={[
+                  index === 0
+                    ? {
+                        height: 110,
+                        width: 140,
+                        position: "absolute",
+                        top: "20%"
+                      }
+                    : styles.images,
+                  {
+                    marginLeft: imgMargin
+                  }
+                ]}
+                source={item.image}
+              />
+              <View
+                style={[
+                  { marginLeft: index === 0 ? "20%" : 0 },
+                  index === 1 ? { flexDirection: "row" } : {},
+                  index === 3
+                    ? { position: "relative", top: 25, right: 30 }
+                    : {}
+                ]}
+              >
+                <Text
+                  style={{
+                    fontSize: font_size,
+                    color: "#263051",
+                    fontWeight: "900"
+                  }}
+                >
+                  {item.rawText}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: font_size,
+                    color: COLOR.MUSTARD,
+                    fontWeight: "900"
+                  }}
+                >
                   {item.boldText}
                 </Text>
-              </Text>
-            </View>
+              </View>
+            </Card>
           </LinearGradient>
         </Col>
         <Row style={[styles.bottomContainer, { backgroundColor: COLOR.LGTWO }]}>
           <Text
-            style={styles.text}
+            style={{ color: "white" }}
             onPress={() => {
               this._onSkip();
             }}

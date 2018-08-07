@@ -9,7 +9,8 @@ import ProfileDescription from "../components/ProfileDescription";
 export default class Profile extends Component {
   static navigationOptions = {
     headerStyle: {
-      elevation: 0
+      elevation: 0,
+      backgroundColor : "white"
     },
     title: "Profile",
     headerTitleStyle: {

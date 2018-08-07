@@ -13,13 +13,13 @@ export default StyleSheet.create({
     alignItems: "center"
   },
   blockView: {
-    backgroundColor:'transparent',
-    justifyContent:'center',
-    alignItems: 'center',
+    backgroundColor: "transparent",
+    justifyContent: "center",
+    alignItems: "center",
     width: width * 0.93,
     borderRadius: 5,
     padding: 10,
-    borderWidth:0
+    borderWidth: 0
   },
   headerText: {
     color: COLOR.Black,
@@ -38,7 +38,7 @@ export default StyleSheet.create({
     color: "#7d7885",
     fontSize: Platform.OS === "ios" ? 19 : 17,
     fontWeight: "400",
-    letterSpacing: 1,
+    letterSpacing: 1
   },
   itemView: {
     paddingVertical: 10,
@@ -55,8 +55,8 @@ export default StyleSheet.create({
     fontSize: 10,
     color: "#fff"
   },
-  buttonPadder:{
-    margin:10,
+  buttonPadder: {
+    margin: 10,
     backgroundColor: COLOR.LGONE
   },
   descriptionText: {

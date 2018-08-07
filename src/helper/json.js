@@ -1,4 +1,4 @@
-import { COLOR } from '../styles/color';
+import { COLOR } from "../styles/color";
 
 export const pageDeatils = [
     {
@@ -21,32 +21,32 @@ export const pageDeatils = [
     }
 ]
 export const AppDetails = [
-    {
-        image: require('../images/hello.png'),
-        boldText:'   Career App',
-        headerText:'Hey there',
-        rawText :'Welcome to Excellence Technologies',
-        bkGrndClr: COLOR.DARKBLUE
-    }, 
-    {
-        image: require('../images/jobs.png'),
-        boldText: '  Jobs',
-        headerText: '',
-        rawText: 'Apply',
-        bkGrndClr: COLOR.DARKBLUE
-    },
-    {
-        image: require('../images/test.png'),
-        boldText: '  Online Test',
-        headerText: '',
-        rawText: 'Take',
-        bkGrndClr: COLOR.DARKBLUE
-    },
-    {
-        image: require('../images/status.png'),
-        boldText: '   Application Status',
-        headerText: '',
-        rawText: 'Check',
-        bkGrndClr: COLOR.DARKBLUE
-    },
-]
+  {
+    image: require("../images/new_hello.png"),
+    boldText: "CAREER APP",
+    headerText: "Hey there",
+    rawText: "WELCOME TO\nEXCELLENCE TECHNOLOGIES",
+    bkGrndClr: COLOR.DARKBLUE
+  },
+  {
+    image: require("../images/new_job.png"),
+    boldText: " JOBS",
+    headerText: "",
+    rawText: "APPLY",
+    bkGrndClr: COLOR.DARKBLUE
+  },
+  {
+    image: require("../images/new_test.png"),
+    boldText: "ONLINE TEST",
+    headerText: "",
+    rawText: "TAKE",
+    bkGrndClr: COLOR.DARKBLUE
+  },
+  {
+    image: require("../images/new_status.png"),
+    boldText: "APPLICATION STATUS",
+    headerText: "",
+    rawText: "CHECK",
+    bkGrndClr: COLOR.DARKBLUE
+  }
+];
