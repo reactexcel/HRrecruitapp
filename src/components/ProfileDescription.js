@@ -65,8 +65,8 @@ const ProfileDescription = props => {
             onPress={props.handleLocate}
           >
             <Icon
-              name="location-pin"
-              type="Entypo"
+              name="map-pin"
+              type="FontAwesome"
               style={{ color: COLOR.PINK }}
             />
             <Text>Location</Text>

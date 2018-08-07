@@ -101,7 +101,7 @@ class AppIntro extends Component {
         fb_id: fb_id,
         profile_pic: `https://pikmail.herokuapp.com/${
           data.sender_mail
-          }?size=60`,
+        }?size=60`,
         name: data.from,
         email: data.sender_mail
       });
@@ -137,11 +137,11 @@ class AppIntro extends Component {
               { flex: 1, justifyContent: "center", alignItems: "center" }
             ]}
           >
-            {index !== 0 ? <CardTrail /> : null}
+            <CardTrail />
             <Card
               style={{
                 width: "85%",
-                flex: index === 0 ? 0.85 : 0.7,
+                flex: 0.7,
                 borderRadius: 10,
                 marginTop: 0,
                 flexDirection: "row",
@@ -157,7 +157,7 @@ class AppIntro extends Component {
                         height: 110,
                         width: 140,
                         position: "absolute",
-                        top: "20%"
+                        top: "15%"
                       }
                     : styles.images,
                   {

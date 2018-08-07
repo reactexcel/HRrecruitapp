@@ -1,16 +1,17 @@
 import React, { Component, Fragment } from "react";
-import { Platform, Linking } from "react-native";
+import { Platform, Linking, StatusBar } from "react-native";
 import { ScrollView, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
 import ProfileDescription from "../components/ProfileDescription";
+import { Icon } from "native-base";
 
 export default class Profile extends Component {
   static navigationOptions = {
     headerStyle: {
       elevation: 0,
-      backgroundColor : "white"
+      backgroundColor: "white"
     },
     title: "Profile",
     headerTitleStyle: {
@@ -20,7 +21,13 @@ export default class Profile extends Component {
       flex: 1
     },
     headerTintColor: COLOR.PINK,
-    headerRight: <View />
+    headerRight: (
+      <Icon
+        name="pencil"
+        type="MaterialCommunityIcons"
+        style={{ color: COLOR.PINK, marginRight: 10, fontSize: 25 }}
+      />
+    )
   };
   constructor(props) {
     super(props);
@@ -28,6 +35,11 @@ export default class Profile extends Component {
       currentPosition: 0
     };
   }
+  // componentDidMount() {
+  //   Platform.OS === "android"
+  //     ? StatusBar.setBackgroundColor("white")
+  //     : StatusBar.setBarStyle("dark-content");
+  // }
   handleLocate = () => {
     let url = "";
     if (Platform.OS === "ios") {
