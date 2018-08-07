@@ -41,7 +41,8 @@ class HomePage extends Component {
       linkOpening: false,
       candidateJob: null,
       profile_pic: null,
-      userName: null
+      userName: null, 
+      textColor: false,
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -109,34 +110,41 @@ class HomePage extends Component {
   handleBackPress = () => {
     BackHandler.exitApp(); // works best when the goBack is async
   };
+  onPressIn = (k) => {
+    this.setState({textColor:true,index:k})
+  }
+  onPressOut = () => {
+    this.setState({ textColor: false })
+  }
   render() {
-    let { linkOpening, profile_pic, userName } = this.state;
+    let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
       : require("../images/profilepic.png");
     let userNames = userName ? userName : "";
     let renderCustomView = pageDeatils.map((data, k) => {
       return (
-        <TouchableHighlight 
+        <TouchableHighlight
+          onPressIn={()=>{this.onPressIn(k)}}
+          onPressOut={()=>{this.onPressOut()}}
+          underlayColor={COLOR.LGONE} 
           key={k}
           onPress={() => {
             this.handleViewClick(data.route);
           }}
-        >
-        <View  style={[styles.listContainer, k == 2 ? { backgroundColor:'#2a365f'}:{}]}>
+         style={[styles.listContainer]}>
           <View style={styles.listSubContainer}>
             <View>
               <Image
                 resizeMode="contain"
                 style={[styles.image,k==2 ? {marginLeft:-15 }:{}]}
-                source={data.image}
+                source={textColor && index == k ? data.image[1] :data.image[0] }
               />            
             </View>
             <View style={styles.textView}>
-                <Text style={[styles.text, k == 2 ? { color: COLOR.WHITE }:{}]}>{data.name}</Text>
+              <Text style={[styles.text, textColor && index == k ? { color: COLOR.WHITE }:{}]}>{data.name}</Text>
             </View>
           </View>
-        </View>
         </TouchableHighlight>
       );
     });
