@@ -164,7 +164,7 @@ class JobList extends Component {
         type="rounded"
         text="Full Description"
         onPress={() => {
-          console.log()
+          this.props.navigation.navigate('FullDescription')
         }}
       />
     </Card>
