@@ -32,6 +32,8 @@ import Share, { ShareSheet, Button } from "react-native-share";
 import { SHAREURL } from "../config/dev";
 import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import JobSalaryDetails from "../components/JobSalaryDetails";
+
 class JobList extends Component {
   constructor(props) {
     super(props);
@@ -104,43 +106,9 @@ class JobList extends Component {
   renderCardItem = ({ item }) => (
     <Card padder>
       <CardItem style={styles.cardItem}>
-        <View style={styles.viewDesign}>
-          <Text style={styles.viewText}>
-            {item.subject}
-          </Text>
-          <View style={styles.iconView}>
-            <View style={styles.viewRow}>
-              <FontAwesome
-                name="briefcase"
-                color={COLOR.Red}
-                style={styles.viewIcon}
-              />
-              <Text style={styles.rowText}>
-                0 - 1 years
-              </Text>
-            </View>
-            <View style={styles.viewRow}>
-              <FontAwesome
-                name="map-pin"
-                color={COLOR.Red}
-                style={styles.viewIcon}
-              />
-              <Text style={styles.rowText}>
-                Noida
-              </Text>
-            </View>
-            <View style={styles.viewRow}>
-              <FontAwesome
-                name="map-pin"
-                color={COLOR.Red}
-                style={styles.viewIcon}
-              />
-              <Text style={styles.rowText}>
-                1,25,000 - 2,00,000 PA
-              </Text>
-            </View>
-          </View>
-        </View>
+        <JobSalaryDetails>
+          <Text style={styles.viewText}>{item.subject}</Text>
+        </JobSalaryDetails>
         <CustomButton
           onPress={() => {
             this.onApplyJob(item);
@@ -160,11 +128,14 @@ class JobList extends Component {
       </CardItem>
       <CustomButton
         btnStyle={styles.buttonPadder}
-        btnTextStyle={{ fontFamily: "Montserrat-Bold", fontSize:13}}
+        btnTextStyle={{ fontFamily: "Montserrat-Bold", fontSize: 13 }}
         type="rounded"
         text="Full Description"
         onPress={() => {
-          this.props.navigation.navigate('FullDescription')
+          this.props.navigation.navigate("FullDescription", {
+            subject: item.subject,
+            job_description: item.job_description
+          });
         }}
       />
     </Card>
@@ -222,16 +193,16 @@ class JobList extends Component {
             ) : null}
           </View>
         ) : (
-            <View
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                flexDirection: "column"
-              }}
-            >
-              <Spinner color={COLOR.Spinner} />
-            </View>
-          )}
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              flexDirection: "column"
+            }}
+          >
+            <Spinner color={COLOR.Spinner} />
+          </View>
+        )}
         <ShareSheet
           visible={this.state.visible}
           onCancel={this.onCancel.bind(this)}
