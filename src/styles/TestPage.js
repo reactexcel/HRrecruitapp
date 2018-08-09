@@ -61,8 +61,7 @@ export default StyleSheet.create({
     paddingBottom: 20
   },
   questionView: {
-    padding: 20,
-    paddingBottom: -20
+    padding: 20
   },
   optionsView: {
     flex: 1,
