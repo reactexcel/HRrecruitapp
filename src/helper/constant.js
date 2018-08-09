@@ -1,3 +1,4 @@
+import { Dimensions } from "react-native";
 export const SUCCESS_STATUS = 1;
 
 export const ABOUT_US =
@@ -13,3 +14,6 @@ export const KEY_SKILLS = [
   "Web Applications",
   "Web Programming"
 ];
+
+export const DEVICE_WIDTH = Dimensions.get("window").width;
+export const DEVICE_HEIGHT = Dimensions.get("window").height;

@@ -50,17 +50,10 @@ export default class Profile extends Component {
     }
     Linking.openURL(url);
   };
-  incPosition = () => {
-    if (this.state.currentPosition < 5) {
-      this.setState(prevState => ({
-        currentPosition: prevState.currentPosition + 1
-      }));
-    }
-  };
   render() {
     return (
       <ScrollView>
-        <ProfileView onPress={this.incPosition} />
+        <ProfileView />
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={{ flexBasis: "65%" }}

@@ -14,12 +14,11 @@ export default StyleSheet.create({
   },
   headerTextStyle: {
     fontFamily: "Montserrat-Bold",
-    color: "#253055"
+    color: COLOR.TEXTCOLOR
   },
   descriptionText: {
-    color: "#253055",
+    color: COLOR.TEXTCOLOR,
     fontFamily: "Montserrat-Medium"
-    
   },
   btnView: {
     flex: 1,
@@ -29,7 +28,7 @@ export default StyleSheet.create({
   },
   btnText: {
     fontFamily: "Montserrat-Bold",
-    color: "#253055"
+    color: COLOR.TEXTCOLOR
   },
   btnStyle: { backgroundColor: COLOR.MUSTARD },
   keySkillsView: {
@@ -44,9 +43,9 @@ export default StyleSheet.create({
     marginRight: 3
   },
   keySkillsButtonText: {
-    color: "#253055",
+    color: COLOR.TEXTCOLOR,
     paddingHorizontal: 15,
     fontFamily: "Montserrat-Bold",
-    fontSize:12
+    fontSize: 12
   }
 });

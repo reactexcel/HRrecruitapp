@@ -101,7 +101,11 @@ class FullDescription extends Component {
               </Text>
             </Button>
             <Button iconLeft rounded style={styles.btnStyle}>
-              <Icon name="share" type="Entypo" style={{ color: "#253055" }} />
+              <Icon
+                name="share"
+                type="Entypo"
+                style={{ color: COLOR.TEXTCOLOR }}
+              />
               <Text style={[styles.btnText, { paddingRight: 20 }]}>
                 SHARE IT
               </Text>
