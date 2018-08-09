@@ -17,61 +17,32 @@ import _styles from "../styles/TestPage";
 import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
 import HTMLView from "react-native-htmlview";
-import { DEVICE_WIDTH } from "../helper/constant";
 
 const Questions = props => {
   const { question, solution, handleSubmit } = props;
   return (
     <Content padder>
       <Accordion
-        style={{
-          borderWidth: 0
-        }}
+        style={_styles.accordionStyle}
         dataArray={question.data}
         renderHeader={(questionObj, expanded) => (
           <View
-            style={{
-              flexDirection: "row",
-              padding: 10,
-              alignItems: "center",
-              backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD,
-              borderRadius: 7,
-              marginTop: 7
-            }}
+            style={[
+              {
+                backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
+              },
+              _styles.accordionHeader
+            ]}
           >
             <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontFamily: "Montserrat-SemiBold",
-                  color: COLOR.TEXTCOLOR,
-                  textAlign: "center"
-                }}
-              >
+              <Text style={_styles.accordionHeaderText}>
                 {questionObj.group_name}
               </Text>
             </View>
             {expanded ? (
-              <Icon
-                type="Entypo"
-                style={{
-                  fontSize: 18,
-                  position: "absolute",
-                  left: DEVICE_WIDTH - 50,
-                  color: COLOR.TEXTCOLOR
-                }}
-                name="minus"
-              />
+              <Icon type="Entypo" style={_styles.accordionIcon} name="minus" />
             ) : (
-              <Icon
-                type="Entypo"
-                style={{
-                  fontSize: 18,
-                  position: "absolute",
-                  left: DEVICE_WIDTH - 50,
-                  color: COLOR.TEXTCOLOR
-                }}
-                name="plus"
-              />
+              <Icon type="Entypo" style={_styles.accordionIcon} name="plus" />
             )}
           </View>
         )}
@@ -79,22 +50,9 @@ const Questions = props => {
           map(questionObj.questions, (ques, index) => {
             return (
               <Content key={index}>
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    marginTop: 7,
-                    borderRadius: 7,
-                    paddingBottom: 20
-                  }}
-                >
-                  <View style={{ padding: 20, paddingBottom: -20 }}>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontFamily: "Montserrat-SemiBold",
-                        color: COLOR.TURQUOISE
-                      }}
-                    >
+                <View style={_styles.questionOptionView}>
+                  <View style={_styles.questionView}>
+                    <Text style={_styles.questionTextStyle}>
                       {index + 1}. {ques.question}
                     </Text>
                     {ques.description ? (
@@ -133,13 +91,7 @@ const Questions = props => {
                             backgroundColor: selected ? "#e3e5e9" : null
                           }}
                         >
-                          <Row
-                            style={{
-                              position: "relative",
-                              top: "15%",
-                              marginHorizontal: 20
-                            }}
-                          >
+                          <View style={_styles.optionsView}>
                             <Col style={{ width: "10%" }}>
                               <Radio
                                 style={
@@ -156,16 +108,11 @@ const Questions = props => {
                               />
                             </Col>
                             <Col>
-                              <Text
-                                style={{
-                                  fontFamily: "Montserrat-Medium",
-                                  color: COLOR.TEXTCOLOR
-                                }}
-                              >
+                              <Text style={_styles.optionText}>
                                 {values.option}
                               </Text>
                             </Col>
-                          </Row>
+                          </View>
                         </Row>
                       </TouchableOpacity>
                     );
