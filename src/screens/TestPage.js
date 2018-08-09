@@ -135,7 +135,7 @@ class TestPage extends Component {
                         ]
                   }
                 >
-                  Remaining Time :
+                  Remaining Time
                 </Text>
                 <Text
                   style={{
