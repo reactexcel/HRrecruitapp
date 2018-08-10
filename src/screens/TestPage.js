@@ -16,14 +16,15 @@ import {
   Thumbnail,
   Button,
   Spinner,
-  Radio
+  Radio,
+  View
 } from "native-base";
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
-import _styles from "../styles/TestPage";
+import _styles from "../styles/screens/TestPage";
 import CustomButton from "../components/CustomButton";
 import Questions from "../components/Questions";
 import StartTest from "../components/StartTest";
@@ -33,6 +34,7 @@ import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
 import { setItem, getItem } from "../helper/storage";
+import LinearGradient from "react-native-linear-gradient";
 
 class TestPage extends Component {
   constructor(props) {
@@ -91,8 +93,6 @@ class TestPage extends Component {
   }
 
   static navigationOptions = ({ navigation }) => {
-    const name = navigation.getParam("name");
-    const profile_pic = navigation.getParam("profile_pic");
     const counter =
       navigation.state.params.time !== undefined
         ? navigation.state.params.time
@@ -100,32 +100,27 @@ class TestPage extends Component {
     const round = navigation.state.params.data.round;
 
     return {
-      title: name.split(" ")[0],
-      headerLeft: (
-        <Content style={{ paddingHorizontal: 10 }}>
-          <Thumbnail small source={{ uri: profile_pic }} />
-        </Content>
-      ),
-      headerRight: (
-        <Content padder>
+      headerLeft: <View />,
+      headerRight: <View />,
+      headerStyle: {
+        elevation: 0,
+        backgroundColor: COLOR.LGONE
+      },
+      headerTitle: (
+        <View style={_styles.timerView}>
           {navigation.state.params.show !== undefined ? (
             navigation.state.params.show ? (
               <React.Fragment>
                 <Text
                   style={
                     Platform.OS === "ios"
-                      ? {
-                          letterSpacing: 1,
-                          textAlign: "center",
-                          fontSize: 13,
-                          color: COLOR.DarkGrey
-                        }
-                      : styles.text
+                      ? _styles.remainingTimeTextIOS
+                      : [styles.text, _styles.remainingTimeText]
                   }
                 >
-                  Remaining Time :
+                  Remaining Time
                 </Text>
-                <Text style={{ color: COLOR.Red }}>
+                <Text style={_styles.timerStyle}>
                   <TimerCountdown
                     initialSecondsRemaining={counter}
                     onTick={counter => {
@@ -156,7 +151,7 @@ class TestPage extends Component {
               </React.Fragment>
             ) : null
           ) : null}
-        </Content>
+        </View>
       )
     };
   };
@@ -287,41 +282,43 @@ class TestPage extends Component {
   };
 
   render() {
+    const name = this.props.navigation.getParam("name");
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
     const { roundType } = this.props.questions.data;
     return (
-      <Container style={styles.container}>
+      <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={{ flex: 1 }}>
         {show ? (
-          <Content padder>
-            <Card style={styles.blockView}>
-              <CardItem>
-                <Text style={styles.headerText}> Test Questions </Text>
-              </CardItem>
-              {roundType !== "Subjective" ? (
-                <Text style={styles.text}>
-                  Questions Attempted : {`${solution.length}/`}
-                  {count}{" "}
-                </Text>
-              ) : (
-                <Text style={styles.text}>Total Questions : {count}</Text>
-              )}
-            </Card>
-            <Card>
-              <Questions
-                question={question}
-                solution={solution}
-                handleSubmit={this.handleSubmit}
-              />
-            </Card>
+          <Content>
+            <Text
+              style={[styles.text, { color: COLOR.TURQUOISE, marginTop: 10 }]}
+            >
+              Hi {name}
+            </Text>
             {roundType !== "Subjective" ? (
-              <CustomButton text="Submit Test" onPress={this.confirmSubmit} />
+              <Text style={[styles.text, { color: COLOR.TURQUOISE }]}>
+                Questions Attempted : {`${solution.length}/`}
+                {count}{" "}
+              </Text>
             ) : (
-              <CustomButton
-                text="Submit Test"
-                onPress={this.confirmSecondRoundSubmit}
-              />
+              <Text style={styles.text}>Total Questions : {count}</Text>
             )}
+            <Questions
+              question={question}
+              solution={solution}
+              handleSubmit={this.handleSubmit}
+            />
+            <Button
+              full
+              style={{ backgroundColor: COLOR.MUSTARD }}
+              onPress={() => {
+                roundType !== "Subjective"
+                  ? this.confirmSubmit()
+                  : this.confirmSecondRoundSubmit();
+              }}
+            >
+              <Text style={_styles.submitButtonText}>Submit Test</Text>
+            </Button>
           </Content>
         ) : (
           <StartTest
@@ -331,7 +328,7 @@ class TestPage extends Component {
             handleCallHelp={this.handleCallHelp}
           />
         )}
-      </Container>
+      </LinearGradient>
     );
   }
 }

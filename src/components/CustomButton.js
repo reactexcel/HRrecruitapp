@@ -4,11 +4,11 @@ import { Button, Text } from "native-base";
 import PropTypes from "prop-types";
 
 const CustomButton = props => {
-  const { text, type='block',btnStyle={} } = props;
+  const { text, type = 'block', btnStyle = {}, btnTextStyle={} } = props;
   if(type == 'rounded'){
     return (
     <Button onPress={props.onPress} style={btnStyle} rounded info>
-      <Text uppercase={false} style={styles.btnText}>
+      <Text uppercase={false} style={[styles.btnText,btnTextStyle]}>
         {text}
       </Text>
     </Button>
@@ -16,7 +16,7 @@ const CustomButton = props => {
   } else {   
     return (
       <Button onPress={props.onPress} style={btnStyle}  block info>
-      <Text uppercase={false} style={styles.btnText}>
+        <Text uppercase={false} style={[styles.btnText, btnTextStyle]}>
         {text}
       </Text>
     </Button>

@@ -13,6 +13,7 @@ import JobList from "../screens/JobList";
 import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
 import Profile from "../screens/Profile";
+import FullDescription from "../screens/FullDescription";
 
 const transitionConfig = () => {
   return {
@@ -77,6 +78,9 @@ const Rootstack = createStackNavigator(
     },
     Profile: {
       screen: Profile
+    },
+    FullDescription: {
+      screen: FullDescription
     }
   },
   {

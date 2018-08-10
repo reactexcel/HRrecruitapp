@@ -26,7 +26,7 @@ import {
 import { connect } from "react-redux";
 import Logo from "../components/Logo";
 import styles from "../styles";
-import _styles from "../styles/InterviewLogin";
+import _styles from "../styles/screens/InterviewLogin";
 import { isLowercase, isEmail } from "validator";
 import { COLOR } from "../styles/color";
 import {

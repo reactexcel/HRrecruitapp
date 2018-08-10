@@ -4,6 +4,7 @@ import { Container, Content, Text, Button, Card, CardItem } from "native-base";
 import HorizontalLine from "./HorizontalLine";
 import CustomButton from "./CustomButton";
 import styles from "../styles";
+import _styles from "../styles/components/StartTest";
 import PropTypes from "prop-types";
 
 class StartTest extends Component {
@@ -104,19 +105,6 @@ class StartTest extends Component {
     );
   }
 }
-
-const _styles = StyleSheet.create({
-  helpButton: {
-    fontSize: 15,
-    fontWeight: "300",
-    letterSpacing: 1
-  },
-  modalView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center"
-  }
-});
 
 StartTest.propTypes = {
   isOnline: PropTypes.bool,

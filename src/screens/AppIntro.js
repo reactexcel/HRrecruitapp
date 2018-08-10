@@ -6,11 +6,11 @@ import {
   Image,
   TouchableOpacity
 } from "react-native";
-import { Container, Text, Button, Icon } from "native-base";
+import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
-import styles from "../styles/AppIntro";
+import styles from "../styles/screens/AppIntro";
 import ProgressBar from "../components/ProgressBar";
 import HomePage from "./HomePage";
 var { height, width } = Dimensions.get("window");
@@ -23,6 +23,7 @@ import { connect } from "react-redux";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
+import CardTrail from "../components/CardTrail";
 
 class AppIntro extends Component {
   constructor(props) {
@@ -91,7 +92,6 @@ class AppIntro extends Component {
   _onSkip = () => {
     this._linkCheck();
   };
-
   _linkCheck = () => {
     const { deepLink, sharing, fb_id } = this.state;
     if (deepLink) {
@@ -113,34 +113,73 @@ class AppIntro extends Component {
   };
   _renderItem = ({ item, index }) => {
     let iconName = index == 3 ? "checkmark" : "arrow-forward";
+    let imgMargin;
+    switch (index) {
+      case 0:
+        imgMargin = -13;
+        break;
+      case 2:
+        imgMargin = -32;
+        break;
+      default:
+        imgMargin = -10;
+        break;
+    }
+    let font_size = index === 0 || index === 3 ? 15 : 24;
+
     return (
       <Grid>
         <Col size={9} style={[styles.container]}>
           <LinearGradient
             colors={[COLOR.LGONE, COLOR.LGTWO]}
-            style={[styles.container, { flex: 1 }]}
+            style={[styles.container, styles.containerView]}
           >
-            <Image
-              resizeMode="contain"
-              style={styles.images}
-              source={item.image}
-            />
-            <View style={styles.margin}>
-              <Text style={[styles.text, { alignSelf: "center" }]}>
-                {item.headerText}
-              </Text>
-              <Text style={[styles.text, { alignSelf: "center" }]}>
-                {item.rawText}
-                <Text style={[styles.text, { fontWeight: "900" }]}>
+            <CardTrail />
+            <Card style={styles.appIntroCardStyle}>
+              <Image
+                resizeMode="contain"
+                style={[
+                  index === 0 ? styles.helloImage : styles.images,
+                  {
+                    marginLeft: imgMargin
+                  }
+                ]}
+                source={item.image}
+              />
+              <View
+                style={[
+                  { marginLeft: index === 0 ? "20%" : 0 },
+                  index === 1 ? styles.secondImageTextView : {},
+                  index === 3 ? styles.fourthImageTextView : {}
+                ]}
+              >
+                <Text
+                  style={[
+                    {
+                      fontSize: font_size
+                    },
+                    styles.rawText
+                  ]}
+                >
+                  {item.rawText}
+                </Text>
+                <Text
+                  style={[
+                    {
+                      fontSize: font_size
+                    },
+                    styles.boldText
+                  ]}
+                >
                   {item.boldText}
                 </Text>
-              </Text>
-            </View>
+              </View>
+            </Card>
           </LinearGradient>
         </Col>
-        <Row style={[styles.bottomContainer, { backgroundColor: COLOR.LGTWO }]}>
+        <Row style={styles.bottomContainer}>
           <Text
-            style={styles.text}
+            style={styles.skipText}
             onPress={() => {
               this._onSkip();
             }}
@@ -152,7 +191,7 @@ class AppIntro extends Component {
             onPress={() => {
               this._onNext(item, index);
             }}
-            style={{ marginRight: 7, marginTop: -10 }}
+            style={styles.nextView}
           >
             <TouchableOpacity
               onPress={() => {
@@ -164,7 +203,7 @@ class AppIntro extends Component {
               onPress={() => {
                 this._onNext(item, index);
               }}
-              style={{ opacity: 1, color: "white", marginTop: 8 }}
+              style={styles.nextIcon}
               name={iconName}
             />
           </View>
@@ -178,20 +217,18 @@ class AppIntro extends Component {
         <FlatList
           pagingEnabled
           horizontal
-          scrollEnabled={false}
           showsHorizontalScrollIndicator={false}
           ref={ref => {
             this.flatListRef = ref;
           }}
           data={AppDetails}
           renderItem={this._renderItem}
-          keyExtractor={(item, index) => item.bkGrndClr}
+          keyExtractor={(item, index) => item.rawText}
         />
       </Container>
     );
   }
 }
-
 const mapStateToProps = state => ({
   appliedJob: state.appliedJob,
   interviewSignUp: state.interviewSignUp

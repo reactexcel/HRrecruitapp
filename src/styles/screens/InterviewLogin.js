@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { COLOR } from "./color";
+import { COLOR } from "../color";
 
 export default StyleSheet.create({
   textInputView: {
@@ -16,7 +16,8 @@ export default StyleSheet.create({
   btnStyle: {
     backgroundColor: COLOR.MUSTARD
   },
-  textStyle : {
-      color : COLOR.LGONE
+  textStyle: {
+    color: COLOR.LGONE,
+    fontFamily: "Montserrat-Bold"
   }
 });

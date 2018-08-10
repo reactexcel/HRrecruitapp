@@ -1,25 +1,33 @@
 import React, { Component, Fragment } from "react";
-import { Platform, Linking } from "react-native";
-import { ScrollView, View } from "react-native";
+import { Platform, Linking, StatusBar, ScrollView, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
 import ProfileDescription from "../components/ProfileDescription";
+import { Icon } from "native-base";
 
 export default class Profile extends Component {
   static navigationOptions = {
     headerStyle: {
-      elevation: 0
+      elevation: 0,
+      backgroundColor: "white"
     },
     title: "Profile",
     headerTitleStyle: {
       color: "black",
       textAlign: "center",
       alignSelf: "center",
-      flex: 1
+      flex: 1,
+      fontFamily: "Montserrat-SemiBold"
     },
     headerTintColor: COLOR.PINK,
-    headerRight: <View />
+    headerRight: (
+      <Icon
+        name="pencil"
+        type="MaterialCommunityIcons"
+        style={{ color: COLOR.PINK, marginRight: 10, fontSize: 25 }}
+      />
+    )
   };
   constructor(props) {
     super(props);
@@ -36,17 +44,10 @@ export default class Profile extends Component {
     }
     Linking.openURL(url);
   };
-  incPosition = () => {
-    if (this.state.currentPosition < 5) {
-      this.setState(prevState => ({
-        currentPosition: prevState.currentPosition + 1
-      }));
-    }
-  };
   render() {
     return (
       <ScrollView>
-        <ProfileView onPress={this.incPosition} />
+        <ProfileView />
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={{ flexBasis: "65%" }}

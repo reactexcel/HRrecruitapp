@@ -5,8 +5,9 @@ import {
   Image,
   Linking,
   Platform,
-  TouchableOpacity,
-  BackHandler
+  TouchableHighlight,
+  BackHandler,
+  Dimensions
 } from "react-native";
 import {
   Container,
@@ -21,13 +22,14 @@ import {
   Spinner
 } from "native-base";
 import { connect } from "react-redux";
-import styles from "../styles/HomePage";
+import styles from "../styles/screens/HomePage";
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
 import { pageDeatils } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
+import LinearGradient from "react-native-linear-gradient";
 
 class HomePage extends Component {
   constructor(props) {
@@ -37,7 +39,8 @@ class HomePage extends Component {
       linkOpening: false,
       candidateJob: null,
       profile_pic: null,
-      userName: null
+      userName: null,
+      textColor: false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -84,7 +87,7 @@ class HomePage extends Component {
     } else if (data == "InterviewLogin") {
       this.props.navigation.navigate("InterviewLogin");
     } else {
-      this.props.navigation.navigate(data, { title: "Apply for Jobs" });
+      this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
   componentDidMount = async () => {
@@ -105,70 +108,87 @@ class HomePage extends Component {
   handleBackPress = () => {
     BackHandler.exitApp(); // works best when the goBack is async
   };
+  onPressIn = k => {
+    this.setState({ textColor: true, index: k });
+  };
+  onPressOut = () => {
+    this.setState({ textColor: false });
+  };
   render() {
-    let { linkOpening, profile_pic, userName } = this.state;
+    let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
       : require("../images/profilepic.png");
     let userNames = userName ? userName : "";
     let renderCustomView = pageDeatils.map((data, k) => {
       return (
-        <View key={k} style={styles.listContainer}>
-          <List>
-            <ListItem
-              onPress={() => {
-                this.handleViewClick(data.route);
-              }}
-              avatar
-            >
-              <Left>
-                <Thumbnail source={data.image} />
-              </Left>
-              <Body style={{ borderBottomWidth: 0 }}>
-                <Text>{data.name}</Text>
-              </Body>
-              <Right style={{ borderBottomWidth: 0, marginTop: 7 }}>
-                <Icon active name={data.icon} />
-              </Right>
-            </ListItem>
-          </List>
-        </View>
+        <TouchableHighlight
+          onPressIn={() => {
+            this.onPressIn(k);
+          }}
+          onPressOut={() => {
+            this.onPressOut();
+          }}
+          underlayColor={COLOR.LGONE}
+          key={k}
+          onPress={() => {
+            this.handleViewClick(data.route);
+          }}
+          style={[styles.listContainer]}
+        >
+          <View style={styles.listSubContainer}>
+            <View>
+              <Image
+                resizeMode="contain"
+                style={[styles.image, k == 2 ? { marginLeft: -15 } : {}]}
+                source={textColor && index == k ? data.image[1] : data.image[0]}
+              />
+            </View>
+            <View style={styles.textView}>
+              <Text
+                style={[
+                  styles.text,
+                  textColor && index == k ? { color: COLOR.WHITE } : {}
+                ]}
+              >
+                {data.name}
+              </Text>
+            </View>
+          </View>
+        </TouchableHighlight>
       );
     });
     return (
-      <Container style={styles.container}>
+      <LinearGradient
+        colors={[COLOR.LGONE, COLOR.LGTWO]}
+        style={styles.container}
+      >
         {linkOpening ? (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              flexDirection: "column"
-            }}
-          >
+          <View style={styles.spinnerView}>
             <Spinner color={COLOR.Spinner} />
           </View>
         ) : (
-          <View>
-            <Image
-              resizeMode="contain"
-              style={styles.bckgndImage}
-              source={require("../images/navbg.png")}
-            />
+          <View style={styles.subContainer}>
             <View style={styles.logoCnt}>
               <View style={styles.logoView}>
                 <Logo />
               </View>
             </View>
-            <View style={styles.avatar}>
-              <Image style={styles.avatarImage} source={profilepic} />
-            </View>
             <View style={styles.btnContainer}>
-              <Text>{userNames}</Text>
+              <CustomButton
+                onPress={() => {
+                  console.log();
+                }}
+                btnStyle={styles.btn}
+                btnTextStyle={styles.joinBtnStyles}
+                text={"JOIN NOW"}
+                type={"rounded"}
+              />
             </View>
             {renderCustomView}
           </View>
         )}
-      </Container>
+      </LinearGradient>
     );
   }
 }

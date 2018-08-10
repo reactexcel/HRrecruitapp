@@ -2,6 +2,7 @@ import { StyleSheet, Platform, Dimensions } from "react-native";
 var { height, width } = Dimensions.get("window");
 
 import { COLOR } from "./color";
+import { CardItem } from "native-base";
 
 export default StyleSheet.create({
   container: {
@@ -12,12 +13,17 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  linearGradientView: {
+    flex: 1
+  },
   blockView: {
+    backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
     width: width * 0.93,
     borderRadius: 5,
-    padding: 10
+    padding: 10,
+    borderWidth: 0
   },
   headerText: {
     color: COLOR.Black,
@@ -27,16 +33,17 @@ export default StyleSheet.create({
     textAlign: "center"
   },
   text: {
-    letterSpacing: 1,
+    fontFamily: "Montserrat-Medium",
     textAlign: "center",
-    fontSize: Platform.OS === "ios" ? 16 : 14,
-    color: COLOR.DarkGrey
+    // letterSpacing: 0.4,
+    color: COLOR.TEXTCOLOR,
+    fontSize: 12
   },
   inputText: {
     color: "#7d7885",
     fontSize: Platform.OS === "ios" ? 19 : 17,
     fontWeight: "400",
-    letterSpacing: 1,
+    fontFamily: "Montserrat-Regular"
   },
   itemView: {
     paddingVertical: 10,
@@ -54,6 +61,59 @@ export default StyleSheet.create({
     color: "#fff"
   },
   buttonPadder: {
-    margin: 10
+    margin: 10,
+    height: 35,
+    backgroundColor: COLOR.LGONE,
+    marginBottom: 15
+  },
+  descriptionText: {
+    width: width * 0.88,
+    marginBottom: -20
+  },
+  cardItem: {
+    justifyContent: "space-between",
+    padding: 0
+  },
+  viewDesign: {
+    flexDirection: "column"
+  },
+  viewText: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 12.8,
+    color: COLOR.TURQUOISE
+  },
+  iconView: {
+    flexDirection: "row",
+    marginTop: 10
+  },
+  viewRow: {
+    flexDirection: "row"
+  },
+  viewIcon: {
+    marginTop: 1
+  },
+  rowText: {
+    fontFamily: "Montserrat-Medium",
+    color: COLOR.TEXTCOLOR,
+    fontSize: 9,
+    marginLeft: 2,
+    marginRight: 10
+  },
+  applyBtn: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 1,
+    paddingLeft: 1,
+    width: 80,
+    height: 27,
+    marginRight: 10,
+    backgroundColor: COLOR.YELLOW,
+    justifyContent: "center"
+  },
+  applyBtnText: {
+    fontFamily: "Montserrat-Bold",
+    fontSize: 9,
+    alignSelf: "center",
+    textAlign: "center"
   }
 });
