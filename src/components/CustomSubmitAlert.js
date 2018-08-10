@@ -80,8 +80,8 @@ const CustomSubmitAlert = props => {
 CustomSubmitAlert.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   showCustomAlert: PropTypes.func.isRequired,
-  length: PropTypes.number.isRequired,
-  count: PropTypes.number.isRequired,
-  confirmSubmit: PropTypes.number.isRequired
+  length: PropTypes.number,
+  count: PropTypes.number,
+  confirmSubmit: PropTypes.func.isRequired
 };
 export default CustomSubmitAlert;
