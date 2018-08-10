@@ -13,6 +13,9 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
+  linearGradientView: {
+    flex: 1
+  },
   blockView: {
     backgroundColor: "transparent",
     justifyContent: "center",
@@ -30,7 +33,7 @@ export default StyleSheet.create({
     textAlign: "center"
   },
   text: {
-    fontFamily: "Montserrat-Medium", 
+    fontFamily: "Montserrat-Medium",
     textAlign: "center",
     // letterSpacing: 0.4,
     color: COLOR.TEXTCOLOR,
@@ -74,10 +77,10 @@ export default StyleSheet.create({
   viewDesign: {
     flexDirection: "column"
   },
-  viewText:{ 
-    fontFamily: "Montserrat-SemiBold", 
-    fontSize: 12.8, 
-    color: COLOR.TURQUOISE 
+  viewText: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 12.8,
+    color: COLOR.TURQUOISE
   },
   iconView: {
     flexDirection: "row",
@@ -89,12 +92,12 @@ export default StyleSheet.create({
   viewIcon: {
     marginTop: 1
   },
-  rowText: { 
-    fontFamily: "Montserrat-Medium", 
-    color:COLOR.TEXTCOLOR,
-    fontSize: 9, 
-    marginLeft: 2, 
-    marginRight: 10 
+  rowText: {
+    fontFamily: "Montserrat-Medium",
+    color: COLOR.TEXTCOLOR,
+    fontSize: 9,
+    marginLeft: 2,
+    marginRight: 10
   },
   applyBtn: {
     paddingTop: 0,
@@ -108,7 +111,7 @@ export default StyleSheet.create({
     justifyContent: "center"
   },
   applyBtnText: {
-    fontFamily: "Montserrat-Bold", 
+    fontFamily: "Montserrat-Bold",
     fontSize: 9,
     alignSelf: "center",
     textAlign: "center"

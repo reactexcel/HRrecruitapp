@@ -132,34 +132,14 @@ class AppIntro extends Component {
         <Col size={9} style={[styles.container]}>
           <LinearGradient
             colors={[COLOR.LGONE, COLOR.LGTWO]}
-            style={[
-              styles.container,
-              { flex: 1, justifyContent: "center", alignItems: "center" }
-            ]}
+            style={[styles.container, styles.containerView]}
           >
             <CardTrail />
-            <Card
-              style={{
-                width: "85%",
-                flex: 0.7,
-                borderRadius: 10,
-                marginTop: 0,
-                flexDirection: "row",
-                justifyContent: "flex-start",
-                alignItems: "center"
-              }}
-            >
+            <Card style={styles.appIntroCardStyle}>
               <Image
                 resizeMode="contain"
                 style={[
-                  index === 0
-                    ? {
-                        height: 110,
-                        width: 140,
-                        position: "absolute",
-                        top: "15%"
-                      }
-                    : styles.images,
+                  index === 0 ? styles.helloImage : styles.images,
                   {
                     marginLeft: imgMargin
                   }
@@ -169,27 +149,27 @@ class AppIntro extends Component {
               <View
                 style={[
                   { marginLeft: index === 0 ? "20%" : 0 },
-                  index === 1 ? { flexDirection: "row", marginLeft: -15 } : {},
-                  index === 3
-                    ? { position: "relative", top: 25, right: 30 }
-                    : {}
+                  index === 1 ? styles.secondImageTextView : {},
+                  index === 3 ? styles.fourthImageTextView : {}
                 ]}
               >
                 <Text
-                  style={{
-                    fontSize: font_size,
-                    color: "#263051",
-                    fontFamily: "Montserrat-Bold"
-                  }}
+                  style={[
+                    {
+                      fontSize: font_size
+                    },
+                    styles.rawText
+                  ]}
                 >
                   {item.rawText}
                 </Text>
                 <Text
-                  style={{
-                    fontSize: font_size,
-                    color: COLOR.MUSTARD,
-                    fontFamily: "Montserrat-Bold"
-                  }}
+                  style={[
+                    {
+                      fontSize: font_size
+                    },
+                    styles.boldText
+                  ]}
                 >
                   {item.boldText}
                 </Text>
@@ -197,9 +177,9 @@ class AppIntro extends Component {
             </Card>
           </LinearGradient>
         </Col>
-        <Row style={[styles.bottomContainer, { backgroundColor: COLOR.LGTWO }]}>
+        <Row style={styles.bottomContainer}>
           <Text
-            style={{ color: "white", fontFamily: "Montserrat-Regular" }}
+            style={styles.skipText}
             onPress={() => {
               this._onSkip();
             }}
@@ -211,7 +191,7 @@ class AppIntro extends Component {
             onPress={() => {
               this._onNext(item, index);
             }}
-            style={{ marginRight: 7, marginTop: -10 }}
+            style={styles.nextView}
           >
             <TouchableOpacity
               onPress={() => {
@@ -223,7 +203,7 @@ class AppIntro extends Component {
               onPress={() => {
                 this._onNext(item, index);
               }}
-              style={{ opacity: 1, color: "white", marginTop: 8 }}
+              style={styles.nextIcon}
               name={iconName}
             />
           </View>

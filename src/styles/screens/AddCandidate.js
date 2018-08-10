@@ -19,7 +19,8 @@ export default StyleSheet.create({
   errorText: {
     color: COLOR.Red,
     fontSize: 12,
-    fontFamily: "Montserrat-SemiBold"
+    fontFamily: "Montserrat-SemiBold",
+    marginLeft: 15
   },
   text: {
     marginLeft: 10,
@@ -83,5 +84,54 @@ export default StyleSheet.create({
     fontSize: 11,
     color: COLOR.WHITE,
     fontFamily: "Montserrat-Medium"
+  },
+  labelText: {
+    color: COLOR.LTONE,
+    fontFamily: "Montserrat-Medium"
+  },
+  jobTitleView: {
+    margin: 6,
+    marginBottom: 10
+  },
+  jobTitleText: {
+    alignSelf: "flex-start",
+    fontFamily: "Montserrat-Medium"
+  },
+  jobTitleBtnView: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    marginLeft: 15
+  },
+  //resume
+  resumeView: {
+    marginLeft: 8
+  },
+  resumeText: {
+    fontFamily: "Montserrat-Medium"
+  },
+  cloudBtn: {
+    marginTop: 5
+  },
+  resumeErrorText: {
+    marginLeft: 10
+  },
+  acquaintedTitle: {
+    textAlign: "center",
+    fontSize: 13,
+    color: COLOR.WHITE,
+    fontFamily: "Montserrat-SemiBold"
+  },
+  acquaintedDescription: {
+    textAlign: "center",
+    color: COLOR.WHITE,
+    fontSize: 11.5,
+    fontFamily: "Montserrat-Regular"
+  },
+  joinNowBtn: {
+    backgroundColor: COLOR.MUSTARD
+  },
+  joinNowBtnText: {
+    color: "black",
+    fontFamily: "Montserrat-Bold"
   }
 });

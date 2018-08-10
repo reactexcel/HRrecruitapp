@@ -47,5 +47,14 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     fontFamily: "Montserrat-Bold",
     fontSize: 12
+  },
+  loginBtnStyle: {
+    marginRight: 3
+  },
+  loginTextStyle: {
+    paddingHorizontal: 15
+  },
+  shareTextStyle: {
+    paddingRight: 20
   }
 });

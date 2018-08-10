@@ -23,6 +23,7 @@ import {
 } from "native-base";
 import { connect } from "react-redux";
 import styles from "../styles";
+import _styles from "../styles/screens/JobList";
 import { COLOR } from "../styles/color";
 import { getJobLists } from "../actions";
 import CustomButton from "../components/CustomButton";
@@ -121,14 +122,14 @@ class JobList extends Component {
       </CardItem>
       <CardItem>
         <Body>
-          <Text style={[styles.text, { textAlign: "auto" }]}>
+          <Text style={[styles.text, _styles.jobDescriptionText]}>
             {item.job_description ? item.job_description : ""}
           </Text>
         </Body>
       </CardItem>
       <CustomButton
         btnStyle={styles.buttonPadder}
-        btnTextStyle={{ fontFamily: "Montserrat-Bold", fontSize: 13 }}
+        btnTextStyle={_styles.fullDescriptionText}
         type="rounded"
         text="Full Description"
         onPress={() => {
@@ -151,7 +152,7 @@ class JobList extends Component {
     return (
       <Container>
         {!isLoading ? (
-          <View style={{ flex: 1 }}>
+          <View style={_styles.container}>
             <View />
             {!isLoading && joblist && joblist.length >= 1 ? (
               <Fragment>
@@ -159,9 +160,9 @@ class JobList extends Component {
                   <JobOpeningAboutUs />
                   <LinearGradient
                     colors={[COLOR.LGONE, COLOR.LGTWO]}
-                    style={{ flex: 1 }}
+                    style={styles.linearGradientView}
                   >
-                    <View style={{ padding: 10 }}>
+                    <View style={_styles.jobCardView}>
                       <FlatList
                         data={joblist}
                         keyExtractor={(item, index) => item.id.toString()}
@@ -175,13 +176,13 @@ class JobList extends Component {
             {!isLoading && userLogin ? (
               <Content padder>
                 <Card>
-                  <CardItem style={{ justifyContent: "space-between" }}>
+                  <CardItem style={_styles.appliedJobStyle}>
                     <Text>{appliedJobDetails.job_profile}</Text>
                   </CardItem>
                   <HorizontalLine />
                   <CardItem>
                     <Body>
-                      <Text style={[styles.text, { textAlign: "auto" }]}>
+                      <Text style={[styles.text, _styles.jobDescriptionText]}>
                         {appliedJobDetails.job_description
                           ? appliedJobDetails.job_description
                           : ""}
@@ -193,13 +194,7 @@ class JobList extends Component {
             ) : null}
           </View>
         ) : (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              flexDirection: "column"
-            }}
-          >
+          <View style={_styles.spinnerView}>
             <Spinner color={COLOR.Spinner} />
           </View>
         )}

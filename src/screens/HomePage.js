@@ -164,13 +164,7 @@ class HomePage extends Component {
         style={styles.container}
       >
         {linkOpening ? (
-          <View
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              flexDirection: "column"
-            }}
-          >
+          <View style={styles.spinnerView}>
             <Spinner color={COLOR.Spinner} />
           </View>
         ) : (

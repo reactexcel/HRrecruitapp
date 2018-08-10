@@ -111,7 +111,7 @@ class AddCandidate extends Component {
     return (
       <Fragment>
         <Item stackedLabel style={_styles.inputTextView}>
-          <Label style={{ color: COLOR.LTONE,fontFamily:"Montserrat-Medium"}}>{props.labelName}</Label>
+          <Label style={_styles.labelText}>{props.labelName}</Label>
           <Input
             style={styles.inputText}
             {...inputProps}
@@ -153,12 +153,12 @@ class AddCandidate extends Component {
     })
     return (
       <Fragment>
-        <View style={{margin: 6, marginBottom:10}}>
-          <Text numberOfLines={1} style={[_styles.text,{alignSelf:'flex-start',fontFamily:"Montserrat-Medium"}]}>
+        <View style={_styles.jobTitleView}>
+          <Text numberOfLines={1} style={[_styles.text,_styles.jobTitleText]}>
             JOB TITLE
           </Text>
         </View>
-        <View style={{ flexDirection: 'row', flexWrap:'wrap', marginLeft:15}}>
+        <View style={_styles.jobTitleBtnView}>
           {renderJobTitle}
         </View>
       </Fragment>
@@ -216,19 +216,19 @@ class AddCandidate extends Component {
     });
     return (
       <Fragment>
-      <View style={{marginLeft:8}}>
+      <View style={_styles.resumeView}>
         <View style={_styles.uploadSection}>
-          <Text numberOfLines={1} style={[_styles.text,{fontFamily:"Montserrat-Medium"}]}>
+          <Text numberOfLines={1} style={[_styles.text,_styles.resumeText]}>
             RESUME
           </Text>
-          <Button transparent onPress={onPress} style={{ marginTop: 5 }}>
+          <Button transparent onPress={onPress} style={_styles.cloudBtn}>
             <Icon style={_styles.uploadIcon} name="cloud-upload" />
           </Button>
         </View>
         {resumeContainer}
         <View style={_styles.errorTextView}>
           {resumeError && (
-            <Text style={[_styles.errorText, { marginLeft: 8 }]}>
+            <Text style={[_styles.errorText,_styles.resumeErrorText]}>
               {resumeError}
             </Text>
           )}
@@ -320,7 +320,7 @@ class AddCandidate extends Component {
     const { converting, resumeData, resumeError } = this.state;
     return (
       <Container style={styles.container}>
-        <LinearGradient style={{flex:1}} colors={[COLOR.LGONE, COLOR.LGTWO]} >
+        <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
           <Content padder>
           <Grid>
             <Row style={[styles.logoView,{marginTop:-40}]}>
@@ -328,8 +328,8 @@ class AddCandidate extends Component {
             </Row>
             <Row style={{justifyContent:'center',marginTop:-30, marginBottom:25}}>
               <View style={styles.descriptionText}>
-                <Text style={{ textAlign: "center", fontSize: 13,  color: COLOR.WHITE,fontFamily:"Montserrat-SemiBold"}}>Let's get acquainted</Text>
-                  <Text style={{ textAlign: 'center', color: COLOR.WHITE,fontSize:11.5,fontFamily:"Montserrat-Regular"}}>
+                <Text style={_styles.acquaintedTitle}>Let's get acquainted</Text>
+                  <Text style={_styles.acquaintedDescription}>
                     Let’s get acquainted Excellence Technologies gathers data to ensure 
                     the accuracy of the information we are providing for you as well as 
                     the security of business for employers and workers.
@@ -402,8 +402,8 @@ class AddCandidate extends Component {
           <Spinner color={COLOR.Spinner} />
         ) : (
             <CustomButton
-              btnStyle={{ backgroundColor: COLOR.MUSTARD}}
-              btnTextStyle={{color:'black',fontFamily:"Montserrat-Bold"}}
+              btnStyle={_styles.joinNowBtn}
+              btnTextStyle={_styles.joinNowBtntext}
               text="JOIN NOW"
               onPress={handleSubmit(this.onSubmit)}
             />
