@@ -21,9 +21,8 @@ import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
-import HorizontalLine from "../components/HorizontalLine";
 import styles from "../styles";
-import _styles from "../styles/AddCandidate";
+import _styles from "../styles/screens/AddCandidate";
 import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
@@ -144,7 +143,7 @@ class AddCandidate extends Component {
       return (
         <CustomButton
           btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
-          btnTextStyle={check ? { fontSize: 11, color: 'black',fontFamily:"Montserrat-Medium" } : { fontSize: 11, color:COLOR.WHITE,fontFamily:"Montserrat-Medium" }}
+          btnTextStyle={check ? _styles.checkedBtnText : _styles.uncheckedBtnText}
           key={i}
           onPress={()=>{console.log()}}
           text={title.title}

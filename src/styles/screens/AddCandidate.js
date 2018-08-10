@@ -1,6 +1,6 @@
 import { StyleSheet, Platform, Dimensions } from "react-native";
 var { height, width } = Dimensions.get("window");
-import { COLOR } from "./color";
+import { COLOR } from "../color";
 
 export default StyleSheet.create({
   picker: {
@@ -39,7 +39,7 @@ export default StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 16 : 14,
     color: COLOR.DarkGrey,
     fontWeight: Platform.OS === "ios" ? "400" : "400",
-    fontFamily : "Montserrat-SemiBold"
+    fontFamily: "Montserrat-SemiBold"
   },
   uploadSection: {
     flexDirection: "row",
@@ -73,5 +73,15 @@ export default StyleSheet.create({
     backgroundColor: "#131931",
     borderWidth: 3,
     borderColor: "#19203e"
+  },
+  checkedBtnText: {
+    fontSize: 11,
+    color: "black",
+    fontFamily: "Montserrat-Medium"
+  },
+  uncheckedBtnText: {
+    fontSize: 11,
+    color: COLOR.WHITE,
+    fontFamily: "Montserrat-Medium"
   }
 });

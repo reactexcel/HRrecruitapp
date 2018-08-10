@@ -24,7 +24,7 @@ import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
 import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
-import _styles from "../styles/TestPage";
+import _styles from "../styles/screens/TestPage";
 import CustomButton from "../components/CustomButton";
 import Questions from "../components/Questions";
 import StartTest from "../components/StartTest";
@@ -107,43 +107,20 @@ class TestPage extends Component {
         backgroundColor: COLOR.LGONE
       },
       headerTitle: (
-        <View
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center"
-          }}
-        >
+        <View style={_styles.timerView}>
           {navigation.state.params.show !== undefined ? (
             navigation.state.params.show ? (
               <React.Fragment>
                 <Text
                   style={
                     Platform.OS === "ios"
-                      ? {
-                          letterSpacing: 1,
-                          textAlign: "center",
-                          fontSize: 13,
-                          color: COLOR.DarkGrey
-                        }
-                      : [
-                          styles.text,
-                          {
-                            color: COLOR.Red,
-                            fontFamily: "Montserrat-SemiBold"
-                          }
-                        ]
+                      ? _styles.remainingTimeTextIOS
+                      : [styles.text, _styles.remainingTimeText]
                   }
                 >
                   Remaining Time
                 </Text>
-                <Text
-                  style={{
-                    color: COLOR.Red,
-                    fontFamily: "Montserrat-SemiBold",
-                    fontSize: 16
-                  }}
-                >
+                <Text style={_styles.timerStyle}>
                   <TimerCountdown
                     initialSecondsRemaining={counter}
                     onTick={counter => {
@@ -340,14 +317,7 @@ class TestPage extends Component {
                   : this.confirmSecondRoundSubmit();
               }}
             >
-              <Text
-                style={{
-                  color: COLOR.TEXTCOLOR,
-                  fontFamily: "Montserrat-Bold"
-                }}
-              >
-                Submit Test
-              </Text>
+              <Text style={_styles.submitButtonText}>Submit Test</Text>
             </Button>
           </Content>
         ) : (

@@ -3,6 +3,7 @@ import { View, Text } from "native-base";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import styles from "../styles";
 import { COLOR } from "../styles/color";
+import PropTypes from "prop-types";
 
 const JobSalaryDetails = props => {
   return (
@@ -38,4 +39,7 @@ const JobSalaryDetails = props => {
   );
 };
 
+JobSalaryDetails.propTypes = {
+  children: PropTypes.any
+};
 export default JobSalaryDetails;

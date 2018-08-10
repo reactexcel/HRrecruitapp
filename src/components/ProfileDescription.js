@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
-import { StyleSheet } from "react-native";
 import { View, Text, Button, Icon } from "native-base";
 import { COLOR } from "../styles/color";
 import ProfileBlock from "./ProfileBlock";
 import StepIndicator from "react-native-step-indicator";
+import { customStyles } from "../helper/constant";
+import styles from "../styles/components/ProfileDescription";
 
 const ProfileDescription = props => {
   const labels = [
@@ -12,31 +13,8 @@ const ProfileDescription = props => {
     "CV Shortlisted",
     "Take Online Test",
     props.result
-    //   "#2a365f"
   ];
-  const customStyles = {
-    stepIndicatorSize: 10,
-    currentStepIndicatorSize: 10,
-    separatorStrokeWidth: 1,
-    currentStepStrokeWidth: 2,
-    stepStrokeCurrentColor: COLOR.MUSTARD,
-    stepStrokeWidth: 3,
-    stepStrokeFinishedColor: COLOR.MUSTARD,
-    stepStrokeUnFinishedColor: "#7d7885",
-    separatorFinishedColor: COLOR.MUSTARD,
-    separatorUnFinishedColor: "#7d7885",
-    stepIndicatorFinishedColor: COLOR.MUSTARD,
-    stepIndicatorUnFinishedColor: "#7d7885",
-    stepIndicatorCurrentColor: COLOR.MUSTARD,
-    stepIndicatorLabelFontSize: 0,
-    currentStepIndicatorLabelFontSize: 0,
-    stepIndicatorLabelCurrentColor: "transparent",
-    stepIndicatorLabelFinishedColor: "transparent",
-    stepIndicatorLabelUnFinishedColor: "transparent",
-    labelColor: "#7d7885",
-    labelSize: 10,
-    currentStepLabelColor: COLOR.MUSTARD
-  };
+
   return (
     <Fragment>
       <ProfileBlock title="JOB TITLE">
@@ -88,23 +66,4 @@ ProfileDescription.defaultProps = {
   result: "Result"
 };
 
-const styles = StyleSheet.create({
-  textStyle: {
-    color: "white",
-    marginTop: 6,
-    fontFamily: "Montserrat-Regular"
-  },
-  btnView: {
-    flex: 1,
-    flexDirection: "row",
-    marginTop: 6
-  },
-  aboutBtn: {
-    backgroundColor: "transparent",
-    marginHorizontal: 10
-  },
-  btnText: {
-    fontFamily: "Montserrat-SemiBold"
-  }
-});
 export default ProfileDescription;

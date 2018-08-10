@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Platform } from "react-native";
-import { COLOR } from "./color";
+import { COLOR } from "../color";
 var { height, width } = Dimensions.get('window');
 
 

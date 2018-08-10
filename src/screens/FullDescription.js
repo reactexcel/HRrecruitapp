@@ -5,7 +5,7 @@ import JobSalaryDetails from "../components/JobSalaryDetails";
 import { Button, Container, Content, Icon } from "native-base";
 import { ABOUT_US } from "../helper/constant";
 import { KEY_SKILLS } from "../helper/constant";
-import styles from "../styles/FullDescription";
+import styles from "../styles/screens/FullDescription";
 
 class FullDescription extends Component {
   static navigationOptions = {

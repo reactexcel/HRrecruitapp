@@ -10,7 +10,7 @@ import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
-import styles from "../styles/AppIntro";
+import styles from "../styles/screens/AppIntro";
 import ProgressBar from "../components/ProgressBar";
 import HomePage from "./HomePage";
 var { height, width } = Dimensions.get("window");

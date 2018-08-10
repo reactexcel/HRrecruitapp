@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
-import { COLOR } from "./color";
-import { DEVICE_WIDTH } from "../helper/constant";
+import { COLOR } from "../color";
+import { DEVICE_WIDTH } from "../../helper/constant";
 
 export default StyleSheet.create({
   descriptionView: {
@@ -83,5 +83,29 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-SemiBold",
     color: COLOR.TEXTCOLOR,
     textAlign: "center"
+  },
+  timerView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  remainingTimeTextIOS: {
+    letterSpacing: 1,
+    textAlign: "center",
+    fontSize: 13,
+    color: COLOR.Red
+  },
+  remainingTimeText: {
+    color: COLOR.Red,
+    fontFamily: "Montserrat-SemiBold"
+  },
+  timerStyle: {
+    color: COLOR.Red,
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 16
+  },
+  submitButtonText: {
+    color: COLOR.TEXTCOLOR,
+    fontFamily: "Montserrat-Bold"
   }
 });

@@ -13,7 +13,7 @@ import { Col, Row } from "react-native-easy-grid";
 import map from "lodash/map";
 import findIndex from "lodash/findIndex";
 import styles from "../styles";
-import _styles from "../styles/TestPage";
+import _styles from "../styles/screens/TestPage";
 import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
 import HTMLView from "react-native-htmlview";

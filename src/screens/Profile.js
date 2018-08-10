@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Platform, Linking, StatusBar } from "react-native";
-import { ScrollView, View } from "react-native";
+import { Platform, Linking, StatusBar, ScrollView, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
@@ -36,11 +35,6 @@ export default class Profile extends Component {
       currentPosition: 0
     };
   }
-  // componentDidMount() {
-  //   Platform.OS === "android"
-  //     ? StatusBar.setBackgroundColor("white")
-  //     : StatusBar.setBarStyle("dark-content");
-  // }
   handleLocate = () => {
     let url = "";
     if (Platform.OS === "ios") {
