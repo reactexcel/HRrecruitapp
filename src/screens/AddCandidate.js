@@ -397,17 +397,17 @@ class AddCandidate extends Component {
             </Row>
           </Grid>
           </Content>
-        </LinearGradient>
         {adding || converting ? (
-          <Spinner color={COLOR.Spinner} />
+          <Spinner color={COLOR.MUSTARD} />
         ) : (
             <CustomButton
               btnStyle={_styles.joinNowBtn}
-              btnTextStyle={_styles.joinNowBtntext}
+              btnTextStyle={_styles.joinNowBtnText}
               text="JOIN NOW"
               onPress={handleSubmit(this.onSubmit)}
             />
           )}
+        </LinearGradient>
       </Container>
     );
   }
