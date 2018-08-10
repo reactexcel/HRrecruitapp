@@ -124,7 +124,7 @@ class FullDescription extends Component {
               <Icon
                 name="share"
                 type="Entypo"
-                style={{ color: COLOR.TEXTCOLOR }}
+                style={styles.shareIconStyle}
               />
               <Text style={[styles.btnText, styles.shareTextStyle]}>
                 SHARE IT

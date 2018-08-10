@@ -56,5 +56,6 @@ export default StyleSheet.create({
   },
   shareTextStyle: {
     paddingRight: 20
-  }
+  },
+  shareIconStyle : { color: COLOR.TEXTCOLOR },
 });
