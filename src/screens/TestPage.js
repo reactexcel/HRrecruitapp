@@ -5,7 +5,8 @@ import {
   NetInfo,
   BackHandler,
   AsyncStorage,
-  Platform
+  Platform,
+  Image
 } from "react-native";
 import {
   Container,
@@ -17,7 +18,8 @@ import {
   Button,
   Spinner,
   Radio,
-  View
+  View,
+  Icon
 } from "native-base";
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
@@ -35,6 +37,8 @@ import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
 import { setItem, getItem } from "../helper/storage";
 import LinearGradient from "react-native-linear-gradient";
+import Modal from "react-native-modalbox";
+import CustomSubmitAlert from "../components/CustomSubmitAlert";
 
 class TestPage extends Component {
   constructor(props) {
@@ -47,7 +51,8 @@ class TestPage extends Component {
       isLoading: false,
       isOnline: true,
       show: false,
-      time: 0
+      time: 0,
+      isOpen: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
   }
@@ -204,53 +209,24 @@ class TestPage extends Component {
   };
 
   confirmSubmit = () => {
+    this.showCustomAlert(false);
+
     const time = this.state.time;
     if (this.state.solution.length === 0) {
       alert("Cannot submit without attempting any question.");
     } else {
-      Alert.alert(
-        "Confirm Please",
-        `You have attempted ${this.state.solution.length}/${this.state.count}. 
-      \nAre you sure, you want to submit your Test? You won't be able to change your response after submitting the test.`,
-        [
-          {
-            text: "Cancel",
-            onPress: () => {},
-            style: "cancel"
-          },
-          {
-            text: "OK",
-            onPress: () => {
-              this.props.navigation.navigate("SubmitTest", {
-                ...this.props.navigation.state.params,
-                taken_time_minutes: 60 - Math.ceil(time / (60 * 1000))
-              });
-            }
-          }
-        ]
-      );
+      this.props.navigation.navigate("SubmitTest", {
+        ...this.props.navigation.state.params,
+        taken_time_minutes: 60 - Math.ceil(time / (60 * 1000))
+      });
     }
   };
   confirmSecondRoundSubmit = () => {
-    Alert.alert(
-      "Confirm Please",
-      "Are you sure, you want to submit your Test?",
-      [
-        {
-          text: "Cancel",
-          onPress: () => {},
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            this.props.navigation.navigate("SubmitTest", {
-              ...this.props.navigation.state.params
-            });
-          }
-        }
-      ]
-    );
+    this.showCustomAlert(false);
+
+    this.props.navigation.navigate("SubmitTest", {
+      ...this.props.navigation.state.params
+    });
   };
 
   handleStartTest = async () => {
@@ -279,6 +255,10 @@ class TestPage extends Component {
         time
       });
     }
+  };
+
+  showCustomAlert = show => {
+    this.setState({ isOpen: show });
   };
 
   render() {
@@ -312,13 +292,25 @@ class TestPage extends Component {
               full
               style={{ backgroundColor: COLOR.MUSTARD }}
               onPress={() => {
-                roundType !== "Subjective"
-                  ? this.confirmSubmit()
-                  : this.confirmSecondRoundSubmit();
+                // roundType !== "Subjective"
+                //   ? this.confirmSubmit()
+                //   : this.confirmSecondRoundSubmit();
+                this.showCustomAlert(true);
               }}
             >
               <Text style={_styles.submitButtonText}>Submit Test</Text>
             </Button>
+            <CustomSubmitAlert
+              showCustomAlert={this.showCustomAlert}
+              isOpen={this.state.isOpen}
+              length={this.state.solution.length}
+              count={this.state.count}
+              confirmSubmit={
+                roundType !== "Subjective"
+                  ? this.confirmSubmit
+                  : this.confirmSecondRoundSubmit
+              }
+            />
           </Content>
         ) : (
           <StartTest
