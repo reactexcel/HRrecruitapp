@@ -310,6 +310,7 @@ class TestPage extends Component {
                   ? this.confirmSubmit
                   : this.confirmSecondRoundSubmit
               }
+              roundType={roundType}
             />
           </Content>
         ) : (

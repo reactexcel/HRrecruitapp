@@ -91,6 +91,10 @@ class HomePage extends Component {
     }
   }
   componentDidMount = async () => {
+    const appIntro = await getItem("appintro");
+    if (appIntro !== undefined && appIntro.shown) {
+      BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+    }
     await this.setCandidateProfile();
   };
 

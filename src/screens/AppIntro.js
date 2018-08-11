@@ -51,10 +51,11 @@ class AppIntro extends Component {
     return null;
   }
   componentDidMount = async () => {
+    const appIntro = await getItem("appintro");
     await this._checkDeepLink();
     const candidateJob = await getItem("mongo_id");
-    if (candidateJob) {
-      this.props.navigation.navigate("HomePage");
+    if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+      this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();
   };
@@ -92,7 +93,7 @@ class AppIntro extends Component {
   _onSkip = () => {
     this._linkCheck();
   };
-  _linkCheck = () => {
+  _linkCheck = async () => {
     const { deepLink, sharing, fb_id } = this.state;
     if (deepLink) {
       const { data, message, error, status } = this.props.interviewSignUp;
@@ -108,6 +109,7 @@ class AppIntro extends Component {
     } else if (sharing) {
       this.props.navigation.navigate("JobList", { title: "Apply for Jobs" });
     } else {
+      setItem("appintro", JSON.stringify({ shown: true }));
       this.props.navigation.navigate("HomePage");
     }
   };

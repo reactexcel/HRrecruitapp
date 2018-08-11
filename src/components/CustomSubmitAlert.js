@@ -7,7 +7,14 @@ import styles from "../styles/components/CustomSubmitAlert";
 import PropTypes from "prop-types";
 
 const CustomSubmitAlert = props => {
-  const { isOpen, showCustomAlert, length, count, confirmSubmit } = props;
+  const {
+    isOpen,
+    showCustomAlert,
+    length,
+    count,
+    confirmSubmit,
+    roundType
+  } = props;
   return (
     <View style={styles.modalView}>
       <Modal
@@ -44,12 +51,16 @@ const CustomSubmitAlert = props => {
             <Text style={[styles.cnfrm, styles.confirmText]}>
               CONFIRM PLEASE
             </Text>
+            {roundType === "Objective" && (
+              <Text style={[styles.cnfrm, styles.modalText]}>
+                {`You have attempted ${length}/${count} questions`}
+              </Text>
+            )}
             <Text style={[styles.cnfrm, styles.modalText]}>
-              {`You have attempted ${length}/${count} questions`}
-            </Text>
-            <Text style={[styles.cnfrm, styles.modalText]}>
-              Are you sure you want to submit test? You Won't be able to change
-              your response after submitting the test
+              Are you sure you want to submit your test?
+              {roundType === "Objective" &&
+                `You Won't be able to
+              change your response after submitting the test`}
             </Text>
             <View style={styles.modalBtnView}>
               <CustomButton
@@ -82,6 +93,7 @@ CustomSubmitAlert.propTypes = {
   showCustomAlert: PropTypes.func.isRequired,
   length: PropTypes.number,
   count: PropTypes.number,
-  confirmSubmit: PropTypes.func.isRequired
+  confirmSubmit: PropTypes.func.isRequired,
+  roundType: PropTypes.string
 };
 export default CustomSubmitAlert;
