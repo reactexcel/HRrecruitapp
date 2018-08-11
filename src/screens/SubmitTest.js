@@ -53,49 +53,27 @@ class SubmitTest extends Component {
       if (this.props.test.data.status === SUCCESS_STATUS) {
         const { roundType } = this.props.navigation.state.params.data;
         const { round } = this.props.navigation.state.params.data;
-        if (roundType === "Subjective") {
-          Alert.alert(
-            "Thank You",
-            "Click OK to exit application and Contact HR to proceed further.",
-            [
-              {
-                text: "OK",
-                onPress: async () => {
-                  const email = this.props.navigation.getParam("email");
-                  const stored_email = await getItem("email");
-                  if (stored_email.email === email) {
-                    setItem("round", JSON.stringify({ round }));
-                  }
-                  Platform.OS === "ios"
-                    ? this.props.navigation.popToTop()
-                    : BackHandler.exitApp();
+
+        Alert.alert(
+          "Thank You",
+          "Your response has been recorded. Please contact HR for for further instructions.",
+          [
+            {
+              text: "OK",
+              onPress: async () => {
+                const email = this.props.navigation.getParam("email");
+                const stored_email = await getItem("email");
+                if (stored_email.email === email) {
+                  setItem("round", JSON.stringify({ round }));
                 }
+                this.props.navigation.navigate("HomePage", {
+                  setUser: true
+                });
               }
-            ],
-            { cancelable: false }
-          );
-        } else {
-          Alert.alert(
-            "Thank You",
-            "Your response has been recorded. Please contact HR for for further instructions.",
-            [
-              {
-                text: "OK",
-                onPress: async () => {
-                  const email = this.props.navigation.getParam("email");
-                  const stored_email = await getItem("email");
-                  if (stored_email.email === email) {
-                    setItem("round", JSON.stringify({ round }));
-                  }
-                  this.props.navigation.navigate("HomePage", {
-                      setUser: true
-                  })
-                }
-              }
-            ],
-            { cancelable: false }
-          );
-        }
+            }
+          ],
+          { cancelable: false }
+        );
       }
     }
     const { success } = this.props.test;
