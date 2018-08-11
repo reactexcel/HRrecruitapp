@@ -24,8 +24,8 @@ const transitionConfig = () => {
       useNativeDriver: true
     },
     screenInterpolator: sceneProps => {
-      const { position, layout, scene } = sceneProps;
-
+      const { position, layout, scene, index, scenes } = sceneProps;
+      const toIndex = index;
       const thisSceneIndex = scene.index;
       const width = layout.initWidth;
 
@@ -36,6 +36,15 @@ const transitionConfig = () => {
 
       const slideFromRight = { transform: [{ translateX }] };
 
+      const lastSceneIndex = scenes[scenes.length - 1].index;
+
+      if (lastSceneIndex - toIndex > 1) {
+        if (scene.index === toIndex) return;
+
+        if (scene.index !== lastSceneIndex) return { opacity: 0 };
+
+        return slideFromRight;
+      }
       return slideFromRight;
     }
   };

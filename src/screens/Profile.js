@@ -5,8 +5,10 @@ import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
 import ProfileDescription from "../components/ProfileDescription";
 import { Icon } from "native-base";
+import { connect } from "react-redux";
+import { getCandidateJobDetails } from "../actions";
 
-export default class Profile extends Component {
+class Profile extends Component {
   static navigationOptions = {
     headerStyle: {
       elevation: 0,
@@ -44,6 +46,26 @@ export default class Profile extends Component {
     }
     Linking.openURL(url);
   };
+  setCandidateProfile = async () => {
+    const candidateJob = await getItem("mongo_id");
+    if (candidateJob) {
+      let email = candidateJob.candidate.data.sender_mail;
+      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+      let userName = candidateJob.candidate.data.from;
+      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+      this.setState({
+        candidateJob,
+        profile_pic,
+        userName,
+        linkOpening: false
+      });
+    } else {
+      this.setState({ linkOpening: false });
+    }
+  };
+  async componentDidMount() {
+    await this.setCandidateProfile();
+  }
   render() {
     return (
       <ScrollView>
@@ -61,3 +83,8 @@ export default class Profile extends Component {
     );
   }
 }
+
+export default connect(
+  null,
+  { getCandidateJobDetails }
+)(Profile);

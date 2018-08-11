@@ -34,7 +34,6 @@ import LinearGradient from "react-native-linear-gradient";
 class HomePage extends Component {
   constructor(props) {
     super(props);
-    this.setCandidateProfile();
     this.state = {
       linkOpening: false,
       candidateJob: null,
@@ -60,23 +59,7 @@ class HomePage extends Component {
     }
     return null;
   }
-  setCandidateProfile = async () => {
-    const candidateJob = await getItem("mongo_id");
-    if (candidateJob) {
-      let email = candidateJob.candidate.data.sender_mail;
-      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
-      let userName = candidateJob.candidate.data.from;
-      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      this.setState({
-        candidateJob,
-        profile_pic,
-        userName,
-        linkOpening: false
-      });
-    } else {
-      this.setState({ linkOpening: false });
-    }
-  };
+
   async handleViewClick(data) {
     const { appliedJob } = this.props;
     if (data == "JobList" && this.state.candidateJob) {
@@ -94,15 +77,6 @@ class HomePage extends Component {
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
-    }
-    await this.setCandidateProfile();
-  };
-
-  componentDidUpdate = async (prevProps, prevState) => {
-    const setUser = this.props.navigation.getParam("setUser");
-    if (setUser) {
-      await this.setCandidateProfile();
-      this.props.navigation.setParams({ setUser: false });
     }
   };
 
