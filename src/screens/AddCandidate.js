@@ -77,7 +77,7 @@ class AddCandidate extends Component {
               text: "OK",
               onPress: () =>
                 this.props.navigation.navigate("HomePage", {
-                  setUser: true
+                  applied: true
                 })
             }
           ],

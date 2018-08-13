@@ -14,17 +14,17 @@ const ProfileDescription = props => {
     "Take Online Test",
     props.result
   ];
+  const {
+    appliedJob: { job_profile, job_description }
+  } = props;
 
   return (
     <Fragment>
       <ProfileBlock title="JOB TITLE">
-        <Text style={styles.textStyle}>Jr. Web Developer</Text>
+        <Text style={styles.textStyle}>{job_profile}</Text>
       </ProfileBlock>
       <ProfileBlock title="JOB DESCRIPTION">
-        <Text style={styles.textStyle}>
-          Web Developer - Experience in PHP,MySQL, HTML, CSS, jQuery is
-          required. Experience in React, Angular, Magento is added benefit
-        </Text>
+        <Text style={styles.textStyle}>{job_description}</Text>
       </ProfileBlock>
       <ProfileBlock title="APPLICATION STATUS">
         <View style={{ marginBottom: 10 }} />

@@ -5,8 +5,6 @@ import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
 import ProfileDescription from "../components/ProfileDescription";
 import { Icon } from "native-base";
-import { connect } from "react-redux";
-import { getCandidateJobDetails } from "../actions";
 
 class Profile extends Component {
   static navigationOptions = {
@@ -46,35 +44,19 @@ class Profile extends Component {
     }
     Linking.openURL(url);
   };
-  setCandidateProfile = async () => {
-    const candidateJob = await getItem("mongo_id");
-    if (candidateJob) {
-      let email = candidateJob.candidate.data.sender_mail;
-      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
-      let userName = candidateJob.candidate.data.from;
-      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      this.setState({
-        candidateJob,
-        profile_pic,
-        userName,
-        linkOpening: false
-      });
-    } else {
-      this.setState({ linkOpening: false });
-    }
-  };
-  async componentDidMount() {
-    await this.setCandidateProfile();
-  }
+
   render() {
+    const profileDetails = this.props.navigation.getParam("profileDetails");
+    const appliedJob = this.props.navigation.getParam("appliedJob");
     return (
       <ScrollView>
-        <ProfileView />
+        <ProfileView profileDetails={profileDetails} />
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={{ flexBasis: "65%" }}
         >
           <ProfileDescription
+            appliedJob={appliedJob}
             currentPosition={this.state.currentPosition}
             handleLocate={this.handleLocate}
           />
@@ -84,7 +66,4 @@ class Profile extends Component {
   }
 }
 
-export default connect(
-  null,
-  { getCandidateJobDetails }
-)(Profile);
+export default Profile;

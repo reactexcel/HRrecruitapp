@@ -52,8 +52,8 @@ class AppIntro extends Component {
   }
   componentDidMount = async () => {
     const appIntro = await getItem("appintro");
-    await this._checkDeepLink();
     const candidateJob = await getItem("mongo_id");
+    await this._checkDeepLink();
     if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
       this.props.navigation.replace("HomePage");
     }

@@ -39,6 +39,7 @@ class HomePage extends Component {
       candidateJob: null,
       profile_pic: null,
       userName: null,
+      mobile_no: null,
       textColor: false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
@@ -59,6 +60,25 @@ class HomePage extends Component {
     }
     return null;
   }
+  setCandidateProfile = async () => {
+    const candidateJob = await getItem("mongo_id");
+    if (candidateJob) {
+      let email = candidateJob.candidate.data.sender_mail;
+      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+      let mobile_no = candidateJob.candidate.data.mobile_no;
+      let userName = candidateJob.candidate.data.from;
+      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+      this.setState({
+        candidateJob,
+        profile_pic,
+        userName,
+        mobile_no,
+        linkOpening: false
+      });
+    } else {
+      this.setState({ linkOpening: false });
+    }
+  };
 
   async handleViewClick(data) {
     const { appliedJob } = this.props;
@@ -67,16 +87,35 @@ class HomePage extends Component {
         appliedJob: appliedJob,
         title: "Your Applied Jobs"
       });
-    } else if (data == "InterviewLogin") {
-      this.props.navigation.navigate("InterviewLogin");
+    } else if (data == "Profile") {
+      const {
+        linkOpening,
+        textColor,
+        candidateJob,
+        ...profileDetails
+      } = this.state;
+      this.props.navigation.navigate("Profile", {
+        appliedJob,
+        profileDetails
+      });
     } else {
       this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
   componentDidMount = async () => {
+    const mongo_id = await getItem("mongo_id");
+    await this.setCandidateProfile();
+    console.log(mongo_id, "mongo_id");
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+    }
+  };
+  componentDidUpdate = async () => {
+    const applied = this.props.navigation.getParam("applied");
+    if (applied) {
+      await this.setCandidateProfile();
+      this.props.navigation.setParams({ applied: false });
     }
   };
 
