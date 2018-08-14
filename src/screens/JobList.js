@@ -104,43 +104,47 @@ class JobList extends Component {
     shareDetails["url"] = SHAREURL;
     this.setState({ visible: true, shareOptions: shareDetails });
   };
-  renderCardItem = ({ item }) => (
-    <Card padder>
-      <CardItem style={styles.cardItem}>
-        <JobSalaryDetails>
-          <Text style={styles.viewText}>{item.subject}</Text>
-        </JobSalaryDetails>
+  renderCardItem = ({ item }) => {
+    console.log(item, "item");
+    return (
+      <Card padder>
+        <CardItem style={styles.cardItem}>
+          <JobSalaryDetails>
+            <Text style={styles.viewText}>{item.subject}</Text>
+          </JobSalaryDetails>
+          <CustomButton
+            onPress={() => {
+              this.onApplyJob(item);
+            }}
+            type="rounded"
+            btnStyle={styles.applyBtn}
+            btnTextStyle={styles.applyBtnText}
+            text="APPLY"
+          />
+        </CardItem>
+        <CardItem>
+          <Body>
+            <Text style={[styles.text, _styles.jobDescriptionText]}>
+              {item.job_description ? item.job_description : ""}
+            </Text>
+          </Body>
+        </CardItem>
         <CustomButton
-          onPress={() => {
-            this.onApplyJob(item);
-          }}
+          btnStyle={styles.buttonPadder}
+          btnTextStyle={_styles.fullDescriptionText}
           type="rounded"
-          btnStyle={styles.applyBtn}
-          btnTextStyle={styles.applyBtnText}
-          text="APPLY"
+          text="Full Description"
+          onPress={() => {
+            this.props.navigation.navigate("FullDescription", {
+              subject: item.subject,
+              job_description: item.job_description,
+              keyword: item.keyword
+            });
+          }}
         />
-      </CardItem>
-      <CardItem>
-        <Body>
-          <Text style={[styles.text, _styles.jobDescriptionText]}>
-            {item.job_description ? item.job_description : ""}
-          </Text>
-        </Body>
-      </CardItem>
-      <CustomButton
-        btnStyle={styles.buttonPadder}
-        btnTextStyle={_styles.fullDescriptionText}
-        type="rounded"
-        text="Full Description"
-        onPress={() => {
-          this.props.navigation.navigate("FullDescription", {
-            subject: item.subject,
-            job_description: item.job_description
-          });
-        }}
-      />
-    </Card>
-  );
+      </Card>
+    );
+  };
   render() {
     const {
       joblist,

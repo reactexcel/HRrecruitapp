@@ -5,7 +5,6 @@ import EmptyView from "../components/EmptyView";
 import JobSalaryDetails from "../components/JobSalaryDetails";
 import { Button, Container, Content, Icon } from "native-base";
 import { ABOUT_US } from "../helper/constant";
-import { KEY_SKILLS } from "../helper/constant";
 import styles from "../styles/screens/FullDescription";
 
 class FullDescription extends Component {
@@ -28,6 +27,7 @@ class FullDescription extends Component {
   render() {
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
+    const keyword = this.props.navigation.getParam("keyword").split(',');
     return (
       <Container style={styles.container}>
         <Content showsVerticalScrollIndicator={false}>
@@ -55,7 +55,7 @@ class FullDescription extends Component {
           <EmptyView />
           <Text style={styles.headerTextStyle}>Keys Skills</Text>
           <View style={styles.keySkillsView}>
-            {KEY_SKILLS.map((text, id) => {
+            {keyword.map((text, id) => {
               return (
                 <Button rounded style={styles.keySkillsButton} key={id}>
                   <Text style={styles.keySkillsButtonText}>{text}</Text>

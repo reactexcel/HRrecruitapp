@@ -8,10 +8,16 @@ export const pageDeatils = [
         route:'JobList'
     },
     {
+      image: [require('../images/company.png'), require("../images/companys.png")],
+      name: 'EXCELLENCE TECHNOLOGIES',
+      icon: 'ios-arrow-forward-outline',
+      route: 'Profile'
+  }, 
+    {
         image: [require('../images/company.png'), require("../images/companys.png")],
         name: 'EXCELLENCE TECHNOLOGIES',
         icon: 'ios-arrow-forward-outline',
-        route: 'Profile'
+        route: 'AboutUs'
     },
     {
         image: [require('../images/interviews.png'), require("../images/interview.png")],

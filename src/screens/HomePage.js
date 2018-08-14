@@ -30,6 +30,7 @@ import { pageDeatils } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
+import SplashScreen from "react-native-splash-screen";
 
 class HomePage extends Component {
   constructor(props) {
@@ -105,11 +106,11 @@ class HomePage extends Component {
   componentDidMount = async () => {
     const mongo_id = await getItem("mongo_id");
     await this.setCandidateProfile();
-    console.log(mongo_id, "mongo_id");
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     }
+    SplashScreen.hide();
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");

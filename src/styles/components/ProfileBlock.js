@@ -4,7 +4,7 @@ import { COLOR } from "../color";
 export default StyleSheet.create({
   profileBlockView: {
     paddingVertical: 15,
-    paddingLeft: 15
+    paddingHorizontal: 15
   },
   titleStyle: {
     color: COLOR.TURQUOISE,
