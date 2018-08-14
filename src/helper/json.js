@@ -23,8 +23,8 @@ export const pageDetails = [
 export const candidatePageDetails = [
   {
       image: [require('../images/job.png'), require("../images/jobs.png")],
-      name:'JOB OPENINGS',
-      icon:'Profile',
+      name:'PROFILE',
+      icon:'ios-arrow-forward-outline',
       route:'Profile'
   },
   {

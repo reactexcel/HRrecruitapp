@@ -138,8 +138,8 @@ class HomePage extends Component {
       : require("../images/profilepic.png");
     let userNames = userName ? userName : "";
     const details = this.state.candidateJob
-      ? pageDetails
-      : candidatePageDetails;
+      ? candidatePageDetails
+      : pageDetails;
     let renderCustomView = details.map((data, k) => {
       return (
         <TouchableHighlight
