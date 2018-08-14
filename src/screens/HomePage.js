@@ -26,7 +26,7 @@ import styles from "../styles/screens/HomePage";
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
-import { pageDeatils } from "../helper/json";
+import { pageDetails, candidatePageDetails } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
@@ -137,7 +137,10 @@ class HomePage extends Component {
       ? { uri: profile_pic }
       : require("../images/profilepic.png");
     let userNames = userName ? userName : "";
-    let renderCustomView = pageDeatils.map((data, k) => {
+    const details = this.state.candidateJob
+      ? pageDetails
+      : candidatePageDetails;
+    let renderCustomView = details.map((data, k) => {
       return (
         <TouchableHighlight
           onPressIn={() => {
