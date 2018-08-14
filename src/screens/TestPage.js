@@ -292,9 +292,6 @@ class TestPage extends Component {
               full
               style={{ backgroundColor: COLOR.MUSTARD }}
               onPress={() => {
-                // roundType !== "Subjective"
-                //   ? this.confirmSubmit()
-                //   : this.confirmSecondRoundSubmit();
                 this.showCustomAlert(true);
               }}
             >

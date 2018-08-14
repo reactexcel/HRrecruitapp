@@ -80,7 +80,6 @@ class InterviewLogin extends Component {
       NetInfo.isConnected.fetch().done(async isConnected => {
         console.log(isConnected, "isConnected");
         if (isConnected) {
-          console.log(fb_id, "fb_id");
           await this.props.getCandidateDetails(fb_id.fb_id);
           const { data, message, error, status } = this.props.interviewSignUp;
           if (status == SUCCESS_STATUS) {
@@ -268,7 +267,6 @@ class InterviewLogin extends Component {
   }
 
   render() {
-    console.log(this.props.interviewSignUp,'props')
     const {
       interviewSignUp: { registering, success }
     } = this.props;

@@ -110,7 +110,6 @@ class HomePage extends Component {
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     }
-    SplashScreen.hide();
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
