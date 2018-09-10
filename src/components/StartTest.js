@@ -17,7 +17,7 @@ class StartTest extends Component {
     const { isOnline, handleStartTest, handleCallHelp } = this.props;
     const { calling } = this.props.callHelp;
     return (
-      <Container>
+      <Container style = {styles.container}>
         <Content padder>
           <Card style={styles.blockView}>
             <CardItem>
