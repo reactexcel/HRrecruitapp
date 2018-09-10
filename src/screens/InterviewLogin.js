@@ -307,6 +307,7 @@ class InterviewLogin extends Component {
                       underlineColorAndroid={COLOR.Grey}
                       onChangeText={text => this.setState({ email: text })}
                       autoCapitalize="none"
+                      onSubmitEditing = {this.handleSubmit}
                     />
                   </Item>
                   {registering ? (
