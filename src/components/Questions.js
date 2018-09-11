@@ -1,12 +1,19 @@
 import React, { Component } from "react";
-import { Content, Card, CardItem, Text, Radio } from "native-base";
+import {
+  Content,
+  Card,
+  CardItem,
+  Text,
+  Radio,
+  Accordion,
+  Icon
+} from "native-base";
 import { View, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import { Col, Row } from "react-native-easy-grid";
 import map from "lodash/map";
 import findIndex from "lodash/findIndex";
 import styles from "../styles";
 import _styles from "../styles/TestPage";
-import Accordion from "react-native-collapsible/Accordion";
 import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
 import HTMLView from "react-native-htmlview";
@@ -14,26 +21,39 @@ import HTMLView from "react-native-htmlview";
 const Questions = props => {
   const { question, solution, handleSubmit } = props;
   return (
-    <Content style={{ backgroundColor: "white" }}>
-      <CardItem>
-        <Content>
-          <Accordion
-            sections={question.data}
-            underlayColor={COLOR.LightGrey}
-            renderHeader={questionObj => (
-              <Card style={styles.blockView}>
-                <CardItem>
-                  <Text style={styles.headerText}>
-                    {questionObj.group_name}
-                  </Text>
-                </CardItem>
-              </Card>
+    <Content padder>
+      <Accordion
+        style={_styles.accordionStyle}
+        dataArray={question.data}
+        renderHeader={(questionObj, expanded) => (
+          <View style={_styles.accordionHeader}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.headerText}>
+                {questionObj.group_name}
+              </Text>
+            </View>
+            {expanded ? (
+              <Icon
+                type="Entypo"
+                style={_styles.accordionIcon}
+                name="chevron-thin-up"
+              />
+            ) : (
+              <Icon
+                type="Entypo"
+                style={_styles.accordionIcon}
+                name="chevron-thin-down"
+              />
             )}
-            renderContent={questionObj =>
-              map(questionObj.questions, (ques, index) => {
-                return (
-                  <Content key={index} padder>
-                    <Text style={{ fontSize: 16 }}>
+          </View>
+        )}
+        renderContent={questionObj =>
+          map(questionObj.questions, (ques, index) => {
+            return (
+              <Content key={index}>
+                <View style={_styles.questionOptionView}>
+                  <View style={_styles.questionView}>
+                    <Text style={_styles.questionTextStyle}>
                       {index + 1}. {ques.question}
                     </Text>
                     {ques.description ? (
@@ -44,25 +64,35 @@ const Questions = props => {
                         />
                       </View>
                     ) : null}
-                    {ques.options.length !== 0 ? (
-                      <Text style={_styles.optText}>Options : </Text>
-                    ) : null}
-                    {map(ques.options, (values, index) => {
-                      let isSolution =
-                        solution[0] != undefined
-                          ? findIndex(solution, value => {
-                              return value.Q_id == ques._id;
-                            })
-                          : null;
-                      let selected =
-                        isSolution != null && isSolution != -1
-                          ? solution[isSolution].ans_id == values.opt_id
-                            ? true
-                            : false
-                          : false;
-                      return (
-                        <Content key={index} style={{ padding: Platform.OS === "ios" ? 7 : 5 }}>
-                          <Row>
+                  </View>
+
+                  {map(ques.options, (values, index) => {
+                    let isSolution =
+                      solution[0] != undefined
+                        ? findIndex(solution, value => {
+                            return value.Q_id == ques._id;
+                          })
+                        : null;
+                    let selected =
+                      isSolution != null && isSolution != -1
+                        ? solution[isSolution].ans_id == values.opt_id
+                          ? true
+                          : false
+                        : false;
+                    return (
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleSubmit(ques._id, values.opt_id);
+                        }}
+                        activeOpacity={1}
+                        key={index}
+                      >
+                        <Row
+                          style={{
+                            backgroundColor: selected ? "#e3e5e9" : null,
+                          }}
+                        >
+                          <View style={_styles.optionsView}>
                             <Col style={{ width: "10%" }}>
                               <Radio
                                 style={
@@ -75,29 +105,25 @@ const Questions = props => {
                                 }}
                                 activeOpacity={1}
                                 selected={selected}
+                                selectedColor={COLOR.TEXTCOLOR}
                               />
                             </Col>
                             <Col>
-                              <TouchableOpacity
-                                onPress={() => {
-                                  handleSubmit(ques._id, values.opt_id);
-                                }}
-                                activeOpacity={1}
-                              >
-                                <Text>{values.option}</Text>
-                              </TouchableOpacity>
+                              <Text style={_styles.optionText}>
+                                {values.option}
+                              </Text>
                             </Col>
-                          </Row>
-                        </Content>
-                      );
-                    })}
-                  </Content>
-                );
-              })
-            }
-          />
-        </Content>
-      </CardItem>
+                          </View>
+                        </Row>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </Content>
+            );
+          })
+        }
+      />
     </Content>
   );
 };

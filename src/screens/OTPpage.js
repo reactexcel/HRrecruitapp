@@ -140,6 +140,7 @@ class OTPpage extends Component {
                     selectionColor={COLOR.Grey}
                     underlineColorAndroid={COLOR.Grey}
                     onChangeText={text => this.setState({ otp: text })}
+                    onSubmitEditing = {this.handleSubmit}
                   />
                 </Item>
                 {registering ? (
