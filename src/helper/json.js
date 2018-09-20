@@ -1,6 +1,6 @@
 import { COLOR } from "../styles/color";
 
-export const pageDeatils = [
+export const pageDetails = [
     {
         image: [require('../images/job.png'), require("../images/jobs.png")],
         name:'JOB OPENINGS',
@@ -11,7 +11,7 @@ export const pageDeatils = [
         image: [require('../images/company.png'), require("../images/companys.png")],
         name: 'EXCELLENCE TECHNOLOGIES',
         icon: 'ios-arrow-forward-outline',
-        route: 'Profile'
+        route: 'AboutUs'
     },
     {
         image: [require('../images/interviews.png'), require("../images/interview.png")],
@@ -19,6 +19,26 @@ export const pageDeatils = [
         icon: 'ios-arrow-forward-outline',
         route: 'InterviewLogin'
     }
+]
+export const candidatePageDetails = [
+  {
+      image: [require('../images/job.png'), require("../images/jobs.png")],
+      name:'PROFILE',
+      icon:'ios-arrow-forward-outline',
+      route:'Profile'
+  },
+  {
+      image: [require('../images/company.png'), require("../images/companys.png")],
+      name: 'EXCELLENCE TECHNOLOGIES',
+      icon: 'ios-arrow-forward-outline',
+      route: 'AboutUs'
+  },
+  {
+      image: [require('../images/interviews.png'), require("../images/interview.png")],
+      name: 'START INTERVIEW',
+      icon: 'ios-arrow-forward-outline',
+      route: 'InterviewLogin'
+  }
 ]
 export const AppDetails = [
   {

@@ -66,9 +66,7 @@ class SubmitTest extends Component {
                 if (stored_email.email === email) {
                   setItem("round", JSON.stringify({ round }));
                 }
-                this.props.navigation.navigate("HomePage", {
-                  setUser: true
-                });
+                this.props.navigation.navigate("HomePage");
               }
             }
           ],

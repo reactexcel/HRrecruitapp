@@ -34,7 +34,6 @@ import {
 import RNFetchBlob from "rn-fetch-blob";
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
-var _ = require('lodash');
 import LinearGradient from "react-native-linear-gradient";
 
 
@@ -77,7 +76,7 @@ class AddCandidate extends Component {
               text: "OK",
               onPress: () =>
                 this.props.navigation.navigate("HomePage", {
-                  setUser: true
+                  applied: true
                 })
             }
           ],

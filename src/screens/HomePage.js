@@ -26,10 +26,11 @@ import styles from "../styles/screens/HomePage";
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
-import { pageDeatils } from "../helper/json";
+import { pageDetails, candidatePageDetails } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
+import SplashScreen from "react-native-splash-screen";
 
 class HomePage extends Component {
   constructor(props) {
@@ -39,6 +40,7 @@ class HomePage extends Component {
       candidateJob: null,
       profile_pic: null,
       userName: null,
+      mobile_no: null,
       textColor: false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
@@ -59,6 +61,25 @@ class HomePage extends Component {
     }
     return null;
   }
+  setCandidateProfile = async () => {
+    const candidateJob = await getItem("mongo_id");
+    if (candidateJob) {
+      let email = candidateJob.candidate.data.sender_mail;
+      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+      let mobile_no = candidateJob.candidate.data.mobile_no;
+      let userName = candidateJob.candidate.data.from;
+      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+      this.setState({
+        candidateJob,
+        profile_pic,
+        userName,
+        mobile_no,
+        linkOpening: false
+      });
+    } else {
+      this.setState({ linkOpening: false });
+    }
+  };
 
   async handleViewClick(data) {
     const { appliedJob } = this.props;
@@ -67,16 +88,34 @@ class HomePage extends Component {
         appliedJob: appliedJob,
         title: "Your Applied Jobs"
       });
-    } else if (data == "InterviewLogin") {
-      this.props.navigation.navigate("InterviewLogin");
+    } else if (data == "Profile") {
+      const {
+        linkOpening,
+        textColor,
+        candidateJob,
+        ...profileDetails
+      } = this.state;
+      this.props.navigation.navigate("Profile", {
+        appliedJob,
+        profileDetails
+      });
     } else {
       this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
   componentDidMount = async () => {
+    const mongo_id = await getItem("mongo_id");
+    await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+    }
+  };
+  componentDidUpdate = async () => {
+    const applied = this.props.navigation.getParam("applied");
+    if (applied) {
+      await this.setCandidateProfile();
+      this.props.navigation.setParams({ applied: false });
     }
   };
 
@@ -98,7 +137,10 @@ class HomePage extends Component {
       ? { uri: profile_pic }
       : require("../images/profilepic.png");
     let userNames = userName ? userName : "";
-    let renderCustomView = pageDeatils.map((data, k) => {
+    const details = this.state.candidateJob
+      ? candidatePageDetails
+      : pageDetails;
+    let renderCustomView = details.map((data, k) => {
       return (
         <TouchableHighlight
           onPressIn={() => {

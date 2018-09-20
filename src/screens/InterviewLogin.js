@@ -80,7 +80,6 @@ class InterviewLogin extends Component {
       NetInfo.isConnected.fetch().done(async isConnected => {
         console.log(isConnected, "isConnected");
         if (isConnected) {
-          console.log(fb_id, "fb_id");
           await this.props.getCandidateDetails(fb_id.fb_id);
           const { data, message, error, status } = this.props.interviewSignUp;
           if (status == SUCCESS_STATUS) {
@@ -221,7 +220,9 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
-            this.props.navigation.navigate("VerifyingCandidate");
+            this.props.navigation.navigate("JobList", {
+              title: "Job Openings"
+            });
             this.setState({ email: "" });
           } else if (status === SUCCESS_STATUS) {
             GOOGLE_ANALYTICS_TRACKER.trackEvent(
