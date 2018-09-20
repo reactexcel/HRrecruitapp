@@ -6,6 +6,9 @@ export const SUCCESS_STATUS = 1;
 export const ABOUT_US =
   "We are India based IT Services company found in August 2009, with the vision to provide excellence in software solutions. We work with US clients on web development projects. Our current team strength is 45+ and we are operating from Sector 8 Noida.";
 
+export const EXCEL_BELIVE =
+  "At Excellence we believe growth is a team sport. We aren't just helping companies globally grow, we are helping more than one thousand employees grow personally and professionally. It's hard to pick our favourite perk here. Here are some of the one we love.";
+
 export const DEVICE_WIDTH = Dimensions.get("window").width;
 export const DEVICE_HEIGHT = Dimensions.get("window").height;
 
