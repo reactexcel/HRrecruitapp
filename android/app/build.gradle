@@ -151,8 +151,8 @@ android {
 dependencies {
     compile project(':react-native-linear-gradient')
     implementation "com.google.android.gms:play-services-base:15.0.1"
-    implementation "com.google.firebase:firebase-core:16.0.1"
-    implementation 'com.google.firebase:firebase-messaging:17.0.0'
+    implementation "com.google.firebase:firebase-core:16.0.3"
+    implementation 'com.google.firebase:firebase-messaging:17.3.2'
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-share')
