@@ -9,6 +9,8 @@ export const ABOUT_US =
 export const EXCEL_BELIVE =
   "At Excellence we believe growth is a team sport. We aren't just helping companies globally grow, we are helping more than one thousand employees grow personally and professionally. It's hard to pick our favourite perk here. Here are some of the one we love.";
 
+export const EMP_SAY = "See what employees and candidates say about what it's like to work at Excellence Technologies. Salaries, reviews and more - all posted by employees working at ...";
+
 export const DEVICE_WIDTH = Dimensions.get("window").width;
 export const DEVICE_HEIGHT = Dimensions.get("window").height;
 

@@ -9,7 +9,7 @@ const AboutUsHeader = ({ text }) => {
       <View
         style={{
           backgroundColor: COLOR.MUSTARD,
-          height: 60,
+          height: 40,
           paddingHorizontal: 0,
           flex: 1,
           flexDirection: "row",
