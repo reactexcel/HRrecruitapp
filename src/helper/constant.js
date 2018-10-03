@@ -11,6 +11,17 @@ export const EXCEL_BELIVE =
 
 export const EMP_SAY = "See what employees and candidates say about what it's like to work at Excellence Technologies. Salaries, reviews and more - all posted by employees working at ...";
 
+export const GRW_US='Grow with Us';
+export const EDGE_TECH='We work on cutting edge technologies and provide end-to-end solutions in mobile apps and developement';
+export const UX_UI='We develope apps using AngularJS,ReactJS,Vue.js';
+
+export const eCommerce='We specialize in full magento customization from module developement to theme designs';
+
+export const M_APPS='We develope cutting adge apps in Android iOS';
+
+export const CLOUD_DEV='We deploy highly scalable backend services on AWS Azure using NodeJS,Laravel';
+export const BLK_CHAIN='We develope smart contract & dApps on leading blockchain platforms'
+
 export const DEVICE_WIDTH = Dimensions.get("window").width;
 export const DEVICE_HEIGHT = Dimensions.get("window").height;
 
