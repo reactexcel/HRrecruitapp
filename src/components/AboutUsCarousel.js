@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import { View, Dimensions, Image } from "react-native";
+import { View, Dimensions, Image, StyleSheet } from "react-native";
 import { COLOR } from "../styles/color";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../helper/constant";
 import { Icon } from "native-base";
@@ -104,22 +104,26 @@ export default class AboutUsCarousel extends Component {
           />
           {this.pagination()}
         </View>
-        <View style={styles.view}>
-          <Icon
-            onPress={() => this._onPressPrev()}
-            type="FontAwesome"
-            name="arrow-circle-left"
-            style={styles.icon}
-          />
-        </View>
-        <View style={styles.view}>
-          <Icon
-            onPress={() => this._onPressNext()}
-            type="FontAwesome"
-            name="arrow-circle-right"
-            style={styles.icon}
-          />
-        </View>
+        {this.state.activeSlide !== 0 && (
+          <View style={styles.leftarrow}>
+            <Icon
+              onPress={() => this._onPressPrev()}
+              type="FontAwesome"
+              name="arrow-circle-left"
+              style={styles.icon}
+            />
+          </View>
+        )}
+        {this.state.activeSlide !== 4 && (
+          <View style={styles.rightarrow}>
+            <Icon
+              onPress={() => this._onPressNext()}
+              type="FontAwesome"
+              name="arrow-circle-right"
+              style={styles.icon}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -133,10 +137,16 @@ const styles = StyleSheet.create({
     borderWidth: 5,
     borderColor: "#000"
   },
-  view: {
+  leftarrow: {
     zIndex: 1,
     position: "absolute",
     left: 15,
+    top: "25%"
+  },
+  rightarrow: {
+    zIndex: 1,
+    position: "absolute",
+    right: 15,
     top: "25%"
   },
   icon: {
