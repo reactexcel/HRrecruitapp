@@ -23,7 +23,7 @@ export default StyleSheet.create({
   imagename: {
     textAlign: "center",
     fontSize: 16,
-    color: "#3aa1af",
+    color: COLOR.PROTEXTCOLOR,
     marginTop: 2,
     marginBottom: 5,
     fontFamily: "Montserrat-SemiBold"
@@ -34,19 +34,19 @@ export default StyleSheet.create({
     fontSize: 11,
     marginTop: 0,
     marginLeft: 6,
-    color: "#868b9e",
+    color: COLOR.PRONAMECOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   ux: {
     textAlign: "center",
     fontSize: 11,
-    color: "#868b9e",
+    color: COLOR.PRONAMECOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   edge: {
     textAlign: "center",
     fontSize: 12,
-    color: "#5b637d",
+    color: COLOR.EDGECOLOR,
     fontFamily: "Montserrat-SemiBold",
     marginLeft: 5,
     marginRight: 5,
@@ -57,7 +57,7 @@ export default StyleSheet.create({
     textAlign: "center",
     fontFamily: "Montserrat-SemiBold",
     fontSize: 16,
-    color: "#3aa1af"
+    color: COLOR.PROTEXTCOLOR
   },
   secondrow: {
     width: "50%",
@@ -65,13 +65,13 @@ export default StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     borderLeftWidth: 0.5,
-    borderLeftColor: "#BDC3C7"
+    borderLeftColor:COLOR.ROWCOLOR
   },
   border: {
     height: 1,
     borderTopWidth: 0.6,
     width: "41%",
-    borderTopColor: "#BDC3C7"
+    borderTopColor: COLOR.ROWCOLOR
   },
   mobileview: {
     width: "50%",
@@ -91,14 +91,14 @@ export default StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     borderLeftWidth: 0.5,
-    borderLeftColor: "#BDC3C7"
+    borderLeftColor: COLOR.ROWCOLOR
   },
   cloudtext: {
     width: "90%",
     textAlign: "center",
     fontSize: 11,
     marginLeft: 6,
-    color: "#868b9e",
+    color: COLOR.PRONAMECOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   blockchainname: {
@@ -114,7 +114,7 @@ export default StyleSheet.create({
     fontSize: 11,
     width: "52%",
     alignSelf: "center",
-    color: "#868b9e",
+    color: COLOR.PRONAMECOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   aboutcover: {

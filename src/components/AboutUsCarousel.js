@@ -40,7 +40,7 @@ export default class AboutUsCarousel extends Component {
           backgroundColor: COLOR.MUSTARD
         }}
         inactiveDotStyle={{
-          backgroundColor: "#d4d4d4"
+          backgroundColor: COLOR.INACTIVEDOT
         }}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     zIndex: -10,
     bottom: 50,
     borderWidth: 5,
-    borderColor: "#000"
+    borderColor: COLOR.PARENTVIEW
   },
   leftarrow: {
     zIndex: 1,
