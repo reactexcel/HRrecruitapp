@@ -33,14 +33,11 @@ class AboutUs extends Component {
       elevation: 0
     },
     headerTitle: (
-      <View style={{ flex: 1, alignItems: "center", alignSelf: "center" }}>
+      <View style={aboutusCss.header}>
         <Image
           source={require("../images/logo.png")}
           resizeMode="contain"
-          style={{
-            height: 100,
-            width: 150
-          }}
+          style={aboutusCss.headerImage}
         />
       </View>
     ),
@@ -114,7 +111,7 @@ class AboutUs extends Component {
               <View style={aboutusCss.childview}>
                 <View style={aboutusCss.firstrow}>
                   <Image
-                    style={{ width: 70, height: 62, marginLeft: 56 }}
+                    style={aboutusCss.one}
                     source={require("../images/Vector_Smart.png")}
                   />
                   <Text style={aboutusCss.imagename}>UX/UI</Text>
@@ -122,7 +119,7 @@ class AboutUs extends Component {
                 </View>
                 <View style={aboutusCss.secondrow}>
                   <Image
-                    style={{ width: 70, height: 77, marginLeft: 50 }}
+                    style={aboutusCss.two}
                     source={require("../images/Icon_cart.png")}
                   />
                   <Text style={aboutusCss.imagename}>eCommerce</Text>
@@ -144,7 +141,7 @@ class AboutUs extends Component {
               >
                 <View style={aboutusCss.mobileview}>
                   <Image
-                    style={{ width: 60, height: 70, marginLeft: 50 }}
+                    style={aboutusCss.three}
                     source={require("../images/Layer_17.png")}
                   />
                   <Text style={aboutusCss.imagename}>Mobile Apps</Text>
@@ -152,20 +149,14 @@ class AboutUs extends Component {
                 </View>
                 <View style={aboutusCss.cloudview}>
                   <Image
-                    style={{ width: 77, height: 70, marginLeft: 50 }}
+                    style={aboutusCss.four}
                     source={require("../images/Layer_18.png")}
                   />
                   <Text style={aboutusCss.imagename}>Cloud Deployment</Text>
                   <Text style={aboutusCss.cloudtext}>{CLOUD_DEV}</Text>
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  marginTop: 8
-                }}
-              >
+              <View style={aboutusCss.borderParent}>
                 <View style={[aboutusCss.border, { marginRight: "9%" }]} />
                 <View style={aboutusCss.border} />
               </View>
@@ -176,7 +167,7 @@ class AboutUs extends Component {
                   marginBottom: 10
                 }}
               >
-                <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                <View style={aboutusCss.chainview}>
                   <Image
                     style={{ width: 70, height: 68 }}
                     source={require("../images/Layer_19.png")}

@@ -2,6 +2,15 @@ import { StyleSheet } from "react-native";
 import { COLOR } from "../color";
 
 export default StyleSheet.create({
+  header: {
+    flex: 1,
+    alignItems: "center",
+    alignSelf: "center"
+  },
+  headerImage: {
+    height: 100,
+    width: 150
+  },
   childview: {
     flexDirection: "row",
     justifyContent: "space-around"
@@ -148,5 +157,34 @@ export default StyleSheet.create({
   },
   masterview: {
     marginTop: -135
+  },
+  chainview: {
+    justifyContent: "center",
+    alignSelf: "center"
+  },
+  borderParent: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 8
+  },
+  one: {
+    width: 70,
+    height: 62,
+    marginLeft: 56
+  },
+  two: {
+    width: 70,
+    height: 77,
+    marginLeft: 50
+  },
+  three: {
+    width: 60,
+    height: 70,
+    marginLeft: 50
+  },
+  four: {
+    width: 77,
+    height: 70,
+    marginLeft: 50
   }
 });

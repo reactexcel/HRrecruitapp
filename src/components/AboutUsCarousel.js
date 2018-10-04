@@ -86,15 +86,7 @@ export default class AboutUsCarousel extends Component {
 
     return (
       <View>
-        <View
-          style={{
-            position: "relative",
-            zIndex: -10,
-            bottom: 50,
-            borderWidth: 5,
-            borderColor: "#000"
-          }}
-        >
+        <View style={styles.parentView}>
           <Carousel
             ref={c => {
               this._carousel = c;
@@ -112,25 +104,43 @@ export default class AboutUsCarousel extends Component {
           />
           {this.pagination()}
         </View>
-        <View style={{ zIndex: 1, position: "absolute", left: 15, top: "25%" }}>
+        <View style={styles.view}>
           <Icon
             onPress={() => this._onPressPrev()}
             type="FontAwesome"
             name="arrow-circle-left"
-            style={{ fontSize: 40, color: "white" }}
+            style={styles.icon}
           />
         </View>
-        <View
-          style={{ zIndex: 1, position: "absolute", right: 15, top: "25%" }}
-        >
+        <View style={styles.view}>
           <Icon
             onPress={() => this._onPressNext()}
             type="FontAwesome"
             name="arrow-circle-right"
-            style={{ fontSize: 40, color: "white" }}
+            style={styles.icon}
           />
         </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  parentView: {
+    position: "relative",
+    zIndex: -10,
+    bottom: 50,
+    borderWidth: 5,
+    borderColor: "#000"
+  },
+  view: {
+    zIndex: 1,
+    position: "absolute",
+    left: 15,
+    top: "25%"
+  },
+  icon: {
+    fontSize: 40,
+    color: "white"
+  }
+});
