@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Animated } from "react";
 import { View, Text } from "react-native";
 import { Button } from "native-base";
 import { COLOR } from "../styles/color";
@@ -11,8 +11,13 @@ class ReviewButton extends Component {
       index: null
     };
   }
-  _onPressIn = index => this.setState({ isPressed: true, index: index });
-  _onPressOut = () => this.setState({ isPressed: false });
+  _onPressIn = index => {
+    this.setState({ isPressed: true, index: index });
+    setTimeout(() => {
+      this.setState({ isPressed: false, index: index });
+    }, 350);
+  };
+  // _onPressOut = () => this.setState({ isPressed: false });
 
   render() {
     const reviews = ["GOOGLE", "GLASSDOOR", "FACEBOOK"];
@@ -22,10 +27,11 @@ class ReviewButton extends Component {
         {reviews.map((btnText, id) => (
           <Button
             rounded
-            onPressIn={() => this._onPressIn(id)}
-            onPressOut={this._onPressOut}
+            onPress={() => this._onPressIn(id)}
+            // onPressOut={this._onPressOut}
             style={{
-              backgroundColor: isPressed && index === id ? COLOR.MUSTARD : "transparent",
+              backgroundColor:
+                isPressed && index === id ? COLOR.MUSTARD : "transparent",
               borderColor: "#201F40",
               paddingHorizontal: 10,
               marginHorizontal: id === 1 ? 7 : 0

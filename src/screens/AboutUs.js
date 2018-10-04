@@ -50,210 +50,141 @@ class AboutUs extends Component {
   render() {
     return (
       <ScrollView>
-        <LinearGradient
-          colors={[COLOR.LGONE, COLOR.LGTWO]}
-          style={{ height: 150 }}
+        <View
+          style={{
+            paddingBottom: 75,
+            backgroundColor: [COLOR.LGTWO],
+            zIndex: -1
+          }}
         >
-          <AboutUsText textcolor="white" />
-        </LinearGradient>
-        {/* <View style ={{position:'absolute',zIndex:1000,bottom:"35%"}}>
+          <LinearGradient
+            colors={[COLOR.LGONE, COLOR.LGTWO]}
+            style={{ height: 150 }}
+          >
+            <AboutUsText textcolor="white" style={{ padding: 200 }} />
+          </LinearGradient>
+        </View>
+        <View style={aboutusCss.aboutcover}>
           <Image
             source={require("../images/teamwork.png")}
-            // style ={{position:'absolute',zIndex:2,bottom:"15%",}}
+            resizeMode="cover"
+            style={aboutusCss.cover}
           />
-        </View> */}
+        </View>
         <View>
-          <View style={{ paddingHorizontal: 10, marginBottom: 30 }}>
+          <View style={aboutusCss.inQoute}>
             <Icon
               type="FontAwesome"
               name="quote-left"
               style={{ color: COLOR.PINK }}
             />
-            <Text
-              style={{
-                fontSize: 14,
-                fontFamily: "Montserrat-SemiBold",
-                color: COLOR.TEXTCOLOR
-              }}
-            >
-              {EXCEL_BELIVE}
-            </Text>
+            <Text style={aboutusCss.excelbelieve}>{EXCEL_BELIVE}</Text>
           </View>
 
           <AboutUsHeader text="CHECK US OUT" />
           <AboutUsCarousel />
 
-          <LinearGradient
-            colors={[COLOR.LGONE, COLOR.LGTWO]}
-            style={{
-              padding: 20,
-              position: "relative",
-              bottom: 135,
-              justifyContent: "center",
-              alignItems: "center"
-            }}
-          >
-            <Text
-              style={{
-                color: COLOR.MUSTARD,
-                fontSize: 18,
-                fontFamily: "Montserrat-Bold"
-              }}
+          <View style={aboutusCss.masterview}>
+            <LinearGradient
+              colors={[COLOR.LGONE, COLOR.LGTWO]}
+              style={aboutusCss.pplSay}
             >
-              WHAT PEOPLE SAY
-            </Text>
-
-            <Icon
-              type="FontAwesome"
-              name="quote-left"
-              style={{ color: COLOR.PINK, alignSelf: "flex-start" }}
-            />
-            <Text
-              style={{
-                fontSize: 18,
-                fontFamily: "Montserrat",
-                color: COLOR.TURQUOISE,
-                textAlign: "center"
-              }}
-            >
-              {EMP_SAY}
-            </Text>
-            <ReviewButton />
-          </LinearGradient>
-
-          <AboutUsHeader text="OUR SERVICES" />
-          <Text
-            style={aboutusCss.grw}
-          >
-            {GRW_US}
-          </Text>
-          <Text
-            style={aboutusCss.edge}
-          >
-            {EDGE_TECH}
-          </Text>
-          <View style={{ marginTop: 30 }}>
-            <View style={aboutusCss.childview}>
-              <View style={aboutusCss.firstrow}>
-                <Image
-                  style={{ width: 70, height: 62, marginLeft: 56 }}
-                  source={require("../images/Vector_Smart.png")}
-                />
-                <Text
-                  style={aboutusCss.imagename}
-                >
-                  UX/UI
-                </Text>
-                <Text
-                  style={aboutusCss.ux}
-                >
-                  {UX_UI}
-                </Text>
-              </View>
-              <View
-                style={aboutusCss.secondrow}
-              >
-                <Image
-                  style={{ width: 70, height: 77, marginLeft: 50 }}
-                  source={require("../images/Icon_cart.png")}
-                />
-                <Text
-                  style={aboutusCss.imagename}
-                >
-                  eCommerce
-                </Text>
-                <Text
-                  style={aboutusCss.ecom}
-                >
-                  {eCommerce}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                marginTop: 8
-              }}
-            >
-              <View
-                style={[aboutusCss.border,{marginRight:'5%'}]}
-              />
-              <View
-                style={aboutusCss.border}
-              />
-            </View>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-around" }}
-            >
-              <View
-                style={aboutusCss.mobileview}
-              >
-                <Image
-                  style={{ width: 60, height: 70, marginLeft: 50 }}
-                  source={require("../images/Layer_17.png")}
-                />
-                <Text
-                  style={aboutusCss.imagename}
-                >
-                  Mobile Apps
-                </Text>
-                <Text
-                  style={aboutusCss.apptext}
-                >
-                  {M_APPS}
-                </Text>
-              </View>
-              <View
-                style={aboutusCss.cloudview}
-              >
-                <Image
-                  style={{ width: 77, height: 70, marginLeft: 50 }}
-                  source={require("../images/Layer_18.png")}
-                />
-                <Text
-                  style={aboutusCss.imagename}
-                >
-                  Cloud Deployment
-                </Text>
-                <Text
-                  style={aboutusCss.cloudtext}
-                >
-                  {CLOUD_DEV}
-                </Text>
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                marginTop: 8
-              }}
-            >
-              <View
-                style={[aboutusCss.border,{marginRight:'5%'}]}
-              />
-              <View
-                style={aboutusCss.border}
-              />
-            </View>
-            <View style={{ justifyContent: "center", marginTop: 15 }}>
-              <View style={{ justifyContent: "center", alignSelf: "center" }}>
-                <Image
-                  style={{ width: 70, height: 68 }}
-                  source={require("../images/Layer_19.png")}
-                />
-              </View>
               <Text
-                style={aboutusCss.blockchainname}
+                style={{
+                  color: COLOR.MUSTARD,
+                  fontSize: 18,
+                  fontFamily: "Montserrat-Bold"
+                }}
               >
-                Block Chain
+                WHAT PEOPLE SAY
               </Text>
-              <Text
-                style={aboutusCss.blockchaintext}
+
+              <Icon
+                type="FontAwesome"
+                name="quote-left"
+                style={{ color: COLOR.PINK, alignSelf: "flex-start" }}
+              />
+              <Text style={aboutusCss.ourServices}>{EMP_SAY}</Text>
+              <ReviewButton />
+            </LinearGradient>
+            <AboutUsHeader text="OUR SERVICES" />
+            <Text style={aboutusCss.grw}>{GRW_US}</Text>
+            <Text style={aboutusCss.edge}>{EDGE_TECH}</Text>
+            <View style={{ marginTop: 30 }}>
+              <View style={aboutusCss.childview}>
+                <View style={aboutusCss.firstrow}>
+                  <Image
+                    style={{ width: 70, height: 62, marginLeft: 56 }}
+                    source={require("../images/Vector_Smart.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>UX/UI</Text>
+                  <Text style={aboutusCss.ux}>{UX_UI}</Text>
+                </View>
+                <View style={aboutusCss.secondrow}>
+                  <Image
+                    style={{ width: 70, height: 77, marginLeft: 50 }}
+                    source={require("../images/Icon_cart.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>eCommerce</Text>
+                  <Text style={aboutusCss.ecom}>{eCommerce}</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 8
+                }}
               >
-                {BLK_CHAIN}
-              </Text>
+                <View style={[aboutusCss.border, { marginRight: "9%" }]} />
+                <View style={aboutusCss.border} />
+              </View>
+              <View
+                style={{ flexDirection: "row", justifyContent: "space-around" }}
+              >
+                <View style={aboutusCss.mobileview}>
+                  <Image
+                    style={{ width: 60, height: 70, marginLeft: 50 }}
+                    source={require("../images/Layer_17.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>Mobile Apps</Text>
+                  <Text style={aboutusCss.apptext}>{M_APPS}</Text>
+                </View>
+                <View style={aboutusCss.cloudview}>
+                  <Image
+                    style={{ width: 77, height: 70, marginLeft: 50 }}
+                    source={require("../images/Layer_18.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>Cloud Deployment</Text>
+                  <Text style={aboutusCss.cloudtext}>{CLOUD_DEV}</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 8
+                }}
+              >
+                <View style={[aboutusCss.border, { marginRight: "9%" }]} />
+                <View style={aboutusCss.border} />
+              </View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  marginTop: 15,
+                  marginBottom: 10
+                }}
+              >
+                <View style={{ justifyContent: "center", alignSelf: "center" }}>
+                  <Image
+                    style={{ width: 70, height: 68 }}
+                    source={require("../images/Layer_19.png")}
+                  />
+                </View>
+                <Text style={aboutusCss.blockchainname}>Block Chain</Text>
+                <Text style={aboutusCss.blockchaintext}>{BLK_CHAIN}</Text>
+              </View>
             </View>
           </View>
         </View>

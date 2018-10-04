@@ -23,13 +23,14 @@ export default StyleSheet.create({
     width: "96%",
     textAlign: "center",
     fontSize: 11,
+    marginTop: 0,
     marginLeft: 6,
     color: "#868b9e",
     fontFamily: "Montserrat-SemiBold"
   },
   ux: {
     textAlign: "center",
-    fontSize: 12,
+    fontSize: 11,
     color: "#868b9e",
     fontFamily: "Montserrat-SemiBold"
   },
@@ -51,7 +52,7 @@ export default StyleSheet.create({
   },
   secondrow: {
     width: "50%",
-    marginTop: 8,
+    marginTop: 5,
     flexDirection: "column",
     justifyContent: "center",
     borderLeftWidth: 0.5,
@@ -60,7 +61,7 @@ export default StyleSheet.create({
   border: {
     height: 1,
     borderTopWidth: 0.6,
-    width: "45%",
+    width: "41%",
     borderTopColor: "#BDC3C7"
   },
   mobileview: {
@@ -77,7 +78,7 @@ export default StyleSheet.create({
   },
   cloudview: {
     width: "50%",
-    marginTop: 8,
+    marginTop: 10,
     flexDirection: "column",
     justifyContent: "center",
     borderLeftWidth: 0.5,
@@ -86,7 +87,7 @@ export default StyleSheet.create({
   cloudtext: {
     width: "90%",
     textAlign: "center",
-    fontSize: 12,
+    fontSize: 11,
     marginLeft: 6,
     color: "#868b9e",
     fontFamily: "Montserrat-SemiBold"
@@ -101,10 +102,51 @@ export default StyleSheet.create({
   },
   blockchaintext: {
     textAlign: "center",
-    fontSize: 12,
+    fontSize: 11,
     width: "52%",
     alignSelf: "center",
     color: "#868b9e",
     fontFamily: "Montserrat-SemiBold"
+  },
+  aboutcover: {
+    width: "94%",
+    height: 180,
+    zIndex: 1,
+    position: "absolute",
+    alignSelf: "center",
+    top: "7%"
+  },
+  pplSay: {
+    margin: 0,
+    padding: 20,
+    paddingBottom: 35,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  ourServices: {
+    fontSize: 18,
+    fontFamily: "Montserrat",
+    color: COLOR.TURQUOISE,
+    textAlign: "center",
+    marginBottom: 20
+  },
+  inQoute: {
+    paddingHorizontal: 10,
+    marginBottom: 30,
+    marginTop: 120
+  },
+  cover: {
+    flex: 1,
+    borderRadius: 3,
+    height: "100%",
+    width: "100%"
+  },
+  excelbelieve: {
+    fontSize: 14,
+    fontFamily: "Montserrat-SemiBold",
+    color: COLOR.TEXTCOLOR
+  },
+  masterview: {
+    marginTop: -135
   }
 });
