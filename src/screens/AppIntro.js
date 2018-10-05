@@ -4,7 +4,8 @@ import {
   FlatList,
   Dimensions,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  AppState
 } from "react-native";
 import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -31,12 +32,15 @@ class AppIntro extends Component {
     this.state = {
       deepLink: false,
       sharing: false,
-      fb_id: null
+      fb_id: null,
+      didPreviouslyLaunch:false
     };
   }
   static navigationOptions = {
     header: null
+    
   };
+  
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1 && message !== message) {
@@ -50,7 +54,15 @@ class AppIntro extends Component {
     }
     return null;
   }
+  _handleAppStateChange = (nextAppState) => {
+    this.setState({didPreviouslyLaunch: nextAppState});
+    if (this.state.didPreviouslyLaunch === 'active') {
+      this.props.navigation.replace("HomePage");
+    }
+    SplashScreen.hide();
+  }
   componentDidMount = async () => {
+    AppState.addEventListener('change', this._handleAppStateChange);
     const appIntro = await getItem("appintro");
     const candidateJob = await getItem("mongo_id");
     await this._checkDeepLink();
@@ -58,7 +70,8 @@ class AppIntro extends Component {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();
-  };
+  }
+
   _checkDeepLink = () => {
     branch.subscribe(async ({ errors, params }) => {
       if (errors) {
