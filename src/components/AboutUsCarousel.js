@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Carousel, { Pagination } from "react-native-snap-carousel";
-import { View, Dimensions, Image, StyleSheet } from "react-native";
+import { View, Dimensions, Image, StyleSheet,Async } from "react-native";
 import { COLOR } from "../styles/color";
 import { DEVICE_HEIGHT, DEVICE_WIDTH } from "../helper/constant";
 import { Icon } from "native-base";
@@ -10,7 +10,7 @@ export default class AboutUsCarousel extends Component {
     super();
     this.state = {
       entries: [
-        { title: require("../images/teamwork.png") },
+        { title: require("../images/teamwork.png")  },
         { title: require("../images/teamwork.png") },
         { title: require("../images/teamwork.png") },
         { title: require("../images/teamwork.png") },
@@ -58,7 +58,9 @@ export default class AboutUsCarousel extends Component {
   _renderItem({ item, index }) {
     return (
       <View>
-        <Image source={item.title} />
+        <Image source={item.title}
+        
+        />
       </View>
     );
   }

@@ -117,7 +117,7 @@ class OTPpage extends Component {
               <Card style={styles.blockView}>
                 <CardItem>
                   <Text style={styles.text}>
-                    You are are about to start your test. Since all tests are
+                    You are about to start your test. Since all tests are
                     confidential, it's mandatory that you do it after approval
                     of our HR. Confirm the same, please ask HR for OTP password
                   </Text>

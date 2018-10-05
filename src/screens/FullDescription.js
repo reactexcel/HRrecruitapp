@@ -27,6 +27,7 @@ class FullDescription extends Component {
   render() {
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
+    const candidate_profile = this.props.navigation.getParam("candidate_profile");
     const keyword = this.props.navigation.getParam("keyword").split(',');
     return (
       <Container style={styles.container}>
@@ -66,7 +67,9 @@ class FullDescription extends Component {
 
           <EmptyView />
           <Text style={styles.headerTextStyle}>Desired Cadidate Profile</Text>
-          <Text style={styles.descriptionText}>
+         {candidate_profile !=='' ?
+         <Text style={styles.descriptionText}>{candidate_profile} </Text> :
+         <Text style={styles.descriptionText}>
             Knowledge of PHP, MySQL.
             {`\n`}
             Knowledge of CSS/Jquery.
@@ -84,6 +87,7 @@ class FullDescription extends Component {
             Freshers can also be apply.
             {`\n`}
           </Text>
+         }
 
           <EmptyView />
           <Text style={styles.headerTextStyle}>Education</Text>
