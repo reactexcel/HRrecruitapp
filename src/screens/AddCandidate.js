@@ -16,6 +16,7 @@ import {
   Label,
   Form
 } from "native-base";
+import FCM,{FCMEvent} from 'react-native-fcm'
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
@@ -44,7 +45,8 @@ class AddCandidate extends Component {
       converting: false,
       resumeData: [],
       currentType: "",
-      resumeError: null
+      resumeError: null,
+      fcm_token_Id:null
     };
   }
 
@@ -61,6 +63,33 @@ class AddCandidate extends Component {
       // alert(msg);
     }
     return null;
+  }
+  componentDidMount() {
+    FCM.requestPermissions();
+    FCM.getFCMToken().then(token => {
+      console.log("TOKEN (getFCMToken)", token);
+    });
+    FCM.getInitialNotification().then(notif => {
+      console.log("INITIAL NOTIFICATION", notif)
+      this.setState({fcm_token_Id:notif})
+    });
+    this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
+      console.log("a", notif);
+      if (notif && notif.local_notification) {
+        return;
+      }
+    this.sendRemote(notif);
+    });
+  }
+  sendRemote(notif) {
+    FCM.presentLocalNotification({
+      title: notif.title,
+      body: notif.body,
+      priority: "high",
+      click_action: notif.click_action,
+      show_in_foreground: true,
+      local: true
+    });
   }
 
   componentDidUpdate() {
@@ -144,7 +173,7 @@ class AddCandidate extends Component {
           btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
           btnTextStyle={check ? _styles.checkedBtnText : _styles.uncheckedBtnText}
           key={i}
-          onPress={}
+          // onPress={}
           text={title.title}
           type="rounded"
         />
@@ -247,6 +276,7 @@ class AddCandidate extends Component {
         values["fileNames"].push(`file${i + 1}`);
         values["default_tag"] = params.jobDetail.default_id;
         values["tag_id"] = params.jobDetail.id;
+        values['candidate_fcm_token']=this.state.fcm_token_Id
       });
       this.props.addCandidate(values);
     } else {

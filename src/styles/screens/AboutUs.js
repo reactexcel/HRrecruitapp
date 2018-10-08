@@ -82,7 +82,7 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 11,
     width: "98%",
-    color: PRONAMECOLOR,
+    color: COLOR.PRONAMECOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   cloudview: {
@@ -104,7 +104,7 @@ export default StyleSheet.create({
   blockchainname: {
     textAlign: "center",
     fontSize: 16,
-    color: PROTEXTCOLOR,
+    color: COLOR.PROTEXTCOLOR,
     marginTop: 2,
     marginBottom: 5,
     fontFamily: "Montserrat-SemiBold"
