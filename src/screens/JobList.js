@@ -28,7 +28,7 @@ import { COLOR } from "../styles/color";
 import { getJobLists } from "../actions";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
-import JobOpeningAboutUs from "../components/JobOpeningAboutUs";
+import AboutUsText from "../components/AboutUsText";
 import Share, { ShareSheet, Button } from "react-native-share";
 import { SHAREURL } from "../config/dev";
 import LinearGradient from "react-native-linear-gradient";
@@ -91,13 +91,11 @@ class JobList extends Component {
     });
   };
   onCancel() {
-    console.log("CANCEL");
     this.setState({ visible: false });
   }
 
   onShareClick = item => {
     let shareDetails = {};
-    console.log(item, "item", shareDetails);
     shareDetails["title"] = item.title;
     shareDetails["subject"] = item.subject;
     shareDetails["message"] = item.job_description;
@@ -137,7 +135,8 @@ class JobList extends Component {
             this.props.navigation.navigate("FullDescription", {
               subject: item.subject,
               job_description: item.job_description,
-              keyword: item.keyword
+              keyword: item.keyword,
+              candidate_profile: item.candidate_profile
             });
           }}
         />
@@ -160,7 +159,7 @@ class JobList extends Component {
             {!isLoading && joblist && joblist.length >= 1 ? (
               <Fragment>
                 <Content>
-                  <JobOpeningAboutUs />
+                  <AboutUsText />
                   <LinearGradient
                     colors={[COLOR.LGONE, COLOR.LGTWO]}
                     style={styles.linearGradientView}

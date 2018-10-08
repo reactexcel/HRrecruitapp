@@ -144,7 +144,7 @@ class AddCandidate extends Component {
           btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
           btnTextStyle={check ? _styles.checkedBtnText : _styles.uncheckedBtnText}
           key={i}
-          onPress={()=>{console.log()}}
+          onPress={}
           text={title.title}
           type="rounded"
         />

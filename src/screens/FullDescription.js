@@ -4,7 +4,21 @@ import { COLOR } from "../styles/color";
 import EmptyView from "../components/EmptyView";
 import JobSalaryDetails from "../components/JobSalaryDetails";
 import { Button, Container, Content, Icon } from "native-base";
-import { ABOUT_US } from "../helper/constant";
+import {
+  ABOUT_US,
+  JOB_DESCRIPTION,
+  CANDIDATE_PROFILE,
+  JOBDES_TITLE,
+  DESIRE_PRO,
+  EDU_TITLE,
+  KEY_SKILL,
+  COM_PRO,
+  EXCELLECE_TECH,
+  LOG_TO_APPLY,
+  SHARE_IT,
+  EDUCATION_DES,
+  RECRUIT_NAME
+} from "../helper/constant";
 import styles from "../styles/screens/FullDescription";
 
 class FullDescription extends Component {
@@ -27,7 +41,10 @@ class FullDescription extends Component {
   render() {
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
-    const keyword = this.props.navigation.getParam("keyword").split(',');
+    const candidate_profile = this.props.navigation.getParam(
+      "candidate_profile"
+    );
+    const keyword = this.props.navigation.getParam("keyword").split(",");
     return (
       <Container style={styles.container}>
         <Content showsVerticalScrollIndicator={false}>
@@ -35,25 +52,12 @@ class FullDescription extends Component {
             <Text style={styles.jobTitle}>{job_title}</Text>
           </JobSalaryDetails>
           <EmptyView />
-          <Text style={styles.headerTextStyle}>Job Description</Text>
+          <Text style={styles.headerTextStyle}>{JOBDES_TITLE}</Text>
           <Text style={styles.descriptionText}>{job_desription}</Text>
           <EmptyView />
-          <Text style={styles.descriptionText}>
-            Salary: INR 1,25,000 - 2,00,000 PA
-            {`\n`}
-            Industry: IT-Software/Software-Services
-            {`\n`}
-            Functional Area: IT Software - Application Programming,Maintenance
-            {`\n`}
-            Role Category: Programming & Design
-            {`\n`}
-            Role: Software Developer Employment
-            {`\n`}
-            Type: Permanent Job, Full Time
-            {`\n`}
-          </Text>
+          <Text style={styles.descriptionText}>{JOB_DESCRIPTION}</Text>
           <EmptyView />
-          <Text style={styles.headerTextStyle}>Keys Skills</Text>
+          <Text style={styles.headerTextStyle}>{KEY_SKILL}</Text>
           <View style={styles.keySkillsView}>
             {keyword.map((text, id) => {
               return (
@@ -65,69 +69,36 @@ class FullDescription extends Component {
           </View>
 
           <EmptyView />
-          <Text style={styles.headerTextStyle}>Desired Cadidate Profile</Text>
-          <Text style={styles.descriptionText}>
-            Knowledge of PHP, MySQL.
-            {`\n`}
-            Knowledge of CSS/Jquery.
-            {`\n`}
-            Knowledge of database designing.
-            {`\n`}
-            Good Programming Logic.
-            {`\n`}
-            Basic/Advanced knowledge of JavaScript, Ajax, Jquery.
-            {`\n`}
-            Self Learner and Self Motivated Person.
-            {`\n`}
-            Team Player.
-            {`\n`}
-            Freshers can also be apply.
-            {`\n`}
-          </Text>
+          <Text style={styles.headerTextStyle}>{DESIRE_PRO}</Text>
+          {candidate_profile !== "" ? (
+            <Text style={styles.descriptionText}>{candidate_profile} </Text>
+          ) : (
+            <Text style={styles.descriptionText}>{CANDIDATE_PROFILE}</Text>
+          )}
 
           <EmptyView />
-          <Text style={styles.headerTextStyle}>Education</Text>
-          <Text style={styles.descriptionText}>
-            UG: Any Graduate - Any Specialization, B.Tech/B.E. - Any
-            Specialization, Diploma - Any Specialization, Other Graduate, BCA -
-            Computers
-          </Text>
+          <Text style={styles.headerTextStyle}>{EDU_TITLE}</Text>
+          <Text style={styles.descriptionText}>{EDUCATION_DES}</Text>
 
           <EmptyView />
-          <Text style={styles.headerTextStyle}>Company Profile:</Text>
+          <Text style={styles.headerTextStyle}>{COM_PRO}</Text>
           <EmptyView />
           <Text style={styles.descriptionText}>
-            Excellence Technologies :{`\n`}
+            {EXCELLECE_TECH}
             {ABOUT_US}
           </Text>
           <EmptyView />
-          <Text style={styles.descriptionText}>
-            Recruiter Name:HR
-            {`\n`}
-            Contact Company:Excellence Technosoft Private Limited
-            {`\n`}
-            Email Address:jobs@excellencetechnologies.in
-            {`\n`}
-            Website:http://www.excellencetechnologies.in
-            {`\n`}
-            Telephone:123456789
-            {`\n`}
-            Reference Id:DEV001
-          </Text>
+          <Text style={styles.descriptionText}>{RECRUIT_NAME}</Text>
           <View style={styles.btnView}>
             <Button rounded style={[styles.btnStyle, styles.loginBtnStyle]}>
               <Text style={[styles.btnText, styles.loginTextStyle]}>
-                LOGIN TO APPLY
+                {LOG_TO_APPLY}
               </Text>
             </Button>
             <Button iconLeft rounded style={styles.btnStyle}>
-              <Icon
-                name="share"
-                type="Entypo"
-                style={styles.shareIconStyle}
-              />
+              <Icon name="share" type="Entypo" style={styles.shareIconStyle} />
               <Text style={[styles.btnText, styles.shareTextStyle]}>
-                SHARE IT
+                {SHARE_IT}
               </Text>
             </Button>
           </View>

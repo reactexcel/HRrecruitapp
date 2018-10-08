@@ -21,5 +21,13 @@ export const COLOR = {
   LGTWO: "#131931",
   WHITE:"#fefefe",
   LTONE:"#109aaa",
-  TEXTCOLOR:"#253055"
+  TEXTCOLOR:"#253055",
+  //for product view below our services 
+  INACTIVEDOT:'#d4d4d4',
+  PARENTVIEW:'#000',
+  PROTEXTCOLOR:'#3aa1af',
+  PRONAMECOLOR:'#868b9e',
+  EDGECOLOR:'#5b637d',
+  ROWCOLOR:'#BDC3C7',
+  BTNYELLOW:'#201F40',
 };

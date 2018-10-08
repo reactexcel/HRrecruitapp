@@ -3,8 +3,7 @@ import { COLOR } from "../color";
 
 export default StyleSheet.create({
   descriptionView: {
-    flexBasis: "50%",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 10
@@ -19,7 +18,6 @@ export default StyleSheet.create({
   aboutUs: {
     fontFamily: "Montserrat-SemiBold",
     textAlign: "center",
-    color: COLOR.TEXTCOLOR,
     fontSize: 12.3,
     textAlignVertical: "center"
   },

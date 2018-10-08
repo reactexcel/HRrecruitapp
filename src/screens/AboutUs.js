@@ -1,35 +1,187 @@
 import React, { Component } from "react";
+import { StyleSheet, Text, View, Alert, ScrollView, Image } from "react-native";
+import { COLOR } from "../styles/color";
+import Logo from "../components/Logo";
+import LinearGradient from "react-native-linear-gradient";
+import { Grid, Row } from "react-native-easy-grid";
+import styles from "../styles";
+import _styles from "../styles/screens/AboutUs";
+import aboutusCss from "../styles/screens/AboutUs";
+import AboutUsText from "../components/AboutUsText";
 import {
-  TextInput,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Alert
-} from "react-native";
+  ABOUT_US,
+  DEVICE_WIDTH,
+  EXCEL_BELIVE,
+  EMP_SAY,
+  GRW_US,
+  EDGE_TECH,
+  UX_UI,
+  eCommerce,
+  CLOUD_DEV,
+  M_APPS,
+  BLK_CHAIN
+} from "../helper/constant";
+import { Icon } from "native-base";
+import AboutUsHeader from "../components/AboutUsHeader";
+import AboutUsCarousel from "../components/AboutUsCarousel";
+import ReviewButton from "../components/ReviewButton";
 
 class AboutUs extends Component {
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: COLOR.LGONE,
+      elevation: 0
+    },
+    headerTitle: (
+      <View style={aboutusCss.header}>
+        <Image
+          source={require("../images/logo.png")}
+          resizeMode="contain"
+          style={aboutusCss.headerImage}
+        />
+      </View>
+    ),
+    headerTintColor: COLOR.PINK,
+    headerRight: <View />
+  };
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>About Us</Text>
-      </View>
+      <ScrollView>
+        <View
+          style={{
+            paddingBottom: 75,
+            backgroundColor: [COLOR.LGTWO],
+            zIndex: -1
+          }}
+        >
+          <LinearGradient
+            colors={[COLOR.LGONE, COLOR.LGTWO]}
+            style={{ height: 150 }}
+          >
+            <AboutUsText textcolor="white" style={{ padding: 200 }} />
+          </LinearGradient>
+        </View>
+        <View style={aboutusCss.aboutcover}>
+          <Image
+            source={require("../images/teamwork.png")}
+            resizeMode="cover"
+            style={aboutusCss.cover}
+          />
+        </View>
+        <View>
+          <View style={aboutusCss.inQoute}>
+            <Icon
+              type="FontAwesome"
+              name="quote-left"
+              style={{ color: COLOR.PINK }}
+            />
+            <Text style={aboutusCss.excelbelieve}>{EXCEL_BELIVE}</Text>
+          </View>
+
+          <AboutUsHeader text="CHECK US OUT" />
+          <AboutUsCarousel />
+
+          <View style={aboutusCss.masterview}>
+            <LinearGradient
+              colors={[COLOR.LGONE, COLOR.LGTWO]}
+              style={aboutusCss.pplSay}
+            >
+              <Text
+                style={{
+                  color: COLOR.MUSTARD,
+                  fontSize: 18,
+                  fontFamily: "Montserrat-Bold"
+                }}
+              >
+                WHAT PEOPLE SAY
+              </Text>
+
+              <Icon
+                type="FontAwesome"
+                name="quote-left"
+                style={{ color: COLOR.PINK, alignSelf: "flex-start" }}
+              />
+              <Text style={aboutusCss.ourServices}>{EMP_SAY}</Text>
+              <ReviewButton />
+            </LinearGradient>
+            <AboutUsHeader text="OUR SERVICES" />
+            <Text style={aboutusCss.grw}>{GRW_US}</Text>
+            <Text style={aboutusCss.edge}>{EDGE_TECH}</Text>
+            <View style={{ marginTop: 30 }}>
+              <View style={aboutusCss.childview}>
+                <View style={aboutusCss.firstrow}>
+                  <Image
+                    style={aboutusCss.one}
+                    source={require("../images/Vector_Smart.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>UX/UI</Text>
+                  <Text style={aboutusCss.ux}>{UX_UI}</Text>
+                </View>
+                <View style={aboutusCss.secondrow}>
+                  <Image
+                    style={aboutusCss.two}
+                    source={require("../images/Icon_cart.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>eCommerce</Text>
+                  <Text style={aboutusCss.ecom}>{eCommerce}</Text>
+                </View>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 8
+                }}
+              >
+                <View style={[aboutusCss.border, { marginRight: "9%" }]} />
+                <View style={aboutusCss.border} />
+              </View>
+              <View
+                style={{ flexDirection: "row", justifyContent: "space-around" }}
+              >
+                <View style={aboutusCss.mobileview}>
+                  <Image
+                    style={aboutusCss.three}
+                    source={require("../images/Layer_17.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>Mobile Apps</Text>
+                  <Text style={aboutusCss.apptext}>{M_APPS}</Text>
+                </View>
+                <View style={aboutusCss.cloudview}>
+                  <Image
+                    style={aboutusCss.four}
+                    source={require("../images/Layer_18.png")}
+                  />
+                  <Text style={aboutusCss.imagename}>Cloud Deployment</Text>
+                  <Text style={aboutusCss.cloudtext}>{CLOUD_DEV}</Text>
+                </View>
+              </View>
+              <View style={aboutusCss.borderParent}>
+                <View style={[aboutusCss.border, { marginRight: "9%" }]} />
+                <View style={aboutusCss.border} />
+              </View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  marginTop: 15,
+                  marginBottom: 10
+                }}
+              >
+                <View style={aboutusCss.chainview}>
+                  <Image
+                    style={{ width: 70, height: 68 }}
+                    source={require("../images/Layer_19.png")}
+                  />
+                </View>
+                <Text style={aboutusCss.blockchainname}>Block Chain</Text>
+                <Text style={aboutusCss.blockchaintext}>{BLK_CHAIN}</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  title: {
-    fontWeight: "bold",
-    fontSize: 20,
-    textAlign: "center"
-  }
-});
 
 export default AboutUs;

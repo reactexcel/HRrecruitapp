@@ -18,7 +18,7 @@ import { notify } from "../helper/notify";
 import { COLOR } from "../styles/color";
 import { connect } from "react-redux";
 import { verifyingOTP, connectionState } from "../actions";
-import { SUCCESS_STATUS } from "../helper/constant";
+import { SUCCESS_STATUS,STARTTEXTMSG } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 
 class OTPpage extends Component {
@@ -117,9 +117,7 @@ class OTPpage extends Component {
               <Card style={styles.blockView}>
                 <CardItem>
                   <Text style={styles.text}>
-                    You are are about to start your test. Since all tests are
-                    confidential, it's mandatory that you do it after approval
-                    of our HR. Confirm the same, please ask HR for OTP password
+                   {STARTTEXTMSG}
                   </Text>
                 </CardItem>
                 <CardItem>

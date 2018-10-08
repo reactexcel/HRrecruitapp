@@ -26,6 +26,7 @@
     "react-native-linear-gradient": "^2.4.0",
     "react-native-modalbox": "^1.6.0",
     "react-native-share": "^1.0.27",
+    "react-native-snap-carousel": "^3.7.4",
     "react-native-splash-screen": "^3.1.0",
     "react-native-step-indicator": "0.0.9",
     "react-native-timer-countdown": "^1.1.0",
