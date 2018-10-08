@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import forEach from "lodash/forEach";
 import { submitTest } from "../actions";
 import { getItem, setItem } from "../helper/storage";
-import { SUCCESS_STATUS } from "../helper/constant";
+import { SUCCESS_STATUS,LOW_CONN_ALERT } from "../helper/constant";
 import { notify } from "../helper/notify";
 
 class SubmitTest extends Component {
@@ -148,7 +148,7 @@ class SubmitTest extends Component {
             <HorizontalLine />
             <CardItem>
               <Text style={styles.text}>
-                To Submit your Test, please turn on your Internet connection.
+                {LOW_CONN_ALERT}
               </Text>
             </CardItem>
             {!isOnline ? (

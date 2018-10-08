@@ -32,7 +32,7 @@ class ReviewButton extends Component {
             style={{
               backgroundColor:
                 isPressed && index === id ? COLOR.MUSTARD : "transparent",
-              borderColor: "#201F40",
+              borderColor: BTNYELLOW,
               paddingHorizontal: 10,
               marginHorizontal: id === 1 ? 7 : 0
             }}

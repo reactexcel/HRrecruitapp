@@ -21,10 +21,24 @@ export const M_APPS='We develope cutting adge apps in Android iOS';
 
 export const CLOUD_DEV='We deploy highly scalable backend services on AWS Azure using NodeJS,Laravel';
 export const BLK_CHAIN='We develope smart contract & dApps on leading blockchain platforms'
+export const STARTTEXTMSG="You are about to start your test. Since all tests are confidential, it's mandatory that you do it after approval of our HR. Confirm the same, please ask HR for OTP password"
+export const JOB_DESCRIPTION="Salary: INR 1,25,000 - 2,00,000 PA {`\n`} Industry: IT-Software/Software-Services {`\n`} Functional Area: IT Software - Application Programming,Maintenance {`\n`} Role Category: Programming & Design {`\n`} Role: Software Developer Employment {`\n`} Type: Permanent Job, Full Time {`\n`}"
+export const CANDIDATE_PROFILE=" Knowledge of PHP, MySQL. {`\n`} Knowledge of CSS/Jquery. {`\n`} Knowledge of database designing. {`\n`} Good Programming Logic. {`\n`} Basic/Advanced knowledge of JavaScript, Ajax, Jquery. {`\n`} Self Learner and Self Motivated Person. {`\n`} Team Player. {`\n`} Freshers can also be apply. {`\n`}"
+export const EDUCATION_DES="UG: Any Graduate - Any Specialization, B.Tech/B.E. - Any Specialization, Diploma - Any Specialization, Other Graduate, BCA - Computers"
+export const RECRUIT_NAME=" Recruiter Name:HR {`\n`} Contact Company:Excellence Technosoft Private Limited {`\n`} Email Address:jobs@excellencetechnologies.in {`\n`} Website:http://www.excellencetechnologies.in {`\n`} Telephone:123456789 {`\n`} Reference Id:DEV001"
+export const JOBDES_TITLE="RECRUIT_NAME"
+export const DESIRE_PRO="Desired Cadidate Profile"
+export const EDU_TITLE="Education"
+export const KEY_SKILL='Keys Skills';
+export const COM_PRO='Company Profile:'
+export const EXCELLECE_TECH="Excellence Technologies :{`\n`}"
+export const LOG_TO_APPLY='LOGIN TO APPLY'
+export const SHARE_IT='SHARE IT'
+export const JOB_APPLYING="you are applying for the job profile for which there is no online interview process. Please contact hr for the same so this issue can be sorted out"
+export const LOW_CONN_ALERT="To Submit your Test, please turn on your Internet connection."
 
 export const DEVICE_WIDTH = Dimensions.get("window").width;
 export const DEVICE_HEIGHT = Dimensions.get("window").height;
-
 //custom styles for step indicator
 export const customStyles = {
   stepIndicatorSize: 10,

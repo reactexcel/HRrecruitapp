@@ -15,7 +15,7 @@ import styles from "../styles";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
 import { setItem, getItem } from "../helper/storage";
-import { SUCCESS_STATUS } from "../helper/constant";
+import { SUCCESS_STATUS,JOB_APPLYING } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import HTMLView from "react-native-htmlview";
 
@@ -87,9 +87,7 @@ class Instructions extends Component {
                   <Fragment>
                     <CardItem>
                       <Text style={styles.text}>
-                        Hi {name}, you are applying for the job profile for
-                        which there is no online interview process. Please
-                        contact hr for the same so this issue can be sorted out
+                        Hi {name}, {JOB_APPLYING}
                       </Text>
                     </CardItem>
                     <CustomButton
