@@ -91,13 +91,11 @@ class JobList extends Component {
     });
   };
   onCancel() {
-    console.log("CANCEL");
     this.setState({ visible: false });
   }
 
   onShareClick = item => {
     let shareDetails = {};
-    console.log(item, "item", shareDetails);
     shareDetails["title"] = item.title;
     shareDetails["subject"] = item.subject;
     shareDetails["message"] = item.job_description;
@@ -105,8 +103,6 @@ class JobList extends Component {
     this.setState({ visible: true, shareOptions: shareDetails });
   };
   renderCardItem = ({ item }) => {
-    console.log(item);
-    
     return (
       <Card padder>
         <CardItem style={styles.cardItem}>
@@ -140,7 +136,7 @@ class JobList extends Component {
               subject: item.subject,
               job_description: item.job_description,
               keyword: item.keyword,
-              candidate_profile:item.candidate_profile
+              candidate_profile: item.candidate_profile
             });
           }}
         />

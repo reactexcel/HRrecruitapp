@@ -78,7 +78,6 @@ class InterviewLogin extends Component {
     const fb_id = await getItem("fb_id");
     if (ans !== undefined && email !== undefined && fb_id !== undefined) {
       NetInfo.isConnected.fetch().done(async isConnected => {
-        console.log(isConnected, "isConnected");
         if (isConnected) {
           await this.props.getCandidateDetails(fb_id.fb_id);
           const { data, message, error, status } = this.props.interviewSignUp;

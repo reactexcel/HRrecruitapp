@@ -197,7 +197,6 @@ class HomePage extends Component {
             <View style={styles.btnContainer}>
               <CustomButton
                 onPress={() => {
-                  console.log();
                 }}
                 btnStyle={styles.btn}
                 btnTextStyle={styles.joinBtnStyles}

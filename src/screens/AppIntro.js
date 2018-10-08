@@ -94,7 +94,6 @@ class AppIntro extends Component {
   };
   _onNext = (item, index) => {
     let items = AppDetails;
-    console.log(items.length - 1 <= index, "items.length - 1");
     let moveToIndex = items.length - 1 <= index;
     if (!moveToIndex) {
       let moveIndex = index + 1;
