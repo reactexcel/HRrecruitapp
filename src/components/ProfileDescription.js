@@ -5,19 +5,36 @@ import ProfileBlock from "./ProfileBlock";
 import StepIndicator from "react-native-step-indicator";
 import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
-
+import { connect } from "react-redux";
 const ProfileDescription = props => {
   const labels = [
     "CV Sent",
     "CV Received",
     "CV Shortlisted",
     "Take Online Test",
-    props.result
+    props.appliedJob.status === "Selected" ||
+    props.appliedJob.status === "Reject"
+      ? props.appliedJob.status
+      : "Result"
   ];
   const {
     appliedJob: { job_profile, job_description }
   } = props;
-
+  let profile_status = 0;
+  let status_color = COLOR.MUSTARD;
+  if (props.appliedJob.status === "First Round") {
+    profile_status = 1;
+  } else if (props.appliedJob.status === "Second Round") {
+    profile_status = 2;
+  } else if (props.appliedJob.status === "Third Round") {
+    profile_status = 3;
+  } else if (props.appliedJob.status === "Reject") {
+    profile_status = 4;
+    status_color = "red";
+  } else if (props.appliedJob.status === "Selected") {
+    profile_status = 4;
+    status_color = "green";
+  }
   return (
     <Fragment>
       <ProfileBlock title="JOB TITLE">
@@ -29,8 +46,30 @@ const ProfileDescription = props => {
       <ProfileBlock title="APPLICATION STATUS">
         <View style={{ marginBottom: 10 }} />
         <StepIndicator
-          customStyles={customStyles}
-          currentPosition={props.currentPosition}
+          customStyles={{
+            stepIndicatorSize: 10,
+            currentStepIndicatorSize: 10,
+            separatorStrokeWidth: 1,
+            currentStepStrokeWidth: 2,
+            stepStrokeWidth: 3,
+            currentStepIndicatorLabelFontSize: 0,
+            stepIndicatorLabelFontSize: 0,
+            labelSize: 10,
+            stepStrokeUnFinishedColor: "#7d7885",
+            separatorUnFinishedColor: "#7d7885",
+            stepIndicatorUnFinishedColor: "#7d7885",
+            stepStrokeCurrentColor: status_color,
+            separatorFinishedColor: status_color,
+            currentStepLabelColor: status_color,
+            stepStrokeFinishedColor: status_color,
+            stepIndicatorFinishedColor: status_color,
+            stepIndicatorCurrentColor: status_color,
+            stepIndicatorLabelCurrentColor: "transparent",
+            stepIndicatorLabelFinishedColor: "transparent",
+            stepIndicatorLabelUnFinishedColor: "transparent",
+            labelColor: "#7d7885"
+          }}
+          currentPosition={profile_status}
           labels={labels}
         />
       </ProfileBlock>
@@ -66,4 +105,11 @@ ProfileDescription.defaultProps = {
   result: "Result"
 };
 
-export default ProfileDescription;
+const mapStateToProps = state => ({
+  data: state
+});
+const mapDispatchToProps = dispatch => ({});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProfileDescription);

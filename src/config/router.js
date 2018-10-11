@@ -14,7 +14,7 @@ import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
 import Profile from "../screens/Profile";
 import FullDescription from "../screens/FullDescription";
-
+import ProfileDescription from '../components/ProfileDescription'
 const transitionConfig = () => {
   return {
     transitionSpec: {
@@ -90,7 +90,11 @@ const Rootstack = createStackNavigator(
     },
     FullDescription: {
       screen: FullDescription
+    },
+    ProfileDescription:{
+      screen:ProfileDescription
     }
+    
   },
   {
     initialScreen: "AppIntro",

@@ -103,6 +103,7 @@ class JobList extends Component {
     this.setState({ visible: true, shareOptions: shareDetails });
   };
   renderCardItem = ({ item }) => {
+    console.log(item);
     return (
       <Card padder>
         <CardItem style={styles.cardItem}>

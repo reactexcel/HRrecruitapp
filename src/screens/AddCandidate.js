@@ -17,6 +17,7 @@ import {
   Form
 } from "native-base";
 import FCM,{FCMEvent} from 'react-native-fcm'
+import DeviceInfo from 'react-native-device-info';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
@@ -46,7 +47,8 @@ class AddCandidate extends Component {
       resumeData: [],
       currentType: "",
       resumeError: null,
-      fcm_token_Id:null
+      fcm_token_Id:null,
+      deviceId:null
     };
   }
 
@@ -60,38 +62,35 @@ class AddCandidate extends Component {
   static getDerivedStateFromProps(nextProps) {
     const { msg } = nextProps.candidate;
     if (msg !== undefined) {
-      // alert(msg);
     }
     return null;
   }
-  componentDidMount() {
+  componentDidMount(){
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
-      console.log("TOKEN (getFCMToken)", token);
+      this.setState({fcm_token_Id:token})
+      this.setState({deviceId: DeviceInfo.getUniqueID()})
     });
     FCM.getInitialNotification().then(notif => {
-      console.log("INITIAL NOTIFICATION", notif)
-      this.setState({fcm_token_Id:notif})
-    });
-    this.notificationUnsubscribe = FCM.on(FCMEvent.Notification, notif => {
-      console.log("a", notif);
-      if (notif && notif.local_notification) {
-        return;
-      }
-    this.sendRemote(notif);
     });
   }
   sendRemote(notif) {
     FCM.presentLocalNotification({
-      title: notif.title,
-      body: notif.body,
-      priority: "high",
-      click_action: notif.click_action,
-      show_in_foreground: true,
-      local: true
+      data: {
+        type:"MEASURE_CHANGE",
+        custom_notification: {
+          body: "test body",
+          title: "test title",
+          color:"#00ACD4",
+          priority:"high",
+          icon:"ic_notif",
+          group: "GROUP",
+          id: "id",
+          show_in_foreground: true
+        }
+      }
     });
   }
-
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
@@ -112,6 +111,11 @@ class AddCandidate extends Component {
           { cancelable: false }
         );
       }
+      // else if(candidate == true){
+      //   this.props.navigation.navigate("HomePage", {
+      //     applied: true
+      //   })
+      // }
     }
     const { success, msg } = this.props.candidate;
     if (success !== undefined && msg !== undefined) {
@@ -276,7 +280,7 @@ class AddCandidate extends Component {
         values["fileNames"].push(`file${i + 1}`);
         values["default_tag"] = params.jobDetail.default_id;
         values["tag_id"] = params.jobDetail.id;
-        values['candidate_fcm_token']=this.state.fcm_token_Id
+        values['device_id']=this.state.fcm_token_Id
       });
       this.props.addCandidate(values);
     } else {

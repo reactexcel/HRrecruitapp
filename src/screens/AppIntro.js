@@ -25,7 +25,7 @@ import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import CardTrail from "../components/CardTrail";
-
+import FCM, { FCMEvent } from "react-native-fcm";
 class AppIntro extends Component {
   constructor(props) {
     super(props);
@@ -33,14 +33,19 @@ class AppIntro extends Component {
       deepLink: false,
       sharing: false,
       fb_id: null,
-      didPreviouslyLaunch:false
+      didPreviouslyLaunch: false,
+      linkOpening: false,
+      candidateJob: null,
+      profile_pic: null,
+      userName: null,
+      mobile_no: null,
+      textColor: false,
+      notification: ""
     };
   }
   static navigationOptions = {
     header: null
-    
   };
-  
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1 && message !== message) {
@@ -54,15 +59,15 @@ class AppIntro extends Component {
     }
     return null;
   }
-  _handleAppStateChange = (nextAppState) => {
-    this.setState({didPreviouslyLaunch: nextAppState});
-    if (this.state.didPreviouslyLaunch === 'active') {
+  _handleAppStateChange = nextAppState => {
+    this.setState({ didPreviouslyLaunch: nextAppState });
+    if (this.state.didPreviouslyLaunch === "active") {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();
-  }
+  };
   componentDidMount = async () => {
-    AppState.addEventListener('change', this._handleAppStateChange);
+    AppState.addEventListener("change", this._handleAppStateChange);
     const appIntro = await getItem("appintro");
     const candidateJob = await getItem("mongo_id");
     await this._checkDeepLink();
@@ -70,8 +75,7 @@ class AppIntro extends Component {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();
-  }
-
+  };
   _checkDeepLink = () => {
     branch.subscribe(async ({ errors, params }) => {
       if (errors) {

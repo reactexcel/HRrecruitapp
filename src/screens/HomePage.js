@@ -7,7 +7,8 @@ import {
   Platform,
   TouchableHighlight,
   BackHandler,
-  Dimensions
+  Dimensions,
+  ActivityIndicator
 } from "react-native";
 import {
   Container,
@@ -19,7 +20,8 @@ import {
   Left,
   Icon,
   List,
-  Spinner
+  Spinner,
+  TabHeading
 } from "native-base";
 import { connect } from "react-redux";
 import styles from "../styles/screens/HomePage";
@@ -31,6 +33,7 @@ import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 import SplashScreen from "react-native-splash-screen";
+import FCM from "react-native-fcm";
 
 class HomePage extends Component {
   constructor(props) {
@@ -41,13 +44,16 @@ class HomePage extends Component {
       profile_pic: null,
       userName: null,
       mobile_no: null,
-      textColor: false
+      textColor: false,
+      animation: false,
+      opacity: 0
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
   static navigationOptions = {
     header: null
   };
+
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
     if (error !== undefined && error === 1 && message !== message) {
@@ -63,6 +69,7 @@ class HomePage extends Component {
   }
   setCandidateProfile = async () => {
     const candidateJob = await getItem("mongo_id");
+
     if (candidateJob) {
       let email = candidateJob.candidate.data.sender_mail;
       let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
@@ -74,13 +81,13 @@ class HomePage extends Component {
         profile_pic,
         userName,
         mobile_no,
-        linkOpening: false
+        linkOpening: false,
+        notification: ""
       });
     } else {
       this.setState({ linkOpening: false });
     }
   };
-
   async handleViewClick(data) {
     const { appliedJob } = this.props;
     if (data == "JobList" && this.state.candidateJob) {
@@ -109,6 +116,27 @@ class HomePage extends Component {
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+    }
+    const notif = await FCM.getInitialNotification().then(notif => {
+      return notif;
+    });
+    this.setState({ notification: notif.from });
+    if (this.state.notification !== undefined) {
+      this.setState({ opacity: 1 });
+      if (this.state.candidateJob !== null) {
+        const { appliedJob } = this.props;
+        const {
+          linkOpening,
+          textColor,
+          candidateJob,
+          ...profileDetails
+        } = this.state;
+        this.props.navigation.navigate("Profile", {
+          appliedJob,
+          profileDetails
+        });
+        this.setState({ notification: "", opacity: 0 });
+      }
     }
   };
   componentDidUpdate = async () => {
@@ -179,42 +207,55 @@ class HomePage extends Component {
       );
     });
     return (
-      <LinearGradient
-        colors={[COLOR.LGONE, COLOR.LGTWO]}
-        style={styles.container}
-      >
-        {linkOpening ? (
-          <View style={styles.spinnerView}>
-            <Spinner color={COLOR.Spinner} />
-          </View>
-        ) : (
-          <View style={styles.subContainer}>
-            <View style={styles.logoCnt}>
-              <View style={styles.logoView}>
-                <Logo />
+      <View style={{ flex: 1 }}>
+        <View
+          style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
+        >
+          <ActivityIndicator
+            animating={true}
+            style={{ opacity: this.state.opacity }}
+            size="large"
+            color={COLOR.MUSTARD}
+          />
+        </View>
+        <LinearGradient
+          colors={[COLOR.LGONE, COLOR.LGTWO]}
+          style={styles.container}
+        >
+          {linkOpening ? (
+            <View style={styles.spinnerView}>
+              <Spinner color={COLOR.Spinner} />
+            </View>
+          ) : (
+            <View style={styles.subContainer}>
+              <View style={styles.logoCnt}>
+                <View style={styles.logoView}>
+                  <Logo />
+                </View>
               </View>
+              <View style={styles.btnContainer}>
+                <CustomButton
+                  onPress={() => {}}
+                  btnStyle={styles.btn}
+                  btnTextStyle={styles.joinBtnStyles}
+                  text={"JOIN NOW"}
+                  type={"rounded"}
+                />
+              </View>
+              {renderCustomView}
             </View>
-            <View style={styles.btnContainer}>
-              <CustomButton
-                onPress={() => {
-                }}
-                btnStyle={styles.btn}
-                btnTextStyle={styles.joinBtnStyles}
-                text={"JOIN NOW"}
-                type={"rounded"}
-              />
-            </View>
-            {renderCustomView}
-          </View>
-        )}
-      </LinearGradient>
+          )}
+        </LinearGradient>
+      </View>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  state_data: state,
   appliedJob: state.appliedJob,
-  interviewSignUp: state.interviewSignUp
+  interviewSignUp: state.interviewSignUp,
+  state_data: state
 });
 export default connect(
   mapStateToProps,
