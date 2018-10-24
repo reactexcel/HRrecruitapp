@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Alert, ScrollView, Image } from "react-native";
+import { StyleSheet, Text, View, Alert, ScrollView, Image ,TouchableNativeFeedback} from "react-native";
 import { COLOR } from "../styles/color";
 import Logo from "../components/Logo";
 import LinearGradient from "react-native-linear-gradient";
@@ -25,6 +25,7 @@ import { Icon } from "native-base";
 import AboutUsHeader from "../components/AboutUsHeader";
 import AboutUsCarousel from "../components/AboutUsCarousel";
 import ReviewButton from "../components/ReviewButton";
+// import {LoginManager,LoginButton} from 'react-native-fbsdk'
 
 class AboutUs extends Component {
   static navigationOptions = {
@@ -44,9 +45,28 @@ class AboutUs extends Component {
     headerTintColor: COLOR.PINK,
     headerRight: <View />
   };
+  onPress=()=>{
+    LoginManager.logInWithReadPermissions(['public_profile']).then(
+      function(result) {
+        if (result.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          console.log('Login success with permissions: '
+            +result.grantedPermissions.toString());
+        }
+      },
+      function(error) {
+        console.log('Login fail with error: ' + error);
+      }
+    );
+  }
   render() {
     return (
-      <ScrollView>
+      <ScrollView
+      overScrollMode ='never'
+      >
+
+        
         <View
           style={{
             paddingBottom: 75,
@@ -178,6 +198,28 @@ class AboutUs extends Component {
               </View>
             </View>
           </View>
+          {/* <LoginButton
+          onLoginFinished={
+            (error, result) => {
+              if (error) {
+                console.log("login has error: " + result.error);
+              } else if (result.isCancelled) {
+                console.log("login is cancelled.");
+              } else {
+                AccessToken.getCurrentAccessToken().then(
+                  (data) => {
+                    console.log(data.accessToken.toString())
+                  }
+                )
+              }
+            }
+          }
+          onLogoutFinished={() => console.log("logout.")}/> */}
+          {/* <TouchableNativeFeedback onPress={this.onPress}>
+         <View style={{width:'100%',height:200,justifyContent:'center',backgroundColor:'blue'}} >
+         <Text style={{color:'white'}}>FB LOGIN</Text>
+         </View>
+         </TouchableNativeFeedback> */}
         </View>
       </ScrollView>
     );

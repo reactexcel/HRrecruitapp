@@ -234,13 +234,13 @@ class HomePage extends Component {
                 </View>
               </View>
               <View style={styles.btnContainer}>
-                <CustomButton
+                {/* <CustomButton
                   onPress={() => {}}
                   btnStyle={styles.btn}
                   btnTextStyle={styles.joinBtnStyles}
                   text={"JOIN NOW"}
                   type={"rounded"}
-                />
+                /> */}
               </View>
               {renderCustomView}
             </View>

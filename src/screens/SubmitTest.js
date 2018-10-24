@@ -91,6 +91,16 @@ class SubmitTest extends Component {
     const profile_pic = navigation.getParam("profile_pic");
     return {
       title: name.split(" ")[0],
+      headerStyle: {
+        backgroundColor: COLOR.LGONE,
+        elevation: 0,
+        color:'white'
+      },
+      headerTitleStyle: {
+        fontFamily: "Montserrat",
+        color: COLOR.PINK,
+        fontWeight:'100'
+      },
       headerLeft: (
         <Content style={{ paddingHorizontal: 10 }}>
           <Thumbnail small source={{ uri: profile_pic }} />
@@ -156,9 +166,11 @@ class SubmitTest extends Component {
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (
-              <Spinner color={COLOR.Spinner} />
+              <Spinner color={COLOR.MUSTARD} />
             ) : (
-              <CustomButton text="Click Here" onPress={this.handleTestSubmit} />
+              <CustomButton
+              textColor={{color:COLOR.LGONE}} style={{backgroundColor:COLOR.MUSTARD}}
+              text="Click Here" onPress={this.handleTestSubmit} />
             )}
           </Card>
         </Content>

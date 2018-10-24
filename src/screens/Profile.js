@@ -7,6 +7,7 @@ import ProfileDescription from "../components/ProfileDescription";
 import { Icon } from "native-base";
 
 class Profile extends Component {
+  
   static navigationOptions = {
     headerStyle: {
       elevation: 0,
@@ -21,18 +22,24 @@ class Profile extends Component {
       fontFamily: "Montserrat-SemiBold"
     },
     headerTintColor: COLOR.PINK,
+    
     headerRight: (
+      
       <Icon
+      // onPress={()=>this.onclikc()}
         name="pencil"
         type="MaterialCommunityIcons"
         style={{ color: COLOR.PINK, marginRight: 10, fontSize: 25 }}
       />
     )
   };
+  
   constructor(props) {
     super(props);
     this.state = {
-      currentPosition: 0
+      currentPosition: 0,
+      isEditing:false,
+      jobTitle:''
     };
   }
   handleLocate = () => {
@@ -44,21 +51,33 @@ class Profile extends Component {
     }
     Linking.openURL(url);
   };
+  aboutUs=()=>{
+    this.props.navigation.navigate('AboutUs')
+  }
+  onclikc=()=>{
+    alert('vkjvjv')
+  }
 
   render() {
+    
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");
+    console.log(appliedJob.job_profile);
     return (
-      <ScrollView>
+      <ScrollView
+      overScrollMode='never'
+      >
         <ProfileView profileDetails={profileDetails} />
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={{ flexBasis: "65%" }}
         >
           <ProfileDescription
+          aboutus={this.aboutUs}
             appliedJob={appliedJob}
             currentPosition={this.state.currentPosition}
             handleLocate={this.handleLocate}
+            isEditing={this.state.isEditing}
           />
         </LinearGradient>
       </ScrollView>

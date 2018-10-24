@@ -6,7 +6,7 @@ import { CardItem } from "native-base";
 
 export default StyleSheet.create({
   container: {
-    backgroundColor: COLOR.BGCOLOR
+    backgroundColor: COLOR.LGONE,
   },
   logoView: {
     flexBasis: "25%",
@@ -14,16 +14,15 @@ export default StyleSheet.create({
     alignItems: "center"
   },
   linearGradientView: {
-    flex: 1
+    flex: 1,
   },
   blockView: {
-    backgroundColor: "transparent",
     justifyContent: "center",
     alignItems: "center",
     width: width * 0.93,
     borderRadius: 5,
     padding: 10,
-    borderWidth: 0
+    borderWidth: 0,
   },
   headerText: {
     color: COLOR.Black,

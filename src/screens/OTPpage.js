@@ -9,7 +9,7 @@ import {
   Input,
   Spinner
 } from "native-base";
-import { NetInfo } from "react-native";
+import { NetInfo,View } from "react-native";
 import { Grid, Row } from "react-native-easy-grid";
 import Logo from "../components/Logo";
 import CustomButton from "../components/CustomButton";
@@ -33,7 +33,22 @@ class OTPpage extends Component {
     };
   }
   static navigationOptions = {
-    title: "Enter OTP"
+    // title: "Enter OTP",
+    headerStyle: {
+      backgroundColor: COLOR.LGONE,
+      elevation: 0,
+      color:'white'
+    },
+    headerTitleStyle: {
+      fontFamily: "Montserrat",
+      color: COLOR.PINK,
+      fontWeight:'100'
+      // flex: 1,
+      // textAlign: "center",
+      // alignSelf: "center"
+    },
+    headerTintColor: COLOR.PINK,
+    // headerRight: <View />
   };
   async componentDidMount() {
     NetInfo.isConnected.addEventListener(
@@ -109,7 +124,7 @@ class OTPpage extends Component {
     return (
       <Container style={styles.container}>
         <Content padder>
-          <Grid>
+          <Grid  >
             <Row style={styles.logoView}>
               <Logo />
             </Row>
@@ -141,14 +156,15 @@ class OTPpage extends Component {
                   />
                 </Item>
                 {registering ? (
-                  <Spinner color={COLOR.Spinner} />
+                  <Spinner color={COLOR.MUSTARD} />
                 ) : (
-                  <CustomButton text="Submit" onPress={this.handleSubmit} />
+                  <CustomButton textColor={{color:COLOR.LGONE}} text="Submit" style={{backgroundColor:COLOR.MUSTARD}} onPress={this.handleSubmit} />
                 )}
               </Card>
             </Row>
           </Grid>
         </Content>
+        {/* <View style={{height:200,}} /> */}
       </Container>
     );
   }

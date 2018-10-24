@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { View, Alert, Platform, PermissionsAndroid } from "react-native";
+import { View, Alert, Platform, PermissionsAndroid ,ScrollView,Animated} from "react-native";
 import {
   Container,
   Content,
@@ -40,15 +40,20 @@ import LinearGradient from "react-native-linear-gradient";
 
 
 class AddCandidate extends Component {
+  contentHeight= 0
+  scrollViewHeight= 0
   constructor() {
     super();
+    this._animatedValue = new Animated.ValueXY();
+    this._animatedValue.setValue({ x: 0, y: 0 });
     this.state = {
       converting: false,
       resumeData: [],
       currentType: "",
       resumeError: null,
       fcm_token_Id:null,
-      deviceId:null
+      deviceId:null,
+      whenAddedResume:false
     };
   }
 
@@ -120,6 +125,7 @@ class AddCandidate extends Component {
     const { success, msg } = this.props.candidate;
     if (success !== undefined && msg !== undefined) {
       if (success === false) {
+        
         Alert.alert(
           "Alert",
           msg,
@@ -271,6 +277,9 @@ class AddCandidate extends Component {
   }
 
   onSubmit = async values => {
+    if(!__DEV__){
+      values.source = 'MobileApp'
+    }
     const { params } = this.props.navigation.state;
     values["fileNames"] = [];
     if (this.state.resumeData.length >= 1) {
@@ -289,6 +298,8 @@ class AddCandidate extends Component {
   };
 
   onResumeAdd = () => {
+    // console.log('???????????????????????');
+    
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });
@@ -300,7 +311,10 @@ class AddCandidate extends Component {
         },
         (error, res) => {
           SplashScreen.hide();
+          this.scroll.scrollToEnd()
+          this.setState({whenAddedResume:true})
           if (res) {
+            // this.scroll.scrollTo({x:0,y:200,animated:true})
             let check =
               this.state.resumeData.length >= 1
                 ? this.state.currentType == res.type
@@ -314,6 +328,13 @@ class AddCandidate extends Component {
                     dataBase64: data,
                     filetype: type[1]
                   });
+                  let base64 = require('base-64');
+                  let decodedData = base64.decode(data);
+                  let bytes = decodedData.length;
+                  let fileSizeInMB=(bytes / 1000000)
+                  if(fileSizeInMB > 2 ){
+                    alert("File size can't be larger than 2MB");
+                  }
                   this.setState({
                     converting: false,
                     resumeData,
@@ -346,7 +367,6 @@ class AddCandidate extends Component {
       this.setState({ resumeData });
     }
   };
-
   render() {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
@@ -354,6 +374,11 @@ class AddCandidate extends Component {
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
+          <ScrollView 
+          contentHeight ={500}
+         ref={(scroll) => {this.scroll = scroll}}
+          overScrollMode ='never'
+          >
           <Content padder>
           <Grid>
             <Row style={[styles.logoView,{marginTop:-40}]}>
@@ -394,11 +419,12 @@ class AddCandidate extends Component {
                   <Item label="Male" value="male" />
                 </Field> */}
 
-                <Field
+                {/* <Field
+                  value='demo'
                   name="source"
                   labelName="SOURCE"
                   component={this.renderField}
-                />
+                /> */}
                 <Field
                   name="mobile_no"
                   labelName="PHONE"
@@ -430,16 +456,18 @@ class AddCandidate extends Component {
             </Row>
           </Grid>
           </Content>
+          </ScrollView>
         {adding || converting ? (
           <Spinner color={COLOR.MUSTARD} />
         ) : (
-            <CustomButton
-              btnStyle={_styles.joinNowBtn}
-              btnTextStyle={_styles.joinNowBtnText}
-              text="JOIN NOW"
-              onPress={handleSubmit(this.onSubmit)}
-            />
-          )}
+          <CustomButton
+          textColor={{color:COLOR.LGONE}} style={{backgroundColor:COLOR.MUSTARD}}
+          btnStyle={_styles.joinNowBtn}
+          btnTextStyle={_styles.joinNowBtnText}
+          text="JOIN NOW"
+          onPress={handleSubmit(this.onSubmit)}
+          />
+        )}
         </LinearGradient>
       </Container>
     );
@@ -457,7 +485,7 @@ validate = values => {
     errors.sender_mail = "Enter a valid email and must be in lowercase";
   }
   if (!values.gender) errors.gender = "Select a gender";
-  if (!values.source) errors.source = "Cannot be Empty";
+  // if (!values.source) errors = "Cannot be Empty";
   if (!values.mobile_no) {
     errors.mobile_no = "Cannot be Empty";
   } else if (!isMobilePhone(values.mobile_no, "en-IN")) {

@@ -6,6 +6,7 @@ import CustomButton from "./CustomButton";
 import styles from "../styles";
 import _styles from "../styles/components/StartTest";
 import PropTypes from "prop-types";
+import {COLOR} from '../styles/color'
 
 class StartTest extends Component {
   state = {
@@ -18,7 +19,7 @@ class StartTest extends Component {
     const { isOnline, handleStartTest, handleCallHelp } = this.props;
     const { calling } = this.props.callHelp;
     return (
-      <Container>
+      <Container style={{backgroundColor: COLOR.LGONE}} >
         <Content padder>
           <Card style={styles.blockView}>
             <CardItem>
@@ -31,13 +32,13 @@ class StartTest extends Component {
               </Text>
             </CardItem>
             {isOnline ? (
-              <Button disabled block>
-                <Text uppercase={false} style={_styles.Button}>
+              <Button  disabled block >
+                <Text uppercase={false} style={[_styles.Button,{color:COLOR.LGONE}]}>
                   Click Here
                 </Text>
               </Button>
             ) : (
-              <CustomButton text="Click Here" onPress={handleStartTest} />
+              <CustomButton text="Click Here" onPress={handleStartTest}  textColor={{color:COLOR.LGONE}} style={{backgroundColor:COLOR.MUSTARD}} />
             )}
             <CardItem />
             <CardItem>
@@ -59,7 +60,7 @@ class StartTest extends Component {
                   </Text>
                 </CardItem>
                 <CardItem>
-                  {!isOnline ? (
+                  {isOnline ? (
                     <Button disabled block>
                       <Text uppercase={false} style={_styles.Button}>
                         Call for Help
@@ -67,6 +68,8 @@ class StartTest extends Component {
                     </Button>
                   ) : (
                     <CustomButton
+                    // textColor={{color:COLOR.LGONE}}
+                    // style={{backgroundColor:COLOR.MUSTARD}}
                       onPress={() => {
                         handleCallHelp();
                         this.setModalVisible(!this.state.modalVisible);

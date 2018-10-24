@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View ,TouchableOpacity} from "react-native";
 import { COLOR } from "../styles/color";
 import EmptyView from "../components/EmptyView";
 import JobSalaryDetails from "../components/JobSalaryDetails";
-import { Button, Container, Content, Icon } from "native-base";
+import { /* Button, */ Container, Content, Icon } from "native-base";
 import {
   ABOUT_US,
   JOB_DESCRIPTION,
@@ -20,7 +20,10 @@ import {
   RECRUIT_NAME
 } from "../helper/constant";
 import styles from "../styles/screens/FullDescription";
-
+import Share, { ShareSheet, Button } from "react-native-share";
+import { SHAREURL } from "../config/dev";
+import LoginAndShareButton from "../components/CustomButton";
+import CustomButton from "../components/CustomButton";
 class FullDescription extends Component {
   static navigationOptions = {
     headerStyle: {
@@ -38,14 +41,44 @@ class FullDescription extends Component {
     headerTintColor: COLOR.PINK,
     headerRight: <View />
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      jobList: [],
+      visible: false,
+      shareOptions: {},
+      appliedJobDetails: null,
+      isLoading: true,
+      userLogin: false
+    };
+  }
+  onShareClick = item => {
+    let shareDetails = {};
+    shareDetails["title"] = item.title;
+    shareDetails["subject"] = item.subject;
+    shareDetails["message"] = item.job_description;
+    shareDetails["url"] = SHAREURL;
+    this.setState({ visible: true, shareOptions: shareDetails });
+  };
+  onCancel() {
+    this.setState({ visible: false });
+  }
   render() {
+    console.log(this.props,'>>>>>>>>>>>>>>>.');
+    const {
+      shareOptions,
+    } = this.state;
+    let currentJob =this.props.navigation.state.params.currentJob
+    let jobDetail=this.props.navigation.state.params.jobDetail
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
     const candidate_profile = this.props.navigation.getParam(
       "candidate_profile"
     );
-    const keyword = this.props.navigation.getParam("keyword").split(",");
-    return (
+   let keyword;
+   this.props.navigation.getParam("keyword") !==null ? keyword = this.props.navigation.getParam("keyword").split(",") : keyword = ['']
+
+   return (
       <Container style={styles.container}>
         <Content showsVerticalScrollIndicator={false}>
           <JobSalaryDetails>
@@ -59,13 +92,19 @@ class FullDescription extends Component {
           <EmptyView />
           <Text style={styles.headerTextStyle}>{KEY_SKILL}</Text>
           <View style={styles.keySkillsView}>
-            {keyword.map((text, id) => {
+           {keyword.map((text, id) => {
               return (
-                <Button rounded style={styles.keySkillsButton} key={id}>
-                  <Text style={styles.keySkillsButtonText}>{text}</Text>
-                </Button>
-              );
-            })}
+                <CustomButton
+            type="keySkillButton"
+            btnStyle={styles.keySkillsButton}
+            btnTextStyle={styles.keySkillsButtonText}
+            text={text}
+            key={id}
+          />
+                // <Button rounded style={styles.keySkillsButton} key={id}>
+                //   <Text style={styles.keySkillsButtonText}>{text}</Text>
+                // </Button>
+              )})}
           </View>
 
           <EmptyView />
@@ -90,19 +129,138 @@ class FullDescription extends Component {
           <EmptyView />
           <Text style={styles.descriptionText}>{RECRUIT_NAME}</Text>
           <View style={styles.btnView}>
-            <Button rounded style={[styles.btnStyle, styles.loginBtnStyle]}>
-              <Text style={[styles.btnText, styles.loginTextStyle]}>
-                {LOG_TO_APPLY}
-              </Text>
-            </Button>
-            <Button iconLeft rounded style={styles.btnStyle}>
-              <Icon name="share" type="Entypo" style={styles.shareIconStyle} />
-              <Text style={[styles.btnText, styles.shareTextStyle]}>
-                {SHARE_IT}
-              </Text>
-            </Button>
+          {/* <TouchableOpacity onPress={()=>this.onShareClick(jobDetail)}>
+          <Text>vsdlsdsdd</Text>
+          </TouchableOpacity> */}
+      
+       <CustomButton
+            onPress={()=>this.props.navigation.navigate('AddCandidate', { jobDetail: jobDetail,
+              currentJob: currentJob})}
+            type="login_to_apply"
+            btnStyle={[styles.btnStyle, styles.loginBtnStyle]}
+            btnTextStyle={[styles.btnText, styles.loginTextStyle]}
+            text={LOG_TO_APPLY}
+          />
+          <CustomButton
+            onPress={()=>this.onShareClick(jobDetail)}
+            type="to_share"
+            btnStyle={styles.btnStyle}
+            btnTextStyle={[styles.btnText, styles.shareTextStyle]}
+            text={SHARE_IT}
+            IconStyle={styles.shareIconStyle}
+          />
           </View>
         </Content>
+        <ShareSheet
+          visible={this.state.visible}
+          onCancel={this.onCancel.bind(this)}
+          style={{zIndex:1}}
+        >
+          <Button
+            iconSrc={require("../images/twitter.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                Share.shareSingle(
+                  Object.assign(shareOptions, {
+                    social: "twitter"
+                  })
+                );
+              }, 300);
+            }}
+          >
+            Twitter
+          </Button>
+          <Button
+            iconSrc={require("../images/facebook.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                Share.shareSingle(
+                  Object.assign(shareOptions, {
+                    social: "facebook"
+                  })
+                );
+              }, 300);
+            }}
+          >
+            Facebook
+          </Button>
+          <Button
+            iconSrc={require("../images/whatapp.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                Share.shareSingle(
+                  Object.assign(shareOptions, {
+                    social: "whatsapp"
+                  })
+                );
+              }, 300);
+            }}
+          >
+            Whatsapp
+          </Button>
+          <Button
+            iconSrc={require("../images/googleplus.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                Share.shareSingle(
+                  Object.assign(shareOptions, {
+                    social: "googleplus"
+                  })
+                );
+              }, 300);
+            }}
+          >
+            Google +
+          </Button>
+          <Button
+            iconSrc={require("../images/mail.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                Share.shareSingle(
+                  Object.assign(shareOptions, {
+                    social: "email"
+                  })
+                );
+              }, 300);
+            }}
+          >
+            Email
+          </Button>
+          <Button
+            iconSrc={require("../images/link.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                if (typeof shareOptions["url"] !== undefined) {
+                  Clipboard.setString(shareOptions["url"]);
+                  if (Platform.OS === "android") {
+                    ToastAndroid.show("Link Copied", ToastAndroid.SHORT);
+                  } else if (Platform.OS === "ios") {
+                    AlertIOS.alert("Link Copied");
+                  }
+                }
+              }, 300);
+            }}
+          >
+            Copy Link
+          </Button>
+          <Button
+            iconSrc={require("../images/more.png")}
+            onPress={() => {
+              this.onCancel();
+              setTimeout(() => {
+                Share.open(shareOptions);
+              }, 300);
+            }}
+          >
+            More
+          </Button>
+        </ShareSheet>
       </Container>
     );
   }

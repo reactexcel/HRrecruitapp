@@ -103,7 +103,6 @@ class JobList extends Component {
     this.setState({ visible: true, shareOptions: shareDetails });
   };
   renderCardItem = ({ item }) => {
-    console.log(item);
     return (
       <Card padder>
         <CardItem style={styles.cardItem}>
@@ -137,7 +136,9 @@ class JobList extends Component {
               subject: item.subject,
               job_description: item.job_description,
               keyword: item.keyword,
-              candidate_profile: item.candidate_profile
+              candidate_profile: item.candidate_profile,
+              jobDetail: item,
+              currentJob: this.state.joblist,
             });
           }}
         />

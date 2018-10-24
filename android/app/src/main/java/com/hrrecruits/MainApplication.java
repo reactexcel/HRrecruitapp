@@ -2,7 +2,15 @@ package com.hrrecruits;
 
 import android.app.Application;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.facebook.appevents.AppEventsLogger;
+
 import com.facebook.react.ReactApplication;
+// import cl.json.RNSharePackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+// import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -28,12 +36,25 @@ import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
 
+  //  private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
+  // protected static CallbackManager getCallbackManager() {
+  //   return mCallbackManager;
+  // }
+
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
-
+   
+  //  protected List<ReactPackage> getPackages() {
+  //     return Arrays.<ReactPackage>asList(
+  //         new MainReactPackage(),
+            // new RNSharePackage(),
+  //           new FBSDKPackage(),
+  //         new FBSDKPackage(mCallbackManager)
+  //     );
+  //   }
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(

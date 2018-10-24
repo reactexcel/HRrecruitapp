@@ -10,4 +10,5 @@ if (__DEV__) {
   API_URL = "http://api.recruit.excellencetechnologies.in/";
 }
 
-export default API_URL;
+export default API_URL; 
+// http://5.9.144.226:3000/

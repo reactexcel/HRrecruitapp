@@ -39,7 +39,7 @@
             <action android:name="android.intent.action.DOWNLOAD_COMPLETE"/>
         </intent-filter>
       </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+       <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="319234285522727"/>
       <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_eetXrV4jUPUuIBQ1qhq1EbdiAEjeF8Iz" />
       <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_emy8EQ5hLNItHvV8qds7GcppuvnkF2UN" />
       <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />

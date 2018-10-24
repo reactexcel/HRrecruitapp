@@ -118,7 +118,7 @@ export const verifyingOTP = (email, otp, fb_id) => async dispatch => {
 export const addCandidate = data => async dispatch => {
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
-    const res = await _axios().post("exams/addCandidateWithBase64File", {...data});
+    const res = await _axios().post("exams/addCandidateWithBase64File", {...data});    
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
     if (err.response.data.message) {

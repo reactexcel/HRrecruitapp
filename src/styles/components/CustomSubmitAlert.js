@@ -8,7 +8,8 @@ export default StyleSheet.create({
   },
   modal: {
     height: 230,
-    width: DEVICE_WIDTH * 0.96
+    width: DEVICE_WIDTH * 0.96,
+    borderRadius:12
   },
   cnfrm: {
     textAlign: "center",
@@ -31,7 +32,7 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    marginTop: -25
+    marginTop: -25,
   },
   modalImageView: {
     marginLeft: 0

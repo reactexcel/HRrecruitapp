@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image, Alert, AsyncStorage } from "react-native";
+import { Image, Alert, AsyncStorage, StyleSheet } from "react-native";
 import {
   Container,
   Content,
@@ -15,9 +15,11 @@ import styles from "../styles";
 import CustomButton from "../components/CustomButton";
 import HorizontalLine from "../components/HorizontalLine";
 import { setItem, getItem } from "../helper/storage";
-import { SUCCESS_STATUS,JOB_APPLYING } from "../helper/constant";
+import { SUCCESS_STATUS, JOB_APPLYING } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import HTMLView from "react-native-htmlview";
+
+const instructions='The test consist of 4 sections {`\n`} Aptitute,English,Logical,{`\n`} There is a time limit of {`\n`} 1hr.{`\n`},Press Finish & submit only after you have complted all 3 sections {`\n`} Do not {`\n`} close/refresh {`\n`} the test at all in between,if you do you will might{`\n`} hab=ve to start you text paper from scratch '
 
 class Instructions extends Component {
   async componentDidMount() {
@@ -50,8 +52,21 @@ class Instructions extends Component {
     const profile_pic = navigation.getParam("profile_pic");
     return {
       title: name.split(" ")[0],
+      headerStyle: {
+        backgroundColor: COLOR.LGONE,
+        elevation: 0,
+        color: COLOR.PINK
+      },
+      headerTitleStyle: {
+        fontFamily: "Montserrat",
+        color: COLOR.PINK,
+        fontWeight: "100"
+        // flex: 1,
+        // textAlign: "center",
+        // alignSelf: "center"
+      },
       headerLeft: (
-        <Content style = {{paddingHorizontal : 10}}>
+        <Content style={{ paddingHorizontal: 10 }}>
           <Thumbnail small source={{ uri: profile_pic }} />
         </Content>
       )
@@ -66,6 +81,10 @@ class Instructions extends Component {
   render() {
     const name = this.props.navigation.getParam("name");
     const { questions } = this.props;
+    console.log(questions,'???????????????????????????');
+    // console.log(questions,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    
+    
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -79,9 +98,17 @@ class Instructions extends Component {
                 {questions.data !== undefined ? (
                   <Fragment>
                     <CardItem>
-                      <HTMLView value={questions.data.instructions} />
+                      <HTMLView
+                        stylesheet={webViewStyle}
+                        value={`<span style={webViewStyle.styledText}>${questions.data.instructions}</span>`}
+                      />
                     </CardItem>
-                    <CustomButton text="Continue" onPress={this.handlePress} />
+                    <CustomButton
+                      textColor={{ color:COLOR.LGONE }}
+                      style={{ backgroundColor:COLOR.MUSTARD }}
+                      text="Continue"
+                      onPress={this.handlePress}
+                    />
                   </Fragment>
                 ) : (
                   <Fragment>
@@ -91,6 +118,8 @@ class Instructions extends Component {
                       </Text>
                     </CardItem>
                     <CustomButton
+                      textColor={{ color: COLOR.LGONE }}
+                      style={{ backgroundColor: COLOR.MUSTARD }}
                       text="Click Here"
                       onPress={() =>
                         this.props.navigation.navigate("InterviewLogin")
@@ -100,7 +129,7 @@ class Instructions extends Component {
                 )}
               </Fragment>
             ) : (
-              <Spinner color={COLOR.Spinner} />
+              <Spinner color={COLOR.MUSTARD} />
             )}
           </Card>
         </Content>
@@ -108,6 +137,18 @@ class Instructions extends Component {
     );
   }
 }
+const webViewStyle = StyleSheet.create({
+  span:{
+    color: "black",
+    opacity: 0.5,
+    fontSize:13,
+    textAlign:'justify',
+    // width:'80%',
+    // backgroundColor:'red',
+    fontFamily:'Montserrat-Regular'
+  }
+});
+
 const mapStateToProps = ({ questions }) => ({ questions });
 
 export default connect(

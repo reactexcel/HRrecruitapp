@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Platform } from "react-native";
-import { Button, Text } from "native-base";
+import { Button, Text ,Icon} from "native-base";
 import PropTypes from "prop-types";
 
 const CustomButton = props => {
-  const { text, type = 'block', btnStyle = {}, btnTextStyle={} } = props;
+  const { text, type = 'block', btnStyle = {}, btnTextStyle={} ,style ={},textColor={},IconStyle={},key} = props;
   if(type == 'rounded'){
     return (
     <Button onPress={props.onPress} style={btnStyle} rounded info>
@@ -13,10 +13,38 @@ const CustomButton = props => {
       </Text>
     </Button>
   );
-  } else {   
+  }else if(type =='login_to_apply') {
+   return( 
+    <Button onPress={props.onPress} style={btnStyle} rounded info>
+    <Text uppercase={false} style={btnTextStyle}>
+      {text}
+    </Text>
+  </Button>
+   )
+  }
+  else if(type =='to_share') {
+    return( 
+     <Button onPress={props.onPress} style={btnStyle} rounded info>
+     <Icon name="share" type="Entypo" style={IconStyle} />
+     <Text uppercase={false} style={btnTextStyle}>
+       {text}
+     </Text>
+   </Button>
+    )
+   }
+   else if(type =='keySkillButton') {
+    return( 
+     <Button onPress={props.onPress} style={btnStyle} key={key} rounded >
+     <Text uppercase={false} style={btnTextStyle}>
+       {text}
+     </Text>
+   </Button>
+    )
+   }
+  else {   
     return (
-      <Button onPress={props.onPress} style={btnStyle}  block info>
-        <Text uppercase={false} style={[styles.btnText, btnTextStyle]}>
+      <Button onPress={props.onPress} style={style}  block info>
+        <Text uppercase={false} style={[styles.btnText, btnTextStyle,textColor]}>
         {text}
       </Text>
     </Button>

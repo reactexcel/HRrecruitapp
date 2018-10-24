@@ -222,6 +222,7 @@ class InterviewLogin extends Component {
             this.props.navigation.navigate("JobList", {
               title: "Job Openings"
             });
+            
             this.setState({ email: "" });
           } else if (status === SUCCESS_STATUS) {
             GOOGLE_ANALYTICS_TRACKER.trackEvent(

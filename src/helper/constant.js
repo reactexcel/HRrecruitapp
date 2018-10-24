@@ -34,7 +34,7 @@ export const COM_PRO='Company Profile:'
 export const EXCELLECE_TECH="Excellence Technologies :{`\n`}"
 export const LOG_TO_APPLY='LOGIN TO APPLY'
 export const SHARE_IT='SHARE IT'
-export const JOB_APPLYING="you are applying for the job profile for which there is no online interview process. Please contact hr for the same so this issue can be sorted out"
+export const JOB_APPLYING="You have not been assigned any round ,Please contact HR"
 export const LOW_CONN_ALERT="To Submit your Test, please turn on your Internet connection."
 
 export const DEVICE_WIDTH = Dimensions.get("window").width;

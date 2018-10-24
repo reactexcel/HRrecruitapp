@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { View, Text, Button, Icon } from "native-base";
+import { View, Text, Button, Icon ,Form, Item, Input} from "native-base";
 import { COLOR } from "../styles/color";
 import ProfileBlock from "./ProfileBlock";
 import StepIndicator from "react-native-step-indicator";
@@ -7,6 +7,8 @@ import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
 import { connect } from "react-redux";
 const ProfileDescription = props => {
+  console.log(props.isEditing,'>>>>>>>>>>>>>>>>>');
+  
   const labels = [
     "CV Sent",
     "CV Received",
@@ -90,7 +92,7 @@ const ProfileDescription = props => {
               Location
             </Text>
           </Button>
-          <Button iconLeft rounded style={styles.aboutBtn}>
+          <Button onPress={props.aboutus} iconLeft rounded style={styles.aboutBtn}>
             <Icon name="volume-up" style={{ color: COLOR.PINK }} />
             <Text uppercase={false} style={styles.btnText}>
               About Us
