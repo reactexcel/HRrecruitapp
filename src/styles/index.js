@@ -113,6 +113,7 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Bold",
     fontSize: 9,
     alignSelf: "center",
-    textAlign: "center"
+    textAlign: "center",
+    color: COLOR.BGCOLOR
   }
 });

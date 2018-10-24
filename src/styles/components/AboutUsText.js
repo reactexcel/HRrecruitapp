@@ -16,9 +16,9 @@ export default StyleSheet.create({
     marginVertical: 10
   },
   aboutUs: {
-    fontFamily: "Montserrat-SemiBold",
+    fontFamily: "Montserrat-Regular",
     textAlign: "center",
-    fontSize: 12.3,
+    fontSize: 13.5,
     textAlignVertical: "center"
   },
   btnStyle: {
