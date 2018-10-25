@@ -72,8 +72,8 @@ export default StyleSheet.create({
     marginBottom: 10,
     marginRight: 10,
     backgroundColor: "#131931",
-    borderWidth: 3,
-    borderColor: "#19203e"
+    borderWidth: 2,
+    borderColor: COLOR.PURPLE
   },
   checkedBtnText: {
     fontSize: 11,
@@ -86,6 +86,7 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Medium"
   },
   labelText: {
+    marginLeft:3,
     color: COLOR.LTONE,
     fontFamily: "Montserrat-Medium"
   },

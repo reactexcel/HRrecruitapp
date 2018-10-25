@@ -12,7 +12,7 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Medium"
   },
   borderStyle: {
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: "#303d6b",
     width: "100%"
   }

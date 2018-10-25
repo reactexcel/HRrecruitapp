@@ -85,7 +85,7 @@ class AboutUs extends Component {
           <Image
             source={require("../images/teamwork.png")}
             resizeMode="cover"
-            style={aboutusCss.cover}
+            style={[aboutusCss.cover]}
           />
         </View>
         <View>
@@ -93,7 +93,7 @@ class AboutUs extends Component {
             <Icon
               type="FontAwesome"
               name="quote-left"
-              style={{ color: COLOR.PINK }}
+              style={{ color: COLOR.REDESS }}
             />
             <Text style={aboutusCss.excelbelieve}>{EXCEL_BELIVE}</Text>
           </View>
@@ -119,7 +119,7 @@ class AboutUs extends Component {
               <Icon
                 type="FontAwesome"
                 name="quote-left"
-                style={{ color: COLOR.PINK, alignSelf: "flex-start" }}
+                style={{ color: COLOR.REDESS, alignSelf: "flex-start" }}
               />
               <Text style={aboutusCss.ourServices}>{EMP_SAY}</Text>
               <ReviewButton />
