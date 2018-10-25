@@ -39,7 +39,8 @@ const ProfileDescription = props => {
   }
   
   return (
-    <View style={{height:400}}>
+    // <View style={{height:400}}>
+    <Fragment>
       <ProfileBlock title="JOB TITLE">
         <Text style={styles.textStyle}>{job_profile}</Text>
         {/* <Form>
@@ -106,7 +107,7 @@ const ProfileDescription = props => {
           </Button>
         </View>
       </ProfileBlock>
-    </View>
+      </Fragment>
   );
 };
 ProfileDescription.defaultProps = {

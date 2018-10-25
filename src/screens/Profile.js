@@ -138,7 +138,7 @@ class Profile extends Component {
             onChange={(value)=>this.onChange(value)}
           />
         </LinearGradient>
-        <Modal
+        {/* <Modal
         isDisabled={false}
         coverScreen={true}
         backdropPressToClose={true}
@@ -188,7 +188,7 @@ class Profile extends Component {
           />
           </View>
         </View>
-        </Modal>
+        </Modal> */}
       </ScrollView>
     );
   }
