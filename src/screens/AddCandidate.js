@@ -29,6 +29,7 @@ import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { addCandidate } from "../actions";
+import { getJobLists } from "../actions";
 import {
   DocumentPicker,
   DocumentPickerUtil
@@ -53,7 +54,11 @@ class AddCandidate extends Component {
       resumeError: null,
       fcm_token_Id:null,
       deviceId:null,
-      whenAddedResume:false
+      whenAddedResume:false,
+      userName:'',
+      mobile_no:'',
+      job_profile:'',
+      name:''
     };
   }
 
@@ -69,8 +74,17 @@ class AddCandidate extends Component {
     if (msg !== undefined) {
     }
     return null;
-  }
+  } 
+  // componentWillMount(){
+  //   alert('vlkdbvdb')
+  // }
+  //  console.log(this.props.navigation.state.params.appliedJob.job_profile
+  //   ,this.props.navigation.state.params.profileDetails.userName,this.props.navigation.state.params.profileDetails.mobile_no ,'hhhhhhhhhhhhhhhhhhhhh');
   componentDidMount(){
+    // this.setState({userName:this.props.navigation.state.params.profileDetails.userName
+    // ,mobile_no:this.props.navigation.state.params.profileDetails.mobile_no,
+    // job_profile:this.props.navigation.state.params.appliedJob.job_profile})
+    // console.log(this.state.mobile_no,this.state.userName,this.state.job_profile,'DDDDDDDDDDDDDDDDDDDDDDDD');
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
       this.setState({fcm_token_Id:token})
@@ -95,6 +109,7 @@ class AddCandidate extends Component {
         }
       }
     });
+    
   }
   componentDidUpdate() {
     const { candidate } = this.props;
@@ -146,6 +161,8 @@ class AddCandidate extends Component {
       meta: { touched, error, active }
     } = props;
     const underLineColor = active ? COLOR.MUSTARD : COLOR.PURPLE
+    const {updateValue} =props
+    // this.setState({name:updateValue})
     return (
       <Fragment>
         <Item stackedLabel style={_styles.inputTextView}>
@@ -156,7 +173,7 @@ class AddCandidate extends Component {
             onChangeText={input.onChange}
             onBlur={input.onBlur}
             onFocus={input.onFocus}
-            value={input.value}
+            value={/* updateValue !=='' ? updateValue : */ input.value}
             placeholderTextColor={COLOR.WHITE}
             selectionColor={COLOR.Grey}
             underlineColorAndroid={underLineColor}
@@ -367,7 +384,17 @@ class AddCandidate extends Component {
       this.setState({ resumeData });
     }
   };
+  handleSubmit=(props)=>{
+   const {input}=props
+    return(
+     <Text>rberbrbeber</Text>
+    )
+  }
   render() {
+  //  console.log(
+  //   this.props.navigation.state.params.profileDetails.userName
+  //   ,this.props.navigation.state.params.profileDetails.mobile_no,
+  //   this.props.navigation.state.params.appliedJob.job_profile,'SSSSSSSSSSSSS')
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
     const { converting, resumeData, resumeError } = this.state;
@@ -396,40 +423,29 @@ class AddCandidate extends Component {
             </Row>
             <Row>
               <View style={styles.blockView}>
-                <Form>
+                <Form onSubmit={handleSubmit(this.handleSubmit)}>
                 <Field
                   name="sender_mail"
                   labelName="EMAIL"
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
+                  // updateValue={this.props.navigation.state.params.sender_email}
                 />
-                <Field
+               <Field
                   name="from"
                   labelName="NAME"
                   component={this.renderField}
+                  params={this.props.navigation.state.params}
+                  // updateValue={this.props.navigation.state.params.profileDetails.userName}
                 />
-                {/* <Field
-                  name="gender"
-                  component={this.renderPicker}
-                  mode="dropdown"
-                >
-                  <Item label="Select gender" value="" />
-                  <Item label="Female" value="female" />
-                  <Item label="Male" value="male" />
-                </Field> */}
-
-                {/* <Field
-                  value='demo'
-                  name="source"
-                  labelName="SOURCE"
-                  component={this.renderField}
-                /> */}
                 <Field
                   name="mobile_no"
                   labelName="PHONE"
                   component={this.renderField}
                   keyboardType="numeric"
+                  // updateValue={this.props.navigation.state.params.profileDetails.mobile_no}
+                  
                 />
                 <Field
                   name="mobile_no"
@@ -485,7 +501,6 @@ validate = values => {
     errors.sender_mail = "Enter a valid email and must be in lowercase";
   }
   if (!values.gender) errors.gender = "Select a gender";
-  // if (!values.source) errors = "Cannot be Empty";
   if (!values.mobile_no) {
     errors.mobile_no = "Cannot be Empty";
   } else if (!isMobilePhone(values.mobile_no, "en-IN")) {
@@ -497,7 +512,7 @@ validate = values => {
 const mapStateToProps = ({ candidate }) => ({ candidate });
 export default reduxForm({
   form: "AddCandidate",
-  validate
+  // validate
 })(
   connect(
     mapStateToProps,

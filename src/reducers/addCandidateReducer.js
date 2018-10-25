@@ -5,7 +5,7 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  adding: false
+  adding: false,
 };
 
 export default function(state = initialState, action) {

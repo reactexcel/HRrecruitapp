@@ -11,11 +11,11 @@ const ProfileDescription = props => {
   
   const labels = [
     "CV Sent",
-    "CV Received",
-    "CV Shortlisted",
-    "Take Online Test",
+    "First Round",
+    "Second Round",
+    "Third Round", 
     props.appliedJob.status === "Selected" ||
-    props.appliedJob.status === "Reject"
+    props.appliedJob.status === "Rejected"
       ? props.appliedJob.status
       : "Result"
   ];
@@ -37,10 +37,16 @@ const ProfileDescription = props => {
     profile_status = 4;
     status_color = "green";
   }
+  
   return (
     <Fragment>
       <ProfileBlock title="JOB TITLE">
         <Text style={styles.textStyle}>{job_profile}</Text>
+        {/* <Form>
+          <Item>
+            <Input editable={props.isEditing==false ? false :true} onChangeText={(e)=>props.onChange(e)} value={props.isEditing==false ? job_profile : props.job_profile} />
+          </Item>
+        </Form> */}
       </ProfileBlock>
       <ProfileBlock title="JOB DESCRIPTION">
         <Text style={styles.textStyle}>{job_description}</Text>

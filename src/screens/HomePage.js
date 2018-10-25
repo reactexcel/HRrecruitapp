@@ -46,7 +46,8 @@ class HomePage extends Component {
       mobile_no: null,
       textColor: false,
       animation: false,
-      opacity: 0
+      opacity: 0,
+      sender_mail:''
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -69,20 +70,22 @@ class HomePage extends Component {
   }
   setCandidateProfile = async () => {
     const candidateJob = await getItem("mongo_id");
-
+    
     if (candidateJob) {
       let email = candidateJob.candidate.data.sender_mail;
       let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
       let mobile_no = candidateJob.candidate.data.mobile_no;
       let userName = candidateJob.candidate.data.from;
       await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+      console.log(candidateJob.data,'%%%%%%%%%%%%%%%%%%%');
       this.setState({
         candidateJob,
         profile_pic,
         userName,
         mobile_no,
         linkOpening: false,
-        notification: ""
+        notification: "",
+        sender_mail:candidateJob.candidate.data.sender_mail
       });
     } else {
       this.setState({ linkOpening: false });
@@ -90,6 +93,8 @@ class HomePage extends Component {
   };
   async handleViewClick(data) {
     const { appliedJob } = this.props;
+    console.log(appliedJob,'tttttttttttttttttttt');
+    
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
         appliedJob: appliedJob,
@@ -104,7 +109,8 @@ class HomePage extends Component {
       } = this.state;
       this.props.navigation.navigate("Profile", {
         appliedJob,
-        profileDetails
+        profileDetails,
+        sender_mail:this.state.sender_mail
       });
     } else {
       this.props.navigation.navigate(data, { title: "Job Openings" });
@@ -112,6 +118,8 @@ class HomePage extends Component {
   }
   componentDidMount = async () => {
     const mongo_id = await getItem("mongo_id");
+    console.log(mongo_id,"oooooooooooooooooooo");
+    
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
@@ -160,6 +168,8 @@ class HomePage extends Component {
     this.setState({ textColor: false });
   };
   render() {
+    console.log(this.props.state_data,'**************************');
+    
     let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
@@ -255,7 +265,7 @@ const mapStateToProps = state => ({
   state_data: state,
   appliedJob: state.appliedJob,
   interviewSignUp: state.interviewSignUp,
-  state_data: state
+  // state_data: state
 });
 export default connect(
   mapStateToProps,

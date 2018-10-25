@@ -15,8 +15,8 @@ export const COLOR = {
   MUSTARD: "#f69f3c",
   PURPLE: "#566cc4",
   DARKGREY: "#7d7885",
-  TURQUOISE : "#3b9baa",
-  //for linear gradient
+  TURQUOISE : "#00b597",
+  //for linear gradient 00b597
   LGONE: "#2a365f",
   LGTWO: "#131931",
   WHITE:"#fefefe",

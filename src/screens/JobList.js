@@ -83,8 +83,9 @@ class JobList extends Component {
       headerRight: <View />
     };
   };
-
   onApplyJob = item => {
+    // console.log(item,this.state.jobList,'cccccccccccccccccccccc');
+    // console.log(item,this.state.jobList,'{{{{{{{{{{{{{{{{{[');
     this.props.navigation.navigate("AddCandidate", {
       jobDetail: item,
       currentJob: this.state.joblist
@@ -146,6 +147,8 @@ class JobList extends Component {
     );
   };
   render() {
+    console.log(this.props,'////////////////////////////');
+    
     const {
       joblist,
       shareOptions,

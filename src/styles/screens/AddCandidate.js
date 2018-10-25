@@ -28,7 +28,7 @@ export default StyleSheet.create({
     letterSpacing: 1,
     alignSelf: "center",
     fontSize: Platform.OS === "ios" ? 15 : 15,
-    color: "#109aaa",
+    color:COLOR.TURQUOISE,
     fontWeight: Platform.OS === "ios" ? "500" : "400"
   },
   fileName: {
@@ -86,7 +86,7 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Medium"
   },
   labelText: {
-    color: COLOR.LTONE,
+    color: COLOR.TURQUOISE,
     fontFamily: "Montserrat-Medium"
   },
   jobTitleView: {

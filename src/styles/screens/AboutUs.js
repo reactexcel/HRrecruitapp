@@ -23,7 +23,7 @@ export default StyleSheet.create({
   imagename: {
     textAlign: "center",
     fontSize: 16,
-    color: COLOR.PROTEXTCOLOR,
+    color: COLOR.TURQUOISE,
     marginTop: 2,
     marginBottom: 5,
     fontFamily: "Montserrat-SemiBold"
@@ -57,7 +57,7 @@ export default StyleSheet.create({
     textAlign: "center",
     fontFamily: "Montserrat-SemiBold",
     fontSize: 16,
-    color: COLOR.PROTEXTCOLOR
+    color: COLOR.TURQUOISE
   },
   secondrow: {
     width: "50%",
@@ -104,7 +104,7 @@ export default StyleSheet.create({
   blockchainname: {
     textAlign: "center",
     fontSize: 16,
-    color: COLOR.PROTEXTCOLOR,
+    color: COLOR.TURQUOISE,
     marginTop: 2,
     marginBottom: 5,
     fontFamily: "Montserrat-SemiBold"
