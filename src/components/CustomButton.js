@@ -7,7 +7,7 @@ const CustomButton = props => {
   const { text, type = 'block', btnStyle = {}, btnTextStyle={} ,style ={},textColor={},IconStyle={},key} = props;
   if(type == 'rounded'){
     return (
-    <Button onPress={props.onPress} style={[removeShadow,btnStyle]} rounded info>
+    <Button onPress={props.onPress} style={[styles.removeShadow,btnStyle]} rounded info>
       <Text uppercase={false} style={[styles.btnText,btnTextStyle]}>
         {text}
       </Text>
@@ -15,7 +15,7 @@ const CustomButton = props => {
   );
   }else if(type =='login_to_apply') {
    return( 
-    <Button onPress={props.onPress} style={[btnStyle,removeShadow]} rounded info>
+    <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} rounded info>
     <Text uppercase={false} style={btnTextStyle}>
       {text}
     </Text>
@@ -24,7 +24,7 @@ const CustomButton = props => {
   }
   else if(type =='to_share') {
     return( 
-     <Button onPress={props.onPress} style={[btnStyle,removeShadow]} rounded info>
+     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} rounded info>
      <Icon name="share" type="Entypo" style={IconStyle} />
      <Text uppercase={false} style={btnTextStyle}>
        {text}
@@ -34,7 +34,7 @@ const CustomButton = props => {
    }
    else if(type =='keySkillButton') {
     return( 
-     <Button onPress={props.onPress} style={[btnStyle,removeShadow]} key={key} rounded >
+     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} key={key} rounded >
      <Text uppercase={false} style={btnTextStyle}>
        {text}
      </Text>
@@ -43,7 +43,7 @@ const CustomButton = props => {
    }
   else {   
     return (
-      <Button onPress={props.onPress} style={[style,removeShadow]}  block info>
+      <Button onPress={props.onPress} style={[style,styles.removeShadow]}  block info>
         <Text uppercase={false} style={[styles.btnText, btnTextStyle,textColor]}>
         {text}
       </Text>

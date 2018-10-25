@@ -116,6 +116,7 @@ export default StyleSheet.create({
     marginLeft: 10
   },
   acquaintedTitle: {
+    marginBottom:5,
     textAlign: "center",
     fontSize: 13,
     color: COLOR.WHITE,

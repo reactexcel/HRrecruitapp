@@ -58,4 +58,7 @@ export default StyleSheet.create({
     paddingRight: 20
   },
   shareIconStyle : { color: COLOR.TEXTCOLOR },
+  marginView: {
+    margin:5
+  }
 });
