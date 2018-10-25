@@ -175,7 +175,7 @@ class AddCandidate extends Component {
             onFocus={input.onFocus}
             value={/* updateValue !=='' ? updateValue : */ input.value}
             placeholderTextColor={COLOR.WHITE}
-            selectionColor={COLOR.Grey}
+            selectionColor={COLOR.LTONE}
             underlineColorAndroid={underLineColor}
           />
         </Item>

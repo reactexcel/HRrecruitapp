@@ -105,8 +105,8 @@ class JobList extends Component {
   };
   renderCardItem = ({ item }) => {
     return (
-      <Card padder>
-        <CardItem style={styles.cardItem}>
+      <Card style={styles.mainCard} padder>
+        <CardItem style={[styles.cardItem,styles.mainCard]}>
           <JobSalaryDetails>
             <Text style={styles.viewText}>{item.subject}</Text>
           </JobSalaryDetails>

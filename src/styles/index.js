@@ -36,7 +36,7 @@ export default StyleSheet.create({
     textAlign: "center",
     // letterSpacing: 0.4,
     color: COLOR.TEXTCOLOR,
-    fontSize: 12
+    fontSize: 13.5
   },
   inputText: {
     color: "#7d7885",
@@ -78,7 +78,7 @@ export default StyleSheet.create({
   },
   viewText: {
     fontFamily: "Montserrat-SemiBold",
-    fontSize: 12.8,
+    fontSize: 13.8,
     color: COLOR.TURQUOISE
   },
   iconView: {
@@ -94,7 +94,7 @@ export default StyleSheet.create({
   rowText: {
     fontFamily: "Montserrat-Medium",
     color: COLOR.TEXTCOLOR,
-    fontSize: 9,
+    fontSize: 10.5,
     marginLeft: 2,
     marginRight: 10
   },
@@ -113,6 +113,10 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Bold",
     fontSize: 9,
     alignSelf: "center",
-    textAlign: "center"
+    textAlign: "center",
+    color: COLOR.BGCOLOR
+  },
+  mainCard: {
+    borderRadius:5
   }
 });

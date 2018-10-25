@@ -7,7 +7,7 @@ const CustomButton = props => {
   const { text, type = 'block', btnStyle = {}, btnTextStyle={} ,style ={},textColor={},IconStyle={},key} = props;
   if(type == 'rounded'){
     return (
-    <Button onPress={props.onPress} style={btnStyle} rounded info>
+    <Button onPress={props.onPress} style={[styles.removeShadow,btnStyle]} rounded info>
       <Text uppercase={false} style={[styles.btnText,btnTextStyle]}>
         {text}
       </Text>
@@ -15,7 +15,7 @@ const CustomButton = props => {
   );
   }else if(type =='login_to_apply') {
    return( 
-    <Button onPress={props.onPress} style={btnStyle} rounded info>
+    <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} rounded info>
     <Text uppercase={false} style={btnTextStyle}>
       {text}
     </Text>
@@ -24,7 +24,7 @@ const CustomButton = props => {
   }
   else if(type =='to_share') {
     return( 
-     <Button onPress={props.onPress} style={btnStyle} rounded info>
+     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} rounded info>
      <Icon name="share" type="Entypo" style={IconStyle} />
      <Text uppercase={false} style={btnTextStyle}>
        {text}
@@ -34,7 +34,7 @@ const CustomButton = props => {
    }
    else if(type =='keySkillButton') {
     return( 
-     <Button onPress={props.onPress} style={btnStyle} key={key} rounded >
+     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} key={key} rounded >
      <Text uppercase={false} style={btnTextStyle}>
        {text}
      </Text>
@@ -43,7 +43,7 @@ const CustomButton = props => {
    }
   else {   
     return (
-      <Button onPress={props.onPress} style={style}  block info>
+      <Button onPress={props.onPress} style={[style,styles.removeShadow]}  block info>
         <Text uppercase={false} style={[styles.btnText, btnTextStyle,textColor]}>
         {text}
       </Text>
@@ -57,6 +57,11 @@ const styles = StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 17 : 15,
     fontWeight: Platform.OS === "ios" ? "500" : "300",
     letterSpacing: 1
+  },
+  removeShadow : {
+    shadowOffset: { height: 0, width: 0 },
+    shadowOpacity: 0,
+    elevation:0
   }
 });
 

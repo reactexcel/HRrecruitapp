@@ -34,13 +34,13 @@ export default StyleSheet.create({
     fontSize: 11,
     marginTop: 0,
     marginLeft: 6,
-    color: COLOR.PRONAMECOLOR,
+    color: COLOR.TEXTCOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   ux: {
     textAlign: "center",
     fontSize: 11,
-    color: COLOR.PRONAMECOLOR,
+    color: COLOR.TEXTCOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   edge: {
@@ -82,7 +82,7 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 11,
     width: "98%",
-    color: COLOR.PRONAMECOLOR,
+    color: COLOR.TEXTCOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   cloudview: {
@@ -98,7 +98,7 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 11,
     marginLeft: 6,
-    color: COLOR.PRONAMECOLOR,
+    color: COLOR.TEXTCOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   blockchainname: {
@@ -111,10 +111,10 @@ export default StyleSheet.create({
   },
   blockchaintext: {
     textAlign: "center",
-    fontSize: 11,
+    fontSize: 11, 
     width: "52%",
     alignSelf: "center",
-    color: COLOR.PRONAMECOLOR,
+    color: COLOR.TEXTCOLOR,
     fontFamily: "Montserrat-SemiBold"
   },
   aboutcover: {

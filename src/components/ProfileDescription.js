@@ -39,7 +39,7 @@ const ProfileDescription = props => {
   }
   
   return (
-    <Fragment>
+    <View style={{height:400}}>
       <ProfileBlock title="JOB TITLE">
         <Text style={styles.textStyle}>{job_profile}</Text>
         {/* <Form>
@@ -86,7 +86,7 @@ const ProfileDescription = props => {
           <Button
             iconLeft
             rounded
-            style={{ backgroundColor: "transparent" }}
+            style={{ backgroundColor: "transparent", borderWidth:1.5, borderColor:'#303d6b' }}
             onPress={props.handleLocate}
           >
             <Icon
@@ -106,7 +106,7 @@ const ProfileDescription = props => {
           </Button>
         </View>
       </ProfileBlock>
-    </Fragment>
+    </View>
   );
 };
 ProfileDescription.defaultProps = {

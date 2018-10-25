@@ -25,7 +25,7 @@ class Profile extends Component {
     },
     title: "Profile",
     headerTitleStyle: {
-      color: "black",
+      color: COLOR.TEXTCOLOR,
       textAlign: "center",
       alignSelf: "center",
       flex: 1,

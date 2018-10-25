@@ -72,8 +72,8 @@ export default StyleSheet.create({
     marginBottom: 10,
     marginRight: 10,
     backgroundColor: "#131931",
-    borderWidth: 3,
-    borderColor: "#19203e"
+    borderWidth: 2,
+    borderColor: COLOR.PURPLE
   },
   checkedBtnText: {
     fontSize: 11,
@@ -87,6 +87,7 @@ export default StyleSheet.create({
   },
   labelText: {
     color: COLOR.TURQUOISE,
+    marginLeft:3,
     fontFamily: "Montserrat-Medium"
   },
   jobTitleView: {
@@ -116,6 +117,7 @@ export default StyleSheet.create({
     marginLeft: 10
   },
   acquaintedTitle: {
+    marginBottom:5,
     textAlign: "center",
     fontSize: 13,
     color: COLOR.WHITE,

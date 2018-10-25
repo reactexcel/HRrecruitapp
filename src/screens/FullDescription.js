@@ -137,10 +137,11 @@ class FullDescription extends Component {
             onPress={()=>this.props.navigation.navigate('AddCandidate', { jobDetail: jobDetail,
               currentJob: currentJob})}
             type="login_to_apply"
-            btnStyle={[styles.btnStyle, styles.loginBtnStyle]}
+            btnStyle={styles.btnStyle}
             btnTextStyle={[styles.btnText, styles.loginTextStyle]}
             text={LOG_TO_APPLY}
           />
+          <View style={styles.marginView}/>
           <CustomButton
             onPress={()=>this.onShareClick(jobDetail)}
             type="to_share"

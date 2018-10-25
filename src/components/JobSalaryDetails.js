@@ -14,7 +14,7 @@ const JobSalaryDetails = props => {
           <FontAwesome
             name="briefcase"
             color={COLOR.Red}
-            style={styles.viewIcon}
+            style={styles.viewIcon} 
           />
           <Text style={styles.rowText}>0 - 1 years</Text>
         </View>
@@ -32,7 +32,7 @@ const JobSalaryDetails = props => {
             color={COLOR.Red}
             style={styles.viewIcon}
           />
-          <Text style={styles.rowText}>1,25,000 - 2,00,000 PA</Text>
+          <Text style={styles.rowText}>125000 - 200000 PA</Text>
         </View>
       </View>
     </View>

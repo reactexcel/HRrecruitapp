@@ -30,4 +30,5 @@ export const COLOR = {
   EDGECOLOR:'#5b637d',
   ROWCOLOR:'#BDC3C7',
   BTNYELLOW:'#201F40',
+  REDESS:'#e44549'
 };
