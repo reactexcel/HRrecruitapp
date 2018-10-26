@@ -74,7 +74,8 @@ export default StyleSheet.create({
     fontSize: 15,
     fontFamily: "Montserrat-Bold",
     color: COLOR.LGONE,
-    alignSelf: "center"
+    alignSelf: "center",
+
   },
   image: {
     width: 90,

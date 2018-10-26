@@ -315,8 +315,6 @@ class AddCandidate extends Component {
   };
 
   onResumeAdd = () => {
-    // console.log('???????????????????????');
-    
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });

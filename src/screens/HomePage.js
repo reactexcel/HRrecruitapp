@@ -207,7 +207,7 @@ class HomePage extends Component {
                 style={[
                   styles.text,
                   textColor && index == k ? { color: COLOR.WHITE } : {}
-                ]}
+                ,{marginRight:data.name=='PROFILE' ? 40:null}]}
               >
                 {data.name}
               </Text>

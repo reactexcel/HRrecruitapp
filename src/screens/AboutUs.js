@@ -36,7 +36,7 @@ class AboutUs extends Component {
     headerTitle: (
       <View style={aboutusCss.header}>
         <Image
-          source={require("../images/logo.png")}
+          source={require("../images/excellencelogo.png")}
           resizeMode="contain"
           style={aboutusCss.headerImage}
         />

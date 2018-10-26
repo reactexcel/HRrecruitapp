@@ -15,7 +15,7 @@ const ProfileDescription = props => {
     "Second Round",
     "Third Round", 
     props.appliedJob.status === "Selected" ||
-    props.appliedJob.status === "Rejected"
+    props.appliedJob.status === "Reject"
       ? props.appliedJob.status
       : "Result"
   ];
@@ -23,19 +23,25 @@ const ProfileDescription = props => {
     appliedJob: { job_profile, job_description }
   } = props;
   let profile_status = 0;
+  let activiColor ='#7d7885'
   let status_color = COLOR.MUSTARD;
   if (props.appliedJob.status === "First Round") {
     profile_status = 1;
+    activiColor=COLOR.MUSTARD
   } else if (props.appliedJob.status === "Second Round") {
     profile_status = 2;
+    activiColor=COLOR.MUSTARD
   } else if (props.appliedJob.status === "Third Round") {
     profile_status = 3;
+    activiColor=COLOR.MUSTARD
   } else if (props.appliedJob.status === "Reject") {
     profile_status = 4;
-    status_color = "red";
+    status_color = COLOR.PINK
+    activiColor=COLOR.PINK
   } else if (props.appliedJob.status === "Selected") {
     profile_status = 4;
     status_color = "green";
+    activiColor='green'
   }
   
   return (
@@ -67,23 +73,25 @@ const ProfileDescription = props => {
             stepStrokeUnFinishedColor: "#7d7885",
             separatorUnFinishedColor: "#7d7885",
             stepIndicatorUnFinishedColor: "#7d7885",
-            stepStrokeCurrentColor: status_color,
-            separatorFinishedColor: status_color,
+            stepStrokeCurrentColor:status_color,
+            separatorFinishedColor: status_color,   
             currentStepLabelColor: status_color,
             stepStrokeFinishedColor: status_color,
             stepIndicatorFinishedColor: status_color,
             stepIndicatorCurrentColor: status_color,
-            stepIndicatorLabelCurrentColor: "transparent",
-            stepIndicatorLabelFinishedColor: "transparent",
-            stepIndicatorLabelUnFinishedColor: "transparent",
-            labelColor: "#7d7885"
+            stepIndicatorLabelCurrentColor: "red",
+            stepIndicatorLabelFinishedColor: "red",
+            stepIndicatorLabelUnFinishedColor: "red",
+            labelColor: activiColor,
+            
+          
           }}
           currentPosition={profile_status}
           labels={labels}
         />
       </ProfileBlock>
       <ProfileBlock title="EXCELLENCE TECHNOLOGIES" showBorder={false}>
-        <View style={styles.btnView}>
+        <View style={[styles.btnView,{paddingBottom:'10%'}]}>
           <Button
             iconLeft
             rounded
