@@ -13,6 +13,7 @@ import CustomButton from '../components/CustomButton'
 import styles from '../styles/screens/FullDescription'
 import { connect } from "react-redux";
 import { getJobLists } from "../actions";
+import { Popup } from 'react-native-map-link';
 
 class Profile extends Component {
   
@@ -65,7 +66,8 @@ class Profile extends Component {
       jobList: [],
       updateDetails:'',
       editing:true,
-      sender_email:''
+      sender_email:'',
+      isLocation: false
     };
   }
   // componentDidMount() {
@@ -82,14 +84,18 @@ class Profile extends Component {
   //     }
   // };
   handleLocate = () => {
-    let url = "";
-    if (Platform.OS === "ios") {
-      url = `http://maps.apple.com/maps?q=${28.5965789},${77.3287437}`;
-    } else if (Platform.OS === "android") {
-      url = `geo:${28.5965789},${77.3287437}`;
-    }
-    Linking.openURL(url);
+    // let url = "";
+    // if (Platform.OS === "ios") {
+    //   url = `http://maps.apple.com/maps?q=${28.5965789},${77.3287437}`;
+    // } else if (Platform.OS === "android") {
+    //   url = `geo:${28.5965789},${77.3287437}`;
+    // }
+    // Linking.openURL(url);
+    this.setState({ isLocation: true })
   };
+  closeLocationModal = () => {
+    this.setState({ isLocation: false })
+  }
   aboutUs=()=>{
     this.props.navigation.navigate('AboutUs')
   }
@@ -137,6 +143,20 @@ class Profile extends Component {
             job_profile={this.state.job_profile}
             onChange={(value)=>this.onChange(value)}
           />
+          <Popup
+          isVisible={this.state.isLocation}
+          onCancelPressed={this.closeLocationModal}
+          onAppPressed={this.closeLocationModal}
+          onBackButtonPressed={this.closeLocationModal}
+          options={{
+            latitude: 28.5965789,
+            longitude: 77.3287437,
+            title: 'Excellene Technologies',
+            dialogTitle: 'Excellence Technologies',
+            dialogMessage: 'Search Our Location in Map',
+            cancelText: 'Cancel'
+          }}
+        />
         </LinearGradient>
         {/* <Modal
         isDisabled={false}
