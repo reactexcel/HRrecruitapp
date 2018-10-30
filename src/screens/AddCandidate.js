@@ -16,6 +16,7 @@ import {
   Label,
   Form
 } from "native-base";
+import Permissions from 'react-native-permissions';
 import FCM,{FCMEvent} from 'react-native-fcm'
 import DeviceInfo from 'react-native-device-info';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -315,7 +316,22 @@ class AddCandidate extends Component {
     }
   };
 
-   onResumeAdd = () => {
+  askStoragePermission = async () =>{
+    await Permissions.request('storage').then(response => {
+      console.log(response,'per storage')
+      return true;
+    })
+  }
+   onResumeAdd = async () => {
+    await Permissions.checkMultiple(['location']).then(response => {
+      //response is an object mapping type to permission
+      console.log(response,'check')
+      if(response.storage != 'authorized'){
+        this.askStoragePermission()
+      } else {
+        return true
+      }
+    })
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });
