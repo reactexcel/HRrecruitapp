@@ -8,6 +8,7 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 // import cl.json.RNSharePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 // import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -66,6 +67,7 @@ public class MainApplication extends Application implements ReactApplication {
             new LinearGradientPackage(),
             new RNSharePackage(),
             new RNFetchBlobPackage(),
+            new RNFSPackage(),            
             new RNBranchPackage(),
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),

@@ -35,6 +35,7 @@ import {
   DocumentPickerUtil
 } from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
+var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
 import LinearGradient from "react-native-linear-gradient";
@@ -314,7 +315,7 @@ class AddCandidate extends Component {
     }
   };
 
-  onResumeAdd = () => {
+   onResumeAdd = () => {
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });
@@ -357,6 +358,7 @@ class AddCandidate extends Component {
                   });
                 },
                 error => {
+                  console.log(error,'asdas')
                   this.setState({ converting: false });
                 }
               );

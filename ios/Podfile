@@ -28,6 +28,10 @@ target 'HRrecruit' do
 
   pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
+  pod 'ReactNativePermissions', :path => '../node_modules/react-native-permissions'
+
   target 'HRrecruitTests' do
     inherit! :search_paths
     # Pods for testing
