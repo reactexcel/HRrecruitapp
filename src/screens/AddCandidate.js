@@ -28,7 +28,7 @@ import _styles from "../styles/screens/AddCandidate";
 import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
-import { addCandidate } from "../actions";
+import { addCandidate,candidateUploadImage,candidateUploadProfile} from "../actions";
 import { getJobLists } from "../actions";
 import {
   DocumentPicker,
@@ -37,8 +37,21 @@ import {
 import RNFetchBlob from "rn-fetch-blob";
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
-import LinearGradient from "react-native-linear-gradient";
+import LinearGradient from "react-native-linear-gradient"; 
+import {ProfileOnChange,UploadProfile} from '../actions/actions'
+import {load as loadAccount} from '../reducers/initialStateReducer' 
 
+
+const data = {
+  // used to populate "account" reducer when "Load" is clicked
+  firstName: 'Jane',
+  lastName: 'Doe',
+  age: '42',
+  sex: 'female',
+  employed: true,
+  favoriteColor: 'Blue',
+  bio: 'Born to write amazing Redux code.'
+}
 
 class AddCandidate extends Component {
   contentHeight= 0
@@ -55,10 +68,15 @@ class AddCandidate extends Component {
       fcm_token_Id:null,
       deviceId:null,
       whenAddedResume:false,
-      userName:'',
+        from:'',
       mobile_no:'',
+      sender_mail:'',
       job_profile:'',
-      name:''
+      name:'',
+      isEditing:false,
+      newValue:'',
+      bottomBotton:'JOIN NOW',
+      SelectJOb:''
     };
   }
 
@@ -81,10 +99,19 @@ class AddCandidate extends Component {
   //  console.log(this.props.navigation.state.params.appliedJob.job_profile
   //   ,this.props.navigation.state.params.profileDetails.userName,this.props.navigation.state.params.profileDetails.mobile_no ,'hhhhhhhhhhhhhhhhhhhhh');
   componentDidMount(){
-    // this.setState({userName:this.props.navigation.state.params.profileDetails.userName
-    // ,mobile_no:this.props.navigation.state.params.profileDetails.mobile_no,
-    // job_profile:this.props.navigation.state.params.appliedJob.job_profile})
-    // console.log(this.state.mobile_no,this.state.userName,this.state.job_profile,'DDDDDDDDDDDDDDDDDDDDDDDD');
+    // const aa='dddd'
+    if(this.props.navigation.state.params.isEditing==true){
+      this.setState({bottomBotton:'UPDATE'/* , from: this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.from,
+        sender_mail: this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail,
+        mobile_no: this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.mobile_no */})
+
+        this.props.change('from',this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.from);
+        this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail);
+        this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.mobile_no);
+        this.props.change("resume_file",null)
+        
+        
+      }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
       this.setState({fcm_token_Id:token})
@@ -114,7 +141,7 @@ class AddCandidate extends Component {
   componentDidUpdate() {
     const { candidate } = this.props;
     if (candidate.data !== undefined) {
-      if (candidate.data.candidate_status === true) {
+      if (candidate.data.candidate_status === true && this.props.navigation.state.params.isEditing ==false) {
         setItem("mongo_id", JSON.stringify({ candidate }));
         Alert.alert(
           "Thank You",
@@ -140,7 +167,6 @@ class AddCandidate extends Component {
     const { success, msg } = this.props.candidate;
     if (success !== undefined && msg !== undefined) {
       if (success === false) {
-        
         Alert.alert(
           "Alert",
           msg,
@@ -155,6 +181,18 @@ class AddCandidate extends Component {
       }
     }
   }
+//   onChangee=(e,a)=>{
+// console.log(e,a,'MMMMMMMMMMsssssssssssssssfffffffffffffaaaaaaaa');
+// if(a=='from'){
+// this.setState({from:e})
+// }
+// // else if(a=='sender_mail'){
+// //   this.setState({sender_mail:e})
+// // }
+// else if(a=='mobile_no'){
+//   this.setState({mobile_no:e})
+// }
+//   }
   renderField(props) {
     const { input, ...inputProps } = props;
     const {
@@ -162,7 +200,7 @@ class AddCandidate extends Component {
     } = props;
     const underLineColor = active ? COLOR.MUSTARD : COLOR.PURPLE
     const {updateValue} =props
-    // this.setState({name:updateValue})
+    const {newValue,isEditing,name}=props
     return (
       <Fragment>
         <Item stackedLabel style={_styles.inputTextView}>
@@ -170,10 +208,12 @@ class AddCandidate extends Component {
           <Input
             style={styles.inputText}
             {...inputProps}
-            onChangeText={input.onChange}
+            onChangeText={/* isEditing==true ? (e,a)=> props.onChangeText(e,a) : */ input.onChange
+            }
+            // editable={name =='sender_mail' ? true :false}
             onBlur={input.onBlur}
             onFocus={input.onFocus}
-            value={/* updateValue !=='' ? updateValue : */ input.value}
+            value={/* newValue !=='' ? newValue : */ input.value}
             placeholderTextColor={COLOR.WHITE}
             selectionColor={COLOR.LTONE}
             underlineColorAndroid={underLineColor}
@@ -185,6 +225,9 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
+  SelectJOb=(i,title)=>{
+      this.setState({SelectJOb:title})
+  }
   renderJobField(props) {
     const { input, ...inputProps, } = props;
     const {
@@ -192,15 +235,21 @@ class AddCandidate extends Component {
     } = props;
     let renderJobTitle = props.params.currentJob.map((title,i)=>{
       let check;
+      let toSElect;
+      if(props.isEditing !==true){
       if (title.title == props.params.jobDetail.title){
         check = true;
       }
+      else {
+        check =false;
+      }
+    }
       return (
         <CustomButton
-          btnStyle={check? _styles.jobTitleBtn:_styles.defaultJobBtn}
+          btnStyle={check || props.SelectJObTitle === title.title ? _styles.jobTitleBtn:_styles.defaultJobBtn}
           btnTextStyle={check ? _styles.checkedBtnText : _styles.uncheckedBtnText}
           key={i}
-          // onPress={}
+          onPress={()=>props.SelectJOb(i,title.title)}
           text={title.title}
           type="rounded"
         />
@@ -292,6 +341,29 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
+
+  onUpdate = async values => {
+    if(!__DEV__){
+      values.source = 'MobileApp'
+    }
+    const { params } = this.props.navigation.state;
+    values["fileNames"] = [];
+    if (this.state.resumeData.length >= 1) {
+      this.state.resumeData.map((data, i) => {
+        values[`file${i + 1}`] = data.dataBase64;
+        values["extention"] = data.filetype;
+        values["fileNames"].push(`file${i + 1}`);
+        values["default_tag"] = params.jobDetail.default_id;
+        values["tag_id"] = params.jobDetail.id;
+        values['device_id']=this.state.fcm_token_Id,
+        values['_id']=this.props.navigation.state.params.mongo_id
+      });
+      this.props.candidateUploadProfile(values);
+      console.log(values,'+++++++++++++++++++++++');
+    } else {
+      this.setState({ resumeError: "Upload your resume" });
+    }
+  };
 
   onSubmit = async values => {
     if(!__DEV__){
@@ -388,7 +460,11 @@ class AddCandidate extends Component {
      <Text>rberbrbeber</Text>
     )
   }
-  render() {
+  render() 
+  {
+    
+    console.log(this.props.candidate,'LLLLLLLLl');
+    // this.props.navigation.state.params.ProfileOnChange('danihsvdvsdvsdv')
   //  console.log(
   //   this.props.navigation.state.params.profileDetails.userName
   //   ,this.props.navigation.state.params.profileDetails.mobile_no,
@@ -428,29 +504,39 @@ class AddCandidate extends Component {
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
-                  // updateValue={this.props.navigation.state.params.sender_email}
+                  // onChangeText={(e)=>this.onChangee(e,'sender_mail')}
+                  // newValue={this.state.sender_mail !=='' ? this.state.sender_mail :''}
+                  // isEditing={this.props.navigation.state.params.isEditing}
                 />
                <Field
                   name="from"
                   labelName="NAME"
                   component={this.renderField}
                   params={this.props.navigation.state.params}
-                  // updateValue={this.props.navigation.state.params.profileDetails.userName}
-                />
+                //   onChangeText={(e)=>this.onChangee(e,'from')}
+                //   newValue={this.state.from !== '' ? this.state.from :''
+                // } 
+                // isEditing={this.props.navigation.state.params.isEditing}
+                   />
                 <Field
                   name="mobile_no"
                   labelName="PHONE"
                   component={this.renderField}
                   keyboardType="numeric"
-                  // updateValue={this.props.navigation.state.params.profileDetails.mobile_no}
-                  
-                />
+                //   onChangeText={(e)=>this.onChangee(e,'mobile_no')}
+                //   newValue={this.state.mobile_no !== '' ? this.state.mobile_no :''
+                // } 
+                  // isEditing={this.props.navigation.state.params.isEditing}
+                   />
                 <Field
                   name="mobile_no"
                   labelName="JOB TITLE"
                   component={this.renderJobField}
                   keyboardType="numeric"
                   params={this.props.navigation.state.params}
+                  SelectJOb={(i,title)=>this.SelectJOb(i,title)}
+                  SelectJObTitle={this.state.SelectJOb}
+                  isEditing={this.props.navigation.state.params.isEditing}
                 />
                 <Field
                   name="resume_file"
@@ -478,8 +564,8 @@ class AddCandidate extends Component {
           textColor={{color:COLOR.LGONE}} style={{backgroundColor:COLOR.MUSTARD}}
           btnStyle={_styles.joinNowBtn}
           btnTextStyle={_styles.joinNowBtnText}
-          text="JOIN NOW"
-          onPress={handleSubmit(this.onSubmit)}
+          text={this.state.bottomBotton}
+          onPress={this.props.navigation.state.params.isEditing !==true ? handleSubmit( this.onSubmit) :handleSubmit( this.onUpdate)} 
           />
         )}
         </LinearGradient>
@@ -488,6 +574,8 @@ class AddCandidate extends Component {
   }
 }
 validate = values => {
+  console.log(values,'validate');
+  
   const errors = {};
   if (!values.from) {
     errors.from = "Cannot be Empty";
@@ -510,10 +598,12 @@ validate = values => {
 const mapStateToProps = ({ candidate }) => ({ candidate });
 export default reduxForm({
   form: "AddCandidate",
-  // validate
+  validate,
+  initialized : true,
+  enableReinitialize:true,
 })(
   connect(
     mapStateToProps,
-    { addCandidate }
+    {addCandidate,UploadProfile,candidateUploadProfile}
   )(AddCandidate)
 );

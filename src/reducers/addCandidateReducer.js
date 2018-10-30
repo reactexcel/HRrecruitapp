@@ -1,9 +1,9 @@
 import {
   ADD_CANDIDATE_REQUEST,
   ADD_CANDIDATE_SUCCESS,
-  ADD_CANDIDATE_FAILURE
+  ADD_CANDIDATE_FAILURE,
+  CANDIDATE_UPDATE_VALUE
 } from "../actions/types";
-
 const initialState = {
   adding: false,
 };
@@ -11,7 +11,7 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case ADD_CANDIDATE_REQUEST:
-      return { adding: true };
+      return { state };
       break;
     case ADD_CANDIDATE_SUCCESS:
       return { adding: false, ...action.payload };

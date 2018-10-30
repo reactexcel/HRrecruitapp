@@ -20,6 +20,7 @@ import {
   CLOUD_DEV,
   M_APPS,
   BLK_CHAIN
+  
 } from "../helper/constant";
 import { Icon } from "native-base";
 import AboutUsHeader from "../components/AboutUsHeader";
@@ -69,7 +70,7 @@ class AboutUs extends Component {
         
         <View
           style={{
-            paddingBottom: 75,
+            paddingBottom: 90,
             backgroundColor: [COLOR.LGTWO],
             zIndex: -1
           }}

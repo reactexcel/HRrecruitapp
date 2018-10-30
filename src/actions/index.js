@@ -8,7 +8,7 @@ import {
 import {
   ADD_CANDIDATE_REQUEST,
   ADD_CANDIDATE_SUCCESS,
-  ADD_CANDIDATE_FAILURE
+  ADD_CANDIDATE_FAILURE,
 } from "./types";
 import { OTP_REQUEST, OTP_SUCCESS, OTP_FAILED, OTP_ERROR } from "./types";
 import { QUESTIONS_SUCCESS, QUESTIONS_FAILURE } from "./types";
@@ -36,8 +36,27 @@ import {
   CANDIDATE_JOB_FAILURE
 } from './types';
 
+import {
+  CANDIDATE_UPDATE_VALUE
+} from './types';
+
+import{
+  CANDIDATE_UPDATE_PROFILE_SUCCESS,
+  CANDIDATE_UPDATE_PROFILE_FAILURE,
+  CANDIDATE_UPDATE_PROFILE_REQUEST
+} from './types';
+
+import {
+  CANDIDATE_UPLOAD_IMAGE_SUCCESS,
+  CANDIDATE_UPLOAD_IMAGE_FAILURE,
+  CANDIDATE_UPLOAD_IMAGE_REQUEST
+} from './types';
+
+
+
 import API_URL from "../config/dev";
 import PubSub from "pubsub-js";
+// import { FORMERR } from "dns";
 
 const _axios = () => axios.create({ baseURL: API_URL, timeout: 20000 }); //TimeOut set to 20 seconds
 
@@ -116,11 +135,13 @@ export const verifyingOTP = (email, otp, fb_id) => async dispatch => {
 
 //Action for adding new component
 export const addCandidate = data => async dispatch => {
+  console.log('fffffffffffffffffffffff');
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
     const res = await _axios().post("exams/addCandidateWithBase64File", {...data});    
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   } catch (err) {
+    console.log(err,'err');
     if (err.response.data.message) {
       dispatch({
         type: ADD_CANDIDATE_FAILURE,
@@ -257,11 +278,15 @@ export const getCandidateRoundDetails = fb_id => async dispatch => {
 };
 
 export const getJobLists = () => async dispatch => {
+  console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
+  
   try {
     const res = await _axios().get(`tag/jobProfile`);
+    console.log(res,'JJJJJJJJJJJJJJJJJJJJJJJJJJ');
+    
     dispatch({ type: GET_JOBLIST_SUCCESS, payload: res.data });
   } catch (err) {
-    console.log(err);
+    console.log(err,'err');
     if (err.message == "timeout of 10000ms exceeded") {
       // Show alert about timeout to user
       dispatch({
@@ -296,3 +321,41 @@ export const getCandidateJobDetails = (_id) => async dispatch => {
     }
   }
 }
+
+export const candidateUploadImage = data => async dispatch => {
+  dispatch({ type: CANDIDATE_UPLOAD_IMAGE_REQUEST });
+  try {
+    const res = await _axios().post("/exams/uploadImage",data[0] );    
+    dispatch({ type: CANDIDATE_UPLOAD_IMAGE_SUCCESS, payload: res });
+  } catch (err) {
+    console.log(err,'errrrrrrr',err.response);
+    if (err.response.data.message) {
+      dispatch({
+        type: CANDIDATE_UPLOAD_IMAGE_FAILURE,
+        payload: { msg: err.response.data.message }
+      });
+    } else {
+      dispatch({ type: CANDIDATE_UPLOAD_IMAGE_FAILURE });
+    }
+  }
+};
+
+export const candidateUploadProfile = data => async dispatch => {
+  console.log(data,"-----------------");
+  
+  dispatch({ type: CANDIDATE_UPDATE_PROFILE_REQUEST });
+  try {
+    const res = await _axios().put("/exams/updateCandidate",data );    
+    dispatch({ type: CANDIDATE_UPDATE_PROFILE_SUCCESS, payload: res });
+  } catch (err) {
+    console.log(err,'errrrrrrr',err.response);
+    if (err.response.data.message) {
+      dispatch({
+        type: CANDIDATE_UPDATE_PROFILE_FAILURE,
+        payload: { msg: err.response.data.message }
+      });
+    } else {
+      dispatch({ type: CANDIDATE_UPDATE_PROFILE_FAILURE });
+    }
+  }
+};

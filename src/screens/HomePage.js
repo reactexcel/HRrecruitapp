@@ -34,6 +34,8 @@ import { getCandidateJobDetails, getCandidateDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 import SplashScreen from "react-native-splash-screen";
 import FCM from "react-native-fcm";
+import {ProfileOnChange,UploadProfile} from '../actions/actions'
+
 
 class HomePage extends Component {
   constructor(props) {
@@ -47,7 +49,9 @@ class HomePage extends Component {
       textColor: false,
       animation: false,
       opacity: 0,
-      sender_mail:''
+      sender_mail:'',
+      mongo_id:'',
+      profile_picture:''
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -70,14 +74,20 @@ class HomePage extends Component {
   }
   setCandidateProfile = async () => {
     const candidateJob = await getItem("mongo_id");
-    
+    const mongo_id = await getItem("mongo_id");
+    console.log(mongo_id,'OOOOOOOOOOO');
+    if(mongo_id !==''){
+      this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
+      })
+    }
     if (candidateJob) {
+      this.props.UploadProfile(candidateJob)
+    this.setState({mongo_id:candidateJob.candidate.data._id})
       let email = candidateJob.candidate.data.sender_mail;
       let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
       let mobile_no = candidateJob.candidate.data.mobile_no;
       let userName = candidateJob.candidate.data.from;
       await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      console.log(candidateJob.data,'%%%%%%%%%%%%%%%%%%%');
       this.setState({
         candidateJob,
         profile_pic,
@@ -93,8 +103,6 @@ class HomePage extends Component {
   };
   async handleViewClick(data) {
     const { appliedJob } = this.props;
-    console.log(appliedJob,'tttttttttttttttttttt');
-    
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
         appliedJob: appliedJob,
@@ -110,16 +118,16 @@ class HomePage extends Component {
       this.props.navigation.navigate("Profile", {
         appliedJob,
         profileDetails,
-        sender_mail:this.state.sender_mail
+        sender_mail:this.state.sender_mail,
+        mongo_id:this.state.mongo_id,
+        profile_picture:this.state.profile_picture
       });
     } else {
       this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
   componentDidMount = async () => {
-    const mongo_id = await getItem("mongo_id");
-    console.log(mongo_id,"oooooooooooooooooooo");
-    
+    // const mongo_id = await getItem("mongo_id");
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
@@ -146,6 +154,12 @@ class HomePage extends Component {
         this.setState({ notification: "", opacity: 0 });
       }
     }
+    // if(mongo_id !==''){
+    //   this.setState({profile_picture:mongo_id.candidate.data.profilePicture
+    //   })
+    //   console.log(mongo_id,">>>");
+      
+    // }
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
@@ -168,7 +182,7 @@ class HomePage extends Component {
     this.setState({ textColor: false });
   };
   render() {
-    console.log(this.props.state_data,'**************************');
+    console.log(this.state.profile_picture,"vsasvasv");
     
     let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
@@ -261,13 +275,25 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => {
+  console.log(state,'llllllllllllllllllllllllll');
+  return {
   state_data: state,
   appliedJob: state.appliedJob,
   interviewSignUp: state.interviewSignUp,
   // state_data: state
-});
+  }};
+
+  // const mapDispatchToProps = dispatch => {
+  //   return {
+  //     getCandidateJobDetails: value => dispatch(getCandidateJobDetails(value)),
+  //     getCandidateDetails: (v) => dispatch(getCandidateDetails(v)),
+  //     ProfileOnChange: value => dispatch(ProfileOnChange(value)),
+  //     UploadProfile: (v) => dispatch(UploadProfile(v))
+  //   };
+  // };
 export default connect(
   mapStateToProps,
-  { getCandidateJobDetails, getCandidateDetails }
+  // mapDispatchToProps
+  { getCandidateJobDetails, getCandidateDetails, ProfileOnChange,UploadProfile}
 )(HomePage);

@@ -8,6 +8,9 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.imagepicker.ImagePickerPackage;
 // import cl.json.RNSharePackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 // import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -46,19 +49,13 @@ public class MainApplication extends Application implements ReactApplication {
     public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
-   
-  //  protected List<ReactPackage> getPackages() {
-  //     return Arrays.<ReactPackage>asList(
-  //         new MainReactPackage(),
-            // new RNSharePackage(),
-  //           new FBSDKPackage(),
-  //         new FBSDKPackage(mCallbackManager)
-  //     );
-  //   }
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
+            new RNFSPackage(),
+            new ImageResizerPackage(),
+            new ImagePickerPackage(),
+            new MainReactPackage(),
             new RNDeviceInfo(),
             new FIRMessagingPackage(),
             new LinearGradientPackage(),

@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { View, Text, Button, Icon ,Form, Item, Input} from "native-base";
+import { View, Text, Button, Icon, Form, Item, Input } from "native-base";
 import { COLOR } from "../styles/color";
 import ProfileBlock from "./ProfileBlock";
 import StepIndicator from "react-native-step-indicator";
@@ -7,13 +7,13 @@ import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
 import { connect } from "react-redux";
 const ProfileDescription = props => {
-  console.log(props.isEditing,'>>>>>>>>>>>>>>>>>');
-  
+  console.log(props.isEditing, ">>>>>>>>>>>>>>>>>");
+
   const labels = [
     "CV Sent",
     "First Round",
     "Second Round",
-    "Third Round", 
+    "Third Round",
     props.appliedJob.status === "Selected" ||
     props.appliedJob.status === "Reject"
       ? props.appliedJob.status
@@ -23,27 +23,40 @@ const ProfileDescription = props => {
     appliedJob: { job_profile, job_description }
   } = props;
   let profile_status = 0;
-  let activiColor ='#7d7885'
+  let activiColor = "#7d7885";
+  let FirstRound = "#7d7885";
+  let SecondRound = "#7d7885";
+  let ThirdRound = "#7d7885";
+  let Result = "#7d7885";
   let status_color = COLOR.MUSTARD;
   if (props.appliedJob.status === "First Round") {
     profile_status = 1;
-    activiColor=COLOR.MUSTARD
+    FirstRound = COLOR.MUSTARD;
   } else if (props.appliedJob.status === "Second Round") {
     profile_status = 2;
-    activiColor=COLOR.MUSTARD
+    FirstRound = COLOR.MUSTARD;
+    SecondRound = COLOR.MUSTARD;
   } else if (props.appliedJob.status === "Third Round") {
     profile_status = 3;
-    activiColor=COLOR.MUSTARD
+    FirstRound = COLOR.MUSTARD;
+    SecondRound = COLOR.MUSTARD;
+    ThirdRound = COLOR.MUSTARD;
   } else if (props.appliedJob.status === "Reject") {
     profile_status = 4;
-    status_color = COLOR.PINK
-    activiColor=COLOR.PINK
+    status_color = COLOR.PINK;
+    FirstRound = COLOR.PINK;
+    SecondRound = COLOR.PINK;
+    ThirdRound = COLOR.PINK;
+    Result = COLOR.PINK;
   } else if (props.appliedJob.status === "Selected") {
     profile_status = 4;
     status_color = "green";
-    activiColor='green'
+    FirstRound = "green";
+    SecondRound = "green";
+    ThirdRound = "green";
+    Result = "green";
   }
-  
+
   return (
     // <View style={{height:400}}>
     <Fragment>
@@ -73,8 +86,8 @@ const ProfileDescription = props => {
             stepStrokeUnFinishedColor: "#7d7885",
             separatorUnFinishedColor: "#7d7885",
             stepIndicatorUnFinishedColor: "#7d7885",
-            stepStrokeCurrentColor:status_color,
-            separatorFinishedColor: status_color,   
+            stepStrokeCurrentColor: status_color,
+            separatorFinishedColor: status_color,
             currentStepLabelColor: status_color,
             stepStrokeFinishedColor: status_color,
             stepIndicatorFinishedColor: status_color,
@@ -82,20 +95,76 @@ const ProfileDescription = props => {
             stepIndicatorLabelCurrentColor: "red",
             stepIndicatorLabelFinishedColor: "red",
             stepIndicatorLabelUnFinishedColor: "red",
-            labelColor: activiColor,
-            
-          
+            labelColor: activiColor
           }}
           currentPosition={profile_status}
-          labels={labels}
+          // labels={labels}
         />
+        <View style={{ flexDirection: "row", marginLeft: 15 }}>
+          <Text
+            style={{
+              fontSize: 10,
+              fontWeight: "500",
+              color: status_color,
+              marginRight: 23
+            }}
+          >
+            CV Sent
+          </Text>
+          <Text
+            style={{
+              fontSize: 10,
+              fontWeight: "500",
+              color: FirstRound !== "#7d7885" ? FirstRound : "#7d7885",
+              marginRight: 7
+            }}
+          >
+            First Round
+          </Text>
+          <Text
+            style={{
+              fontSize: 10,
+              fontWeight: "500",
+              color: SecondRound !== "#7d7885" ? SecondRound : "#7d7885",
+              marginRight: 7
+            }}
+          >
+            Second Round
+          </Text>
+          <Text
+            style={{
+              fontSize: 10,
+              fontWeight: "500",
+              color: ThirdRound !== "#7d7885" ? ThirdRound : "#7d7885",
+              marginRight: 23
+            }}
+          >
+            Third Round
+          </Text>
+          <Text
+            style={{
+              fontSize: 10,
+              fontWeight: "500",
+              color: Result !== "#7d7885" ? Result : "#7d7885"
+            }}
+          >
+            {props.appliedJob.status === "Selected" ||
+            props.appliedJob.status === "Reject"
+              ? props.appliedJob.status
+              : "Result"}
+          </Text>
+        </View>
       </ProfileBlock>
       <ProfileBlock title="EXCELLENCE TECHNOLOGIES" showBorder={false}>
-        <View style={[styles.btnView,{paddingBottom:'10%'}]}>
+        <View style={[styles.btnView, { paddingBottom: "10%" }]}>
           <Button
             iconLeft
             rounded
-            style={{ backgroundColor: "transparent", borderWidth:1.5, borderColor:'#303d6b' }}
+            style={{
+              backgroundColor: "transparent",
+              borderWidth: 1.5,
+              borderColor: "#303d6b"
+            }}
             onPress={props.handleLocate}
           >
             <Icon
@@ -107,7 +176,12 @@ const ProfileDescription = props => {
               Location
             </Text>
           </Button>
-          <Button onPress={props.aboutus} iconLeft rounded style={styles.aboutBtn}>
+          <Button
+            onPress={props.aboutus}
+            iconLeft
+            rounded
+            style={styles.aboutBtn}
+          >
             <Icon name="volume-up" style={{ color: COLOR.PINK }} />
             <Text uppercase={false} style={styles.btnText}>
               About Us
@@ -115,7 +189,7 @@ const ProfileDescription = props => {
           </Button>
         </View>
       </ProfileBlock>
-      </Fragment>
+    </Fragment>
   );
 };
 ProfileDescription.defaultProps = {

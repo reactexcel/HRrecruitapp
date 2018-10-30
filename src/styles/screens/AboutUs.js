@@ -123,7 +123,7 @@ export default StyleSheet.create({
     zIndex: 1,
     position: "absolute",
     alignSelf: "center",
-    top: "7%"
+    top: "8%"
   },
   pplSay: {
     margin: 0,

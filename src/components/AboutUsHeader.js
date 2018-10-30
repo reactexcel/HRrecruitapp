@@ -20,7 +20,7 @@ const AboutUsHeader = ({ text }) => {
           {text}
         </Text>
       </View>
-      <View
+      <View 
         style={headerStyle.fragmentview}
       />
     </Fragment>

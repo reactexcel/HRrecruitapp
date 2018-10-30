@@ -4,6 +4,7 @@ import com.facebook.react.ReactActivity;
 import io.branch.rnbranch.*; // <-- add this
 import android.content.Intent; // <-- and this
 import org.devio.rn.splashscreen.SplashScreen;
+// import android.support.v7.graphics.drawable.DrawableWrapper;
 
 
 public class MainActivity extends ReactActivity {

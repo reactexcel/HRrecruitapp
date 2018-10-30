@@ -88,7 +88,8 @@ class JobList extends Component {
     // console.log(item,this.state.jobList,'{{{{{{{{{{{{{{{{{[');
     this.props.navigation.navigate("AddCandidate", {
       jobDetail: item,
-      currentJob: this.state.joblist
+      currentJob: this.state.joblist,
+      isEditing:false
     });
   };
   onCancel() {
@@ -319,8 +320,21 @@ class JobList extends Component {
   }
 }
 
+
+// const mapStateToProps = state => {
+//   return {
+//     joblist:state
+//   };
+// };
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     getJobLists: () => dispatch(getJobLists()),
+//   };
+// };
+
 const mapStateToProps = ({ joblist }) => ({ joblist });
 export default connect(
   mapStateToProps,
+  // mapDispatchToProps,
   { getJobLists }
 )(JobList);

@@ -149,6 +149,9 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-fs')
+    compile project(':react-native-image-resizer')
+    compile project(':react-native-image-picker')
     // compile project(':react-native-share')
     compile project(':react-native-fbsdk')
     compile project(':react-native-device-info')
@@ -170,7 +173,7 @@ dependencies {
     implementation project(':appcenter')
     implementation project(':react-native-google-analytics-bridge')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:23.0.1"
+    implementation "com.android.support:appcompat-v7:27.1.1"
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation project(':react-native-document-picker')
 }

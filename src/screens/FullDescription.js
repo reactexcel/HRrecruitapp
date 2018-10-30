@@ -135,7 +135,7 @@ class FullDescription extends Component {
       
        <CustomButton
             onPress={()=>this.props.navigation.navigate('AddCandidate', { jobDetail: jobDetail,
-              currentJob: currentJob})}
+              currentJob: currentJob,isEditing:false})}
             type="login_to_apply"
             btnStyle={styles.btnStyle}
             btnTextStyle={[styles.btnText, styles.loginTextStyle]}
