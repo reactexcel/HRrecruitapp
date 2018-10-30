@@ -98,12 +98,16 @@ export default StyleSheet.create({
     marginLeft: 2,
     marginRight: 10
   },
+  viewRight:{
+    marginLeft:70,
+    marginBottom:5,
+  },
   applyBtn: {
     paddingTop: 0,
     paddingBottom: 0,
     paddingRight: 1,
     paddingLeft: 1,
-    width: 80,
+    width: 70,
     height: 27,
     marginRight: 10,
     backgroundColor: COLOR.YELLOW,

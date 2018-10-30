@@ -19,7 +19,8 @@ import {
   Body,
   CardItem,
   Icon,
-  Spinner
+  Spinner,
+  Right
 } from "native-base";
 import { connect } from "react-redux";
 import styles from "../styles";
@@ -110,6 +111,7 @@ class JobList extends Component {
           <JobSalaryDetails>
             <Text style={styles.viewText}>{item.subject}</Text>
           </JobSalaryDetails>
+          <Right style={styles.viewRight} >
           <CustomButton
             onPress={() => {
               this.onApplyJob(item);
@@ -119,6 +121,7 @@ class JobList extends Component {
             btnTextStyle={styles.applyBtnText}
             text="APPLY"
           />
+          </Right>
         </CardItem>
         <CardItem>
           <Body>
