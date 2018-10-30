@@ -329,7 +329,7 @@ class AddCandidate extends Component {
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       } else {
-        return true
+        return true;
       }
     })
     this.props.change({ resume_file: [] });
