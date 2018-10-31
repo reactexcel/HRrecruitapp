@@ -13,7 +13,7 @@ import {
       case CANDIDATE_UPLOAD_IMAGE_REQUEST:
         return { state };
         break;
-      case CANDIDATE_UPLOAD_IMAGE_SUCCESS:
+      case CANDIDATE_UPLOAD_IMAGE_SUCCESS: 
         return { adding: false, ...action.payload };
         break;
       case CANDIDATE_UPLOAD_IMAGE_FAILURE:

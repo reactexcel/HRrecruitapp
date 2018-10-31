@@ -36,6 +36,7 @@ import SplashScreen from "react-native-splash-screen";
 import FCM from "react-native-fcm";
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 
+import Permissions from 'react-native-permissions';
 
 class HomePage extends Component {
   constructor(props) {
@@ -126,8 +127,23 @@ class HomePage extends Component {
       this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
+  askStoragePermission = async () =>{
+    await Permissions.request('storage').then(response => {
+      console.log(response,'per storage')
+    })
+  }
   componentDidMount = async () => {
     // const mongo_id = await getItem("mongo_id");
+    //response is an object mapping type to permission
+    Permissions.checkMultiple(['location']).then(response => {
+      console.log(response,'check')
+      if(response.storage != 'authorized'){
+        this.askStoragePermission()
+      }
+    })
+    const mongo_id = await getItem("mongo_id");
+    console.log(mongo_id,"oooooooooooooooooooo");
+    
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
@@ -221,7 +237,7 @@ class HomePage extends Component {
                 style={[
                   styles.text,
                   textColor && index == k ? { color: COLOR.WHITE } : {}
-                ,{marginRight:data.name=='PROFILE' ? 40:null}]}
+                ,{marginRight:data.name=='PROFILE' ? 40 :null}]}
               >
                 {data.name}
               </Text>

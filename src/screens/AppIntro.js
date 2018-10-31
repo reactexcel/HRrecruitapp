@@ -85,6 +85,8 @@ class AppIntro extends Component {
       if (params.$deeplink_path !== undefined) {
         let fb_id = params.$deeplink_path;
         await this.props.getCandidateDetails(fb_id);
+        console.log('jjjjjjjjjj');
+        
         const { status } = this.props.interviewSignUp;
         if (status == SUCCESS_STATUS) {
           this.setState({ deepLink: true, fb_id: fb_id });

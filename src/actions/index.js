@@ -135,12 +135,13 @@ export const verifyingOTP = (email, otp, fb_id) => async dispatch => {
 
 //Action for adding new component
 export const addCandidate = data => async dispatch => {
-  console.log('fffffffffffffffffffffff');
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
     const res = await _axios().post("exams/addCandidateWithBase64File", {...data});    
+    console.log(res,'fffffffffffffffffffffff');
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
-  } catch (err) {
+  }
+  catch (err) {
     console.log(err,'err');
     if (err.response.data.message) {
       dispatch({
@@ -238,6 +239,8 @@ export const getCandidateDetails = fb_id => async dispatch => {
     const res = await _axios().get(`exams/candidateDetails/${fb_id}`);
     PubSub.publish("CANDIDATE_DETAILS_SUCCESS", { API_URL, fb_id, res });
     dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
+    console.log(res,'666666666');
+    
   } catch (err) {
     if (err.message == "timeout of 10000ms exceeded") {
       // Show alert about timeout to user
@@ -327,6 +330,9 @@ export const candidateUploadImage = data => async dispatch => {
   try {
     const res = await _axios().post("/exams/uploadImage",data[0] );    
     dispatch({ type: CANDIDATE_UPLOAD_IMAGE_SUCCESS, payload: res });
+  
+  console.log(res,'))))))))');
+  
   } catch (err) {
     console.log(err,'errrrrrrr',err.response);
     if (err.response.data.message) {

@@ -27,6 +27,8 @@ import {
 } from "react-native-document-picker";
 import SplashScreen from "react-native-splash-screen";
 import RNFetchBlob from "rn-fetch-blob";
+// import { getJobLists } from "../actions";
+import { Popup } from 'react-native-map-link';
 
 class Profile extends Component {
   static navigationOptions = props => {
@@ -79,27 +81,27 @@ class Profile extends Component {
       sender_email: "",
       joblist: "",
       imageSource:null,
-      resumeData:[]
+      resumeData:[],
+      profile_picture:'',
+      uploading :false
+
     };
   }
-  componentDidMount() {
-    this.props.navigation.setParams({ increaseCount: this.onEditing });
-  }
   componentDidMount = async () => {
-    this.props.navigation.setParams({ increaseCount: this.onEditing });
+    this.props.navigation.setParams({ increaseCount: this.onEditing});
+    const profileDetails = this.props.navigation.getParam("profileDetails");
+    this.setState({profile_picture:profileDetails.profile_picture})
     await this.props.getJobLists();
     const { data, error } = this.props.joblist;
-    // console.log(data,'^^^^^^^^^^^^^^^^^^^^');
-    console.log(data);
-
     if (data) {
       this.setState({ joblist: data });
     }
   };
 
-  onResumeAdd = () => {
+  onPhotoUpload = () => {
     // this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
+    this.setState({profile_picture:undefined})
     // this.setState({ converting: true });
     if (Platform.OS !== "ios") {
       //Android Only
@@ -111,7 +113,7 @@ class Profile extends Component {
           SplashScreen.hide();
           console.log(res.uri,'gggggggggggggg');
 
-          this.setState({imageSource:res.uri})
+          this.setState({imageSource:res.uri,uploading:true})
           
           // this.setState({ whenAddedResume: true });
           if (res) {
@@ -134,18 +136,22 @@ class Profile extends Component {
   };
 
   handleLocate = () => {
-    let url = "";
-    if (Platform.OS === "ios") {
-      url = `http://maps.apple.com/maps?q=${28.5965789},${77.3287437}`;
-    } else if (Platform.OS === "android") {
-      url = `geo:${28.5965789},${77.3287437}`;
-    }
-    Linking.openURL(url);
+    // let url = "";
+    // if (Platform.OS === "ios") {
+    //   url = `http://maps.apple.com/maps?q=${28.5965789},${77.3287437}`;
+    // } else if (Platform.OS === "android") {
+    //   url = `geo:${28.5965789},${77.3287437}`;
+    // }
+    // Linking.openURL(url);
+    this.setState({ isLocation: true })
   };
-  aboutUs = () => {
-    this.props.navigation.navigate("AboutUs");
-  };
-  forEditing = () => {
+  closeLocationModal = () => {
+    this.setState({ isLocation: false })
+  }
+  aboutUs=()=>{
+    this.props.navigation.navigate('AboutUs')
+  }
+  forEditing=()=>{
     const appliedJob = this.props.navigation.getParam("appliedJob");
     this.setState({
       isEditing: true,
@@ -160,16 +166,10 @@ class Profile extends Component {
   //   this.setState({isEditing:true})
   // }
   onEditing = () => {
-    // console.log(this.state.joblist);
-
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");
-    console.log(this.state.joblist);
-
     this.state.joblist.forEach((item, i) => {
       if (item.title == appliedJob.job_profile) {
-        console.log(item);
-
         this.props.navigation.navigate("AddCandidate", {
           currentJob: this.state.joblist,
           jobDetail: item,
@@ -177,25 +177,25 @@ class Profile extends Component {
           appliedJob: appliedJob,
           candidateDataToUpdate: this.props.candidateDataToUpdate,
           isEditing: true,
-          mongo_id:this.props.navigation.state.params.mongo_id
+          mongo_id:this.props.navigation.state.params.mongo_id,
         });
       }
     });
   };
   render() {
-    console.log(this.props, "[[[[[[[[[[[[]]]]]]]]]]]]]]]");
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");
-    console.log(appliedJob, profileDetails, "::::::::;;;");
-
+    console.log(profileDetails, this.state.profile_picture,'profile_picture' ,this.state.imageSource,'imageSource', "::::::::;;;");
     return (
       <ScrollView overScrollMode="never">
         <ProfileView
-          onPress={() => this.onResumeAdd()}
+          onPress={() => this.onPhotoUpload()}
           candidateUploadImage={value => this.props.candidateUploadImage(value)}
           profileDetails={profileDetails}
           imageSource={this.state.imageSource}
-          profile_picture={this.props.profile_picture}
+          profile_picture={this.state.profile_picture}
+          uploading={this.state.uploading}
+
         />
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGONE /* COLOR.LGTWO */]}
@@ -210,6 +210,20 @@ class Profile extends Component {
             job_profile={this.state.job_profile}
             onChange={value => this.onChange(value)}
           />
+          <Popup
+          isVisible={this.state.isLocation}
+          onCancelPressed={this.closeLocationModal}
+          onAppPressed={this.closeLocationModal}
+          onBackButtonPressed={this.closeLocationModal}
+          options={{
+            latitude: 28.5965789,
+            longitude: 77.3287437,
+            title: 'Excellene Technologies',
+            dialogTitle: 'Excellence Technologies',
+            dialogMessage: 'Search Our Location in Map',
+            cancelText: 'Cancel'
+          }}
+        />
         </LinearGradient>
         <Modal
           isDisabled={false}

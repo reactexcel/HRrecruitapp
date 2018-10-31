@@ -16,6 +16,7 @@ import {
   Label,
   Form
 } from "native-base";
+import Permissions from 'react-native-permissions';
 import FCM,{FCMEvent} from 'react-native-fcm'
 import DeviceInfo from 'react-native-device-info';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -35,6 +36,7 @@ import {
   DocumentPickerUtil
 } from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
+var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
 import LinearGradient from "react-native-linear-gradient"; 
@@ -76,7 +78,9 @@ class AddCandidate extends Component {
       isEditing:false,
       newValue:'',
       bottomBotton:'JOIN NOW',
-      SelectJOb:''
+      SelectJOb:'',
+      isJobEmpty:true,
+      updating:false
     };
   }
 
@@ -108,7 +112,7 @@ class AddCandidate extends Component {
         this.props.change('from',this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.from);
         this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail);
         this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.mobile_no);
-        this.props.change("resume_file",null)
+        this.props.change("resume_file",[])
         
         
       }
@@ -226,7 +230,7 @@ class AddCandidate extends Component {
     );
   }
   SelectJOb=(i,title)=>{
-      this.setState({SelectJOb:title})
+      this.setState({SelectJOb:title,isJobEmpty:true})
   }
   renderJobField(props) {
     const { input, ...inputProps, } = props;
@@ -240,16 +244,16 @@ class AddCandidate extends Component {
       if (title.title == props.params.jobDetail.title){
         check = true;
       }
-      else {
-        check =false;
-      }
+    }else {
+      check =false;
     }
       return (
         <CustomButton
           btnStyle={check || props.SelectJObTitle === title.title ? _styles.jobTitleBtn:_styles.defaultJobBtn}
-          btnTextStyle={check ? _styles.checkedBtnText : _styles.uncheckedBtnText}
+          btnTextStyle={check || props.SelectJObTitle === title.title ? _styles.checkedBtnText : _styles.uncheckedBtnText} 
           key={i}
-          onPress={()=>props.SelectJOb(i,title.title)}
+          onPress={props.isEditing !==true ? console.log('no action') :
+           ()=>  props.SelectJOb(i,title.title)}
           text={title.title}
           type="rounded"
         />
@@ -261,6 +265,7 @@ class AddCandidate extends Component {
           <Text numberOfLines={1} style={[_styles.text,_styles.jobTitleText]}>
             JOB TITLE
           </Text>
+            { !props.isJobEmpty &&   <Text style={{color:'red',fontSize:12,fontFamily:'Montserrat-SemiBold',marginLeft:7}}> Please! Select Any Job</Text>}
         </View>
         <View style={_styles.jobTitleBtnView}>
           {renderJobTitle}
@@ -356,11 +361,20 @@ class AddCandidate extends Component {
         values["default_tag"] = params.jobDetail.default_id;
         values["tag_id"] = params.jobDetail.id;
         values['device_id']=this.state.fcm_token_Id,
-        values['_id']=this.props.navigation.state.params.mongo_id
+        values['_id']=this.props.navigation.state.params.mongo_id,
+        values['jobtitle']=this.state.SelectJOb
       });
+      if(this.state.SelectJOb==''){
+       this.setState({isJobEmpty:false})
+      }
+      else{
+        this.setState({updating:true})
       this.props.candidateUploadProfile(values);
+
       console.log(values,'+++++++++++++++++++++++');
-    } else {
+      }
+    } 
+    else {
       this.setState({ resumeError: "Upload your resume" });
     }
   };
@@ -386,7 +400,22 @@ class AddCandidate extends Component {
     }
   };
 
-  onResumeAdd = () => {
+  askStoragePermission = async () =>{
+    await Permissions.request('storage').then(response => {
+      console.log(response,'per storage')
+      return true;
+    })
+  }
+   onResumeAdd = async () => {
+     //response is an object mapping type to permission
+    await Permissions.checkMultiple(['location']).then(response => {
+      console.log(response,'check')
+      if(response.storage != 'authorized'){
+        this.askStoragePermission()
+      } else {
+        return true;
+      }
+    })
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });
@@ -429,6 +458,7 @@ class AddCandidate extends Component {
                   });
                 },
                 error => {
+                  console.log(error,'asdas')
                   this.setState({ converting: false });
                 }
               );
@@ -463,7 +493,7 @@ class AddCandidate extends Component {
   render() 
   {
     
-    console.log(this.props.candidate,'LLLLLLLLl');
+    console.log(this.state.SelectJOb,'LLLLLLLLl');
     // this.props.navigation.state.params.ProfileOnChange('danihsvdvsdvsdv')
   //  console.log(
   //   this.props.navigation.state.params.profileDetails.userName
@@ -471,7 +501,9 @@ class AddCandidate extends Component {
   //   this.props.navigation.state.params.appliedJob.job_profile,'SSSSSSSSSSSSS')
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
-    const { converting, resumeData, resumeError } = this.state;
+    console.log(adding,'dvsdvsdvsd');
+    
+    const { converting, resumeData, resumeError ,updating} = this.state;
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
@@ -537,6 +569,7 @@ class AddCandidate extends Component {
                   SelectJOb={(i,title)=>this.SelectJOb(i,title)}
                   SelectJObTitle={this.state.SelectJOb}
                   isEditing={this.props.navigation.state.params.isEditing}
+                  isJobEmpty={this.state.isJobEmpty}
                 />
                 <Field
                   name="resume_file"
@@ -557,7 +590,7 @@ class AddCandidate extends Component {
           </Grid>
           </Content>
           </ScrollView>
-        {adding || converting ? (
+        {adding || converting || updating ? (
           <Spinner color={COLOR.MUSTARD} />
         ) : (
           <CustomButton

@@ -6,6 +6,9 @@ import StepIndicator from "react-native-step-indicator";
 import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
 import { connect } from "react-redux";
+import {Dimensions} from 'react-native';
+const  {height, width} = Dimensions.get('window');
+const h=height/100;
 const ProfileDescription = props => {
   console.log(props.isEditing, ">>>>>>>>>>>>>>>>>");
 
@@ -156,7 +159,7 @@ const ProfileDescription = props => {
         </View>
       </ProfileBlock>
       <ProfileBlock title="EXCELLENCE TECHNOLOGIES" showBorder={false}>
-        <View style={[styles.btnView, { paddingBottom: "10%" }]}>
+        <View style={[styles.btnView, { paddingBottom:h+8+'%' }]}>
           <Button
             iconLeft
             rounded
