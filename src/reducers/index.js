@@ -11,7 +11,9 @@ import candidateRoundReducer from "./candidateRoundReducer";
 import joblist from './joblistReducer';
 import candidateAppliedJob from './candidateAppliedJob';
 import UpdateProfile from './UpdateProfile'
-
+import UploadProfilePic from './uploadProfilePic'
+import candidateProfileUpdate from './candidatePRofileUpdate';
+import candidateProfileUpdateDetails from './candidateUploadProfileDetails'
 export default combineReducers({
   form: formReducer,
   interviewSignUp: interviewReducer,
@@ -24,5 +26,8 @@ export default combineReducers({
   candidateInfo : candidateRoundReducer,
   joblist: joblist,
   appliedJob: candidateAppliedJob,
-  UpdateProfile:UpdateProfile
+  UpdateProfile:UpdateProfile,
+  UploadProfilePic:UploadProfilePic,
+  candidateProfileUpdate:candidateProfileUpdate,
+  candidateProfileUpdateDetails:candidateProfileUpdateDetails
 });

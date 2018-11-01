@@ -10,11 +10,11 @@ export default class AboutUsCarousel extends Component {
     super();
     this.state = {
       entries: [
-        { title: require("../images/teamwork.png")  },
-        { title: require("../images/teamwork.png") },
-        { title: require("../images/teamwork.png") },
-        { title: require("../images/teamwork.png") },
-        { title: require("../images/teamwork.png") }
+        { title: require("../images/FB_IMG_1540989165666.jpg")  },
+        { title: require("../images/FB_IMG_1540989205370.jpg") },
+        { title: require("../images/FB_IMG_1540989182982.jpg") },
+        { title: require("../images/FB_IMG_1540989229373.jpg") },
+        { title: require("../images/FB_IMG_1540989174091.jpg") }
       ],
       activeSlide: 0
     };
@@ -57,8 +57,9 @@ export default class AboutUsCarousel extends Component {
 
   _renderItem({ item, index }) {
     return (
-      <View>
-        <Image source={item.title}
+      <View style={{height:400,width:'100%'}}>
+        <Image style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover'
+         source={item.title}
         
         />
       </View>
@@ -96,9 +97,9 @@ export default class AboutUsCarousel extends Component {
             data={this.state.entries}
             renderItem={this._renderItem}
             sliderWidth={sliderWidth}
-            // sliderHeight={100}
+            sliderHeight={100}
             itemWidth={itemWidth}
-            // itemHeight={itemWidth}
+            itemHeight={100}
             firstItem={this.state.activeSlide}
             inactiveSlideScale={0.94}
             inactiveSlideOpacity={0.7}

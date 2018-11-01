@@ -8,37 +8,35 @@ import { Spinner } from "native-base";
 import RNFetchBlob from "rn-fetch-blob";
 
 const ProfileView = props => {
-  console.log(props,'::::');
+  console.log(props.uploading,'::::');
 
   const {
     profile_pic,
     userName,
     mobile_no,
+    addToProfilePage,
   } = props.profileDetails;
   let url;
+  let spinner;
   if(props.profile_picture ==undefined && props.imageSource ==null){
     url=profile_pic
-    console.log(url,'111');
-    
   }else if(props.imageSource !==null && props.profile_picture ==undefined){
     url=props.imageSource
-    console.log(url,'222');
   }
   else{
-    url= props.profile_picture,
-    console.log(url,'333');
-    
+    url= props.profile_picture
+  }
+  if(props.uploadStatus==undefined && props.uploading==true){
+    spinner =true
+  }
+  else{
+    spinner =false
   }
   return (
     <View style={styles.profileView}>
-      {/* await props.candidateUploadImage(resumeData) */}
-
       <Thumbnail
         large
-        // source={{
-          // uri: 
-        // }}
-        source={{uri:url/* 'https://facebook.github.io/react-native/docs/assets/favicon.png' */ /* 'https://facebook.github.io/react-native/docs/assets/favicon.png' */}}
+        source={{uri:url}}
         style={styles.thumbnail}
       />
       <Icon
@@ -49,23 +47,9 @@ const ProfileView = props => {
       />
       <Text style={styles.nameText}>{userName}</Text>
       <Text style={styles.number}>{mobile_no}</Text>
-    {props.uploading &&  <View style={{zIndex:1,position:'absolute',top:'12%'}}>
+    {spinner &&  <View style={{zIndex:1,position:'absolute',top:'12%'}}>
       <Spinner color={COLOR.MUSTARD} />
   </View> }
-      {/* <Image
-              style={
-              styles.thumbnail}
-              resizeMode='cover'
-              source={{
-                uri: 'https://www.sparklabs.com/forum/styles/comboot/theme/images/default_avatar.jpg'
-              }}
-            />
-    </PhotoUpload> */}
-      {/* <View style={{zIndex:1,position:'absolute',alignItems:'center',justifyContent:'center'}}>
-    </View>
-    <Icon name="squared-plus" type="Entypo" style={[styles.plusIcon,{marginLeft:100}]} />
-      <Text style={styles.nameText}>{userName}</Text>
-      <Text style={styles.number}>{mobile_no}</Text> */}
     </View>
   );
 };

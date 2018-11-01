@@ -52,6 +52,10 @@ import {
   CANDIDATE_UPLOAD_IMAGE_REQUEST
 } from './types';
 
+import{
+  CANDIDATE_UPDATE_PROFILE_DETAILS_SUCCESS,
+  CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE
+} from './types';
 
 
 import API_URL from "../config/dev";
@@ -330,9 +334,7 @@ export const candidateUploadImage = data => async dispatch => {
   try {
     const res = await _axios().post("/exams/uploadImage",data[0] );    
     dispatch({ type: CANDIDATE_UPLOAD_IMAGE_SUCCESS, payload: res });
-  
   console.log(res,'))))))))');
-  
   } catch (err) {
     console.log(err,'errrrrrrr',err.response);
     if (err.response.data.message) {
@@ -347,14 +349,11 @@ export const candidateUploadImage = data => async dispatch => {
 };
 
 export const candidateUploadProfile = data => async dispatch => {
-  console.log(data,"-----------------");
-  
   dispatch({ type: CANDIDATE_UPDATE_PROFILE_REQUEST });
   try {
     const res = await _axios().put("/exams/updateCandidate",data );    
     dispatch({ type: CANDIDATE_UPDATE_PROFILE_SUCCESS, payload: res });
   } catch (err) {
-    console.log(err,'errrrrrrr',err.response);
     if (err.response.data.message) {
       dispatch({
         type: CANDIDATE_UPDATE_PROFILE_FAILURE,
@@ -365,3 +364,24 @@ export const candidateUploadProfile = data => async dispatch => {
     }
   }
 };
+
+export const getCandidateUpdateProfileDetails = (_id) => async dispatch => {
+  try {
+    const res = await _axios().get(`/exam/candidateProfile?id=${_id}`);
+    dispatch({ type: CANDIDATE_UPDATE_PROFILE_DETAILS_SUCCESS, payload: res.data });
+  }
+  catch (err) {
+    if (err.message == "timeout of 10000ms exceeded") {
+      // get candidate data after updating
+      dispatch({
+        type: CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE,
+        payload: { msg: err.message }
+      });
+    } else {
+      dispatch({
+        type: CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE,
+        payload: err.response.data
+      });
+    }
+  }
+}

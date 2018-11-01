@@ -30,7 +30,7 @@ import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
 import { pageDetails, candidatePageDetails } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
-import { getCandidateJobDetails, getCandidateDetails } from "../actions";
+import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 import SplashScreen from "react-native-splash-screen";
 import FCM from "react-native-fcm";
@@ -52,7 +52,8 @@ class HomePage extends Component {
       opacity: 0,
       sender_mail:'',
       mongo_id:'',
-      profile_picture:''
+      profile_picture:'',
+      latestImage:null
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -74,34 +75,41 @@ class HomePage extends Component {
     return null;
   }
   setCandidateProfile = async () => {
-    const candidateJob = await getItem("mongo_id");
     const mongo_id = await getItem("mongo_id");
-    console.log(mongo_id,'OOOOOOOOOOO');
+    console.log(mongo_id,'??');
     if(mongo_id !==''){
       this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
       })
     }
+  await this.props.getCandidateUpdateProfileDetails(this.state.mongo_id)
+    const candidateJob = await getItem("mongo_id");
     if (candidateJob) {
       this.props.UploadProfile(candidateJob)
-    this.setState({mongo_id:candidateJob.candidate.data._id})
-      let email = candidateJob.candidate.data.sender_mail;
-      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
-      let mobile_no = candidateJob.candidate.data.mobile_no;
-      let userName = candidateJob.candidate.data.from;
-      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      this.setState({
-        candidateJob,
-        profile_pic,
-        userName,
-        mobile_no,
-        linkOpening: false,
-        notification: "",
-        sender_mail:candidateJob.candidate.data.sender_mail
-      });
-    } else {
+      this.setState({mongo_id:candidateJob.candidate.data._id})
+        let email = candidateJob.candidate.data.sender_mail;
+        let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+        let mobile_no = candidateJob.candidate.data.mobile_no;
+        let userName = candidateJob.candidate.data.from;
+        await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        this.setState({
+          candidateJob,
+          profile_pic,
+          userName,
+          mobile_no,
+          linkOpening: false,
+          notification: "",
+          sender_mail:candidateJob.candidate.data.sender_mail,
+        });
+        console.log(this.props.candidateProfileUpdateDetails.profilePicture)
+      }
+      // else if(this.props.candidateProfileUpdateDetails.profilePicture !==undefined){
+      //   this.setState({latestImage:this.props.candidateProfileUpdateDetails.profilePicture})
+      // }
+      
+    else {
       this.setState({ linkOpening: false });
     }
-  };
+}
   async handleViewClick(data) {
     const { appliedJob } = this.props;
     if (data == "JobList" && this.state.candidateJob) {
@@ -121,7 +129,8 @@ class HomePage extends Component {
         profileDetails,
         sender_mail:this.state.sender_mail,
         mongo_id:this.state.mongo_id,
-        profile_picture:this.state.profile_picture
+        profile_picture:this.state.profile_picture,
+        latestImage:this.props.candidateProfileUpdateDetails.profilePicture
       });
     } else {
       this.props.navigation.navigate(data, { title: "Job Openings" });
@@ -129,21 +138,20 @@ class HomePage extends Component {
   }
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      console.log(response,'per storage')
     })
   }
   componentDidMount = async () => {
-    // const mongo_id = await getItem("mongo_id");
-    //response is an object mapping type to permission
+    this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
+   
+    )
     Permissions.checkMultiple(['location']).then(response => {
-      console.log(response,'check')
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       }
     })
+    const candidateJob = await getItem("mongo_id");
+    console.log(candidateJob,'MMMMMMMM');
     const mongo_id = await getItem("mongo_id");
-    console.log(mongo_id,"oooooooooooooooooooo");
-    
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
     if (appIntro !== undefined && appIntro.shown) {
@@ -170,21 +178,14 @@ class HomePage extends Component {
         this.setState({ notification: "", opacity: 0 });
       }
     }
-    // if(mongo_id !==''){
-    //   this.setState({profile_picture:mongo_id.candidate.data.profilePicture
-    //   })
-    //   console.log(mongo_id,">>>");
-      
-    // }
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
-    if (applied) {
+    if (applied  ) {
       await this.setCandidateProfile();
-      this.props.navigation.setParams({ applied: false });
+      this.props.navigation.setParams({ applied: false});
     }
   };
-
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
   }
@@ -198,14 +199,12 @@ class HomePage extends Component {
     this.setState({ textColor: false });
   };
   render() {
-    console.log(this.state.profile_picture,"vsasvasv");
-    
     let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
       : require("../images/profilepic.png");
     let userNames = userName ? userName : "";
-    const details = this.state.candidateJob
+    const details = this.state.candidateJob 
       ? candidatePageDetails
       : pageDetails;
     let renderCustomView = details.map((data, k) => {
@@ -297,19 +296,10 @@ const mapStateToProps = state => {
   state_data: state,
   appliedJob: state.appliedJob,
   interviewSignUp: state.interviewSignUp,
-  // state_data: state
+  candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
   }};
 
-  // const mapDispatchToProps = dispatch => {
-  //   return {
-  //     getCandidateJobDetails: value => dispatch(getCandidateJobDetails(value)),
-  //     getCandidateDetails: (v) => dispatch(getCandidateDetails(v)),
-  //     ProfileOnChange: value => dispatch(ProfileOnChange(value)),
-  //     UploadProfile: (v) => dispatch(UploadProfile(v))
-  //   };
-  // };
 export default connect(
   mapStateToProps,
-  // mapDispatchToProps
-  { getCandidateJobDetails, getCandidateDetails, ProfileOnChange,UploadProfile}
+  { getCandidateJobDetails, getCandidateDetails, ProfileOnChange,UploadProfile,getCandidateUpdateProfileDetails}
 )(HomePage);

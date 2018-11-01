@@ -29,7 +29,7 @@ import _styles from "../styles/screens/AddCandidate";
 import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
-import { addCandidate,candidateUploadImage,candidateUploadProfile} from "../actions";
+import { addCandidate,candidateUploadImage,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails} from "../actions";
 import { getJobLists } from "../actions";
 import {
   DocumentPicker,
@@ -71,7 +71,7 @@ class AddCandidate extends Component {
       deviceId:null,
       whenAddedResume:false,
         from:'',
-      mobile_no:'',
+      // mobile_no:'',
       sender_mail:'',
       job_profile:'',
       name:'',
@@ -80,7 +80,23 @@ class AddCandidate extends Component {
       bottomBotton:'JOIN NOW',
       SelectJOb:'',
       isJobEmpty:true,
-      updating:false
+      updating:false,
+      Updated:true,
+      userName: null,
+      mobile_no: null,
+      textColor: false,
+      animation: false,
+      linkOpening: false,
+      candidateJob: null,
+      profile_pic: null,
+      profile_picture:'',
+      jobId:'',
+      mongo_id:'',
+      updateData:false,
+      addToProfilePage:true,
+      freshDate:''
+
+  
     };
   }
 
@@ -103,18 +119,12 @@ class AddCandidate extends Component {
   //  console.log(this.props.navigation.state.params.appliedJob.job_profile
   //   ,this.props.navigation.state.params.profileDetails.userName,this.props.navigation.state.params.profileDetails.mobile_no ,'hhhhhhhhhhhhhhhhhhhhh');
   componentDidMount(){
-    // const aa='dddd'
     if(this.props.navigation.state.params.isEditing==true){
-      this.setState({bottomBotton:'UPDATE'/* , from: this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.from,
-        sender_mail: this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail,
-        mobile_no: this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.mobile_no */})
-
-        this.props.change('from',this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.from);
-        this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail);
-        this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.mobile_no);
+      this.setState({bottomBotton:'UPDATE'})
+        this.props.change('from',this.props.navigation.state.params.candidateDataToUpdate.candidate.data.from);
+        this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.sender_mail);
+        this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.mobile_no);
         this.props.change("resume_file",[])
-        
-        
       }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
@@ -140,12 +150,55 @@ class AddCandidate extends Component {
         }
       }
     });
-    
   }
+
+  setCandidateProfile = async () => {
+    const candidateJob = await getItem("mongo_id");
+    this.setState({freshDate:candidateJob})
+    console.log(candidateJob,'hey');
+    if (this.state.freshDate !=='') {
+    console.log(this.state.freshDate,'tey');
+      this.setState({mongo_id:this.state.freshDate.candidate.data._id,profile_picture:this.state.freshDate.candidate.data.profilePicture})
+        let email = this.state.freshDate.candidate.data.sender_mail;
+        let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+        let mobile_no = this.state.freshDate.candidate.data.mobile_no;
+        let userName = this.state.freshDate.candidate.data.from;
+        let candidateJobb=this.state.freshDate
+        await this.props.getCandidateJobDetails(this.state.freshDate.candidate.data._id);
+        this.setState({
+          candidateJobb,
+          profile_pic,
+          userName,
+          mobile_no,
+          linkOpening: false,
+          notification: "",
+          sender_mail:this.state.freshDate.candidate.data.sender_mail
+        });
+        const { appliedJob } = this.props;
+        console.log(appliedJob,this.state.freshDate,'joblist');
+        const {
+          linkOpening,
+          textColor,
+          candidateJob,
+          ...profileDetails
+        } = this.state;
+            console.log(profileDetails,appliedJob,'profileDATA');
+                this.props.navigation.navigate("Profile", {
+                  appliedJob,
+                  profileDetails,
+                  sender_mail:this.state.sender_mail,
+                  mongo_id:this.state.mongo_id,
+                  profile_picture:this.state.profile_picture
+                });
+                this.setState({updating:false})
+      }
+}
+
   componentDidUpdate() {
-    const { candidate } = this.props;
-    if (candidate.data !== undefined) {
-      if (candidate.data.candidate_status === true && this.props.navigation.state.params.isEditing ==false) {
+    const { candidate ,candidateProfileUpdateDetails} = this.props;
+    console.log(candidateProfileUpdateDetails,'newData');
+    if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false) {
+      if (candidate.data.candidate_status === true ) {
         setItem("mongo_id", JSON.stringify({ candidate }));
         Alert.alert(
           "Thank You",
@@ -154,20 +207,24 @@ class AddCandidate extends Component {
             {
               text: "OK",
               onPress: () =>
-                this.props.navigation.navigate("HomePage", {
-                  applied: true
-                })
+              this.props.navigation.navigate("HomePage", {
+                applied: true
+              })
             }
           ],
           { cancelable: false }
         );
       }
-      // else if(candidate == true){
-      //   this.props.navigation.navigate("HomePage", {
-      //     applied: true
-      //   })
-      // }
     }
+      else if(this.state.updateData==true){
+        console.log(candidate,'sadas')
+        if(candidate.data.candidate_status === true){
+        setItem("mongo_id", JSON.stringify({ candidate }))
+        this.setCandidateProfile();
+         this.setState({updateData:false})
+        }
+      }
+
     const { success, msg } = this.props.candidate;
     if (success !== undefined && msg !== undefined) {
       if (success === false) {
@@ -212,12 +269,11 @@ class AddCandidate extends Component {
           <Input
             style={styles.inputText}
             {...inputProps}
-            onChangeText={/* isEditing==true ? (e,a)=> props.onChangeText(e,a) : */ input.onChange
+            onChangeText={ input.onChange
             }
-            // editable={name =='sender_mail' ? true :false}
             onBlur={input.onBlur}
             onFocus={input.onFocus}
-            value={/* newValue !=='' ? newValue : */ input.value}
+            value={input.value}
             placeholderTextColor={COLOR.WHITE}
             selectionColor={COLOR.LTONE}
             underlineColorAndroid={underLineColor}
@@ -229,8 +285,8 @@ class AddCandidate extends Component {
       </Fragment>
     );
   }
-  SelectJOb=(i,title)=>{
-      this.setState({SelectJOb:title,isJobEmpty:true})
+  SelectJOb=(i,title,id)=>{
+      this.setState({SelectJOb:title,isJobEmpty:true,jobId:id})
   }
   renderJobField(props) {
     const { input, ...inputProps, } = props;
@@ -253,7 +309,7 @@ class AddCandidate extends Component {
           btnTextStyle={check || props.SelectJObTitle === title.title ? _styles.checkedBtnText : _styles.uncheckedBtnText} 
           key={i}
           onPress={props.isEditing !==true ? console.log('no action') :
-           ()=>  props.SelectJOb(i,title.title)}
+           ()=>  props.SelectJOb(i,title.title,title.id)}
           text={title.title}
           type="rounded"
         />
@@ -349,7 +405,8 @@ class AddCandidate extends Component {
 
   onUpdate = async values => {
     if(!__DEV__){
-      values.source = 'MobileApp'
+      values.source = 'MobileApp',
+      values.sender_mail=this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail
     }
     const { params } = this.props.navigation.state;
     values["fileNames"] = [];
@@ -359,7 +416,7 @@ class AddCandidate extends Component {
         values["extention"] = data.filetype;
         values["fileNames"].push(`file${i + 1}`);
         values["default_tag"] = params.jobDetail.default_id;
-        values["tag_id"] = params.jobDetail.id;
+        values["tag_id"] = this.state.jobId;
         values['device_id']=this.state.fcm_token_Id,
         values['_id']=this.props.navigation.state.params.mongo_id,
         values['jobtitle']=this.state.SelectJOb
@@ -369,9 +426,13 @@ class AddCandidate extends Component {
       }
       else{
         this.setState({updating:true})
-      this.props.candidateUploadProfile(values);
+    await this.props.addCandidate(values)
+      this.setState({updateData:true})
 
-      console.log(values,'+++++++++++++++++++++++');
+    /* .then(()=>{
+      
+    }) */
+    /* this.props.getCandidateUpdateProfileDetails(this.props.navigation.state.params.mongo_id) */
       }
     } 
     else {
@@ -492,8 +553,10 @@ class AddCandidate extends Component {
   }
   render() 
   {
+    console.log(this.state.updateData,'DAAATTAA');
     
-    console.log(this.state.SelectJOb,'LLLLLLLLl');
+    // console.log(this.state.updating,this.props.navigation.state.params.mongo_id,this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail,'DD');
+    
     // this.props.navigation.state.params.ProfileOnChange('danihsvdvsdvsdv')
   //  console.log(
   //   this.props.navigation.state.params.profileDetails.userName
@@ -502,7 +565,6 @@ class AddCandidate extends Component {
     const { handleSubmit } = this.props;
     const { adding } = this.props.candidate;
     console.log(adding,'dvsdvsdvsd');
-    
     const { converting, resumeData, resumeError ,updating} = this.state;
     return (
       <Container style={styles.container}>
@@ -530,16 +592,13 @@ class AddCandidate extends Component {
             <Row>
               <View style={styles.blockView}>
                 <Form onSubmit={handleSubmit(this.handleSubmit)}>
-                <Field
+             {this.props.navigation.state.params.isEditing !==true &&  <Field
                   name="sender_mail"
                   labelName="EMAIL"
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
-                  // onChangeText={(e)=>this.onChangee(e,'sender_mail')}
-                  // newValue={this.state.sender_mail !=='' ? this.state.sender_mail :''}
-                  // isEditing={this.props.navigation.state.params.isEditing}
-                />
+                />}
                <Field
                   name="from"
                   labelName="NAME"
@@ -566,7 +625,7 @@ class AddCandidate extends Component {
                   component={this.renderJobField}
                   keyboardType="numeric"
                   params={this.props.navigation.state.params}
-                  SelectJOb={(i,title)=>this.SelectJOb(i,title)}
+                  SelectJOb={(i,title,id)=>this.SelectJOb(i,title,id)}
                   SelectJObTitle={this.state.SelectJOb}
                   isEditing={this.props.navigation.state.params.isEditing}
                   isJobEmpty={this.state.isJobEmpty}
@@ -628,7 +687,14 @@ validate = values => {
   return errors;
 };
 
-const mapStateToProps = ({ candidate }) => ({ candidate });
+const mapStateToProps = (state ) =>{
+  console.log(state,'77');
+ return{
+ candidate:state.candidate,
+ appliedJob:state.appliedJob,
+ candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
+};
+}
 export default reduxForm({
   form: "AddCandidate",
   validate,
@@ -637,6 +703,6 @@ export default reduxForm({
 })(
   connect(
     mapStateToProps,
-    {addCandidate,UploadProfile,candidateUploadProfile}
+    {addCandidate,UploadProfile,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails}
   )(AddCandidate)
 );
