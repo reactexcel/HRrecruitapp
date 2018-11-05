@@ -90,7 +90,8 @@ class JobList extends Component {
     this.props.navigation.navigate("AddCandidate", {
       jobDetail: item,
       currentJob: this.state.joblist,
-      isEditing:false
+      isEditing:false,
+      addCandidate:true
     });
   };
   onCancel() {
@@ -151,7 +152,7 @@ class JobList extends Component {
     );
   };
   render() {
-    console.log(this.props,'////////////////////////////');
+    // console.log(this.props,'////////////////////////////');
     
     const {
       joblist,

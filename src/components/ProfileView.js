@@ -2,14 +2,12 @@ import React from "react";
 import { View, Text, Thumbnail, Icon, Item } from "native-base";
 import styles from "../styles/components/ProfileView";
 import PhotoUpload from "react-native-photo-upload";
-import { Image } from "react-native";
+import { Image,Animated,TouchableOpacity } from "react-native";
 import { COLOR } from "../styles/color";
 import { Spinner } from "native-base";
 import RNFetchBlob from "rn-fetch-blob";
 
 const ProfileView = props => {
-  console.log(props.uploading,'::::');
-
   const {
     profile_pic,
     userName,
@@ -26,11 +24,12 @@ const ProfileView = props => {
   else{
     url= props.profile_picture
   }
+
   if(props.uploadStatus==undefined && props.uploading==true){
     spinner =true
   }
   else{
-    spinner =false
+      spinner =false
   }
   return (
     <View style={styles.profileView}>
@@ -39,17 +38,22 @@ const ProfileView = props => {
         source={{uri:url}}
         style={styles.thumbnail}
       />
+      {/* <TouchableOpacity  style={styles.plusIcon} onPress={() => props.onPress()} > */}
       <Icon
         onPress={() => props.onPress()}
         name="squared-plus"
         type="Entypo"
         style={styles.plusIcon}
       />
+      {/* </TouchableOpacity> */}
       <Text style={styles.nameText}>{userName}</Text>
       <Text style={styles.number}>{mobile_no}</Text>
     {spinner &&  <View style={{zIndex:1,position:'absolute',top:'12%'}}>
       <Spinner color={COLOR.MUSTARD} />
   </View> }
+ <Animated.View style={[{opacity:props.fadeAnim} , {zIndex:1,position:'absolute',top:'30%',left:'40%',width:130,height:25}]}>
+    <Text>Uploaded</Text>
+   </Animated.View>
     </View>
   );
 };

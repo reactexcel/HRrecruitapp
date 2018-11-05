@@ -70,8 +70,7 @@ class AddCandidate extends Component {
       fcm_token_Id:null,
       deviceId:null,
       whenAddedResume:false,
-        from:'',
-      // mobile_no:'',
+      from:'',
       sender_mail:'',
       job_profile:'',
       name:'',
@@ -94,7 +93,9 @@ class AddCandidate extends Component {
       mongo_id:'',
       updateData:false,
       addToProfilePage:true,
-      freshDate:''
+      freshDate:'',
+      adding:false,
+      haveData:false
 
   
     };
@@ -155,9 +156,7 @@ class AddCandidate extends Component {
   setCandidateProfile = async () => {
     const candidateJob = await getItem("mongo_id");
     this.setState({freshDate:candidateJob})
-    console.log(candidateJob,'hey');
     if (this.state.freshDate !=='') {
-    console.log(this.state.freshDate,'tey');
       this.setState({mongo_id:this.state.freshDate.candidate.data._id,profile_picture:this.state.freshDate.candidate.data.profilePicture})
         let email = this.state.freshDate.candidate.data.sender_mail;
         let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
@@ -175,31 +174,49 @@ class AddCandidate extends Component {
           sender_mail:this.state.freshDate.candidate.data.sender_mail
         });
         const { appliedJob } = this.props;
-        console.log(appliedJob,this.state.freshDate,'joblist');
         const {
           linkOpening,
           textColor,
           candidateJob,
           ...profileDetails
         } = this.state;
-            console.log(profileDetails,appliedJob,'profileDATA');
-                this.props.navigation.navigate("Profile", {
-                  appliedJob,
-                  profileDetails,
-                  sender_mail:this.state.sender_mail,
-                  mongo_id:this.state.mongo_id,
-                  profile_picture:this.state.profile_picture
-                });
+                // this.props.navigation.navigate("Profile", {
+                //   appliedJob,
+                //   profileDetails,
+                //   sender_mail:this.state.sender_mail,
+                //   mongo_id:this.state.mongo_id,
+                //   profile_picture:this.state.profile_picture
+                // });
                 this.setState({updating:false})
+                Alert.alert(
+                  "Thank You",
+                  "Your profile has updated successfully!",
+                  [
+                    {
+                      text: "OK",
+                      onPress: () =>
+                      this.props.navigation.navigate("Profile", {
+                        appliedJob,
+                        profileDetails,
+                        sender_mail:this.state.sender_mail,
+                        mongo_id:this.state.mongo_id,
+                        profile_picture:this.state.profile_picture
+                      })
+                    }
+                  ]
+                );
       }
 }
 
   componentDidUpdate() {
-    const { candidate ,candidateProfileUpdateDetails} = this.props;
-    console.log(candidateProfileUpdateDetails,'newData');
-    if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false) {
+    const { candidate} = this.props;
+    if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false && this.props.navigation.state.params.addCandidate ==true) {
       if (candidate.data.candidate_status === true ) {
         setItem("mongo_id", JSON.stringify({ candidate }));
+        this.props.navigation.setParams({ addCandidate: false});
+        if(this.state.haveData==true){
+      this.setState({adding:false,haveData:false})
+        }
         Alert.alert(
           "Thank You",
           "Wait for the confirmation of your registration from HR.",
@@ -217,7 +234,6 @@ class AddCandidate extends Component {
       }
     }
       else if(this.state.updateData==true){
-        console.log(candidate,'sadas')
         if(candidate.data.candidate_status === true){
         setItem("mongo_id", JSON.stringify({ candidate }))
         this.setCandidateProfile();
@@ -405,8 +421,8 @@ class AddCandidate extends Component {
 
   onUpdate = async values => {
     if(!__DEV__){
-      values.source = 'MobileApp',
-      values.sender_mail=this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail
+      values.source = 'MobileApp'
+      values.sender_mail=this.props.navigation.state.params.candidateDataToUpdate.candidate.data.sender_mail
     }
     const { params } = this.props.navigation.state;
     values["fileNames"] = [];
@@ -455,6 +471,7 @@ class AddCandidate extends Component {
         values["tag_id"] = params.jobDetail.id;
         values['device_id']=this.state.fcm_token_Id
       });
+      this.setState({adding:true,haveData:true})
       this.props.addCandidate(values);
     } else {
       this.setState({ resumeError: "Upload your resume" });
@@ -463,7 +480,7 @@ class AddCandidate extends Component {
 
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      console.log(response,'per storage')
+      // console.log(response,'per storage')
       return true;
     })
   }
@@ -519,7 +536,7 @@ class AddCandidate extends Component {
                   });
                 },
                 error => {
-                  console.log(error,'asdas')
+                  // console.log(error,'asdas')
                   this.setState({ converting: false });
                 }
               );
@@ -553,19 +570,11 @@ class AddCandidate extends Component {
   }
   render() 
   {
-    console.log(this.state.updateData,'DAAATTAA');
-    
-    // console.log(this.state.updating,this.props.navigation.state.params.mongo_id,this.props.navigation.state.params.candidateDataToUpdate.candidateJob.payload.candidate.data.sender_mail,'DD');
-    
-    // this.props.navigation.state.params.ProfileOnChange('danihsvdvsdvsdv')
-  //  console.log(
-  //   this.props.navigation.state.params.profileDetails.userName
-  //   ,this.props.navigation.state.params.profileDetails.mobile_no,
-  //   this.props.navigation.state.params.appliedJob.job_profile,'SSSSSSSSSSSSS')
     const { handleSubmit } = this.props;
-    const { adding } = this.props.candidate;
-    console.log(adding,'dvsdvsdvsd');
-    const { converting, resumeData, resumeError ,updating} = this.state;
+    // const { adding } = this.props.candidate;
+    const { converting, resumeData, resumeError ,updating,adding} = this.state;
+    console.log(adding,'adding');
+    
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
@@ -666,7 +675,7 @@ class AddCandidate extends Component {
   }
 }
 validate = values => {
-  console.log(values,'validate');
+  // console.log(values,'validate');
   
   const errors = {};
   if (!values.from) {
@@ -688,7 +697,7 @@ validate = values => {
 };
 
 const mapStateToProps = (state ) =>{
-  console.log(state,'77');
+  // console.log(state,'77');
  return{
  candidate:state.candidate,
  appliedJob:state.appliedJob,

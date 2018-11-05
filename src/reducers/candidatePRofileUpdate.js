@@ -8,7 +8,7 @@ import {
      };
      
      export default function(state = initialState, action) {
-         console.log(state,action,'KKKKKKKKKKKKKKk');
+        //  console.log(state,action,'KKKKKKKKKKKKKKk');
        switch (action.type) {
          case CANDIDATE_UPDATE_PROFILE_REQUEST:
            return { state };

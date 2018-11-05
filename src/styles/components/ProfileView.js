@@ -26,5 +26,11 @@ export default StyleSheet.create({
     position: "absolute",
     top: "25%",
     right: "25%"
+  },
+  plusIconN: {
+    color: COLOR.PINK,
+    // position: "absolute",
+    // top: "25%",
+    // right: "25%"
   }
 });

@@ -5,7 +5,8 @@ import {
   Linking,
   StatusBar,
   ScrollView,
-  View
+  View,
+  Animated
 } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../styles/color";
@@ -27,7 +28,6 @@ import {
 } from "react-native-document-picker";
 import SplashScreen from "react-native-splash-screen";
 import RNFetchBlob from "rn-fetch-blob";
-// import { getJobLists } from "../actions";
 import { Popup } from 'react-native-map-link';
 import { setItem, getItem } from "../helper/storage";
 
@@ -56,12 +56,6 @@ class Profile extends Component {
             style={{ color: COLOR.PINK, marginRight: 10, fontSize: 25 }}
           />
         </TouchableOpacity>
-        /* <Icon
-      onPress={navigation.getParam('increaseCount')}
-        name="add-circle"
-        type="MaterialIcons"
-        style={{ color: COLOR.PINK, marginRight: 10, fontSize: 25 }}
-      /> */
       )
     };
   };
@@ -85,7 +79,9 @@ class Profile extends Component {
       resumeData:[],
       profile_picture:'',
       uploading :false,
-      catch:false
+      catch:false,
+      updateMessage:false,
+      fadeAnim: new Animated.Value(0),
     };
   }
   componentDidMount = async () => {
@@ -98,9 +94,19 @@ class Profile extends Component {
       this.setState({ joblist: data });
     }
   };
+  ImageUpdatedPopUp=()=>{
+    console.log('updated message');
+    
+    // Animated.timing(  
+    //   this.state.fadeAnim,           
+    //   {
+    //     toValue: 1,             
+    //     duration: 1000,
+    //   }
+    // ).start();  
+  }
   onPhotoUpload = () => {
     let resumeData = this.state.resumeData;
-    this.setState({profile_picture:undefined})
     if (Platform.OS !== "ios") {
       //Android Only
       DocumentPicker.show(
@@ -109,20 +115,32 @@ class Profile extends Component {
         },
         async(error, res) => {
           SplashScreen.hide();
-          this.setState({imageSource:res.uri,uploading:true,catch:true})
           if (res) {
             let check = true;
             if (check) {
               let type = res.type.split("/");
-              const data = await RNFetchBlob.fs.readFile(res.uri, "base64");
-                resumeData.push({
-                  fileName: res.fileName,
-                  file: data,
-                  mongo_id:this.props.navigation.state.params.mongo_id
-                });
+              const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
+                let base64 = require('base-64');
+                let decodedData = base64.decode(data);
+                let bytes = decodedData.length;
+                let fileSizeInMB=(bytes / 1000000)
+                if(fileSizeInMB > .8 ){
+                  alert("Image size can't exceed 800KB");
+                }
+                else if(fileSizeInMB <.03){
+                  alert("Image size can't be less than 30KB")
+                }
+                else{ 
+                  resumeData.push({
+                    fileName: res.fileName,
+                    file: data,
+                    mongo_id:this.props.navigation.state.params.mongo_id
+                  });
+                  this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
+                  this.props.candidateUploadImage(resumeData)
+              }
             }
           }
-            this.props.candidateUploadImage(resumeData)
         }
       );
     }
@@ -158,7 +176,7 @@ class Profile extends Component {
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");
     const candidateJob =await getItem("mongo_id");
-    console.log(candidateJob);
+    // console.log(candidateJob);
     this.state.joblist.forEach((item, i) => {
       if (item.title == appliedJob.job_profile) {
         this.props.navigation.navigate("AddCandidate", {
@@ -169,13 +187,19 @@ class Profile extends Component {
           candidateDataToUpdate:candidateJob,
           isEditing: true,
           mongo_id:this.props.navigation.state.params.mongo_id,
-          updatedData:true
+          updatedData:true,
+          addCandidate:false
         });
       }
     });
   };
+// componentDidUpdate(){
+//   if(this.props.state.UploadProfilePic.data !==undefined && this.state.uploading ==true){
+//     this.setState({uploading:false})
+//   }
+// }
   render() {
-    console.log(this.props,'profile');
+    console.log(this.state.uploading,'profile');
     
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");
@@ -183,13 +207,15 @@ class Profile extends Component {
       <ScrollView overScrollMode="never">
         <ProfileView
           onPress={() => this.onPhotoUpload()}
-          candidateUploadImage={value => this.props.candidateUploadImage(value)}
           profileDetails={profileDetails}
           imageSource={this.state.imageSource}
           profile_picture={this.state.profile_picture}
           uploading={this.state.uploading}
           uploadStatus={this.props.state.UploadProfilePic.data}
           latestImage={this.state.latestImage}
+          updateMessage={this.state.updateMessage}
+          // ImageUpdatedPopUp={()=>this.ImageUpdatedPopUp()}
+          fadeAnim={this.state.fadeAnim}
         />
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGONE /* COLOR.LGTWO */]}
@@ -232,7 +258,7 @@ class Profile extends Component {
             style={{
               width: "100%",
               height: "100%",
-              backgroundColor: [COLOR.LGONE, COLOR.LGONE]
+              backgroundColor:[COLOR.LGONE,COLOR.LGONE]
             }}
           >
             <View
@@ -368,7 +394,7 @@ class Profile extends Component {
   }
 }
 const mapStateToProps = state => {
-  console.log(state, "ddddddddddddddd");
+  // console.log(state, "ddddddddddddddd");
   return {
     joblist: state.joblist,
     state:state,

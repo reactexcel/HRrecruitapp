@@ -10,7 +10,6 @@ import {Dimensions} from 'react-native';
 const  {height, width} = Dimensions.get('window');
 const h=height/100;
 const ProfileDescription = props => {
-  console.log(props.isEditing, ">>>>>>>>>>>>>>>>>");
 
   const labels = [
     "CV Sent",

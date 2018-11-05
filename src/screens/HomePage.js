@@ -76,8 +76,7 @@ class HomePage extends Component {
   }
   setCandidateProfile = async () => {
     const mongo_id = await getItem("mongo_id");
-    console.log(mongo_id,'??');
-    if(mongo_id !==''){
+    if(mongo_id){
       this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
       })
     }
@@ -100,7 +99,6 @@ class HomePage extends Component {
           notification: "",
           sender_mail:candidateJob.candidate.data.sender_mail,
         });
-        console.log(this.props.candidateProfileUpdateDetails.profilePicture)
       }
       // else if(this.props.candidateProfileUpdateDetails.profilePicture !==undefined){
       //   this.setState({latestImage:this.props.candidateProfileUpdateDetails.profilePicture})
@@ -142,7 +140,6 @@ class HomePage extends Component {
   }
   componentDidMount = async () => {
     this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
-   
     )
     Permissions.checkMultiple(['location']).then(response => {
       if(response.storage != 'authorized'){
@@ -150,7 +147,7 @@ class HomePage extends Component {
       }
     })
     const candidateJob = await getItem("mongo_id");
-    console.log(candidateJob,'MMMMMMMM');
+    // console.log(candidateJob,'MMMMMMMM');
     const mongo_id = await getItem("mongo_id");
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
@@ -181,7 +178,7 @@ class HomePage extends Component {
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
-    if (applied  ) {
+    if (applied ) {
       await this.setCandidateProfile();
       this.props.navigation.setParams({ applied: false});
     }
@@ -291,7 +288,7 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state,'llllllllllllllllllllllllll');
+  // console.log(state,'llllllllllllllllllllllllll');
   return {
   state_data: state,
   appliedJob: state.appliedJob,

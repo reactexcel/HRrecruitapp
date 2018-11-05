@@ -8,13 +8,13 @@ const initialState = {
   };
 
   const toGetData = (state=initialState, action) => {
-      console.log(action,'+++++++++++++++++++++++++++++++++++++');
+      // console.log(action,'+++++++++++++++++++++++++++++++++++++');
     return update(state, {
       candidateJob: { $set: action}
     });
   };
   const onChange = (state=initialState, action) => {
-    console.log(state,action.payload,'#############################');
+    // console.log(state,action.payload,'#############################');
   return update(state, {
     candidateJob:{payload:{candidate:{data:{mobile_no:{$set:action.payload}}}}}
   });

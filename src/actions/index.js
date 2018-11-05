@@ -142,7 +142,7 @@ export const addCandidate = data => async dispatch => {
   dispatch({ type: ADD_CANDIDATE_REQUEST });
   try {
     const res = await _axios().post("exams/addCandidateWithBase64File", {...data});    
-    console.log(res,'fffffffffffffffffffffff');
+    // console.log(res,'fffffffffffffffffffffff');
     dispatch({ type: ADD_CANDIDATE_SUCCESS, payload: res });
   }
   catch (err) {
@@ -285,11 +285,11 @@ export const getCandidateRoundDetails = fb_id => async dispatch => {
 };
 
 export const getJobLists = () => async dispatch => {
-  console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
+  // console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
   
   try {
     const res = await _axios().get(`tag/jobProfile`);
-    console.log(res,'JJJJJJJJJJJJJJJJJJJJJJJJJJ');
+    // console.log(res,'JJJJJJJJJJJJJJJJJJJJJJJJJJ');
     
     dispatch({ type: GET_JOBLIST_SUCCESS, payload: res.data });
   } catch (err) {
@@ -334,7 +334,6 @@ export const candidateUploadImage = data => async dispatch => {
   try {
     const res = await _axios().post("/exams/uploadImage",data[0] );    
     dispatch({ type: CANDIDATE_UPLOAD_IMAGE_SUCCESS, payload: res });
-  console.log(res,'))))))))');
   } catch (err) {
     console.log(err,'errrrrrrr',err.response);
     if (err.response.data.message) {
