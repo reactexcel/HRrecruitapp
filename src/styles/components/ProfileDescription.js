@@ -14,8 +14,11 @@ export default StyleSheet.create({
   aboutBtn: {
     backgroundColor: "transparent",
     marginHorizontal: 10,
-    borderWidth:1.5,
-    borderColor:'#303d6b'
+    borderWidth:4,
+    borderColor:'rgba(52, 66, 116, 1)',
+    shadowOffset: { height: 0, width: 0 },
+    shadowOpacity: 0,
+    elevation:0
   },
   btnText: {
     fontFamily: "Montserrat-SemiBold"

@@ -38,14 +38,14 @@ const ProfileView = props => {
         source={{uri:url}}
         style={styles.thumbnail}
       />
-      {/* <TouchableOpacity  style={styles.plusIcon} onPress={() => props.onPress()} > */}
+      <TouchableOpacity  style={styles.plusIcon} hitSlop={{top: 12, bottom: 12, left: 12, right: 12}} onPress={() => props.onPress()} >
       <Icon
-        onPress={() => props.onPress()}
+        // onPress={() => props.onPress()}
         name="squared-plus"
         type="Entypo"
-        style={styles.plusIcon}
+        style={styles.plusIconN}
       />
-      {/* </TouchableOpacity> */}
+      </TouchableOpacity>
       <Text style={styles.nameText}>{userName}</Text>
       <Text style={styles.number}>{mobile_no}</Text>
     {spinner &&  <View style={{zIndex:1,position:'absolute',top:'12%'}}>

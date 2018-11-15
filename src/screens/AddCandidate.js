@@ -95,7 +95,8 @@ class AddCandidate extends Component {
       addToProfilePage:true,
       freshDate:'',
       adding:false,
-      haveData:false
+      haveData:false,
+      resumeUpdate:''
 
   
     };
@@ -126,6 +127,10 @@ class AddCandidate extends Component {
         this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.sender_mail);
         this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.mobile_no);
         this.props.change("resume_file",[])
+        this.setState({SelectJOb:this.props.appliedJob.job_profile,resumeUpdate:'no',jobId:this.props.navigation.state.params.jobDetail.id
+      })
+      }else{
+        this.setState({resumeUpdate:'yes'})
       }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
@@ -377,9 +382,12 @@ class AddCandidate extends Component {
   }
   renderButtonField(props) {
     const { onPress, resumeError, input, onClosePress } = props;
+    if(props.forEditing ==true){
+
+    }
     const resumeContainer = input.map((data, i) => {
       return (
-        <View key={i} style={_styles.uploadSection}>
+          <View key={i} style={_styles.uploadSection}>
           <Text numberOfLines={1} style={_styles.fileName}>
             {data.fileName}
           </Text>
@@ -397,6 +405,25 @@ class AddCandidate extends Component {
     });
     return (
       <Fragment>
+       {props.forEditing ==true && 
+       <View style={{marginTop:-30,marginLeft:10,flex:1,flexDirection:'row'}}>
+       <Text style={{color:COLOR.TURQUOISE,marginTop:7,fontFamily:'Montserrat-Medium',fontSize:10,marginRight:25,marginLeft:4,marginTop:16}} >WANT TO UPDATE YOUR RESUME  ?</Text>
+   <CustomButton
+          btnStyle={props.resumeUpdate=='yes' ? _styles.jobTitleBtn : _styles.defaultJobBtn}
+          btnTextStyle={props.resumeUpdate=='yes'? _styles.checkedBtnText : _styles.uncheckedBtnText} 
+          text='Yes'
+          type="rounded"
+          onPress={()=>props.onPresss('yes')}
+        />
+        <CustomButton
+          btnStyle={props.resumeUpdate=='no' ? _styles.jobTitleBtn : _styles.defaultJobBtn}
+          btnTextStyle={props.resumeUpdate=='no'? _styles.checkedBtnText : _styles.uncheckedBtnText } 
+          text='No'
+          type="rounded"
+          onPress={()=>props.onPresss('no')}
+        />
+    </View>}
+    { props.resumeUpdate =='yes' && 
       <View style={_styles.resumeView}>
         <View style={_styles.uploadSection}>
           <Text numberOfLines={1} style={[_styles.text,_styles.resumeText]}>
@@ -415,6 +442,7 @@ class AddCandidate extends Component {
           )}
         </View>
       </View>
+    }
       </Fragment>
     );
   }
@@ -426,7 +454,8 @@ class AddCandidate extends Component {
     }
     const { params } = this.props.navigation.state;
     values["fileNames"] = [];
-    if (this.state.resumeData.length >= 1) {
+    if(this.state.resumeUpdate=='yes'){
+    if (this.state.resumeData.length >= 1 ) {
       this.state.resumeData.map((data, i) => {
         values[`file${i + 1}`] = data.dataBase64;
         values["extention"] = data.filetype;
@@ -444,17 +473,29 @@ class AddCandidate extends Component {
         this.setState({updating:true})
     await this.props.addCandidate(values)
       this.setState({updateData:true})
-
-    /* .then(()=>{
-      
-    }) */
-    /* this.props.getCandidateUpdateProfileDetails(this.props.navigation.state.params.mongo_id) */
       }
     } 
     else {
       this.setState({ resumeError: "Upload your resume" });
     }
-  };
+  }
+  else{
+    values["fileNames"].push(`file${1 + 1}`);
+    values["default_tag"] = params.jobDetail.default_id;
+    values["tag_id"] = this.state.jobId;
+    values['device_id']=this.state.fcm_token_Id,
+    values['_id']=this.props.navigation.state.params.mongo_id,
+    values['jobtitle']=this.state.SelectJOb
+    if(this.state.SelectJOb==''){
+      this.setState({isJobEmpty:false})
+     }
+     else{
+       this.setState({updating:true})
+   await this.props.addCandidate(values)
+     this.setState({updateData:true})
+     }
+  }
+}
 
   onSubmit = async values => {
     if(!__DEV__){
@@ -568,18 +609,25 @@ class AddCandidate extends Component {
      <Text>rberbrbeber</Text>
     )
   }
+  forResumeUploading=(value)=>{
+        this.setState({resumeUpdate:value})
+        if(value=='yes'){
+        this.scroll.scrollToEnd()
+        // alert('vbnvneovb')
+        }
+  }
+  
   render() 
   {
+    console.log(this.props,'<<<<<<<<<<<<<<<<<<<<<<<<<');
     const { handleSubmit } = this.props;
-    // const { adding } = this.props.candidate;
     const { converting, resumeData, resumeError ,updating,adding} = this.state;
-    console.log(adding,'adding');
-    
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
           <ScrollView 
-          contentHeight ={500}
+          contentHeight ={1000}
+          contentContainerStyle={{flex:0}}
          ref={(scroll) => {this.scroll = scroll}}
           overScrollMode ='never'
           >
@@ -639,7 +687,9 @@ class AddCandidate extends Component {
                   isEditing={this.props.navigation.state.params.isEditing}
                   isJobEmpty={this.state.isJobEmpty}
                 />
-                <Field
+
+               {/* {(this.props.navigation.state.params.isEditing !==true && (!this.state.resumeUpdate =='' || !this.state.resumeUpdate =='no' )) &&  */}
+               <Field
                   name="resume_file"
                   placeholder="Mobile number"
                   onPress={() => {
@@ -648,10 +698,14 @@ class AddCandidate extends Component {
                   onClosePress={i => {
                     this.onClosePress(i);
                   }}
-                  component={this.renderButtonField}
+                  component={ this.renderButtonField}
                   input={resumeData}
                   resumeError={resumeError}
+                  onPresss={(value)=>this.forResumeUploading(value)}
+                  resumeUpdate={this.state.resumeUpdate}
+                  forEditing={this.props.navigation.state.params.isEditing}
                 />
+                {/* } */}
                 </Form>
               </View>
             </Row>

@@ -10,11 +10,12 @@ export default class AboutUsCarousel extends Component {
     super();
     this.state = {
       entries: [
-        { title: require("../images/FB_IMG_1540989165666.jpg")  },
-        { title: require("../images/FB_IMG_1540989205370.jpg") },
-        { title: require("../images/FB_IMG_1540989182982.jpg") },
-        { title: require("../images/FB_IMG_1540989229373.jpg") },
-        { title: require("../images/FB_IMG_1540989174091.jpg") }
+        { title: require("../images/image_5.png")  },
+        { title: require("../images/image_2.png") },
+        { title: require("../images/image_3.png") },
+        { title: require("../images/image_4.png") },
+        { title: require("../images/image_1.png") },
+        { title: require("../images/image_6.png") }
       ],
       activeSlide: 0
     };
@@ -66,8 +67,8 @@ export default class AboutUsCarousel extends Component {
     );
   }
   _onPressNext = () => {
-    if (this.state.activeSlide == 4) {
-      this.setState({ activeSlide: 4 });
+    if (this.state.activeSlide == 5) {
+      this.setState({ activeSlide: 5 });
     } else {
       this.setState({ activeSlide: this.state.activeSlide + 1 });
     }
@@ -117,7 +118,7 @@ export default class AboutUsCarousel extends Component {
             />
           </View>
         )}
-        {this.state.activeSlide !== 4 && (
+        {this.state.activeSlide !== 5 && (
           <View style={styles.rightarrow}>
             <Icon
               onPress={() => this._onPressNext()}

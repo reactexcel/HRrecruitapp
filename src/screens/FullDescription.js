@@ -76,8 +76,18 @@ class FullDescription extends Component {
       "candidate_profile"
     );
    let keyword;
-   this.props.navigation.getParam("keyword") !==null ? keyword = this.props.navigation.getParam("keyword").split(",") : keyword = ['']
+   if(this.props.navigation.getParam("keyword") !==null){
+     keyword=this.props.navigation.getParam("keyword").split(",")
+     if(keyword.length ==1){
+       keyword=[]
+     }else{
+      keyword=this.props.navigation.getParam("keyword").split(",")
+     }
+   }else{
+     keyword=[]
+   }
 
+  //  this.props.navigation.getParam("keyword") !==null ? keyword = this.props.navigation.getParam("keyword").split(",") : keyword = []
    return (
       <Container style={styles.container}>
         <Content showsVerticalScrollIndicator={false}>
@@ -90,7 +100,7 @@ class FullDescription extends Component {
           <EmptyView />
           <Text style={styles.descriptionText}>{JOB_DESCRIPTION}</Text>
           <EmptyView />
-          <Text style={styles.headerTextStyle}>{KEY_SKILL}</Text>
+       {keyword.length !==0 && <Text style={styles.headerTextStyle}>{KEY_SKILL}</Text>}
           <View style={styles.keySkillsView}>
            {keyword.map((text, id) => {
               return (
@@ -108,7 +118,7 @@ class FullDescription extends Component {
           </View>
 
           <EmptyView />
-          <Text style={styles.headerTextStyle}>{DESIRE_PRO}</Text>
+          {candidate_profile !== null && <Text style={styles.headerTextStyle}>{DESIRE_PRO}</Text>}
           {candidate_profile !== "" ? (
             <Text style={styles.descriptionText}>{candidate_profile} </Text>
           ) : (

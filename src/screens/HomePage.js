@@ -53,7 +53,8 @@ class HomePage extends Component {
       sender_mail:'',
       mongo_id:'',
       profile_picture:'',
-      latestImage:null
+      latestImage:null,
+      isNotify:true
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -76,6 +77,8 @@ class HomePage extends Component {
   }
   setCandidateProfile = async () => {
     const mongo_id = await getItem("mongo_id");
+    console.log(mongo_id,'kkkkk');
+    
     if(mongo_id){
       this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
       })
@@ -159,21 +162,24 @@ class HomePage extends Component {
     });
     this.setState({ notification: notif.from });
     if (this.state.notification !== undefined) {
-      this.setState({ opacity: 1 });
-      if (this.state.candidateJob !== null) {
-        const { appliedJob } = this.props;
-        const {
-          linkOpening,
-          textColor,
-          candidateJob,
-          ...profileDetails
-        } = this.state;
-        this.props.navigation.navigate("Profile", {
-          appliedJob,
-          profileDetails
-        });
-        this.setState({ notification: "", opacity: 0 });
-      }
+      // this.setState({ isNotify:false },()=>{
+        if (this.state.candidateJob !== null) {
+          const { appliedJob } = this.props;
+          const {
+            linkOpening,
+            textColor,
+            candidateJob,
+            ...profileDetails
+          } = this.state;
+          this.props.navigation.navigate("Profile", {
+            appliedJob,
+            profileDetails
+          });
+          this.setState({ notification: "", opacity: 0,isNotify:false });
+        }
+      // })
+    }else{
+      this.setState({isNotify:false})
     }
   };
   componentDidUpdate = async () => {
@@ -196,6 +202,8 @@ class HomePage extends Component {
     this.setState({ textColor: false });
   };
   render() {
+    console.log(this.state.isNotify,'***************');
+    
     let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
@@ -254,6 +262,10 @@ class HomePage extends Component {
             color={COLOR.MUSTARD}
           />
         </View>
+         {this.state.isNotify && 
+         <View style={{zIndex:1,position:'absolute',top:'31%',left:'45%'}}>
+      <Spinner color={COLOR.MUSTARD} />
+    </View> }
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={styles.container}

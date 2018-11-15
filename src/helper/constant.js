@@ -12,26 +12,26 @@ export const EXCEL_BELIVE =
 export const EMP_SAY = "See what employees and candidates say about what it's like to work at Excellence Technologies. Salaries, reviews and more - all posted by employees working at ...";
 
 export const GRW_US='Grow with Us';
-export const EDGE_TECH='We work on cutting edge technologies and provide end-to-end solutions in mobile apps and developement';
-export const UX_UI='We develope apps using AngularJS,ReactJS,Vue.js';
+export const EDGE_TECH='We work on cutting edge technologies and provide end-to-end solutions in mobile apps and development';
+export const UX_UI='We develop apps using AngularJS,ReactJS,Vue.js';
 
-export const eCommerce='We specialize in full magento customization from module developement to theme designs';
+export const eCommerce='We specialize in full magento customization from module development to theme designs';
 
-export const M_APPS='We develope cutting adge apps in Android iOS';
+export const M_APPS='We develop cutting edge apps in Android iOS';
 
 export const CLOUD_DEV='We deploy highly scalable backend services on AWS Azure using NodeJS,Laravel';
-export const BLK_CHAIN='We develope smart contract & dApps on leading blockchain platforms'
+export const BLK_CHAIN='We develop smart contract & dApps on leading blockchain platforms'
 export const STARTTEXTMSG="You are about to start your test. Since all tests are confidential, it's mandatory that you do it after approval of our HR. Confirm the same, please ask HR for OTP password"
-export const JOB_DESCRIPTION="Salary: INR 1,25,000 - 2,00,000 PA {`\n`} Industry: IT-Software/Software-Services {`\n`} Functional Area: IT Software - Application Programming,Maintenance {`\n`} Role Category: Programming & Design {`\n`} Role: Software Developer Employment {`\n`} Type: Permanent Job, Full Time {`\n`}"
-export const CANDIDATE_PROFILE=" Knowledge of PHP, MySQL. {`\n`} Knowledge of CSS/Jquery. {`\n`} Knowledge of database designing. {`\n`} Good Programming Logic. {`\n`} Basic/Advanced knowledge of JavaScript, Ajax, Jquery. {`\n`} Self Learner and Self Motivated Person. {`\n`} Team Player. {`\n`} Freshers can also be apply. {`\n`}"
+export const JOB_DESCRIPTION="Salary: INR 1,25,000 - 2,00,000 PA \n Industry: IT-Software/Software-Services \n Functional Area: IT Software - Application Programming,Maintenance \n Role Category: Programming & Design \n Role: Software developr Employment \n Type: Permanent Job, Full Time \n"
+export const CANDIDATE_PROFILE=" Knowledge of PHP, MySQL. \n Knowledge of CSS/Jquery. \n Knowledge of database designing. \n Good Programming Logic. \n Basic/Advanced knowledge of JavaScript, Ajax, Jquery.\n Self Learner and Self Motivated Person.\n Team Player.\n Freshers can also be apply.\n"
 export const EDUCATION_DES="UG: Any Graduate - Any Specialization, B.Tech/B.E. - Any Specialization, Diploma - Any Specialization, Other Graduate, BCA - Computers"
-export const RECRUIT_NAME=" Recruiter Name:HR {`\n`} Contact Company:Excellence Technosoft Private Limited {`\n`} Email Address:jobs@excellencetechnologies.in {`\n`} Website:http://www.excellencetechnologies.in {`\n`} Telephone:123456789 {`\n`} Reference Id:DEV001"
+export const RECRUIT_NAME=" Recruiter Name:HR \n Contact Company:Excellence Technosoft Private Limited \n Email Address:jobs@excellencetechnologies.in \n Website:http://www.excellencetechnologies.in \n Telephone:0120-4131655/4226736 \n Reference Id:DEV001"
 export const JOBDES_TITLE="RECRUIT_NAME"
 export const DESIRE_PRO="Desired Cadidate Profile"
 export const EDU_TITLE="Education"
-export const KEY_SKILL='Keys Skills';
+export const KEY_SKILL='Key Skills';
 export const COM_PRO='Company Profile:'
-export const EXCELLECE_TECH="Excellence Technologies :{`\n`}"
+export const EXCELLECE_TECH="Excellence Technologies :\n"
 export const LOG_TO_APPLY='LOGIN TO APPLY'
 export const SHARE_IT='SHARE IT'
 export const JOB_APPLYING="You have not been assigned any round ,Please contact HR"
