@@ -14,6 +14,7 @@ import UpdateProfile from './UpdateProfile'
 import UploadProfilePic from './uploadProfilePic'
 import candidateProfileUpdate from './candidatePRofileUpdate';
 import candidateProfileUpdateDetails from './candidateUploadProfileDetails'
+import candidateValidation from './candidateValidation'
 export default combineReducers({
   form: formReducer,
   interviewSignUp: interviewReducer,
@@ -29,5 +30,6 @@ export default combineReducers({
   UpdateProfile:UpdateProfile,
   UploadProfilePic:UploadProfilePic,
   candidateProfileUpdate:candidateProfileUpdate,
-  candidateProfileUpdateDetails:candidateProfileUpdateDetails
+  candidateProfileUpdateDetails:candidateProfileUpdateDetails,
+  candidateValidation:candidateValidation
 });

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "native-base";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 import styles from "../styles";
 import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
@@ -27,8 +28,8 @@ const JobSalaryDetails = props => {
           <Text style={styles.rowText}>Noida</Text>
         </View>
         <View style={styles.viewRow}>
-          <FontAwesome
-            name="map-pin"
+          <MaterialCommunityIcons
+            name="currency-inr"
             color={COLOR.Red}
             style={styles.viewIcon}
           />

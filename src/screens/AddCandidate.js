@@ -29,7 +29,7 @@ import _styles from "../styles/screens/AddCandidate";
 import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
-import { addCandidate,candidateUploadImage,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails} from "../actions";
+import { addCandidate,candidateValidationapi,candidateUploadImage,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails} from "../actions";
 import { getJobLists } from "../actions";
 import {
   DocumentPicker,
@@ -43,17 +43,6 @@ import LinearGradient from "react-native-linear-gradient";
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import {load as loadAccount} from '../reducers/initialStateReducer' 
 
-
-const data = {
-  // used to populate "account" reducer when "Load" is clicked
-  firstName: 'Jane',
-  lastName: 'Doe',
-  age: '42',
-  sex: 'female',
-  employed: true,
-  favoriteColor: 'Blue',
-  bio: 'Born to write amazing Redux code.'
-}
 
 class AddCandidate extends Component {
   contentHeight= 0
@@ -76,7 +65,7 @@ class AddCandidate extends Component {
       name:'',
       isEditing:false,
       newValue:'',
-      bottomBotton:'JOIN NOW',
+      bottomBotton:'JOIN',
       SelectJOb:'',
       isJobEmpty:true,
       updating:false,
@@ -96,7 +85,11 @@ class AddCandidate extends Component {
       freshDate:'',
       adding:false,
       haveData:false,
-      resumeUpdate:''
+      resumeUpdate:'',
+      isExisting:false,
+      valiSpinner:false,
+      forvali:false,
+      isExistUser:true
 
   
     };
@@ -127,10 +120,12 @@ class AddCandidate extends Component {
         this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.sender_mail);
         this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.mobile_no);
         this.props.change("resume_file",[])
-        this.setState({SelectJOb:this.props.appliedJob.job_profile,resumeUpdate:'no',jobId:this.props.navigation.state.params.jobDetail.id
+        this.setState({SelectJOb:this.props.appliedJob.job_profile,resumeUpdate:'no',jobId:this.props.navigation.state.params.jobDetail.id,
+        forvali:true
+
       })
       }else{
-        this.setState({resumeUpdate:'yes'})
+        this.setState({resumeUpdate:'yes',forvali:false})
       }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
@@ -212,9 +207,53 @@ class AddCandidate extends Component {
                 );
       }
 }
-
+exitingCandidate = async () => {
+  const candidateJob = await getItem("mongo_id");
+  if (candidateJob !=='') {
+    this.setState({mongo_id:candidateJob.candidate.data._id,profile_picture:candidateJob.candidate.data.profilePicture})
+      let email = candidateJob.candidate.data.sender_mail;
+      let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+      let mobile_no = candidateJob.candidate.data.mobile_no;
+      let userName = candidateJob.candidate.data.from;
+      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+      this.setState({
+        candidateJob,
+        profile_pic,
+        userName,
+        mobile_no,
+        linkOpening: false,
+        notification: "",
+        sender_mail:candidateJob.candidate.data.sender_mail
+      },()=>{
+        const { appliedJob } = this.props;
+        const {
+          linkOpening,
+          textColor,
+          candidateJob,
+          ...profileDetails  
+        } = this.state;
+        this.props.navigation.navigate("Profile", {
+          appliedJob,
+          profileDetails,
+          sender_mail:this.state.sender_mail,
+          mongo_id:this.state.mongo_id,
+          profile_picture:this.state.profile_picture
+        });
+        this.setState({valiSpinner:false})   
+      });     
+    }
+}
   componentDidUpdate() {
     const { candidate} = this.props;
+    if(this.props.candidateValidation.data !== undefined && this.props.candidateValidation.data !==null){
+      if(this.state.isExisting){
+        this.setdata()
+        this.setState({isExisting:false})
+      }}else if(this.props.candidateValidation.data === null){
+        if(this.state.isExisting){
+        this.setState({forvali:true,isExisting:false,valiSpinner:false,isExistUser:false,bottomBotton:'JOIN NOW'})
+      }      
+        }
     if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false && this.props.navigation.state.params.addCandidate ==true) {
       if (candidate.data.candidate_status === true ) {
         setItem("mongo_id", JSON.stringify({ candidate }));
@@ -406,7 +445,7 @@ class AddCandidate extends Component {
     return (
       <Fragment>
        {props.forEditing ==true && 
-       <View style={{marginTop:-30,marginLeft:10,flex:1,flexDirection:'row'}}>
+       <View style={{marginLeft:10,flex:1,flexDirection:'row'}}>
        <Text style={{color:COLOR.TURQUOISE,marginTop:7,fontFamily:'Montserrat-Medium',fontSize:10,marginRight:25,marginLeft:4,marginTop:16}} >WANT TO UPDATE YOUR RESUME  ?</Text>
    <CustomButton
           btnStyle={props.resumeUpdate=='yes' ? _styles.jobTitleBtn : _styles.defaultJobBtn}
@@ -616,12 +655,33 @@ class AddCandidate extends Component {
         // alert('vbnvneovb')
         }
   }
-  
+  setdata=async ()=>{
+    const candidate =this.props.candidateValidation
+   await setItem("mongo_id", JSON.stringify({ candidate }))
+    this.exitingCandidate();
+    console.log('gotdata');
+    
+    
+  }
+  emailValidation=(values)=>{
+    this.props.candidateValidationapi(values.sender_mail)
+    this.setState({isExisting:true,valiSpinner:true})
+  }
+  toAddCandidate=(values)=>{
+      if(this.state.bottomBotton=='JOIN'){
+        this.emailValidation(values)
+      }
+      else if(this.state.bottomBotton == 'JOIN NOW'){
+          this.onSubmit(values)
+      }
+      else{
+        this.onUpdate(values);
+      }
+  }
   render() 
-  {
-    console.log(this.props,'<<<<<<<<<<<<<<<<<<<<<<<<<');
+  {         
     const { handleSubmit } = this.props;
-    const { converting, resumeData, resumeError ,updating,adding} = this.state;
+    const { converting, resumeData, resumeError ,updating,adding,valiSpinner,forvali} = this.state;
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
@@ -656,7 +716,8 @@ class AddCandidate extends Component {
                   component={this.renderField}
                   autoCapitalize="none"
                 />}
-               <Field
+             {forvali &&
+              <Field
                   name="from"
                   labelName="NAME"
                   component={this.renderField}
@@ -666,7 +727,9 @@ class AddCandidate extends Component {
                 // } 
                 // isEditing={this.props.navigation.state.params.isEditing}
                    />
-                <Field
+                    }
+               {forvali && 
+               <Field
                   name="mobile_no"
                   labelName="PHONE"
                   component={this.renderField}
@@ -676,6 +739,8 @@ class AddCandidate extends Component {
                 // } 
                   // isEditing={this.props.navigation.state.params.isEditing}
                    />
+                    } 
+               {forvali &&
                 <Field
                   name="mobile_no"
                   labelName="JOB TITLE"
@@ -687,8 +752,10 @@ class AddCandidate extends Component {
                   isEditing={this.props.navigation.state.params.isEditing}
                   isJobEmpty={this.state.isJobEmpty}
                 />
+                 }
 
                {/* {(this.props.navigation.state.params.isEditing !==true && (!this.state.resumeUpdate =='' || !this.state.resumeUpdate =='no' )) &&  */}
+               {forvali && 
                <Field
                   name="resume_file"
                   placeholder="Mobile number"
@@ -705,6 +772,7 @@ class AddCandidate extends Component {
                   resumeUpdate={this.state.resumeUpdate}
                   forEditing={this.props.navigation.state.params.isEditing}
                 />
+                }
                 {/* } */}
                 </Form>
               </View>
@@ -712,7 +780,7 @@ class AddCandidate extends Component {
           </Grid>
           </Content>
           </ScrollView>
-        {adding || converting || updating ? (
+        {adding || converting || updating ||valiSpinner ? (
           <Spinner color={COLOR.MUSTARD} />
         ) : (
           <CustomButton
@@ -720,7 +788,8 @@ class AddCandidate extends Component {
           btnStyle={_styles.joinNowBtn}
           btnTextStyle={_styles.joinNowBtnText}
           text={this.state.bottomBotton}
-          onPress={this.props.navigation.state.params.isEditing !==true ? handleSubmit( this.onSubmit) :handleSubmit( this.onUpdate)} 
+          onPress={handleSubmit(this.toAddCandidate)}
+          // onPress={this.props.navigation.state.params.isEditing !==true ? handleSubmit( this.onSubmit)   isExistUser !==true ? handleSubmit(this.emailValidation) :   handleSubmit( this.onUpdate)} 
           />
         )}
         </LinearGradient>
@@ -748,11 +817,18 @@ validate = values => {
     errors.mobile_no = "Enter valid phone number";
   }
   return errors;
+
+
+
+
+
+    
 };
 
 const mapStateToProps = (state ) =>{
-  // console.log(state,'77');
+  console.log(state,'77');
  return{
+  candidateValidation:state.candidateValidation,
  candidate:state.candidate,
  appliedJob:state.appliedJob,
  candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
@@ -766,6 +842,6 @@ export default reduxForm({
 })(
   connect(
     mapStateToProps,
-    {addCandidate,UploadProfile,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails}
+    {addCandidate,UploadProfile,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails,candidateValidationapi}
   )(AddCandidate)
 );

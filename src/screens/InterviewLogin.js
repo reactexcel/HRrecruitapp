@@ -315,11 +315,13 @@ class InterviewLogin extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = state => {
+  console.log(state,'))))))))))))))');
+  return{
   interviewSignUp: state.interviewSignUp,
   isConnected: state.network.isConnected,
   candidateInfo: state.candidateInfo
-});
+}};
 export default connect(
   mapStateToProps,
   { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails }

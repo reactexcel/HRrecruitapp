@@ -15,6 +15,7 @@ import AboutUs from "../screens/AboutUs";
 import Profile from "../screens/Profile";
 import FullDescription from "../screens/FullDescription";
 import ProfileDescription from '../components/ProfileDescription'
+import candidateValidation from '../screens/candidateValidation'
 const transitionConfig = () => {
   return {
     transitionSpec: {
@@ -66,6 +67,9 @@ const Rootstack = createStackNavigator(
     },
     OTPpage: {
       screen: OTPpage
+    },
+    candidateValidation:{
+      screen:candidateValidation
     },
     AddCandidate: {
       screen: AddCandidate

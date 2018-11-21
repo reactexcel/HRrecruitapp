@@ -53,6 +53,12 @@ import {
 } from './types';
 
 import{
+  CANDIDATE_VALIDATION_FAILURE,
+  CANDIDATE_VALIDATION_REQUEST,
+  CANDIDATE_VALIDATION_SUCCESS,
+} from './types';
+
+import{
   CANDIDATE_UPDATE_PROFILE_DETAILS_SUCCESS,
   CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE
 } from './types';
@@ -384,3 +390,25 @@ export const getCandidateUpdateProfileDetails = (_id) => async dispatch => {
     }
   }
 }
+
+export const candidateValidationapi = data => async dispatch => {
+  // console.log(data,'kkkkk');
+  
+  dispatch({ type: CANDIDATE_VALIDATION_REQUEST });
+  try {
+    const res = await _axios().post("exam/candidateValidate", {email:data});    
+    // console.log(res,'fffffffffffffffffffffff');
+    dispatch({ type: CANDIDATE_VALIDATION_SUCCESS, payload: res });
+  }
+  catch (err) {
+    console.log(err,'err');
+    if (err.response.data.message) {
+      dispatch({
+        type: CANDIDATE_VALIDATION_FAILURE,
+        payload: { msg: err.response.data.message }
+      });
+    } else {
+      dispatch({ type: CANDIDATE_VALIDATION_FAILURE });
+    }
+  }
+};

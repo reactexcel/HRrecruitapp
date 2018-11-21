@@ -134,6 +134,7 @@ class HomePage extends Component {
         latestImage:this.props.candidateProfileUpdateDetails.profilePicture
       });
     } else {
+      // this.props.navigation.navigate('candidateValidation')
       this.props.navigation.navigate(data, { title: "Job Openings" });
     }
   }
@@ -144,13 +145,20 @@ class HomePage extends Component {
   componentDidMount = async () => {
     this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
     )
+    if (Platform.OS === 'android') {
+      Linking.getInitialURL().then(url => {
+        // this.navigate(url);
+        console.log(url,'initial url');
+        
+      });
+    }
     Permissions.checkMultiple(['location']).then(response => {
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       }
     })
     const candidateJob = await getItem("mongo_id");
-    // console.log(candidateJob,'MMMMMMMM');
+    console.log(candidateJob,'MMMMMMMM');
     const mongo_id = await getItem("mongo_id");
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
