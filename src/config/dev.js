@@ -7,8 +7,9 @@ let API_URL;
 if (__DEV__) {
   API_URL = "http://5.9.144.226:3000/";
 } else {
-  API_URL = "http://api.recruit.excellencetechnologies.in/";
+  API_URL = "http://5.9.144.226:3000/";
 }
 
 export default API_URL; 
 // http://5.9.144.226:3000/
+// http://api.recruit.excellencetechnologies.in/

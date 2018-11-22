@@ -46,7 +46,6 @@ class AppIntro extends Component {
       mobile_no: null,
       textColor: false,
       notification: "",
-      appintro: undefined
     };
   }
   static navigationOptions = {
@@ -77,7 +76,6 @@ class AppIntro extends Component {
     await this.props.getJobLists();
     AppState.addEventListener("change", this._handleAppStateChange);
     const appIntro = await getItem("appintro");
-    this.setState({ appIntro: appIntro });
     const candidateJob = await getItem("mongo_id");
     await this._checkDeepLink();
     if (candidateJob || (appIntro !== undefined && appIntro.shown)) {

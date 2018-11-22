@@ -267,9 +267,9 @@ class TestPage extends Component {
     let solution = this.state.solution;
     const { roundType } = this.props.questions.data;
     return (
-      <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={{ flex: 1 }}>
+      <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={{ flex: 1,flexDirection:'column' }}>
         {show ? (
-          <Content>
+          <Content style={{flex:1,flexDirection:'column'}}>
             <Text
               style={[styles.text, { color: COLOR.TURQUOISE, marginTop: 10 }]}
             >
@@ -288,15 +288,17 @@ class TestPage extends Component {
               solution={solution}
               handleSubmit={this.handleSubmit}
             />
+            {/* <View style={{height, flexDirection:'column',alignSelf:'flex-end',alignContent:'flex-end'}}> */}
             <Button
               full
-              style={{ backgroundColor: COLOR.MUSTARD,alignSelf:'flex-end' }}
+              style={{ backgroundColor: COLOR.MUSTARD }}
               onPress={() => {
                 this.showCustomAlert(true);
               }}
             >
-              <Text style={_styles.submitButtonText}>Submit Test</Text>
+              <Text style={_styles.submitButtonText}>Test</Text>
             </Button>
+            {/* </View> */}
             <CustomSubmitAlert
               showCustomAlert={this.showCustomAlert}
               isOpen={this.state.isOpen}

@@ -33,7 +33,9 @@ import {
   signUp,
   connectionState,
   getCandidateDetails,
-  getCandidateRoundDetails
+  getCandidateRoundDetails,
+  getCandidateJobDetails,
+  candidateValidationapi
 } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
@@ -46,7 +48,8 @@ class InterviewLogin extends Component {
   constructor() {
     super();
     this.state = {
-      email: ""
+      email: "",
+    spinner:false
     };
   }
   static navigationOptions = {
@@ -61,7 +64,19 @@ class InterviewLogin extends Component {
     const { error, success, msg, message } = nextProps.interviewSignUp;
             
     if (error !== undefined && error === 1 /* && message !== message */) {
+      // this.setState({spinner:false})
       alert(message);
+      // Alert.alert(
+      //   "Thank You",
+      //   message,
+      //   [
+      //     {
+      //       text: "OK",
+      //       onPress: () =>
+      //       this.props.navigation.navigate("HomePage")
+      //     }
+      //   ]
+      // );
     }
     if (success !== undefined && !success) {
       notify("Something went wrong");
@@ -206,7 +221,26 @@ class InterviewLogin extends Component {
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
-    if (Object.keys(errors).length === 0) {
+    this.setState({spinner:true})
+   await this.props.candidateValidationapi(this.state.email)
+    if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null){
+     await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id)
+     if(this.props.appliedJob.status !==undefined){
+     if(this.props.appliedJob.status=='Reject' || this.props.appliedJob.status=='Selected'){
+       Alert.alert(
+        "Thank You",
+        "You are not allowed to take online test,Please check your job status!",
+        [
+          {
+            text: "OK",
+            onPress: () =>
+            this.props.navigation.navigate("HomePage")
+          }
+        ]
+      );
+     }
+    else if (Object.keys(errors).length === 0) {
+      this.setState({spinner:false})
       NetInfo.isConnected.fetch().done(async isConnected => {
         if (isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
@@ -217,7 +251,58 @@ class InterviewLogin extends Component {
           const {
             interviewSignUp: { status, fb_id }
           } = this.props;
-          // console.log(interviewSignUp,'>>>');
+          console.log(this.props.interviewSignUp,'>>>');
+          
+          if (status === 0) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.email,
+              status.toString()
+            );
+            this.props.navigation.navigate("JobList", {
+              title: "Job Openings"
+            });
+            
+            this.setState({ email: "",spinner:false });
+          } else if (status === SUCCESS_STATUS) {
+            GOOGLE_ANALYTICS_TRACKER.trackEvent(
+              this.state.email,
+              status.toString()
+            );
+            if (this.state.email === "test_123@gmail.com") {
+              this.props.navigation.navigate("Instructions", {
+                fb_id: fb_id,
+                profile_pic: `https://pikmail.herokuapp.com/${
+                  this.state.email
+                }?size=60`,
+                name: "Test",
+                email: this.state.email
+              });
+              this.setState({ email: "" ,spinner:false});
+              return;
+            }
+            this.props.navigation.navigate("OTPpage");
+            this.setState({ email: "",spinner:false });
+          }
+        } else {
+          alert("Please connect to internet");
+        }
+      });
+    }
+     }
+    }
+   else if (Object.keys(errors).length === 0) {
+    this.setState({spinner:false})
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if (isConnected) {
+          GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            "INTERVIEWLOGIN",
+            this.state.email
+          );
+          await this.props.signUp(this.state.email);
+          const {
+            interviewSignUp: { status, fb_id }
+          } = this.props;
+          console.log(this.props.interviewSignUp,'>>>');
           
           if (status === 0) {
             GOOGLE_ANALYTICS_TRACKER.trackEvent(
@@ -277,9 +362,12 @@ class InterviewLogin extends Component {
   // }
 
   render() {
+    console.log(this.props.appliedJob.status,'status');
+    
     const {
       interviewSignUp: { registering, success }
     } = this.props;
+    const{spinner} =this.state
     const { navigation } = this.props;
     const appliedBefore = navigation.getParam("appliedBefore", false);
     const appliedText = navigation.getParam("appliedText");
@@ -308,7 +396,7 @@ class InterviewLogin extends Component {
           </Item>
         </View>
         <View style={_styles.btnView}>
-          {registering ? (
+          {/* registering || */ spinner ? (
             <Spinner color={COLOR.MUSTARD} />
           ) : (
             <Button
@@ -330,9 +418,11 @@ const mapStateToProps = state => {
   return{
   interviewSignUp: state.interviewSignUp,
   isConnected: state.network.isConnected,
-  candidateInfo: state.candidateInfo
+  candidateInfo: state.candidateInfo,
+  candidateValidation:state.candidateValidation,
+  appliedJob:state.appliedJob
 }};
 export default connect(
   mapStateToProps,
-  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails }
+  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi }
 )(InterviewLogin);
