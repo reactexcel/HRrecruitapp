@@ -290,7 +290,7 @@ class TestPage extends Component {
             />
             <Button
               full
-              style={{ backgroundColor: COLOR.MUSTARD }}
+              style={{ backgroundColor: COLOR.MUSTARD,alignSelf:'flex-end' }}
               onPress={() => {
                 this.showCustomAlert(true);
               }}

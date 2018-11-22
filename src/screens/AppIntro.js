@@ -19,13 +19,18 @@ import LinearGradient from "react-native-linear-gradient";
 import { AppDetails } from "../helper/json";
 import { getItem, setItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
-import branch from "react-native-branch";
+import branch, { RegisterViewEvent } from "react-native-branch";
 import { connect } from "react-redux";
-import { getCandidateJobDetails, getCandidateDetails } from "../actions";
+import {
+  getCandidateJobDetails,
+  getCandidateDetails,
+  getJobLists
+} from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import CardTrail from "../components/CardTrail";
 import FCM, { FCMEvent } from "react-native-fcm";
+
 class AppIntro extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +45,8 @@ class AppIntro extends Component {
       userName: null,
       mobile_no: null,
       textColor: false,
-      notification: ""
+      notification: "",
+      appintro: undefined
     };
   }
   static navigationOptions = {
@@ -59,6 +65,7 @@ class AppIntro extends Component {
     }
     return null;
   }
+
   _handleAppStateChange = nextAppState => {
     this.setState({ didPreviouslyLaunch: nextAppState });
     if (this.state.didPreviouslyLaunch === "active") {
@@ -67,8 +74,10 @@ class AppIntro extends Component {
     SplashScreen.hide();
   };
   componentDidMount = async () => {
+    await this.props.getJobLists();
     AppState.addEventListener("change", this._handleAppStateChange);
     const appIntro = await getItem("appintro");
+    this.setState({ appIntro: appIntro });
     const candidateJob = await getItem("mongo_id");
     await this._checkDeepLink();
     if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
@@ -76,8 +85,27 @@ class AppIntro extends Component {
     }
     SplashScreen.hide();
   };
-  _checkDeepLink = () => {
+
+  _checkDeepLink = async () => {
     branch.subscribe(async ({ errors, params }) => {
+      if (
+        this.props.joblist.data !== "" &&
+        this.props.joblist.data !== undefined &&
+        params.$share_data !== undefined
+      ) {
+        this.props.joblist.data.forEach((item, i) => {
+          if (item.id == params.$share_data) {
+            this.props.navigation.navigate("FullDescription", {
+              subject: item.subject,
+              job_description: item.job_description,
+              keyword: item.keyword,
+              candidate_profile: item.candidate_profile,
+              jobDetail: item,
+              currentJob: this.props.joblist
+            });
+          }
+        });
+      }
       if (errors) {
         alert("Error from Branch: " + errors);
         return;
@@ -85,7 +113,6 @@ class AppIntro extends Component {
       if (params.$deeplink_path !== undefined) {
         let fb_id = params.$deeplink_path;
         await this.props.getCandidateDetails(fb_id);
-        // console.log('jjjjjjjjjj');
         const { status } = this.props.interviewSignUp;
         if (status == SUCCESS_STATUS) {
           this.setState({ deepLink: true, fb_id: fb_id });
@@ -231,6 +258,8 @@ class AppIntro extends Component {
     );
   };
   render() {
+    console.log(this.props.joblist);
+
     return (
       <Container>
         <FlatList
@@ -250,9 +279,10 @@ class AppIntro extends Component {
 }
 const mapStateToProps = state => ({
   appliedJob: state.appliedJob,
-  interviewSignUp: state.interviewSignUp
+  interviewSignUp: state.interviewSignUp,
+  joblist: state.joblist
 });
 export default connect(
   mapStateToProps,
-  { getCandidateJobDetails, getCandidateDetails }
+  { getCandidateJobDetails, getCandidateDetails, getJobLists }
 )(AppIntro);

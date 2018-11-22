@@ -59,7 +59,8 @@ class InterviewLogin extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== message) {
+            
+    if (error !== undefined && error === 1 /* && message !== message */) {
       alert(message);
     }
     if (success !== undefined && !success) {
@@ -113,6 +114,8 @@ class InterviewLogin extends Component {
       });
     } else {
       branch.subscribe(async ({ errors, params }) => {
+        console.log(params,'interviewLogin');
+        
         if (errors) {
           alert("Error from Branch: " + errors);
           return;
@@ -214,6 +217,8 @@ class InterviewLogin extends Component {
           const {
             interviewSignUp: { status, fb_id }
           } = this.props;
+          // console.log(interviewSignUp,'>>>');
+          
           if (status === 0) {
             GOOGLE_ANALYTICS_TRACKER.trackEvent(
               this.state.email,
@@ -265,6 +270,11 @@ class InterviewLogin extends Component {
     }
     return errors;
   }
+  // componentDidUpdate(){
+  //   if(this.props.interviewSignUp.    ){
+
+  //   }
+  // }
 
   render() {
     const {

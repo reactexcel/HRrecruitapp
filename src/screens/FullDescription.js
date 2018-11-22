@@ -54,10 +54,10 @@ class FullDescription extends Component {
   }
   onShareClick = item => {
     let shareDetails = {};
-    shareDetails["title"] = item.title;
     shareDetails["subject"] = item.subject;
     shareDetails["message"] = item.job_description;
-    shareDetails["url"] = SHAREURL;
+    shareDetails["title"] = item.title;
+    shareDetails["url"] = `https://hrrecruit.app.link/9gvVNNaqIN?$share_data=${item.id}`
     this.setState({ visible: true, shareOptions: shareDetails });
   };
   onCancel() {
@@ -70,6 +70,8 @@ class FullDescription extends Component {
     } = this.state;
     let currentJob =this.props.navigation.state.params.currentJob
     let jobDetail=this.props.navigation.state.params.jobDetail
+    console.log(jobDetail,'jobdetails');
+    
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
     const candidate_profile = this.props.navigation.getParam(
