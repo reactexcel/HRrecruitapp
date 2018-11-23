@@ -210,7 +210,7 @@ class HomePage extends Component {
     this.setState({ textColor: false });
   };
   render() {
-    console.log(this.state.isNotify,'***************');
+    console.log(this.props,'***************');
     
     let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
