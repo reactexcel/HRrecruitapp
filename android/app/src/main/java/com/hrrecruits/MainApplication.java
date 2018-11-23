@@ -8,6 +8,7 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
+
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -56,6 +57,9 @@ public class MainApplication extends Application implements ReactApplication {
             new ImageResizerPackage(),
             new ImagePickerPackage(),
             new MainReactPackage(),
+
+
+
             new RNDeviceInfo(),
             new FIRMessagingPackage(),
             // new LinearGradientPackage(),
