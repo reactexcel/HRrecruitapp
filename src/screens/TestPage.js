@@ -6,7 +6,12 @@ import {
   BackHandler,
   AsyncStorage,
   Platform,
-  Image
+  Image,
+  ScrollView,
+  Animated,
+  PanResponder,
+  Dimensions
+  // BackHandler
 } from "react-native";
 import {
   Container,
@@ -39,8 +44,11 @@ import { setItem, getItem } from "../helper/storage";
 import LinearGradient from "react-native-linear-gradient";
 import Modal from "react-native-modalbox";
 import CustomSubmitAlert from "../components/CustomSubmitAlert";
-
+const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
 class TestPage extends Component {
+  scroll = new Animated.Value(0);
+  headerY;
   constructor(props) {
     super(props);
     this.state = {
@@ -52,9 +60,14 @@ class TestPage extends Component {
       isOnline: true,
       show: false,
       time: 0,
-      isOpen: false
+      isOpen: false,
+      expanded: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
+    this.headerY = Animated.multiply(
+      Animated.diffClamp(this.scroll, -46, 0),
+      -1
+    );
   }
   async componentDidMount() {
     const question = await getItem("question");
@@ -260,67 +273,115 @@ class TestPage extends Component {
   showCustomAlert = show => {
     this.setState({ isOpen: show });
   };
-
+  animation = () => {
+    this.setState({ expanded: true });
+  };
   render() {
     const name = this.props.navigation.getParam("name");
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
     const { roundType } = this.props.questions.data;
     return (
-      <LinearGradient colors={[COLOR.LGONE, COLOR.LGTWO]} style={{ flex: 1,flexDirection:'column' }}>
-        {show ? (
-          <Content style={{flex:1,flexDirection:'column'}}>
-            <Text
-              style={[styles.text, { color: COLOR.TURQUOISE, marginTop: 10 }]}
-            >
-              Hi {name}
-            </Text>
-            {roundType !== "Subjective" ? (
-              <Text style={[styles.text, { color: COLOR.TURQUOISE }]}>
-                Questions Attempted : {`${solution.length}/`}
-                {count}{" "}
-              </Text>
-            ) : (
-              <Text style={styles.text}>Total Questions : {count}</Text>
-            )}
-            <Questions
-              question={question}
-              solution={solution}
-              handleSubmit={this.handleSubmit}
-            />
-            {/* <View style={{height, flexDirection:'column',alignSelf:'flex-end',alignContent:'flex-end'}}> */}
+      <View style={{ flex: 1 }}>
+        {show && (
+          <Animated.View
+            style={{
+              zIndex: 1,
+              position: "absolute",
+              width: "100%",
+              bottom:0,
+              elevation: 0,
+              flex: 1,
+              transform: [
+                {
+                  translateY: this.headerY
+                }
+              ]
+            }}
+          >
             <Button
+              full
+              style={{ backgroundColor: COLOR.MUSTARD, width: "100%" }}
+              onPress={() => {
+                this.showCustomAlert(true);
+              }}
+            >
+              <Text style={_styles.submitButtonText}>Submit Test</Text>
+            </Button>
+           </Animated.View>
+        )}
+        <LinearGradient
+          colors={[COLOR.LGONE, COLOR.LGTWO]}
+          style={{ flex: 1, flexDirection: "column" }}
+        >
+          <Animated.ScrollView
+            scrollEventThrottle={1}
+            bounces={false}
+            showsVerticalScrollIndicator={false}
+            onScroll={Animated.event(
+              [{ nativeEvent: { contentOffset: { y: this.scroll } } }],
+              { useNativeDriver: true, listener: e => {} }
+            )}
+            overScrollMode="never"
+          >
+            {show ? (
+              <Content style={{ flex: 1, flexDirection: "column" }}>
+                <Text
+                  style={[
+                    styles.text,
+                    { color: COLOR.TURQUOISE, marginTop: 10 }
+                  ]}
+                >
+                  Hi {name}
+                </Text>
+                {roundType !== "Subjective" ? (
+                  <Text style={[styles.text, { color: COLOR.TURQUOISE }]}>
+                    Questions Attempted : {`${solution.length}/`}
+                    {count}{" "}
+                  </Text>
+                ) : (
+                  <Text style={styles.text}>Total Questions : {count}</Text>
+                )}
+                <Questions
+                  question={question}
+                  solution={solution}
+                  handleSubmit={this.handleSubmit}
+                />
+                {/* <View style={{height, flexDirection:'column',alignSelf:'flex-end',alignContent:'flex-end'}}> */}
+                {/* <Button
               full
               style={{ backgroundColor: COLOR.MUSTARD }}
               onPress={() => {
                 this.showCustomAlert(true);
               }}
             >
-              <Text style={_styles.submitButtonText}>Test</Text>
-            </Button>
-            {/* </View> */}
-            <CustomSubmitAlert
-              showCustomAlert={this.showCustomAlert}
-              isOpen={this.state.isOpen}
-              length={this.state.solution.length}
-              count={this.state.count}
-              confirmSubmit={
-                roundType !== "Subjective"
-                  ? this.confirmSubmit
-                  : this.confirmSecondRoundSubmit
-              }
-              roundType={roundType}
-            />
-          </Content>
-        ) : (
-          <StartTest
-            isOnline={isOnline}
-            handleStartTest={this.handleStartTest}
-            callHelp={this.props.callHelp}
-            handleCallHelp={this.handleCallHelp}
-          />
-        )}
-      </LinearGradient>
+              <Text style={_styles.submitButtonText}>Submit Test</Text>
+            </Button> */}
+                {/* </View> */}
+                <CustomSubmitAlert
+                  showCustomAlert={this.showCustomAlert}
+                  isOpen={this.state.isOpen}
+                  length={this.state.solution.length}
+                  count={this.state.count}
+                  confirmSubmit={
+                    roundType !== "Subjective"
+                      ? this.confirmSubmit
+                      : this.confirmSecondRoundSubmit
+                  }
+                  roundType={roundType}
+                />
+              </Content>
+            ) : (
+              <StartTest
+                isOnline={isOnline}
+                handleStartTest={this.handleStartTest}
+                callHelp={this.props.callHelp}
+                handleCallHelp={this.handleCallHelp}
+              />
+            )}
+          </Animated.ScrollView>
+        </LinearGradient>
+      </View>
     );
   }
 }

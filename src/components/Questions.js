@@ -21,19 +21,20 @@ import HTMLView from "react-native-htmlview";
 const Questions = props => {
   const { question, solution, handleSubmit } = props;
   return (
-    <Content padder>
+    <Content style={{zIndex:0,paddingBottom:40}} padder>
       <Accordion
         style={_styles.accordionStyle}
         dataArray={question.data}
         renderHeader={(questionObj, expanded) => (
           <View
-            style={[
-              {
-                backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
-              },
-              _styles.accordionHeader
-            ]}
+          style={[
+            {
+              backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
+            },
+            _styles.accordionHeader
+          ]}
           >
+           {/* <TouchableOpacity onPress={()=>console.log('sdasdasda')}> */}
             <View style={{ flex: 1 }}>
               <Text style={_styles.accordionHeaderText}>
                 {questionObj.group_name}
@@ -44,12 +45,13 @@ const Questions = props => {
             ) : (
               <Icon type="Entypo" style={_styles.accordionIcon} name="plus" />
             )}
+            {/* </TouchableOpacity> */}
           </View>
         )}
         renderContent={questionObj =>
           map(questionObj.questions, (ques, index) => {
             return (
-              <Content key={index}>
+              <Content  key={index}>
                 <View style={_styles.questionOptionView}>
                   <View style={_styles.questionView}>
                     <Text style={_styles.questionTextStyle}>

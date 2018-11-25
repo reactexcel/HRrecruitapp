@@ -24,9 +24,9 @@ const CustomButton = props => {
   }
   else if(type =='to_share') {
     return( 
-     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} rounded info>
-     <Icon name="share" type="Entypo" style={IconStyle} />
-     <Text uppercase={false} style={btnTextStyle}>
+     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} /* iconLeft */ rounded info>
+     <Icon name="share" type="Entypo" style={[IconStyle/* ,{marginLeft:0} */]} />
+     <Text uppercase={false} style={[btnTextStyle,{marginLeft:-28,paddingRight:42}]}>
        {text}
      </Text>
    </Button>

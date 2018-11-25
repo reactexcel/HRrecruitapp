@@ -221,11 +221,12 @@ class InterviewLogin extends Component {
 
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
+    if(Object.keys(errors).length === 0){
     this.setState({spinner:true})
-   await this.props.candidateValidationapi(this.state.email)
-    if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null){
+   await this.props.candidateValidationapi(this.state.email)}
+    if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
      await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id)
-     if(this.props.appliedJob.status !==undefined){
+     if(this.props.appliedJob.status !==undefined && this.props.appliedJob.status !==null){
      if(this.props.appliedJob.status=='Reject' || this.props.appliedJob.status=='Selected'){
        Alert.alert(
         "Thank You",
@@ -288,6 +289,18 @@ class InterviewLogin extends Component {
         }
       });
     }
+     }else{
+      Alert.alert(
+        "Thank You",
+        "You have not been assigned any Job Round,Please contact to HR",
+        [
+          {
+            text: "OK",
+            onPress: () =>
+            this.props.navigation.navigate("HomePage")
+          }
+        ]
+      );
      }
     }
    else if (Object.keys(errors).length === 0) {
