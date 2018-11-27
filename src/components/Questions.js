@@ -19,14 +19,16 @@ import PropTypes from "prop-types";
 import HTMLView from "react-native-htmlview";
 
 const Questions = props => {
-  const { question, solution, handleSubmit } = props;
+  const { question, solution, handleSubmit,scrollToBegin } = props;
   return (
     <Content style={{zIndex:0,paddingBottom:40}} padder>
       <Accordion
         style={_styles.accordionStyle}
         dataArray={question.data}
         renderHeader={(questionObj, expanded) => (
-          <View
+          //  <TouchableOpacity)}>
+          <View 
+          //  onPress={()=>console.log('sdasdasda')}x`
           style={[
             {
               backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
@@ -34,9 +36,8 @@ const Questions = props => {
             _styles.accordionHeader
           ]}
           >
-           {/* <TouchableOpacity onPress={()=>console.log('sdasdasda')}> */}
             <View style={{ flex: 1 }}>
-              <Text style={_styles.accordionHeaderText}>
+              <Text /* onPress={()=> {scrollToBegin()}} */ style={_styles.accordionHeaderText}>
                 {questionObj.group_name}
               </Text>
             </View>
@@ -45,8 +46,8 @@ const Questions = props => {
             ) : (
               <Icon type="Entypo" style={_styles.accordionIcon} name="plus" />
             )}
-            {/* </TouchableOpacity> */}
           </View>
+            // </TouchableOpacity>
         )}
         renderContent={questionObj =>
           map(questionObj.questions, (ques, index) => {

@@ -256,7 +256,6 @@ class AppIntro extends Component {
     );
   };
   render() {
-    console.log(this.props.joblist);
 
     return (
       <Container>

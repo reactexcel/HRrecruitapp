@@ -77,7 +77,6 @@ class HomePage extends Component {
   }
   setCandidateProfile = async () => {
     const mongo_id = await getItem("mongo_id");
-    console.log(mongo_id,'kkkkk');
     
     if(mongo_id){
       this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
@@ -148,7 +147,6 @@ class HomePage extends Component {
     if (Platform.OS === 'android') {
       Linking.getInitialURL().then(url => {
         // this.navigate(url);
-        console.log(url,'initial url');
         
       });
     }
@@ -158,7 +156,6 @@ class HomePage extends Component {
       }
     })
     const candidateJob = await getItem("mongo_id");
-    console.log(candidateJob,'MMMMMMMM');
     const mongo_id = await getItem("mongo_id");
     await this.setCandidateProfile();
     const appIntro = await getItem("appintro");
@@ -210,8 +207,6 @@ class HomePage extends Component {
     this.setState({ textColor: false });
   };
   render() {
-    console.log(this.props,'***************');
-    
     let { linkOpening, profile_pic, userName, textColor, index } = this.state;
     let profilepic = profile_pic
       ? { uri: profile_pic }
@@ -308,7 +303,6 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => {
-  // console.log(state,'llllllllllllllllllllllllll');
   return {
   state_data: state,
   appliedJob: state.appliedJob,
