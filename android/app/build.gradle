@@ -149,6 +149,9 @@ android {
 }
 
 dependencies {
+    compile project(':appcenter-crashes')
+    compile project(':appcenter-analytics')
+    compile project(':appcenter')
     compile project(':react-native-fs')
     compile project(':react-native-image-resizer')
     compile project(':react-native-image-picker')
@@ -168,9 +171,7 @@ dependencies {
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-branch')
     implementation project(':react-native-version-number')
-    implementation project(':appcenter-crashes')
-    implementation project(':appcenter-analytics')
-    implementation project(':appcenter')
+
     implementation project(':react-native-google-analytics-bridge')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:27.1.1"

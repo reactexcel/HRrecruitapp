@@ -1,8 +1,9 @@
-#import <Foundation/Foundation.h>
+#import "MSLogWithNameAndProperties.h"
 
-#import "MSLogWithProperties.h"
+@class MSEventProperties;
+@class MSMetadataExtension;
 
-@interface MSEventLog : MSLogWithProperties
+@interface MSEventLog : MSLogWithNameAndProperties
 
 /**
  * Unique identifier for this event.
@@ -10,8 +11,8 @@
 @property(nonatomic, copy) NSString *eventId;
 
 /**
- * Name of the event.
+ * Event properties.
  */
-@property(nonatomic, copy) NSString *name;
+@property(nonatomic) MSEventProperties *typedProperties;
 
 @end
