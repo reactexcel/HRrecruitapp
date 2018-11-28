@@ -19,25 +19,42 @@ import PropTypes from "prop-types";
 import HTMLView from "react-native-htmlview";
 
 const Questions = props => {
-  const { question, solution, handleSubmit,scrollToBegin } = props;
+  const { question, solution, handleSubmit, scrollToBegin } = props;
+  // console.count('questions')
   return (
-    <Content style={{zIndex:0,paddingBottom:40}} padder>
+    <Content style={{ zIndex: 0, paddingBottom: 40 }} padder>
       <Accordion
         style={_styles.accordionStyle}
         dataArray={question.data}
-        renderHeader={(questionObj, expanded) => (
-          //  <TouchableOpacity)}>
-          <View 
-          //  onPress={()=>console.log('sdasdasda')}x`
-          style={[
-            {
-              backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
-            },
-            _styles.accordionHeader
-          ]}
+        renderHeader={(questionObj, expanded) =>{ 
+          // if(expanded && questionObj.group_name==="Logical Reasoning"){
+          //   scrollToBegin()
+          // }
+          return(
+          <View
+            style={[
+              {
+                backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
+              },
+              _styles.accordionHeader
+            ]}
+            onStartShouldSetResponder={() => true}
+            onResponderRelease={() => {
+                console.log("sad");
+                if(expanded && questionObj.group_name==="Logical Reasoning"){
+            scrollToBegin()
+          }
+              }}
           >
-            <View style={{ flex: 1 }}>
-              <Text /* onPress={()=> {scrollToBegin()}} */ style={_styles.accordionHeaderText}>
+            <View
+              style={{ flex: 1 }}
+        
+            >
+              <Text
+                 style={
+                  _styles.accordionHeaderText
+                }
+              >
                 {questionObj.group_name}
               </Text>
             </View>
@@ -47,12 +64,13 @@ const Questions = props => {
               <Icon type="Entypo" style={_styles.accordionIcon} name="plus" />
             )}
           </View>
-            // </TouchableOpacity>
-        )}
-        renderContent={questionObj =>
-          map(questionObj.questions, (ques, index) => {
+        )}}
+        renderContent={(questionObj) =>
+{          
+
+  return map(questionObj.questions, (ques, index) => {
             return (
-              <Content  key={index}>
+              <Content key={index}>
                 <View style={_styles.questionOptionView}>
                   <View style={_styles.questionView}>
                     <Text style={_styles.questionTextStyle}>
@@ -123,7 +141,7 @@ const Questions = props => {
                 </View>
               </Content>
             );
-          })
+          })}
         }
       />
     </Content>

@@ -29,7 +29,6 @@ import {
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
-import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/screens/TestPage";
 import CustomButton from "../components/CustomButton";
@@ -42,7 +41,6 @@ import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
 import { setItem, getItem } from "../helper/storage";
 import LinearGradient from "react-native-linear-gradient";
-import Modal from "react-native-modalbox";
 import CustomSubmitAlert from "../components/CustomSubmitAlert";
 const deviceHeight = Dimensions.get("window").height;
 const deviceWidth = Dimensions.get("window").width;
@@ -62,7 +60,7 @@ class TestPage extends Component {
       time: 0,
       isOpen: false,
       expanded: false,
-      top:false
+      top: false
     };
     this.handleNetwork = this.handleNetwork.bind(this);
     this.headerY = Animated.multiply(
@@ -278,34 +276,68 @@ class TestPage extends Component {
   animation = () => {
     this.setState({ expanded: true });
   };
-  scrollToBegin=()=>{
-    if(this.state.top){
+  scrollToBegin = () => {
+    console.log(this.myRef.getNode(),'sddxdx')
+    // if (this.state.top) {
       this.myRef.getNode().scrollTo({
         y: 0,
-        animated: true,
+        animated: true
       });
+    // } else {
+    //   this.myRef.getNode().scrollToEnd();
+    // }
+    // this.setState({ top: !this.state.top });
+  };
+
+  arrowScroll = () => {
+    console.log(this.myRef.getNode(),'sddxdx')
+    if (this.state.top) {
+      this.myRef.getNode().scrollTo({
+        y: 0,
+        animated: true
+      });
+    } else {
+      this.myRef.getNode().scrollToEnd();
     }
-    else{
-      this.myRef.getNode().scrollToEnd()
-    }
-    this.setState({top:!this.state.top})
-  }
+    this.setState({ top: !this.state.top });
+  };
+
+
+  // shouldComponentUpdate(){
+
+  // }
   render() {
     const name = this.props.navigation.getParam("name");
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
     const { roundType } = this.props.questions.data;
-    
     return (
       <View style={{ flex: 1 }}>
-     {show && <View style={{zIndex:1,position:'absolute',bottom:'15%',left:'90%'}}><Icon onPress={()=>this.scrollToBegin}  type="FontAwesome" name={this.state.top ?  "arrow-circle-up" : "arrow-circle-down"} style={{color:COLOR.MUSTARD}} /></View>}
+        {show && (
+          <View
+            style={{
+              zIndex: 1000,
+              position: "absolute",
+              bottom: "15%",
+              left: "85%"
+            }}
+            
+          >
+            <Icon
+              onPress={() => {this.arrowScroll()}}
+              type="FontAwesome"
+              name={this.state.top ? "arrow-circle-up" : "arrow-circle-down"}
+              style={{ color: COLOR.MUSTARD ,fontSize:50}}
+            />
+          </View>
+        )}
         {show && (
           <Animated.View
             style={{
               zIndex: 1,
               position: "absolute",
               width: "100%",
-              bottom:0,
+              bottom: 0,
               elevation: 0,
               flex: 1,
               transform: [
@@ -324,14 +356,14 @@ class TestPage extends Component {
             >
               <Text style={_styles.submitButtonText}>Submit Test</Text>
             </Button>
-           </Animated.View>
+          </Animated.View>
         )}
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={{ flex: 1, flexDirection: "column" }}
         >
           <Animated.ScrollView
-          ref={c => (this.myRef = c)}
+            ref={c => (this.myRef = c)}
             scrollEventThrottle={1}
             scrollsToTop={true}
             bounces={false}
@@ -339,10 +371,9 @@ class TestPage extends Component {
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: this.scroll } } }],
               { useNativeDriver: true, listener: e => {} }
-          )}
-          overScrollMode="never"
+            )}
+            overScrollMode="never"
           >
-
             {show ? (
               <Content style={{ flex: 1, flexDirection: "column" }}>
                 <Text
@@ -365,7 +396,7 @@ class TestPage extends Component {
                   question={question}
                   solution={solution}
                   handleSubmit={this.handleSubmit}
-                  // scrollToBegin={this.scrollToBegin}
+                  scrollToBegin={this.scrollToBegin}
                   animation={this.animation}
                 />
                 {/* <View style={{height, flexDirection:'column',alignSelf:'flex-end',alignContent:'flex-end'}}> */}
