@@ -19,56 +19,61 @@ import PropTypes from "prop-types";
 import HTMLView from "react-native-htmlview";
 
 const Questions = props => {
-  const { question, solution, handleSubmit, scrollToBegin } = props;
-  // console.count('questions')
+  const {
+    question,
+    solution,
+    handleSubmit,
+    scrollToBegin,
+    scrollTop,
+    scrollToTopLogical
+  } = props;
   return (
     <Content style={{ zIndex: 0, paddingBottom: 40 }} padder>
       <Accordion
         style={_styles.accordionStyle}
         dataArray={question.data}
-        renderHeader={(questionObj, expanded) =>{ 
-          // if(expanded && questionObj.group_name==="Logical Reasoning"){
-          //   scrollToBegin()
-          // }
-          return(
-          <View
-            style={[
-              {
-                backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
-              },
-              _styles.accordionHeader
-            ]}
-            onStartShouldSetResponder={() => true}
-            onResponderRelease={() => {
-                console.log("sad");
-                if(expanded && questionObj.group_name==="Logical Reasoning"){
-            scrollToBegin()
+        renderHeader={(questionObj, expanded) => {
+          if (
+            scrollTop &&
+            expanded &&
+            questionObj.group_name === "Logical Reasoning"
+          ) {
+            scrollToBegin();
           }
-              }}
-          >
-            <View
-              style={{ flex: 1 }}
-        
-            >
-              <Text
-                 style={
-                  _styles.accordionHeaderText
-                }
-              >
-                {questionObj.group_name}
-              </Text>
-            </View>
-            {expanded ? (
-              <Icon type="Entypo" style={_styles.accordionIcon} name="minus" />
-            ) : (
-              <Icon type="Entypo" style={_styles.accordionIcon} name="plus" />
-            )}
-          </View>
-        )}}
-        renderContent={(questionObj) =>
-{          
 
-  return map(questionObj.questions, (ques, index) => {
+          if (expanded && questionObj.group_name === "Aptitude") {
+            scrollToTopLogical(
+              expanded && questionObj.group_name === "Aptitude",questionObj.group_name
+            );
+          } 
+          return (
+            <View
+              style={[
+                {
+                  backgroundColor: expanded ? "#e3e5e9" : COLOR.MUSTARD
+                },
+                _styles.accordionHeader
+              ]}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={_styles.accordionHeaderText}>
+                  {questionObj.group_name}
+                </Text>
+              </View>
+              {expanded ? (
+                <Icon
+                  type="Entypo"
+                  style={_styles.accordionIcon}
+                  name="minus"
+                />
+              ) : (
+                <Icon type="Entypo" style={_styles.accordionIcon} name="plus" />
+              )}
+            </View>
+          );
+        }}
+        renderContent={questionObj => {
+          return map(questionObj.questions, (ques, index) => {
             return (
               <Content key={index}>
                 <View style={_styles.questionOptionView}>
@@ -102,7 +107,11 @@ const Questions = props => {
                     return (
                       <TouchableOpacity
                         onPress={() => {
-                          handleSubmit(ques._id, values.opt_id);
+                          handleSubmit(
+                            ques._id,
+                            values.opt_id,
+                            questionObj.group_name
+                          );
                         }}
                         activeOpacity={1}
                         key={index}
@@ -121,7 +130,11 @@ const Questions = props => {
                                     : _styles.radio
                                 }
                                 onPress={() => {
-                                  handleSubmit(ques._id, values.opt_id);
+                                  handleSubmit(
+                                    ques._id,
+                                    values.opt_id,
+                                    questionObj.group_name
+                                  );
                                 }}
                                 activeOpacity={1}
                                 selected={selected}
@@ -141,8 +154,8 @@ const Questions = props => {
                 </View>
               </Content>
             );
-          })}
-        }
+          });
+        }}
       />
     </Content>
   );
