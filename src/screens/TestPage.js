@@ -29,10 +29,8 @@ import {
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";
-import { Row, Col, Grid } from "react-native-easy-grid";
 import styles from "../styles";
 import _styles from "../styles/screens/TestPage";
-import CustomButton from "../components/CustomButton";
 import Questions from "../components/Questions";
 import StartTest from "../components/StartTest";
 import { callingHelp } from "../actions";
@@ -42,10 +40,8 @@ import { COLOR } from "../styles/color";
 import TimerCountdown from "react-native-timer-countdown";
 import { setItem, getItem } from "../helper/storage";
 import LinearGradient from "react-native-linear-gradient";
-import Modal from "react-native-modalbox";
 import CustomSubmitAlert from "../components/CustomSubmitAlert";
-const deviceHeight = Dimensions.get("window").height;
-const deviceWidth = Dimensions.get("window").width;
+
 class TestPage extends Component {
   scroll = new Animated.Value(0);
   headerY;
@@ -61,8 +57,7 @@ class TestPage extends Component {
       show: false,
       time: 0,
       isOpen: false,
-      expanded: false,
-      top:false
+      scrollTop: true
     };
     this.handleNetwork = this.handleNetwork.bind(this);
     this.headerY = Animated.multiply(
@@ -78,9 +73,7 @@ class TestPage extends Component {
       "connectionChange",
       this.handleNetwork
     );
-    this.props.navigation.setParams({
-      setTime: this.setTime
-    });
+
     const ans = await getItem("solution");
     const email = await getItem("email");
     if (
@@ -92,6 +85,7 @@ class TestPage extends Component {
     if (this.props.questions.data.roundType === "Subjective") {
       AsyncStorage.removeItem("remaining_time");
     }
+
   }
 
   componentWillUnmount() {
@@ -126,7 +120,6 @@ class TestPage extends Component {
         backgroundColor: COLOR.LGONE
       },
       headerTitle: (
-        // <View />
         <View style={_styles.timerView}>
           {navigation.state.params.show !== undefined ? (
             navigation.state.params.show ? (
@@ -148,9 +141,7 @@ class TestPage extends Component {
                         "remaining_time",
                         JSON.stringify({ remaining_time: counter })
                       );
-                      if (navigation.state.params.setTime !== undefined) {
-                        navigation.state.params.setTime(counter);
-                      }
+
                       if (counter < 180000 && counter > 175000) {
                         notify(
                           "You have less than 3 minutes left to complete your test.Your marked responses are saved. If you don't submit manually, you will be directed to next page where you will submit your test"
@@ -175,9 +166,7 @@ class TestPage extends Component {
       )
     };
   };
-  setTime = time => {
-    this.setState({ time });
-  };
+
   handleCallHelp = async () => {
     const fb_id = this.props.navigation.getParam("fb_id");
     const accessToken = fb_id ? true : null;
@@ -196,7 +185,16 @@ class TestPage extends Component {
     }
   };
 
-  handleSubmit = async (question, option) => {
+  scrollToTopLogical = (expanded, group_name) => {
+    if(expanded && !this.state.scrollTop && group_name === "Aptitude"){
+      this.setState({scrollTop:true})
+    }
+  }
+  
+  handleSubmit = async (question, option, group_name) => {
+    if(group_name !== "Aptitude"){
+      this.setState({scrollTop: false});
+    }
     const solution = this.state.solution;
     let answer;
     if (solution[0] != undefined) {
@@ -223,16 +221,15 @@ class TestPage extends Component {
     await setItem("solution", JSON.stringify({ solution: uniqSolution }));
   };
 
-  confirmSubmit = () => {
+  confirmSubmit = async() => {
     this.showCustomAlert(false);
-
-    const time = this.state.time;
+    const time = await getItem("remaining_time");
     if (this.state.solution.length === 0) {
       alert("Cannot submit without attempting any question.");
     } else {
       this.props.navigation.navigate("SubmitTest", {
         ...this.props.navigation.state.params,
-        taken_time_minutes: 60 - Math.ceil(time / (60 * 1000))
+        taken_time_minutes: 60 - Math.ceil(time.remaining_time / (60 * 1000))
       });
     }
   };
@@ -272,40 +269,34 @@ class TestPage extends Component {
     }
   };
 
-  showCustomAlert = show => {
+  showCustomAlert = async show => {
     this.setState({ isOpen: show });
   };
-  animation = () => {
-    this.setState({ expanded: true });
-  };
-  scrollToBegin=()=>{
-    if(this.state.top){
+
+  scrollToBegin = () => {
       this.myRef.getNode().scrollTo({
         y: 0,
-        animated: true,
+        animated: true
       });
-    }
-    else{
-      this.myRef.getNode().scrollToEnd()
-    }
-    this.setState({top:!this.state.top})
-  }
+  };
+
+
+
   render() {
     const name = this.props.navigation.getParam("name");
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;
     const { roundType } = this.props.questions.data;
-    
+
     return (
       <View style={{ flex: 1 }}>
-     {show && <View style={{zIndex:1,position:'absolute',bottom:'15%',left:'90%'}}><Icon onPress={()=>this.scrollToBegin}  type="FontAwesome" name={this.state.top ?  "arrow-circle-up" : "arrow-circle-down"} style={{color:COLOR.MUSTARD}} /></View>}
         {show && (
           <Animated.View
             style={{
               zIndex: 1,
               position: "absolute",
               width: "100%",
-              bottom:0,
+              bottom: 0,
               elevation: 0,
               flex: 1,
               transform: [
@@ -324,14 +315,14 @@ class TestPage extends Component {
             >
               <Text style={_styles.submitButtonText}>Submit Test</Text>
             </Button>
-           </Animated.View>
+          </Animated.View>
         )}
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={{ flex: 1, flexDirection: "column" }}
         >
           <Animated.ScrollView
-          ref={c => (this.myRef = c)}
+            ref={c => (this.myRef = c)}
             scrollEventThrottle={1}
             scrollsToTop={true}
             bounces={false}
@@ -339,10 +330,9 @@ class TestPage extends Component {
             onScroll={Animated.event(
               [{ nativeEvent: { contentOffset: { y: this.scroll } } }],
               { useNativeDriver: true, listener: e => {} }
-          )}
-          overScrollMode="never"
+            )}
+            overScrollMode="never"
           >
-
             {show ? (
               <Content style={{ flex: 1, flexDirection: "column" }}>
                 <Text
@@ -365,8 +355,9 @@ class TestPage extends Component {
                   question={question}
                   solution={solution}
                   handleSubmit={this.handleSubmit}
-                  // scrollToBegin={this.scrollToBegin}
-                  animation={this.animation}
+                  scrollToBegin={this.scrollToBegin}
+                  scrollTop = {this.state.scrollTop}
+                  scrollToTopLogical = {this.scrollToTopLogical}
                 />
                 {/* <View style={{height, flexDirection:'column',alignSelf:'flex-end',alignContent:'flex-end'}}> */}
                 {/* <Button
