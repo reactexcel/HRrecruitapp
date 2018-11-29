@@ -129,6 +129,7 @@ class AddCandidate extends Component {
       }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
+      console.log(token);
       this.setState({fcm_token_Id:token})
       this.setState({deviceId: DeviceInfo.getUniqueID()})
     });
@@ -664,7 +665,7 @@ exitingCandidate = async () => {
     
   }
   emailValidation=(values)=>{
-    this.props.candidateValidationapi(values.sender_mail)
+    this.props.candidateValidationapi(values.sender_mail,this.state.fcm_token_Id)
     this.setState({isExisting:true,valiSpinner:true})
   }
   toAddCandidate=(values)=>{

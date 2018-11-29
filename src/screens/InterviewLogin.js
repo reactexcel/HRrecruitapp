@@ -49,7 +49,8 @@ class InterviewLogin extends Component {
     super();
     this.state = {
       email: "",
-    spinner:false
+    spinner:false,
+    alertMessage:false
     };
   }
   static navigationOptions = {
@@ -62,25 +63,12 @@ class InterviewLogin extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-            
     if (error !== undefined && error === 1 /* && message !== message */) {
-      // this.setState({spinner:false})
       alert(message);
-      // Alert.alert(
-      //   "Thank You",
-      //   message,
-      //   [
-      //     {
-      //       text: "OK",
-      //       onPress: () =>
-      //       this.props.navigation.navigate("HomePage")
-      //     }
-      //   ]
-      // );
-    }
+    }return null;
     if (success !== undefined && !success) {
       notify("Something went wrong");
-    }
+    }return null;
     if (msg !== undefined) {
       alert(msg);
     }
