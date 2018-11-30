@@ -71,7 +71,7 @@ export default StyleSheet.create({
   },
   cardItem: {
     justifyContent: "space-between",
-    padding: 0
+    padding: 0,
   },
   viewDesign: {
     flexDirection: "column"
@@ -99,7 +99,9 @@ export default StyleSheet.create({
     marginRight: 10
   },
   viewRight:{
-    marginLeft:70,
+    // marginLeft:70,
+    position:'relative',
+    right:-25,
     marginBottom:5,
   },
   applyBtn: {

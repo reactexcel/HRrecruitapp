@@ -89,7 +89,8 @@ class AddCandidate extends Component {
       isExisting:false,
       valiSpinner:false,
       forvali:false,
-      isExistUser:true
+      isExistUser:true,
+      emailVefication:true
 
   
     };
@@ -129,6 +130,7 @@ class AddCandidate extends Component {
       }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
+      console.log(token);
       this.setState({fcm_token_Id:token})
       this.setState({deviceId: DeviceInfo.getUniqueID()})
     });
@@ -251,7 +253,7 @@ exitingCandidate = async () => {
         this.setState({isExisting:false})
       }}else if(this.props.candidateValidation.data === null){
         if(this.state.isExisting){
-        this.setState({forvali:true,isExisting:false,valiSpinner:false,isExistUser:false,bottomBotton:'JOIN NOW'})
+        this.setState({forvali:true,isExisting:false,valiSpinner:false,isExistUser:false,bottomBotton:'JOIN NOW',emailVefication:false})
       }      
         }
     if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false && this.props.navigation.state.params.addCandidate ==true) {
@@ -337,6 +339,7 @@ exitingCandidate = async () => {
             placeholderTextColor={COLOR.WHITE}
             selectionColor={COLOR.LTONE}
             underlineColorAndroid={underLineColor}
+            editable={props.emailVefication}
           />
         </Item>
         <View style={_styles.errorTextView}>
@@ -664,7 +667,7 @@ exitingCandidate = async () => {
     
   }
   emailValidation=(values)=>{
-    this.props.candidateValidationapi(values.sender_mail)
+    this.props.candidateValidationapi(values.sender_mail,this.state.fcm_token_Id)
     this.setState({isExisting:true,valiSpinner:true})
   }
   toAddCandidate=(values)=>{
@@ -715,6 +718,7 @@ exitingCandidate = async () => {
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
+                  emailVefication={this.state.emailVefication}
                 />}
              {forvali &&
               <Field

@@ -113,6 +113,7 @@ class JobList extends Component {
           <JobSalaryDetails>
             <Text style={styles.viewText}>{item.subject}</Text>
           </JobSalaryDetails>
+          {/* <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'flex-start'}}> */}
           <Right style={styles.viewRight} >
           <CustomButton
             onPress={() => {
@@ -124,6 +125,7 @@ class JobList extends Component {
             text="APPLY"
           />
           </Right>
+          {/* </View> */}
         </CardItem>
         <CardItem>
           <Body>

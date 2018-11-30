@@ -64,12 +64,12 @@ class HomePage extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== message) {
+    if (error !== undefined && error === 1 && message !== undefined) {
       alert(message);
-    }
+    }return null;
     if (success !== undefined && !success) {
       notify("Something went wrong");
-    }
+    }return null;
     if (msg !== undefined) {
       alert(msg);
     }
