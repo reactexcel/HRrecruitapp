@@ -19,7 +19,7 @@ PODS:
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
   - boost-for-react-native (1.63.0)
-  - BVLinearGradient (2.4.4):
+  - BVLinearGradient (2.4.0):
     - React
   - DoubleConversion (1.1.5)
   - FBSDKCoreKit (4.38.1):
@@ -79,16 +79,16 @@ PODS:
   - react-native-fbsdk/Share (0.8.0):
     - FBSDKShareKit
     - React
-  - react-native-fcm (16.2.4):
+  - react-native-fcm (16.2.3):
     - Firebase/Messaging
     - React
   - react-native-image-picker (0.14.3):
     - React
   - react-native-image-resizer (1.0.0):
     - React
-  - react-native-splash-screen (3.1.1):
+  - react-native-splash-screen (3.1.0):
     - React
-  - react-native-version-number (0.3.5):
+  - react-native-version-number (0.3.4):
     - React
   - React/Core (0.55.4):
     - yoga (= 0.55.4.React)
@@ -139,7 +139,7 @@ PODS:
     - React/Core
   - RNDeviceInfo (0.21.5):
     - React
-  - RNFS (2.12.1):
+  - RNFS (2.12.0):
     - React
   - RNShare (1.1.3):
     - React
@@ -242,7 +242,7 @@ SPEC CHECKSUMS:
   AppCenterReactNativeShared: a77b000c2ac6dc2e44472621d7d0770f196e5822
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  BVLinearGradient: 6d8909e3fc6b089defa4b89d967441fa6827a2ee
+  BVLinearGradient: 8913bd8fdc47b85abc801ae8bae007bbfb6b4ce5
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
   FBSDKCoreKit: 8d47857400e2f5bdea697a80daff882e91c84ef6
   FBSDKLoginKit: 4621c690d9dd8628031a4791497062183ea34b0d
@@ -257,22 +257,22 @@ SPEC CHECKSUMS:
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
   GoogleUtilities: 95996bea7c7d9b8fb811b7507669a4a8762f80c7
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
-  React: aa2040dbb6f317b95314968021bd2888816e03d5
-  react-native-document-picker: e7934f6a3c898a1b62fa68b1f09371beef6ac51a
-  react-native-fbsdk: d5f98cc5abecbcc463e3c35c04743d716d002d37
-  react-native-fcm: 7de3ba1108aba709c3d2b4237594554eb5f6f026
-  react-native-image-picker: b303e31c3c4ada1d7cb1342423d328d2efb07fb3
-  react-native-image-resizer: 04a3409e7d4ad646c4468671c69dec490def139c
-  react-native-splash-screen: 8e3f866dc79bfe533baeffd0a38c33f7a7eae7f8
-  react-native-version-number: 36c0d8eb57a275a6239a860f8dbab3d18299b0e0
-  ReactNativePermissions: 9f2d9c45c98800795e6c2ed330e25d11a66a8169
-  rn-fetch-blob: 76a8f798dae965bbcd146a2438f2e1d381c91ae3
-  RNDeviceInfo: 568c5641057313b4912d08a7742ff0b2f753ed5c
-  RNFS: bbb1a64eb245763daf34aea86f97c97c4e85f74c
-  RNShare: d875e8e37f3e5e8eb7a103ae01e06490af1796f6
+  React: 755b16d9a9387e856d4dce6528130c51e4d409b8
+  react-native-document-picker: 1e75650447a24dd5621d0d02884f004c619547f9
+  react-native-fbsdk: 5c3ff4dda057e17d3b4b5491033fc653d423e71d
+  react-native-fcm: cf78eac41b567de3022eb8f728a17b9e034077dd
+  react-native-image-picker: 3693786b3d5958c8f71deed66ec068b323565e0d
+  react-native-image-resizer: aa1600566fd336a044daf9273dcec5033c1d41ca
+  react-native-splash-screen: 25447292d379e3c247a773137ff85bbf6523604a
+  react-native-version-number: 5606c7ceacb5e728563e55da02361c6640b06dab
+  ReactNativePermissions: 2e324bb3baf12702e3ec27f76c8ae1158fa69fc6
+  rn-fetch-blob: 766f85cabd2992300dfa1be2bc9e4e258abc6f04
+  RNDeviceInfo: e7c5fcde13d40e161d8a27f6c5dc69c638936002
+  RNFS: adcee9a3e7cec0469b7709535504aac628a9ed2e
+  RNShare: 4f206fa36e384e95a0cbf79f2a92490647e93127
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
-  yoga: a23273df0088bf7f2bb7e5d7b00044ea57a2a54a
+  yoga: c3ce6137f85f60c93a834235d7f08e2b44a42eed
 
 PODFILE CHECKSUM: 055d680f3c606c570475789166d72f4f7157b534
 
-COCOAPODS: 1.6.0.beta.1
+COCOAPODS: 1.6.0.beta.2

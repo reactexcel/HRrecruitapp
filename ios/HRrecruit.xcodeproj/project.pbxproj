@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		008FE53223954F83A62B0902 /* branch.json in Resources */ = {isa = PBXBuildFile; fileRef = 029B89AB508C44A88DB6D0A2 /* branch.json */; };
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
@@ -69,6 +68,7 @@
 		CC7923956F1E4655827F3BBF /* libAppCenterReactNative.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8478AA7C880487EA0D8D004 /* libAppCenterReactNative.a */; };
 		CE9732A9CEB54083A773105D /* libAppCenterReactNativeCrashes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4D79B7E9FB49D2B0DF63A0 /* libAppCenterReactNativeCrashes.a */; };
 		E15BE246CDE30CB5A9AA1E24 /* libPods-HRrecruitTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BDE9E69DDD102BFBCF7F2E7 /* libPods-HRrecruitTests.a */; };
+		78EFDB6DF04F4861959BFE43 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F214E8938A3C42D8BDAD5038 /* Feather.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -440,6 +440,7 @@
 		F62E54B1B0ACABBC97599CD0 /* Pods-HRrecruit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HRrecruit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-HRrecruit/Pods-HRrecruit.debug.xcconfig"; sourceTree = "<group>"; };
 		FECC4816A6D9478A8221B5AF /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		FEEDC3D31A2746AB91689BD2 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		F214E8938A3C42D8BDAD5038 /* Feather.ttf */ = {isa = PBXFileReference; name = "Feather.ttf"; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -735,6 +736,7 @@
 				1F51A83708E0443D9BA04BD0 /* SimpleLineIcons.ttf */,
 				77622FFE240A429BB74BFBB3 /* Zocial.ttf */,
 				A3F76779A5D846088DE207B4 /* MaterialCommunityIcons.ttf */,
+				F214E8938A3C42D8BDAD5038 /* Feather.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1330,6 +1332,7 @@
 				552BAF03495D400A8F6AF153 /* AppCenter-Config.plist in Resources */,
 				008FE53223954F83A62B0902 /* branch.json in Resources */,
 				AC0EF101688148E38AABC95A /* MaterialCommunityIcons.ttf in Resources */,
+				78EFDB6DF04F4861959BFE43 /* Feather.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
