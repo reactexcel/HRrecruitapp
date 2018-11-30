@@ -53,7 +53,7 @@ class AppIntro extends Component {
   };
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== message) {
+    if (error !== undefined && error === 1 && message !== undefined) {
       alert(message);
     }
     if (success !== undefined && !success) {
@@ -65,9 +65,10 @@ class AppIntro extends Component {
     return null;
   }
 
-  _handleAppStateChange = nextAppState => {
+  _handleAppStateChange =async nextAppState => {
     this.setState({ didPreviouslyLaunch: nextAppState });
-    if (this.state.didPreviouslyLaunch === "active") {
+    const appIntro = await getItem("appintro");
+    if (this.state.didPreviouslyLaunch === "active" && (appIntro !== undefined && appIntro.shown) ) {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();

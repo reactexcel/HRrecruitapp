@@ -63,7 +63,7 @@ class InterviewLogin extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 /* && message !== message */) {
+    if (error !== undefined && error === 1 && message !== undefined) {
       alert(message);
     }return null;
     if (success !== undefined && !success) {
@@ -210,8 +210,10 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if(Object.keys(errors).length === 0){
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if(isConnected){
     this.setState({spinner:true})
-   await this.props.candidateValidationapi(this.state.email)}
+   await this.props.candidateValidationapi(this.state.email)}})}
     if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
      await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id)
      if(this.props.appliedJob.status !==undefined && this.props.appliedJob.status !==null){
@@ -314,7 +316,7 @@ class InterviewLogin extends Component {
               title: "Job Openings"
             });
             
-            this.setState({ email: "" });
+            this.setState({ email: "",spinner:false });
           } else if (status === SUCCESS_STATUS) {
             GOOGLE_ANALYTICS_TRACKER.trackEvent(
               this.state.email,
@@ -329,11 +331,11 @@ class InterviewLogin extends Component {
                 name: "Test",
                 email: this.state.email
               });
-              this.setState({ email: "" });
+              this.setState({ email: "",spinner:false });
               return;
             }
             this.props.navigation.navigate("OTPpage");
-            this.setState({ email: "" });
+            this.setState({ email: "",spinner:false });
           }
         } else {
           alert("Please connect to internet");

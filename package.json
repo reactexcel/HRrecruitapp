@@ -13,7 +13,7 @@
     "axios": "^0.18.0",
     "firebase": "^5.0.4",
     "immutability-helper": "^2.8.1",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "native-base": "^2.7.2",
     "prop-types": "^15.6.1",
     "pubsub-js": "^1.6.0",

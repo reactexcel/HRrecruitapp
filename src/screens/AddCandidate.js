@@ -89,7 +89,8 @@ class AddCandidate extends Component {
       isExisting:false,
       valiSpinner:false,
       forvali:false,
-      isExistUser:true
+      isExistUser:true,
+      emailVefication:true
 
   
     };
@@ -252,7 +253,7 @@ exitingCandidate = async () => {
         this.setState({isExisting:false})
       }}else if(this.props.candidateValidation.data === null){
         if(this.state.isExisting){
-        this.setState({forvali:true,isExisting:false,valiSpinner:false,isExistUser:false,bottomBotton:'JOIN NOW'})
+        this.setState({forvali:true,isExisting:false,valiSpinner:false,isExistUser:false,bottomBotton:'JOIN NOW',emailVefication:false})
       }      
         }
     if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false && this.props.navigation.state.params.addCandidate ==true) {
@@ -338,6 +339,7 @@ exitingCandidate = async () => {
             placeholderTextColor={COLOR.WHITE}
             selectionColor={COLOR.LTONE}
             underlineColorAndroid={underLineColor}
+            editable={props.emailVefication}
           />
         </Item>
         <View style={_styles.errorTextView}>
@@ -716,6 +718,7 @@ exitingCandidate = async () => {
                   keyboardType="email-address"
                   component={this.renderField}
                   autoCapitalize="none"
+                  emailVefication={this.state.emailVefication}
                 />}
              {forvali &&
               <Field
