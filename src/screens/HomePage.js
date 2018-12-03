@@ -64,12 +64,12 @@ class HomePage extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== undefined) {
+    if (error !== undefined && error === 1 && message !== message) {
       alert(message);
-    }return null;
+    }
     if (success !== undefined && !success) {
       notify("Something went wrong");
-    }return null;
+    }
     if (msg !== undefined) {
       alert(msg);
     }
@@ -149,12 +149,13 @@ class HomePage extends Component {
         // this.navigate(url);
         
       });
-    }
+    
     Permissions.checkMultiple(['location']).then(response => {
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       }
     })
+  }
     const candidateJob = await getItem("mongo_id");
     const mongo_id = await getItem("mongo_id");
     await this.setCandidateProfile();
@@ -162,6 +163,7 @@ class HomePage extends Component {
     if (appIntro !== undefined && appIntro.shown) {
       BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     }
+    if (Platform.OS === 'android') {
     const notif = await FCM.getInitialNotification().then(notif => {
       return notif;
     });
@@ -186,6 +188,8 @@ class HomePage extends Component {
     }else{
       this.setState({isNotify:false})
     }
+  }else{
+    this.setState({isNotify:false})}
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
@@ -232,10 +236,10 @@ class HomePage extends Component {
           style={[styles.listContainer]}
         >
           <View style={styles.listSubContainer}>
-            <View>
+            <View style={{flex:1}}>
               <Image
-                resizeMode="contain"
-                style={[styles.image, k == 2 ? { marginLeft: -15 } : {}]}
+                resizeMode= "contain"
+                style={[styles.image, k == 2 ? { marginLeft: -15, } : {},{marginTop: Platform.OS==='ios' ? -12 :null}]}
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>

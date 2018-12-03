@@ -100,9 +100,10 @@ export default StyleSheet.create({
   },
   viewRight:{
     // marginLeft:70,
+    marginBottom:Platform.OS === "ios" ? 20 : 5,
     position:'relative',
-    right:-25,
-    marginBottom:5,
+    right:Platform.OS === "ios" ? -20 : -25,
+    // marginBottom:5,
   },
   applyBtn: {
     paddingTop: 0,

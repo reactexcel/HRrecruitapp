@@ -46,7 +46,7 @@ export default StyleSheet.create({
     color: COLOR.TEXTCOLOR,
     paddingHorizontal: 15,
     fontFamily: "Montserrat-Bold",
-    fontSize: 12
+    fontSize:12
   },
   loginBtnStyle: {
     marginRight: 3

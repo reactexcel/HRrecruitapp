@@ -1,5 +1,5 @@
 import React, { Component, Animated } from "react";
-import { View, Text ,Linking } from "react-native";
+import { View, Text ,Linking ,Platform} from "react-native";
 import { Button } from "native-base";
 import { COLOR } from "../styles/color";
 
@@ -42,7 +42,7 @@ class ReviewButton extends Component {
               backgroundColor:
                 isPressed && index === id ? COLOR.MUSTARD : "transparent",
               borderColor: COLOR.BTNYELLOW,
-              paddingHorizontal: 10,
+              paddingHorizontal:Platform.OS === "ios" ? 8 : 10,
               marginHorizontal: id === 1 ? 7 : 0
             }}
             key={id}
@@ -50,7 +50,7 @@ class ReviewButton extends Component {
             <Text
               style={{
                 color: isPressed && index === id ? COLOR.LGTWO : "white",
-                fontSize: 10,
+                fontSize:Platform.OS === "ios" ? 8 : 10,
                 fontFamily: "Montserrat"
               }}
             >

@@ -112,6 +112,7 @@ class FullDescription extends Component {
             btnTextStyle={styles.keySkillsButtonText}
             text={text}
             key={id}
+            onPress={()=>{return true}}
           />
                 // <Button rounded style={styles.keySkillsButton} key={id}>
                 //   <Text style={styles.keySkillsButtonText}>{text}</Text>

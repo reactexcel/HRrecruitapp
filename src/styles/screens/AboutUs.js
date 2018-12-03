@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,Platform } from "react-native";
 import { COLOR } from "../color";
 
 export default StyleSheet.create({
@@ -61,7 +61,7 @@ export default StyleSheet.create({
   },
   secondrow: {
     width: "50%",
-    marginTop: 5,
+    marginTop: Platform.OS === 'ios' ?25 : 5,
     flexDirection: "column",
     justifyContent: "center",
     borderLeftWidth: 0.5,
@@ -76,7 +76,8 @@ export default StyleSheet.create({
   mobileview: {
     width: "50%",
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
+    marginTop:Platform.OS ==='ios' ? -10 :0
   },
   apptext: {
     textAlign: "center",
@@ -87,7 +88,7 @@ export default StyleSheet.create({
   },
   cloudview: {
     width: "50%",
-    marginTop: 10,
+    marginTop:Platform.OS ==='ios' ?15 : 10,
     flexDirection: "column",
     justifyContent: "center",
     borderLeftWidth: 0.5,

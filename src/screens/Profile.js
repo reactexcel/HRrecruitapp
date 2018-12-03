@@ -22,6 +22,7 @@ import styles from "../styles/screens/FullDescription";
 import { connect } from "react-redux";
 import { getJobLists, candidateUploadImage ,getCandidateUpdateProfileDetails} from "../actions";
 import { ProfileOnChange } from "../actions/actions";
+
 import {
   DocumentPicker,
   DocumentPickerUtil
@@ -30,6 +31,7 @@ import SplashScreen from "react-native-splash-screen";
 import RNFetchBlob from "rn-fetch-blob";
 import { Popup } from 'react-native-map-link';
 import { setItem, getItem } from "../helper/storage";
+var RNFS = require('react-native-fs');
 
 class Profile extends Component {
   static navigationOptions = props => {
@@ -143,6 +145,44 @@ class Profile extends Component {
           }
         }
       );
+    }else{
+      // if (Platform.OS !== "ios") {
+        //Android Only
+        DocumentPicker.show(
+          {
+            filetype: [DocumentPickerUtil.images()]
+          },
+          async(error, res) => {
+            SplashScreen.hide();
+            if (res) {
+              let check = true;
+              if (check) {
+                let type = res.type.split("/");
+                const data = await RNFS.readFile(res.uri, "base64")
+                  let base64 = require('base-64');
+                  let decodedData = base64.decode(data);
+                  let bytes = decodedData.length;
+                  let fileSizeInMB=(bytes / 1000000)
+                  if(fileSizeInMB > .8 ){
+                    alert("Image size can't exceed 800KB");
+                  }
+                  else if(fileSizeInMB <.03){
+                    alert("Image size can't be less than 30KB")
+                  }
+                  else{ 
+                    resumeData.push({
+                      fileName: res.fileName,
+                      file: data,
+                      mongo_id:this.props.navigation.state.params.mongo_id
+                    });
+                    this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
+                    this.props.candidateUploadImage(resumeData)
+                }
+              }
+            }
+          }
+        );
+      // }
     }
   };
   handleLocate = () => {
@@ -245,7 +285,7 @@ class Profile extends Component {
           }}
         />
         </LinearGradient>
-        <Modal
+        {/* <Modal
           isDisabled={false}
           coverScreen={true}
           backdropPressToClose={true}
@@ -365,7 +405,7 @@ class Profile extends Component {
               }}
             >
               <CustomButton
-                // onPress={()=>this.setState({isEditing:false})}
+                onPress={()=>this.setState({isEditing:false})}
                 type="login_to_apply"
                 btnStyle={[
                   styles.btnStyle,
@@ -388,7 +428,7 @@ class Profile extends Component {
               />
             </View>
           </View>
-        </Modal>
+        </Modal> */}
       </ScrollView>
     );
   }
