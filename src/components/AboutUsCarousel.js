@@ -10,12 +10,12 @@ export default class AboutUsCarousel extends Component {
     super();
     this.state = {
       entries: [
-        { title: require("../images/image_5.png")  },
+        { title: require("../images/image_6.png")  },
         { title: require("../images/image_2.png") },
         { title: require("../images/image_3.png") },
         { title: require("../images/image_4.png") },
         { title: require("../images/image_1.png") },
-        { title: require("../images/image_6.png") }
+        { title: require("../images/image_5.png") }
       ],
       activeSlide: 0
     };
@@ -58,8 +58,8 @@ export default class AboutUsCarousel extends Component {
 
   _renderItem({ item, index }) {
     return (
-      <View style={{height:400,width:'100%'}}>
-        <Image style={{flex:1,width:'100%',height:'100%'}} resizeMode='cover'
+      <View style={{height:390,width:'100%'}}>
+        <Image style={{flex:1,width:'100%',height:'100%'}} resizeMode='contain'
          source={item.title}
         
         />
@@ -138,8 +138,9 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: -10,
     bottom: 50,
-    borderWidth: 5,
-    borderColor: COLOR.PARENTVIEW
+    // borderWidth: 5,
+    // borderColor: COLOR.PARENTVIEW,
+    backgroundColor:'black'
   },
   leftarrow: {
     zIndex: 1,

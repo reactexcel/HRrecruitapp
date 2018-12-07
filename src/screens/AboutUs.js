@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Alert, ScrollView, Image ,TouchableNativeFeedback} from "react-native";
+import { StyleSheet, Text, View,ImageBackground, Alert, ScrollView, Image ,TouchableNativeFeedback} from "react-native";
 import { COLOR } from "../styles/color";
 import Logo from "../components/Logo";
 import LinearGradient from "react-native-linear-gradient";
@@ -65,21 +65,24 @@ class AboutUs extends Component {
     return (
       <ScrollView
       overScrollMode ='never'
+      showsVerticalScrollIndicator={false}
       >
 
         
         <View
           style={{
-            paddingBottom: 90,
+            // paddingBottom: 90,
             backgroundColor: [COLOR.LGTWO],
             zIndex: -1
           }}
         >
           <LinearGradient
             colors={[COLOR.LGONE, COLOR.LGTWO]}
-            style={{ height: 150 }}
+            style={{ height: 240 }}
           >
-            <AboutUsText textcolor="white" style={{ padding: 200 }} />
+          <ImageBackground style={{width:'100%',height:'100%'}} source ={require('../images/background.png')} >
+            <AboutUsText textcolor="white" /* style={{ padding: 200 }} */ />
+          </ImageBackground>
           </LinearGradient>
         </View>
         <View style={aboutusCss.aboutcover}>

@@ -22,7 +22,7 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Medium"
   },
   plusIcon: {
-    color: COLOR.PINK,
+    // color: COLOR.PINK,
     position: "absolute",
     top: "25%",
     right: "25%"

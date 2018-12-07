@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, Thumbnail, Icon, Item } from "native-base";
+import { View, Text, Thumbnail, Icon, Item, } from "native-base";
 import styles from "../styles/components/ProfileView";
 import PhotoUpload from "react-native-photo-upload";
-import { Image,Animated,TouchableOpacity } from "react-native";
+import { Image,Animated,TouchableOpacity ,ToastAndroid} from "react-native";
 import { COLOR } from "../styles/color";
 import { Spinner } from "native-base";
 import RNFetchBlob from "rn-fetch-blob";
@@ -29,8 +29,11 @@ const ProfileView = props => {
     spinner =true
   }
   else{
-      spinner =false
+    spinner =false
   }
+  // if(props.uploadStatus !==undefined && props.uploaded ){
+  //   ToastAndroid.show('Image uploaded',ToastAndroid.SHORT)
+  // }
   return (
     <View style={styles.profileView}>
       <Thumbnail

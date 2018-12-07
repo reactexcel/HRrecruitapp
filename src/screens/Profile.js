@@ -194,12 +194,12 @@ class Profile extends Component {
     });
   };
 // componentDidUpdate(){
-//   if(this.props.state.UploadProfilePic.data !==undefined && this.state.uploading ==true){
-//     this.setState({uploading:false})
+//   if(this.props.state.UploadProfilePic.data !==undefined && this.state.uploaded ==false){
+//     this.setState({uploaded:true})
 //   }
 // }
   render() {
-    console.log(this.state.uploading,'profile');
+    // console.log(this.state.uploading,'profile');
     
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");

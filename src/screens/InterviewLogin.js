@@ -50,7 +50,8 @@ class InterviewLogin extends Component {
     this.state = {
       email: "",
     spinner:false,
-    alertMessage:false
+    alertMessage:false,
+    activity:true
     };
   }
   static navigationOptions = {
@@ -61,15 +62,25 @@ class InterviewLogin extends Component {
     headerTintColor: COLOR.PINK
   };
 
-  static getDerivedStateFromProps(nextProps) {
-    const { error, success, msg, message } = nextProps.interviewSignUp;
+   componentDidUpdate() {
+    const { error, success, msg, message } = this.props.interviewSignUp;
+  
     if (error !== undefined && error === 1 && message !== undefined) {
+      if(this.state.activity){
+        this.setState({spinner:false,activity:false})
+      }
       alert(message);
     }return null;
     if (success !== undefined && !success) {
+      if(this.state.activity){
+        this.setState({spinner:false,activity:false})
+      }
       notify("Something went wrong");
     }return null;
     if (msg !== undefined) {
+      if(this.state.activity){
+        this.setState({spinner:false,activity:false})
+      }
       alert(msg);
     }
     return null;

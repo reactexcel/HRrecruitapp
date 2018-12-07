@@ -51,24 +51,24 @@ class AppIntro extends Component {
   static navigationOptions = {
     header: null
   };
-  static getDerivedStateFromProps(nextProps) {
-    const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== undefined) {
-      alert(message);
-    }
-    if (success !== undefined && !success) {
-      notify("Something went wrong");
-    }
-    if (msg !== undefined) {
-      alert(msg);
-    }
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps) {
+  //   const { error, success, msg, message } = nextProps.interviewSignUp;
+  //   if (error !== undefined && error === 1 && message !== undefined) {
+  //     alert(message);
+  //   }
+  //   if (success !== undefined && !success) {
+  //     notify("Something went wrong");
+  //   }
+  //   if (msg !== undefined) {
+  //     alert(msg);
+  //   }
+  //   return null;
+  // }
 
   _handleAppStateChange =async nextAppState => {
     this.setState({ didPreviouslyLaunch: nextAppState });
-    const appIntro = await getItem("appintro");
-    if (this.state.didPreviouslyLaunch === "active" && (appIntro !== undefined && appIntro.shown) ) {
+    // const appIntro = await getItem("appintro");
+    if (this.state.didPreviouslyLaunch === "active" /* && (appIntro !== undefined && appIntro.shown) */ ) {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();
@@ -180,7 +180,8 @@ class AppIntro extends Component {
             style={[styles.container, styles.containerView]}
           >
             <CardTrail />
-            <Card style={styles.appIntroCardStyle}>
+            <Card style={[{borderWidth:1},styles.appIntroCardStyle]}>
+            {/* <View style={{borderWidth:1}}> */}
               <Image
                 resizeMode="contain"
                 style={[
@@ -193,9 +194,11 @@ class AppIntro extends Component {
               />
               <View
                 style={[
-                  { marginLeft: index === 0 ? "20%" : 0 },
+                  // { marginLeft: index === 0 ? "17%" : null,marginTop:index === 0 ? 0 :null },
+                  index === 0 ? {position:'relative',left:'14%',top:0} : {}, 
                   index === 1 ? styles.secondImageTextView : {},
-                  index === 3 ? styles.fourthImageTextView : {}
+                  index === 3 ? styles.fourthImageTextView : {},
+                  // {borderWidth:1}
                 ]}
               >
                 <Text
@@ -219,6 +222,7 @@ class AppIntro extends Component {
                   {item.boldText}
                 </Text>
               </View>
+            {/* </View> */}
             </Card>
           </LinearGradient>
         </Col>

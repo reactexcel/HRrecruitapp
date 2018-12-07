@@ -9,7 +9,8 @@ import {
   FlatList,
   Clipboard,
   ToastAndroid,
-  AlertIOS
+  AlertIOS,
+  ScrollView
 } from "react-native";
 import {
   Container,
@@ -107,14 +108,15 @@ class JobList extends Component {
     this.setState({ visible: true, shareOptions: shareDetails });
   };
   renderCardItem = ({ item }) => {
+    console.log(item);
+    
     return (
       <Card style={styles.mainCard} padder>
+      
         <CardItem style={[styles.cardItem,styles.mainCard]}>
-          <JobSalaryDetails>
-            <Text style={styles.viewText}>{item.subject}</Text>
-          </JobSalaryDetails>
-          {/* <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'flex-start'}}> */}
-          <Right style={styles.viewRight} >
+        <Right style={[{position:'absolute',
+    // top:'25%',
+    right:'2.5%'},{top:item.id == 40 ? '20%' :"25%" }]} >
           <CustomButton
             onPress={() => {
               this.onApplyJob(item);
@@ -125,6 +127,24 @@ class JobList extends Component {
             text="APPLY"
           />
           </Right>
+          <JobSalaryDetails>
+            <View style={{width:'85%',flexWrap:'wrap'}}>
+            <Text style={[styles.viewText]}>{item.subject}</Text>
+          </View>
+          </JobSalaryDetails>
+
+          {/* <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start',alignItems:'flex-start'}}> */}
+          {/* <Right style={styles.viewRight} >
+          <CustomButton
+            onPress={() => {
+              this.onApplyJob(item);
+            }}
+            type="rounded"
+            btnStyle={styles.applyBtn}
+            btnTextStyle={styles.applyBtnText}
+            text="APPLY"
+          />
+          </Right> */}
           {/* </View> */}
         </CardItem>
         <CardItem>
@@ -169,23 +189,29 @@ class JobList extends Component {
           <View style={_styles.container}>
             <View />
             {!isLoading && joblist && joblist.length >= 1 ? (
-              <Fragment>
+             <ScrollView
+             showsVerticalScrollIndicator={false}
+             overScrollMode='never'
+             >
+             <Fragment>
                 <Content>
                   <AboutUsText />
                   <LinearGradient
-                    colors={[COLOR.LGONE, COLOR.LGTWO]}
+                    colors={[COLOR.JOBC1, COLOR.JOBC2]}
                     style={styles.linearGradientView}
                   >
+                  
                     <View style={_styles.jobCardView}>
                       <FlatList
                         data={joblist}
                         keyExtractor={(item, index) => item.id.toString()}
                         renderItem={this.renderCardItem}
-                      />
+                      /> 
                     </View>
                   </LinearGradient>
                 </Content>
               </Fragment>
+                    </ScrollView>
             ) : null}
             {!isLoading && userLogin ? (
               <Content padder>

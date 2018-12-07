@@ -13,7 +13,8 @@ export default StyleSheet.create({
     color: COLOR.TURQUOISE
   },
   aboutUsView: {
-    marginVertical: 10
+    marginVertical: 10,
+    paddingBottom:12
   },
   aboutUs: {
     fontFamily: "Montserrat-Regular",

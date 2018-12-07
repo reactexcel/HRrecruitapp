@@ -33,18 +33,18 @@ export default StyleSheet.create({
     paddingRight: 14
   },
   listContainer: {
-    borderWidth: 1,
-    height: height * 0.1567,
-    paddingTop: 10,
+    // borderWidth: 1,
+    height: height * 0.1550,
+    /* paddingTop: 10, */   /* 1567 */
     borderRadius: 3,
     borderBottomWidth: 0,
-    elevation: 2,
+    // elevation: 2,
     marginLeft: 10,
     marginRight: 10,
     marginTop: 8,
     marginTop: 25,
     borderRadius: 10,
-    backgroundColor: "#fefefe"
+    // backgroundColor: 'green'
   },
   logoCnt: {
     top: 0,
@@ -79,12 +79,14 @@ export default StyleSheet.create({
   },
   image: {
     width: 90,
-    height: 90
+    height: 90,
+    // marginTop:-15
   },
   listSubContainer: {
     flex: 0.87,
     flexDirection: "row",
-    marginBottom: -36
+    marginBottom: -36,
+    // backgroundColor:'red'
   },
   joinBtnStyles: {
     fontFamily: "Montserrat-Bold",

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, StyleSheet, View ,TouchableOpacity} from "react-native";
+import { Text,ScrollView, StyleSheet, View ,TouchableOpacity,ToastAndroid,AlertIOS,Clipboard,Platform} from "react-native";
 import { COLOR } from "../styles/color";
 import EmptyView from "../components/EmptyView";
 import JobSalaryDetails from "../components/JobSalaryDetails";
@@ -91,7 +91,11 @@ class FullDescription extends Component {
 
   //  this.props.navigation.getParam("keyword") !==null ? keyword = this.props.navigation.getParam("keyword").split(",") : keyword = []
    return (
-      <Container style={styles.container}>
+     <Container style={styles.container}>
+    <ScrollView
+    showsVerticalScrollIndicator={false}
+    overScrollMode='never'
+    >
         <Content showsVerticalScrollIndicator={false}>
           <JobSalaryDetails>
             <Text style={styles.jobTitle}>{job_title}</Text>
@@ -112,6 +116,7 @@ class FullDescription extends Component {
             btnTextStyle={styles.keySkillsButtonText}
             text={text}
             key={id}
+            onPress={()=>{return true}}
           />
                 // <Button rounded style={styles.keySkillsButton} key={id}>
                 //   <Text style={styles.keySkillsButtonText}>{text}</Text>
@@ -164,6 +169,8 @@ class FullDescription extends Component {
           />
           </View>
         </Content>
+      </ScrollView >
+
         <ShareSheet
           visible={this.state.visible}
           onCancel={this.onCancel.bind(this)}

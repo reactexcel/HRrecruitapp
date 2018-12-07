@@ -82,6 +82,6 @@ export default StyleSheet.create({
   fourthImageTextView: {
     position: "relative",
     top: 25,
-    right: 30
+    right: 48
   }
 });

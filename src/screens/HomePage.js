@@ -37,7 +37,7 @@ import FCM from "react-native-fcm";
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 
 import Permissions from 'react-native-permissions';
-
+var { height, width } = Dimensions.get("window");
 class HomePage extends Component {
   constructor(props) {
     super(props);
@@ -54,7 +54,9 @@ class HomePage extends Component {
       mongo_id:'',
       profile_picture:'',
       latestImage:null,
-      isNotify:true
+      isNotify:true,
+      backgroundColor:false
+      // index:''
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -62,19 +64,19 @@ class HomePage extends Component {
     header: null
   };
 
-  static getDerivedStateFromProps(nextProps) {
-    const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== undefined) {
-      alert(message);
-    }return null;
-    if (success !== undefined && !success) {
-      notify("Something went wrong");
-    }return null;
-    if (msg !== undefined) {
-      alert(msg);
-    }
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps) {
+  //   const { error, success, msg, message } = nextProps.interviewSignUp;
+  //   if (error !== undefined && error === 1 && message !== undefined) {
+  //     alert(message);
+  //   }return null;
+  //   if (success !== undefined && !success) {
+  //     notify("Something went wrong");
+  //   }return null;
+  //   if (msg !== undefined) {
+  //     alert(msg);
+  //   }
+  //   return null;
+  // }
   setCandidateProfile = async () => {
     const mongo_id = await getItem("mongo_id");
     
@@ -201,13 +203,18 @@ class HomePage extends Component {
     BackHandler.exitApp(); // works best when the goBack is async
   };
   onPressIn = k => {
-    this.setState({ textColor: true, index: k });
+    this.setState({ textColor: true, index: k ,backgroundColor:true});
+    console.log(this.state.textColor,this.state.index,k);
+    
   };
   onPressOut = () => {
-    this.setState({ textColor: false });
+    this.setState({ textColor: false,backgroundColor:false });
+    console.log(this.state.textColor);
+    
   };
   render() {
-    let { linkOpening, profile_pic, userName, textColor, index } = this.state;
+    let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
+  
     let profilepic = profile_pic
       ? { uri: profile_pic }
       : require("../images/profilepic.png");
@@ -224,27 +231,28 @@ class HomePage extends Component {
           onPressOut={() => {
             this.onPressOut();
           }}
-          underlayColor={COLOR.LGONE}
+          underlayColor=/* {COLOR.LGONE} */ "#1f264d"
           key={k}
           onPress={() => {
             this.handleViewClick(data.route);
           }}
-          style={[styles.listContainer]}
+          style={[styles.listContainer,{backgroundColor:'#fefefe',/* borderWidth:1,borderColor:'yellow' */}]}
         >
-          <View style={styles.listSubContainer}>
-            <View>
+          <View style={[styles.listSubContainer,{zIndex:-1/* borderWidth:1,borderColor:'green' */}]}>
+            <View style={{width:height * 0.1350,height: height * 0.1350,zIndex:1,position:'absolute',left:0,top:'12.2%',/* borderWidth:1,borderColor:'red' */}}>
               <Image
-                resizeMode="contain"
-                style={[styles.image, k == 2 ? { marginLeft: -15 } : {}]}
+                resizeMode='contain'
+                style={[{width:'100%',height:'100%',}, k == 2 ? {marginLeft:-17} : null ,k==1 ? {marginLeft:-5} :null  ]}
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>
-            <View style={styles.textView}>
+            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 0 && data.name=='PROFILE' ? {left:'75%'}:null,k == 0 ? {left:'55%'}:null,k == 1 ? {left:'75%'}:null,k == 2 ? {left:'60%'}:null]}>
               <Text
                 style={[
                   styles.text,
+                  {alignSelf:'center'},
                   textColor && index == k ? { color: COLOR.WHITE } : {}
-                ,{marginRight:data.name=='PROFILE' ? 40 :null}]}
+                ,/* {marginRight:data.name=='PROFILE' ? 40 :null} */]}
               >
                 {data.name}
               </Text>

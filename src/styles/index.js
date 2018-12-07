@@ -79,7 +79,9 @@ export default StyleSheet.create({
   viewText: {
     fontFamily: "Montserrat-SemiBold",
     fontSize: 13.8,
-    color: COLOR.TURQUOISE
+    color: COLOR.TURQUOISE,
+    // width:width-120
+    
   },
   iconView: {
     flexDirection: "row",
@@ -100,9 +102,14 @@ export default StyleSheet.create({
   },
   viewRight:{
     // marginLeft:70,
-    position:'relative',
-    right:-25,
-    marginBottom:5,
+    // position:'absolute',
+    // top:'25%',
+    // right:'2.5%',
+    // bottom:0,
+    // borderWidth:1
+    // right:'2%'
+    // right:-25,
+    // marginBottom:5,
   },
   applyBtn: {
     paddingTop: 0,
@@ -111,7 +118,9 @@ export default StyleSheet.create({
     paddingLeft: 1,
     width: 70,
     height: 27,
-    marginRight: 10,
+    // marginRight: 10,
+    // marginTop:-20,
+
     backgroundColor: COLOR.YELLOW,
     justifyContent: "center"
   },

@@ -17,8 +17,10 @@ export const COLOR = {
   DARKGREY: "#7d7885",
   TURQUOISE : "#00b597",
   //for linear gradient 00b597
-  LGONE: "#2a365f",
-  LGTWO: "#131931",
+  LGONE: /* "#2c3761" */ "#2a365f" ,
+  LGTWO: /* "#080b1b" */ "#131931",
+  JOBC1 :"#2c3761",
+  JOBC2:"#080b1b",
   WHITE:"#fefefe",
   LTONE:"#109aaa",
   TEXTCOLOR:"#253055",

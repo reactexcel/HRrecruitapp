@@ -2,19 +2,19 @@ import { COLOR } from "../styles/color";
 
 export const pageDetails = [
     {
-        image: [require('../images/job.png'), require("../images/jobs.png")],
+        image: [require('../images/job.png'), require("../images/job_Image.png")],
         name:'JOB OPENINGS',
         icon:'ios-arrow-forward-outline',
         route:'JobList'
     },
     {
-        image: [require('../images/company.png'), require("../images/companys.png")],
+        image: [require('../images/company.png'), require("../images/dgital_marketing.png")],
         name: 'EXCELLENCE TECHNOLOGIES',
         icon: 'ios-arrow-forward-outline',
         route: 'AboutUs'
     },
     {
-        image: [require('../images/interviews.png'), require("../images/interview.png")],
+        image: [require('../images/interviews.png'), require("../images/interview_image.png")],
         name: 'START INTERVIEW',
         icon: 'ios-arrow-forward-outline',
         route: 'InterviewLogin'
@@ -22,19 +22,19 @@ export const pageDetails = [
 ]
 export const candidatePageDetails = [
   {
-      image: [require('../images/job.png'), require("../images/jobs.png")],
+      image: [require('../images/job.png'), require("../images/job_Image.png")],
       name:'PROFILE',
       icon:'ios-arrow-forward-outline',
       route:'Profile'
   },
   {
-      image: [require('../images/company.png'), require("../images/companys.png")],
+      image: [require('../images/company.png'), require("../images/dgital_marketing.png")],
       name: 'EXCELLENCE TECHNOLOGIES',
       icon: 'ios-arrow-forward-outline',
       route: 'AboutUs'
   },
   {
-      image: [require('../images/interviews.png'), require("../images/interview.png")],
+      image: [require('../images/interviews.png'), require("../images/interview_image.png")],
       name: 'START INTERVIEW',
       icon: 'ios-arrow-forward-outline',
       route: 'InterviewLogin'
