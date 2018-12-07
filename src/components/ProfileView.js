@@ -14,7 +14,7 @@ const ProfileView = props => {
     mobile_no,
     addToProfilePage,
   } = props.profileDetails;
-  let url;
+  let url="https://cdn4.iconfinder.com/data/icons/men-avatars-icons-set-2/256/4-512.png";
   let spinner;
   if(props.profile_picture ==undefined && props.imageSource ==null){
     url=profile_pic

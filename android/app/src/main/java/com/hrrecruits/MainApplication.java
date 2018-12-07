@@ -8,6 +8,13 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.apsl.versionnumber.RNVersionNumberPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import cl.json.RNSharePackage;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
+import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
+import io.branch.rnbranch.RNBranchPackage;
 
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -57,24 +64,31 @@ public class MainApplication extends Application implements ReactApplication {
             new ImageResizerPackage(),
             new ImagePickerPackage(),
             new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new RNVersionNumberPackage(),
+            new SplashScreenReactPackage(),
+            new RNSharePackage(),
+            new GoogleAnalyticsBridgePackage(),
+            new ReactNativeDocumentPicker(),
+            new RNBranchPackage(),
 
 
 
             new RNDeviceInfo(),
             new FIRMessagingPackage(),
             // new LinearGradientPackage(),
-            new SplashScreenReactPackage(),
+            // new SplashScreenReactPackage(),
             new LinearGradientPackage(),
-            new RNSharePackage(),
-            new RNFetchBlobPackage(),
+            // new RNSharePackage(),
+            // new RNFetchBlobPackage(),
             // new RNFSPackage(),            
-            new RNBranchPackage(),
+            // new RNBranchPackage(),
             new AppCenterReactNativeCrashesPackage(MainApplication.this, getResources().getString(R.string.appCenterCrashes_whenToSendCrashes)),
             new AppCenterReactNativeAnalyticsPackage(MainApplication.this, getResources().getString(R.string.appCenterAnalytics_whenToEnableAnalytics)),
-            new AppCenterReactNativePackage(MainApplication.this),
-            new GoogleAnalyticsBridgePackage(),
-            new RNVersionNumberPackage(),
-            new ReactNativeDocumentPicker()
+            new AppCenterReactNativePackage(MainApplication.this)
+            // new GoogleAnalyticsBridgePackage(),
+            // new RNVersionNumberPackage(),
+            // new ReactNativeDocumentPicker()
       );
     }
 

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet ,Platform} from "react-native";
 import { COLOR } from "../color";
 
 export default StyleSheet.create({
@@ -23,6 +23,7 @@ export default StyleSheet.create({
   },
   plusIcon: {
     // color: COLOR.PINK,
+      marginRight:Platform.OS==='ios' ? -10 : null ,
     position: "absolute",
     top: "25%",
     right: "25%"

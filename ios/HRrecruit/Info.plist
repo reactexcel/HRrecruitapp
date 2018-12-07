@@ -39,16 +39,17 @@
 			<string>http://api.recruit.excellencetechnologies.in/exams/</string>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Entypo.ttf</string>
-		<string>EvilIcons.ttf</string>
+		<string>Montserrat-Regular.ttf</string>
+		<string>Montserrat-Medium.ttf</string>
+		<string>Montserrat-Bold.ttf</string>
+		<string>Montserrat-SemiBold.ttf</string>
+		<string>Evillcons.ttf</string>
 		<string>FontAwesome.ttf</string>
 		<string>Foundation.ttf</string>
 		<string>Ionicons.ttf</string>
-		<string>MaterialIcons.ttf</string>
+		<string>Materiallcons.ttf</string>
 		<string>Octicons.ttf</string>
 		<string>Roboto_medium.ttf</string>
 		<string>Roboto.ttf</string>
@@ -56,11 +57,25 @@
 		<string>SimpleLineIcons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>MaterialCommunityIcons.ttf</string>
-		<string>Montserrat-Regular.ttf</string>
-		<string>Montserrat-Bold.ttf</string>
-		<string>Montserrat-Medium.ttf</string>
-		<string>Montserrat-SemiBold.ttf</string>
+		<string>Feather.ttf</string>
+		<string>Entypo.ttf</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to your location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string></string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app requires access to your media storage</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string></string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string></string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>UILaunchStoryboardName</key>
@@ -73,7 +88,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 </dict>
 </plist>

@@ -1,5 +1,5 @@
 import React, { Component, Animated } from "react";
-import { View, Text, Linking } from "react-native";
+import { View, Text ,Linking ,Platform} from "react-native";
 import { Button } from "native-base";
 import { COLOR } from "../styles/color";
 

@@ -6,7 +6,7 @@ import StepIndicator from "react-native-step-indicator";
 import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
 import { connect } from "react-redux";
-import {Dimensions} from 'react-native';
+import {Dimensions,Platform} from 'react-native';
 const  {height, width} = Dimensions.get('window');
 const h=height/100;
 const ProfileDescription = props => {
@@ -94,19 +94,19 @@ const ProfileDescription = props => {
             stepStrokeFinishedColor: status_color,
             stepIndicatorFinishedColor: status_color,
             stepIndicatorCurrentColor: status_color,
-            stepIndicatorLabelCurrentColor: "red",
-            stepIndicatorLabelFinishedColor: "red",
-            stepIndicatorLabelUnFinishedColor: "red",
+            stepIndicatorLabelCurrentColor: status_color,
+            stepIndicatorLabelFinishedColor:status_color,
+            stepIndicatorLabelUnFinishedColor: '#7d7885',
             labelColor: activiColor
           }}
           currentPosition={profile_status}
           // labels={labels}
         />
-        <View style={{flex:1, flexDirection: "row", marginLeft: 15,marginRight:22,justifyContent:'space-between' }}>
+        <View style={{flex:1, flexDirection: "row", marginLeft:Platform.OS ==='ios' ? 5 : 15,marginRight:22,justifyContent:'space-between' }}>
         <View>
           <Text
             style={{
-              fontSize: 10,
+              fontSize: Platform.OS ==='ios' ? 9.8 : 10,
               fontWeight: "500",
               color: status_color,
               // marginRight: 23
@@ -118,7 +118,7 @@ const ProfileDescription = props => {
           <View style={{marginLeft:5}}>
           <Text
             style={{
-              fontSize: 10,
+              fontSize:Platform.OS ==='ios' ? 9.8 : 10,
               fontWeight: "500",
               color: FirstRound !== "#7d7885" ? FirstRound : "#7d7885",
               // marginRight: 7
@@ -130,7 +130,7 @@ const ProfileDescription = props => {
           <View /* style={{marginRight:10}} */>
           <Text
             style={{
-              fontSize: 10,
+              fontSize: Platform.OS ==='ios' ? 9.8 : 10,
               fontWeight: "500",
               color: SecondRound !== "#7d7885" ? SecondRound : "#7d7885",
               // marginRight: 7
@@ -142,7 +142,7 @@ const ProfileDescription = props => {
           <View style={{marginRight:8}}>
           <Text
             style={{
-              fontSize: 10,
+              fontSize: Platform.OS ==='ios' ? 9.8 : 10,
               fontWeight: "500",
               color: ThirdRound !== "#7d7885" ? ThirdRound : "#7d7885",
               // marginRight: 23
@@ -154,7 +154,7 @@ const ProfileDescription = props => {
           <View>
           <Text
             style={{
-              fontSize: 10,
+              fontSize: Platform.OS ==='ios' ? 9.8 : 10,
               fontWeight: "500",
               color: Result !== "#7d7885" ? Result : "#7d7885"
             }}
@@ -168,7 +168,7 @@ const ProfileDescription = props => {
         </View>
       </ProfileBlock>
       <ProfileBlock title="EXCELLENCE TECHNOLOGIES" showBorder={false}>
-        <View style={[styles.btnView, { paddingBottom:h+15+'%' }]}>
+        <View style={[styles.btnView, { paddingBottom:h+15+'%' ,marginLeft:Platform.OS==='ios' ? -7 :null}]}>
           <Button
             iconLeft
             rounded

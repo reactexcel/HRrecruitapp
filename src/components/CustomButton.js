@@ -16,7 +16,7 @@ const CustomButton = props => {
   }else if(type =='login_to_apply') {
    return( 
     <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} rounded info>
-    <Text uppercase={false} style={btnTextStyle}>
+    <Text uppercase={false} style={[btnTextStyle,{fontSize:Platform.OS==='ios' ? 11.5 :12}]}>
       {text}
     </Text>
   </Button>
@@ -26,7 +26,7 @@ const CustomButton = props => {
     return( 
      <Button onPress={props.onPress} style={[btnStyle,styles.removeShadow]} /* iconLeft */ rounded info>
      <Icon name="share" type="Entypo" style={[IconStyle/* ,{marginLeft:0} */]} />
-     <Text uppercase={false} style={[btnTextStyle,{marginLeft:-28,paddingRight:42}]}>
+     <Text uppercase={false} style={[btnTextStyle,{marginLeft:-28,paddingRight:42,fontSize:Platform.OS==='ios' ? 11.5 :12}]}>
        {text}
      </Text>
    </Button>

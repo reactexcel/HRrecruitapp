@@ -325,8 +325,8 @@ exitingCandidate = async () => {
     const {updateValue} =props
     const {newValue,isEditing,name}=props
     return (
-      <Fragment>
-        <Item stackedLabel style={_styles.inputTextView}>
+      <Fragment >
+        <Item stackedLabel style={[_styles.inputTextView]}>
           <Label style={_styles.labelText}>{props.labelName}</Label>
           <Input
             style={styles.inputText}
@@ -569,14 +569,15 @@ exitingCandidate = async () => {
   }
    onResumeAdd = async () => {
      //response is an object mapping type to permission
+     if(Platform.OS !== "ios"){
     await Permissions.checkMultiple(['location']).then(response => {
-      console.log(response,'check')
+      // console.log(response,'check')
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       } else {
         return true;
       }
-    })
+    })}
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });
@@ -587,6 +588,8 @@ exitingCandidate = async () => {
           filetype: [DocumentPickerUtil.allFiles()]
         },
         (error, res) => {
+          console.log(res);
+          
           SplashScreen.hide();
           this.scroll.scrollToEnd()
           this.setState({whenAddedResume:true})
@@ -633,8 +636,63 @@ exitingCandidate = async () => {
         }
       );
     } else {
-      alert("Not implemented in IOS");
-      this.setState({ converting: false, resumeError: null });
+      DocumentPicker.show(
+        {
+          filetype: [DocumentPickerUtil.allFiles()]
+        },
+        (error, res) => {
+          console.log(res);
+
+          
+          SplashScreen.hide();
+          this.scroll.scrollToEnd()
+          this.setState({whenAddedResume:true})
+          if (res) {
+
+            // this.scroll.scrollTo({x:0,y:200,animated:true})
+            let check =
+              this.state.resumeData.length >= 1
+                ? this.state.currentType == res.type
+                : true;
+            // if (check) {
+              let type = res.type
+              // console.log('gfhgfhgff');
+              
+              RNFS.readFile(res.uri, "base64").then(
+                data => {
+                  console.log(data, 'base64');
+                  resumeData.push({
+                    fileName: res.fileName,
+                    dataBase64: data,
+                    filetype: type[1]
+                  });
+                  let base64 = require('base-64');
+                  let decodedData = base64.decode(data);
+                  let bytes = decodedData.length;
+                  let fileSizeInMB=(bytes / 1000000)
+                  if(fileSizeInMB > 2 ){
+                    alert("File size can't be larger than 2MB");
+                  }
+                  this.setState({
+                    converting: false,
+                    resumeData,
+                    currentType: res.type
+                  });
+                },
+                error => {
+                  // console.log(error,'asdas')
+                  this.setState({ converting: false });
+                }
+              );
+            } else {
+              this.setState({ converting: false, resumeError: null });
+              alert("Please select same format for files");
+            }
+          // } else {
+          //   this.setState({ converting: false, resumeError: null });
+          // }
+        }
+      );
     }
   };
 
@@ -685,6 +743,7 @@ exitingCandidate = async () => {
   {         
     const { handleSubmit } = this.props;
     const { converting, resumeData, resumeError ,updating,adding,valiSpinner,forvali} = this.state;
+    
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >

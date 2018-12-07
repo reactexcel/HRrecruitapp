@@ -87,7 +87,8 @@ class InterviewLogin extends Component {
   }
 
   async componentDidMount() {
-    StatusBar.setBackgroundColor(COLOR.LGONE);
+    if(Platform.OS !=='ios'){
+    StatusBar.setBackgroundColor(COLOR.LGONE);}
     const ans = await getItem("solution");
     const email = await getItem("email");
     const fb_id = await getItem("fb_id");

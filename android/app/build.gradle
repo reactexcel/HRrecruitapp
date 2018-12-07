@@ -149,6 +149,13 @@ android {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
+    compile project(':react-native-version-number')
+    compile project(':react-native-splash-screen')
+    compile project(':react-native-share')
+    compile project(':react-native-google-analytics-bridge')
+    compile project(':react-native-document-picker')
+    compile project(':react-native-branch')
     compile project(':appcenter-crashes')
     compile project(':appcenter-analytics')
     compile project(':appcenter')
@@ -188,3 +195,4 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply plugin: 'com.google.gms.google-services'
 com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
+// canOverrideExistingModule=true
