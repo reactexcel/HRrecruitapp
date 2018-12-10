@@ -96,6 +96,11 @@ class Profile extends Component {
       this.setState({ joblist: data });
     }
   };
+
+  jobOpening=()=>{
+    this.props.navigation.navigate('JobList',{ title: "Job Openings",isCandidate:true })
+  }
+
   ImageUpdatedPopUp=()=>{
     console.log('updated message');
     
@@ -228,7 +233,8 @@ class Profile extends Component {
           isEditing: true,
           mongo_id:this.props.navigation.state.params.mongo_id,
           updatedData:true,
-          addCandidate:false
+          addCandidate:false,
+          isCandidate:false
         });
       }
     });
@@ -269,6 +275,7 @@ class Profile extends Component {
             isEditing={this.state.isEditing}
             job_profile={this.state.job_profile}
             onChange={value => this.onChange(value)}
+            jobOpening={()=>this.jobOpening()}
           />
           <Popup
           isVisible={this.state.isLocation}
@@ -447,7 +454,8 @@ const mapDispatchToProps = dispatch => {
     getJobLists: value => dispatch(getJobLists(value)),
     ProfileOnChange: v => dispatch(ProfileOnChange(v)),
     candidateUploadImage: data => dispatch(candidateUploadImage(data)),
-    getCandidateUpdateProfileDetails:(id)=>dispatch(getCandidateUpdateProfileDetails(id))
+    getCandidateUpdateProfileDetails:(id)=>dispatch(getCandidateUpdateProfileDetails(id)),
+    getCandidateJobDetails :()=>dispatch(getCandidateJobDetails())
   };
 };
 // export default Profile;

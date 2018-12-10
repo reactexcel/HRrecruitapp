@@ -67,8 +67,8 @@ class AppIntro extends Component {
 
   _handleAppStateChange =async nextAppState => {
     this.setState({ didPreviouslyLaunch: nextAppState });
-    // const appIntro = await getItem("appintro");
-    if (this.state.didPreviouslyLaunch === "active" /* && (appIntro !== undefined && appIntro.shown) */ ) {
+    const appIntro = await getItem("appintro");
+    if (this.state.didPreviouslyLaunch === "active" && (appIntro !== undefined && appIntro.shown) ) {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();

@@ -109,28 +109,35 @@ class AddCandidate extends Component {
     }
     return null;
   } 
-  // componentWillMount(){
-  //   alert('vlkdbvdb')
-  // }
-  //  console.log(this.props.navigation.state.params.appliedJob.job_profile
-  //   ,this.props.navigation.state.params.profileDetails.userName,this.props.navigation.state.params.profileDetails.mobile_no ,'hhhhhhhhhhhhhhhhhhhhh');
-  componentDidMount(){
-    if(this.props.navigation.state.params.isEditing==true){
-      this.setState({bottomBotton:'UPDATE'})
-        this.props.change('from',this.props.navigation.state.params.candidateDataToUpdate.candidate.data.from);
+async  componentDidMount(){
+  if(this.props.navigation.state.params.isEditing==true){
+    this.setState({bottomBotton:'UPDATE'})
+    this.props.change('from',this.props.navigation.state.params.candidateDataToUpdate.candidate.data.from);
         this.props.change("sender_mail",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.sender_mail);
         this.props.change("mobile_no",this.props.navigation.state.params.candidateDataToUpdate.candidate.data.mobile_no);
         this.props.change("resume_file",[])
         this.setState({SelectJOb:this.props.appliedJob.job_profile,resumeUpdate:'no',jobId:this.props.navigation.state.params.jobDetail.id,
         forvali:true
-
+        
       })
-      }else{
-        this.setState({resumeUpdate:'yes',forvali:false})
+    }else{
+      this.setState({resumeUpdate:'yes',forvali:false})
+      const candidateJob = await getItem("mongo_id");
+      if(this.props.navigation.state.params.isCandidate ==true && candidateJob ){
+          Alert.alert(
+            "Alert",
+            "Not allowed,You are already in",
+             [
+            {
+              text: "Ok",
+              onPress: () =>this.props.navigation.goBack()
+              
+            }
+          ]);
+        }
       }
     FCM.requestPermissions();
     FCM.getFCMToken().then(token => {
-      console.log(token);
       this.setState({fcm_token_Id:token})
       this.setState({deviceId: DeviceInfo.getUniqueID()})
     });
@@ -182,13 +189,6 @@ class AddCandidate extends Component {
           candidateJob,
           ...profileDetails
         } = this.state;
-                // this.props.navigation.navigate("Profile", {
-                //   appliedJob,
-                //   profileDetails,
-                //   sender_mail:this.state.sender_mail,
-                //   mongo_id:this.state.mongo_id,
-                //   profile_picture:this.state.profile_picture
-                // });
                 this.setState({updating:false})
                 Alert.alert(
                   "Thank You",
@@ -304,18 +304,6 @@ exitingCandidate = async () => {
       }
     }
   }
-//   onChangee=(e,a)=>{
-// console.log(e,a,'MMMMMMMMMMsssssssssssssssfffffffffffffaaaaaaaa');
-// if(a=='from'){
-// this.setState({from:e})
-// }
-// // else if(a=='sender_mail'){
-// //   this.setState({sender_mail:e})
-// // }
-// else if(a=='mobile_no'){
-//   this.setState({mobile_no:e})
-// }
-//   }
   renderField(props) {
     const { input, ...inputProps } = props;
     const {
@@ -563,7 +551,7 @@ exitingCandidate = async () => {
 
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      // console.log(response,'per storage')
+      console.log(response,'per storage')
       return true;
     })
   }
@@ -571,7 +559,7 @@ exitingCandidate = async () => {
      //response is an object mapping type to permission
      if(Platform.OS !== "ios"){
     await Permissions.checkMultiple(['location']).then(response => {
-      // console.log(response,'check')
+      console.log(response,'check')
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       } else {
@@ -594,7 +582,6 @@ exitingCandidate = async () => {
           this.scroll.scrollToEnd()
           this.setState({whenAddedResume:true})
           if (res) {
-            // this.scroll.scrollTo({x:0,y:200,animated:true})
             let check =
               this.state.resumeData.length >= 1
                 ? this.state.currentType == res.type
@@ -641,23 +628,15 @@ exitingCandidate = async () => {
           filetype: [DocumentPickerUtil.allFiles()]
         },
         (error, res) => {
-          console.log(res);
-
-          
           SplashScreen.hide();
           this.scroll.scrollToEnd()
           this.setState({whenAddedResume:true})
           if (res) {
-
-            // this.scroll.scrollTo({x:0,y:200,animated:true})
             let check =
               this.state.resumeData.length >= 1
                 ? this.state.currentType == res.type
                 : true;
-            // if (check) {
               let type = res.type
-              // console.log('gfhgfhgff');
-              
               RNFS.readFile(res.uri, "base64").then(
                 data => {
                   console.log(data, 'base64');
@@ -688,9 +667,6 @@ exitingCandidate = async () => {
               this.setState({ converting: false, resumeError: null });
               alert("Please select same format for files");
             }
-          // } else {
-          //   this.setState({ converting: false, resumeError: null });
-          // }
         }
       );
     }
@@ -713,16 +689,12 @@ exitingCandidate = async () => {
         this.setState({resumeUpdate:value})
         if(value=='yes'){
         this.scroll.scrollToEnd()
-        // alert('vbnvneovb')
         }
   }
   setdata=async ()=>{
     const candidate =this.props.candidateValidation
    await setItem("mongo_id", JSON.stringify({ candidate }))
     this.exitingCandidate();
-    console.log('gotdata');
-    
-    
   }
   emailValidation=(values)=>{
     this.props.candidateValidationapi(values.sender_mail,this.state.fcm_token_Id)
@@ -743,7 +715,6 @@ exitingCandidate = async () => {
   {         
     const { handleSubmit } = this.props;
     const { converting, resumeData, resumeError ,updating,adding,valiSpinner,forvali} = this.state;
-    
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
@@ -785,10 +756,6 @@ exitingCandidate = async () => {
                   labelName="NAME"
                   component={this.renderField}
                   params={this.props.navigation.state.params}
-                //   onChangeText={(e)=>this.onChangee(e,'from')}
-                //   newValue={this.state.from !== '' ? this.state.from :''
-                // } 
-                // isEditing={this.props.navigation.state.params.isEditing}
                    />
                     }
                {forvali && 
@@ -797,10 +764,6 @@ exitingCandidate = async () => {
                   labelName="PHONE"
                   component={this.renderField}
                   keyboardType="numeric"
-                //   onChangeText={(e)=>this.onChangee(e,'mobile_no')}
-                //   newValue={this.state.mobile_no !== '' ? this.state.mobile_no :''
-                // } 
-                  // isEditing={this.props.navigation.state.params.isEditing}
                    />
                     } 
                {forvali &&
@@ -816,8 +779,6 @@ exitingCandidate = async () => {
                   isJobEmpty={this.state.isJobEmpty}
                 />
                  }
-
-               {/* {(this.props.navigation.state.params.isEditing !==true && (!this.state.resumeUpdate =='' || !this.state.resumeUpdate =='no' )) &&  */}
                {forvali && 
                <Field
                   name="resume_file"
@@ -836,7 +797,6 @@ exitingCandidate = async () => {
                   forEditing={this.props.navigation.state.params.isEditing}
                 />
                 }
-                {/* } */}
                 </Form>
               </View>
             </Row>
@@ -852,7 +812,6 @@ exitingCandidate = async () => {
           btnTextStyle={_styles.joinNowBtnText}
           text={this.state.bottomBotton}
           onPress={handleSubmit(this.toAddCandidate)}
-          // onPress={this.props.navigation.state.params.isEditing !==true ? handleSubmit( this.onSubmit)   isExistUser !==true ? handleSubmit(this.emailValidation) :   handleSubmit( this.onUpdate)} 
           />
         )}
         </LinearGradient>
@@ -860,9 +819,7 @@ exitingCandidate = async () => {
     );
   }
 }
-validate = values => {
-  // console.log(values,'validate');
-  
+validate = values => {  
   const errors = {};
   if (!values.from) {
     errors.from = "Cannot be Empty";
@@ -889,7 +846,7 @@ validate = values => {
 };
 
 const mapStateToProps = (state ) =>{
-  console.log(state,'77');
+  // console.log(state,'77');
  return{
   candidateValidation:state.candidateValidation,
  candidate:state.candidate,

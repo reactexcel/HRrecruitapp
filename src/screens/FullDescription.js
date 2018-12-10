@@ -17,7 +17,10 @@ import {
   LOG_TO_APPLY,
   SHARE_IT,
   EDUCATION_DES,
-  RECRUIT_NAME
+  RECRUIT_NAME,
+  JOB_DESCRIPTION_SBDE,
+  EDUCATION_DES_HRADMIN,
+  EDUCATION_DES_SRBDE
 } from "../helper/constant";
 import styles from "../styles/screens/FullDescription";
 import Share, { ShareSheet, Button } from "react-native-share";
@@ -70,7 +73,7 @@ class FullDescription extends Component {
     } = this.state;
     let currentJob =this.props.navigation.state.params.currentJob
     let jobDetail=this.props.navigation.state.params.jobDetail
-    console.log(jobDetail,'jobdetails');
+    // console.log(jobDetail,'jobdetails');
     
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
@@ -78,6 +81,7 @@ class FullDescription extends Component {
       "candidate_profile"
     );
    let keyword;
+   let education_required;
    if(this.props.navigation.getParam("keyword") !==null){
      keyword=this.props.navigation.getParam("keyword").split(",")
      if(keyword.length ==1){
@@ -88,6 +92,14 @@ class FullDescription extends Component {
    }else{
      keyword=[]
    }
+   if(jobDetail.id== 40){
+     education_required =EDUCATION_DES_SRBDE;
+   }else if(jobDetail.id==12 || jobDetail.id==58){
+     education_required =EDUCATION_DES_HRADMIN;
+   }else{
+     education_required =EDUCATION_DES;
+   }
+   
 
   //  this.props.navigation.getParam("keyword") !==null ? keyword = this.props.navigation.getParam("keyword").split(",") : keyword = []
    return (
@@ -104,7 +116,7 @@ class FullDescription extends Component {
           <Text style={styles.headerTextStyle}>{JOBDES_TITLE}</Text>
           <Text style={styles.descriptionText}>{job_desription}</Text>
           <EmptyView />
-          <Text style={styles.descriptionText}>{JOB_DESCRIPTION}</Text>
+          <Text style={styles.descriptionText}> {jobDetail.id ==40 ?JOB_DESCRIPTION_SBDE :JOB_DESCRIPTION}</Text>
           <EmptyView />
        {keyword.length !==0 && <Text style={styles.headerTextStyle}>{KEY_SKILL}</Text>}
           <View style={styles.keySkillsView}>
@@ -134,7 +146,7 @@ class FullDescription extends Component {
 
           <EmptyView />
           <Text style={styles.headerTextStyle}>{EDU_TITLE}</Text>
-          <Text style={styles.descriptionText}>{EDUCATION_DES}</Text>
+          <Text style={styles.descriptionText}>{education_required}</Text>
 
           <EmptyView />
           <Text style={styles.headerTextStyle}>{COM_PRO}</Text>
@@ -152,7 +164,7 @@ class FullDescription extends Component {
       
        <CustomButton
             onPress={()=>this.props.navigation.navigate('AddCandidate', { jobDetail: jobDetail,
-              currentJob: currentJob,isEditing:false,addCandidate:true})}
+              currentJob: currentJob,isEditing:false,addCandidate:true,isCandidate:this.props.navigation.state.params.isCandidate})}
             type="login_to_apply"
             btnStyle={styles.btnStyle}
             btnTextStyle={[styles.btnText, styles.loginTextStyle]}

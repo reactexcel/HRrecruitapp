@@ -7,6 +7,14 @@ import { COLOR } from "../styles/color";
 import PropTypes from "prop-types";
 
 const JobSalaryDetails = props => {
+  // console.log(props);
+  let salary;
+  if(props.jobid == 40) {
+    salary ='400000 - 6.50000 PA'
+  }else{
+    salary ='125000 - 200000 PA'
+  }
+  
   return (
     <View style={styles.viewDesign}>
       {props.children}
@@ -33,7 +41,7 @@ const JobSalaryDetails = props => {
             color={COLOR.Red}
             style={styles.viewIcon}
           />
-          <Text style={styles.rowText}>125000 - 200000 PA</Text>
+          <Text style={styles.rowText}>{salary}</Text>
         </View>
       </View>
     </View>

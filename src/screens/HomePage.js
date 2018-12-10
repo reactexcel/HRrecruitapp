@@ -104,16 +104,14 @@ class HomePage extends Component {
           sender_mail:candidateJob.candidate.data.sender_mail,
         });
       }
-      // else if(this.props.candidateProfileUpdateDetails.profilePicture !==undefined){
-      //   this.setState({latestImage:this.props.candidateProfileUpdateDetails.profilePicture})
-      // }
-      
     else {
       this.setState({ linkOpening: false });
     }
 }
   async handleViewClick(data) {
     const { appliedJob } = this.props;
+    console.log(appliedJob,'appliedjob');
+    
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
         appliedJob: appliedJob,
@@ -135,43 +133,35 @@ class HomePage extends Component {
         latestImage:this.props.candidateProfileUpdateDetails.profilePicture
       });
     } else {
-      // this.props.navigation.navigate('candidateValidation')
-      this.props.navigation.navigate(data, { title: "Job Openings" });
+      this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
     }
   }
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
+      console.log(response);
+      
     })
   }
   componentDidMount = async () => {
     this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
     )
-    if (Platform.OS === 'android') {
-      Linking.getInitialURL().then(url => {
-        // this.navigate(url);
-        
-      });
-    
     Permissions.checkMultiple(['location']).then(response => {
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       }
     })
+  await this.setCandidateProfile();
+  const appIntro = await getItem("appintro");
+  if (appIntro !== undefined && appIntro.shown) {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
   }
-    const candidateJob = await getItem("mongo_id");
-    const mongo_id = await getItem("mongo_id");
-    await this.setCandidateProfile();
-    const appIntro = await getItem("appintro");
-    if (appIntro !== undefined && appIntro.shown) {
-      BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
-    }
-    if (Platform.OS === 'android') {
     const notif = await FCM.getInitialNotification().then(notif => {
       return notif;
     });
+    const candidateJob = await getItem("mongo_id");
+    const mongo_id = await getItem("mongo_id");
     this.setState({ notification: notif.from });
     if (this.state.notification !== undefined) {
-      // this.setState({ isNotify:false },()=>{
         if (this.state.candidateJob !== null) {
           const { appliedJob } = this.props;
           const {
@@ -186,12 +176,10 @@ class HomePage extends Component {
           });
           this.setState({ notification: "", opacity: 0,isNotify:false });
         }
-      // })
     }else{
       this.setState({isNotify:false})
     }
-  }else{
-    this.setState({isNotify:false})}
+ 
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
@@ -208,13 +196,9 @@ class HomePage extends Component {
   };
   onPressIn = k => {
     this.setState({ textColor: true, index: k ,backgroundColor:true});
-    console.log(this.state.textColor,this.state.index,k);
-    
   };
   onPressOut = () => {
     this.setState({ textColor: false,backgroundColor:false });
-    console.log(this.state.textColor);
-    
   };
   render() {
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
@@ -240,9 +224,9 @@ class HomePage extends Component {
           onPress={() => {
             this.handleViewClick(data.route);
           }}
-          style={[styles.listContainer,{backgroundColor:'#fefefe',/* borderWidth:1,borderColor:'yellow' */}]}
+          style={[styles.listContainer,{backgroundColor:'#fefefe',}]}
         >
-          <View style={[styles.listSubContainer,{zIndex:-1/* borderWidth:1,borderColor:'green' */}]}>
+          <View style={[styles.listSubContainer,{zIndex:-1}]}>
             <View style={{width:height * 0.1350,height: height * 0.1350,zIndex:1,position:'absolute',left:0,top:'12.2%',/* borderWidth:1,borderColor:'red' */}}>
               <Image
                 resizeMode='contain'
@@ -256,7 +240,7 @@ class HomePage extends Component {
                   styles.text,
                   {alignSelf:'center'},
                   textColor && index == k ? { color: COLOR.WHITE } : {}
-                ,/* {marginRight:data.name=='PROFILE' ? 40 :null} */]}
+                ,]}
               >
                 {data.name}
               </Text>
@@ -297,13 +281,6 @@ class HomePage extends Component {
                 </View>
               </View>
               <View style={styles.btnContainer}>
-                {/* <CustomButton
-                  onPress={() => {}}
-                  btnStyle={styles.btn}
-                  btnTextStyle={styles.joinBtnStyles}
-                  text={"JOIN NOW"}
-                  type={"rounded"}
-                /> */}
               </View>
               {renderCustomView}
             </View>
@@ -315,6 +292,8 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => {
+  console.log(state);
+  
   return {
   state_data: state,
   appliedJob: state.appliedJob,

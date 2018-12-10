@@ -6,7 +6,8 @@ import StepIndicator from "react-native-step-indicator";
 import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
 import { connect } from "react-redux";
-import {Dimensions,Platform} from 'react-native';
+import {Dimensions,Platform,Image} from 'react-native';
+import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
 const  {height, width} = Dimensions.get('window');
 const h=height/100;
 const ProfileDescription = props => {
@@ -168,7 +169,7 @@ const ProfileDescription = props => {
         </View>
       </ProfileBlock>
       <ProfileBlock title="EXCELLENCE TECHNOLOGIES" showBorder={false}>
-        <View style={[styles.btnView, { paddingBottom:h+15+'%' ,marginLeft:Platform.OS==='ios' ? -7 :null}]}>
+        <View style={[styles.btnView, {justifyContent:'space-evenly',paddingBottom:20,  marginLeft:Platform.OS==='ios' ? -7 :null}]}>
           <Button
             iconLeft
             rounded
@@ -204,6 +205,20 @@ const ProfileDescription = props => {
             </Text>
           </Button>
         </View>
+        <View style={{flex:.87,paddingBottom:h+15+'%',justifyContent:'center'}}>
+        <Button
+            onPress={props.jobOpening}
+            iconLeft
+            rounded
+            style={[{paddingHorizontal:'20%',alignSelf:'center'},styles.aboutBtn]}
+          >
+          {/* <Image stepIndicatorCurrentColor={require('../images/ic_launcher.png')} /> */}
+            <Icon type='FontAwesome' name="search" style={{ color: COLOR.PINK }} />
+            <Text uppercase={false} style={styles.btnText}>
+              JOB OPENINGS 
+            </Text>
+          </Button>
+          </View>
       </ProfileBlock>
     </Fragment>
   );

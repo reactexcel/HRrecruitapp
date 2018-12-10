@@ -122,7 +122,7 @@ class Instructions extends Component {
                       style={{ backgroundColor: COLOR.MUSTARD }}
                       text="Click Here"
                       onPress={() =>
-                        this.props.navigation.navigate("Homepage")
+                        this.props.navigation.navigate("HomePage")
                       }
                     />
                   </Fragment>

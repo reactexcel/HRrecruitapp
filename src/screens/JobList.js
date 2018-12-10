@@ -92,7 +92,8 @@ class JobList extends Component {
       jobDetail: item,
       currentJob: this.state.joblist,
       isEditing:false,
-      addCandidate:true
+      addCandidate:true,
+      isCandidate:true
     });
   };
   onCancel() {
@@ -127,8 +128,8 @@ class JobList extends Component {
             text="APPLY"
           />
           </Right>
-          <JobSalaryDetails>
-            <View style={{width:'85%',flexWrap:'wrap'}}>
+          <JobSalaryDetails jobid={item.id}>
+            <View style={{width:'83%',flexWrap:'wrap'}}>
             <Text style={[styles.viewText]}>{item.subject}</Text>
           </View>
           </JobSalaryDetails>
@@ -167,6 +168,7 @@ class JobList extends Component {
               candidate_profile: item.candidate_profile,
               jobDetail: item,
               currentJob: this.state.joblist,
+              isCandidate:this.props.navigation.state.params.isCandidate
             });
           }}
         />

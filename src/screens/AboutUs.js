@@ -14,7 +14,7 @@ import {
   EXCEL_BELIVE,
   EMP_SAY,
   GRW_US,
-  EDGE_TECH,
+  EDGE_TECH, 
   UX_UI,
   eCommerce,
   CLOUD_DEV,
@@ -135,7 +135,7 @@ class AboutUs extends Component {
               <View style={aboutusCss.childview}>
                 <View style={aboutusCss.firstrow}>
                   <Image
-                    style={aboutusCss.one}
+                    style={[{resizeMode:'contain'},aboutusCss.one]}
                     source={require("../images/Vector_Smart.png")}
                   />
                   <Text style={aboutusCss.imagename}>UX/UI</Text>
@@ -143,7 +143,7 @@ class AboutUs extends Component {
                 </View>
                 <View style={aboutusCss.secondrow}>
                   <Image
-                    style={aboutusCss.two}
+                    style={[{resizeMode:'contain'},aboutusCss.two]}
                     source={require("../images/Icon_cart.png")}
                   />
                   <Text style={aboutusCss.imagename}>eCommerce</Text>
@@ -165,7 +165,7 @@ class AboutUs extends Component {
               >
                 <View style={aboutusCss.mobileview}>
                   <Image
-                    style={aboutusCss.three}
+                    style={[{resizeMode:'contain'},aboutusCss.three]}
                     source={require("../images/Layer_17.png")}
                   />
                   <Text style={aboutusCss.imagename}>Mobile Apps</Text>
@@ -173,7 +173,7 @@ class AboutUs extends Component {
                 </View>
                 <View style={aboutusCss.cloudview}>
                   <Image
-                    style={aboutusCss.four}
+                    style={[{resizeMode:'contain'},aboutusCss.four]}
                     source={require("../images/Layer_18.png")}
                   />
                   <Text style={aboutusCss.imagename}>Cloud Deployment</Text>
@@ -193,7 +193,7 @@ class AboutUs extends Component {
               >
                 <View style={aboutusCss.chainview}>
                   <Image
-                    style={{ width: 70, height: 68 }}
+                    style={[{resizeMode:'contain'},{ width: 70, height: 68 }]}
                     source={require("../images/Layer_19.png")}
                   />
                 </View>
