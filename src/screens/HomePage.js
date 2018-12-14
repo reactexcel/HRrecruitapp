@@ -187,6 +187,7 @@ class HomePage extends Component {
       await this.setCandidateProfile();
       this.props.navigation.setParams({ applied: false});
     }
+    
   };
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
@@ -292,7 +293,7 @@ class HomePage extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state);
+  console.log(state ,'state');
   
   return {
   state_data: state,

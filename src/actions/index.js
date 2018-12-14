@@ -249,7 +249,7 @@ export const getCandidateDetails = fb_id => async dispatch => {
     const res = await _axios().get(`exams/candidateDetails/${fb_id}`);
     PubSub.publish("CANDIDATE_DETAILS_SUCCESS", { API_URL, fb_id, res });
     dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
-    console.log(res,'666666666');
+    // console.log(res,'666666666');
     
   } catch (err) {
     if (err.message == "timeout of 10000ms exceeded") {

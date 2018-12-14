@@ -34,7 +34,7 @@ export default StyleSheet.create({
     alignItems: "center",
     paddingLeft: 15,
     paddingRight: 15,
-    backgroundColor: COLOR.LGTWO
+    backgroundColor: /* COLOR.LGTWO */ 'transparent'
   },
   btnBack: {
     position: "absolute",

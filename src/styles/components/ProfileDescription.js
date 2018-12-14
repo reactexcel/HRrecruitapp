@@ -8,7 +8,7 @@ export default StyleSheet.create({
   },
   btnView: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: 'column',
     marginTop: 6
   },
   aboutBtn: {

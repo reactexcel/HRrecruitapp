@@ -5,7 +5,8 @@ import {
   Dimensions,
   Image,
   TouchableOpacity,
-  AppState
+  AppState,
+  NetInfo
 } from "react-native";
 import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -24,13 +25,13 @@ import { connect } from "react-redux";
 import {
   getCandidateJobDetails,
   getCandidateDetails,
-  getJobLists
+  getJobLists,
+  getCandidateRoundDetails
 } from "../actions";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import CardTrail from "../components/CardTrail";
 import FCM, { FCMEvent } from "react-native-fcm";
-
 class AppIntro extends Component {
   constructor(props) {
     super(props);
@@ -46,6 +47,7 @@ class AppIntro extends Component {
       mobile_no: null,
       textColor: false,
       notification: "",
+      index:0
     };
   }
   static navigationOptions = {
@@ -76,13 +78,17 @@ class AppIntro extends Component {
   componentDidMount = async () => {
     await this.props.getJobLists();
     AppState.addEventListener("change", this._handleAppStateChange);
-    const appIntro = await getItem("appintro");
-    const candidateJob = await getItem("mongo_id");
     await this._checkDeepLink();
-    if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-      this.props.navigation.replace("HomePage");
-    }
-    SplashScreen.hide();
+    NetInfo.isConnected.fetch().done(async isConnected => {
+      if(!isConnected){
+        const appIntro = await getItem("appintro");
+        const candidateJob = await getItem("mongo_id");
+        if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+          this.props.navigation.replace("HomePage");
+        }
+        SplashScreen.hide()
+      }
+    })
   };
 
   _checkDeepLink = async () => {
@@ -105,7 +111,7 @@ class AppIntro extends Component {
           }
         });
       }
-      if (errors) {
+      if (errors && errors !==undefined ) {
         alert("Error from Branch: " + errors);
         return;
       }
@@ -113,17 +119,26 @@ class AppIntro extends Component {
         let fb_id = params.$deeplink_path;
         await this.props.getCandidateDetails(fb_id);
         const { status } = this.props.interviewSignUp;
-        if (status == SUCCESS_STATUS) {
+        if (status == 1) {
           this.setState({ deepLink: true, fb_id: fb_id });
         } else if (error == 1) {
           this.setState({ deepLink: false });
         }
-      } else if (params.$share_data !== undefined) {
+      }
+      else if(params.$deeplink_path == undefined){
+        const appIntro = await getItem("appintro");
+        const candidateJob = await getItem("mongo_id");
+        if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+          this.props.navigation.replace("HomePage");
+        }
+      }
+      else if (params.$share_data !== undefined) {
         this.setState({ sharing: true });
       }
     });
+    SplashScreen.hide();
   };
-  _onNext = (item, index) => {
+  _onNext = (index) => {
     let items = AppDetails;
     let moveToIndex = items.length - 1 <= index;
     if (!moveToIndex) {
@@ -157,7 +172,7 @@ class AppIntro extends Component {
     }
   };
   _renderItem = ({ item, index }) => {
-    let iconName = index == 3 ? "checkmark" : "arrow-forward";
+    
     let imgMargin;
     switch (index) {
       case 0:
@@ -171,7 +186,7 @@ class AppIntro extends Component {
         break;
     }
     let font_size = index === 0 || index === 3 ? 15 : 24;
-
+           
     return (
       <Grid>
         <Col size={9} style={[styles.container]}>
@@ -180,7 +195,7 @@ class AppIntro extends Component {
             style={[styles.container, styles.containerView]}
           >
             <CardTrail />
-            <Card style={[{borderWidth:1},styles.appIntroCardStyle]}>
+            <Card style={[styles.appIntroCardStyle]}>
             {/* <View style={{borderWidth:1}}> */}
               <Image
                 resizeMode="contain"
@@ -226,7 +241,7 @@ class AppIntro extends Component {
             </Card>
           </LinearGradient>
         </Col>
-        <Row style={styles.bottomContainer}>
+        {/* <Row style={styles.bottomContainer}>
           <Text
             style={styles.skipText}
             onPress={() => {
@@ -256,17 +271,68 @@ class AppIntro extends Component {
               name={iconName}
             />
           </View>
-        </Row>
+        </Row> */}
       </Grid>
     );
   };
-  render() {
+handleScroll(event) {
+  let index = Math.ceil(
+    event.nativeEvent.contentOffset.x / 300
+  );
+  if(index == 0 || index ==1){
+    this.setState({index:0}) 
+  }else if(index ==2){
+    this.setState({index:1})
+  }else if(index ==3){
+    this.setState({index:2})
+  }else if(index ==4){
+    this.setState({index:3})
+  }
 
+}
+  render() {
+    console.log(this.state.deepLink ,this.state.fb_id , 'deeplink');
+    
+    let iconName =this.state.index == 3 ? "checkmark" : "arrow-forward";
     return (
       <Container>
+        <View style={{zIndex:1,width:'100%' ,position:'absolute' ,bottom:20}}>
+        <Row style={styles.bottomContainer}>
+          <Text
+            style={styles.skipText}
+            onPress={() => {
+              this._onSkip();
+            }}
+          >
+             {this.state.index == 3 ? "" : "Skip"}
+          </Text>
+          <ProgressBar items={AppDetails} index={this.state.index} />
+          <View
+            onPress={() => {
+              this._onNext(this.state.index);
+            }}
+            style={styles.nextView}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                this._onNext(this.state.index);
+              }}
+              style={styles.btnBack}
+            />
+            <Icon
+              onPress={() => {
+                this._onNext(this.state.index);
+              }}
+              style={styles.nextIcon}
+              name={iconName}
+            />
+          </View>
+        </Row>
+        </View>
         <FlatList
           pagingEnabled
           horizontal
+          onScroll={(e) => this.handleScroll(e)} 
           showsHorizontalScrollIndicator={false}
           ref={ref => {
             this.flatListRef = ref;
@@ -279,12 +345,16 @@ class AppIntro extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = state => {
+  // console.log(state ,'appintro');
+  
+  return{
   appliedJob: state.appliedJob,
   interviewSignUp: state.interviewSignUp,
   joblist: state.joblist
-});
+  }
+}
 export default connect(
   mapStateToProps,
-  { getCandidateJobDetails, getCandidateDetails, getJobLists }
+  { getCandidateJobDetails, getCandidateDetails, getJobLists,getCandidateRoundDetails }
 )(AppIntro);

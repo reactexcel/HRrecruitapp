@@ -6,8 +6,7 @@ import StepIndicator from "react-native-step-indicator";
 import { customStyles } from "../helper/constant";
 import styles from "../styles/components/ProfileDescription";
 import { connect } from "react-redux";
-import {Dimensions,Platform,Image} from 'react-native';
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import {Dimensions,Platform} from 'react-native';
 const  {height, width} = Dimensions.get('window');
 const h=height/100;
 const ProfileDescription = props => {
@@ -169,7 +168,8 @@ const ProfileDescription = props => {
         </View>
       </ProfileBlock>
       <ProfileBlock title="EXCELLENCE TECHNOLOGIES" showBorder={false}>
-        <View style={[styles.btnView, {justifyContent:'space-evenly',paddingBottom:20,  marginLeft:Platform.OS==='ios' ? -7 :null}]}>
+        <View style={[styles.btnView, {justifyContent:'space-evenly',/* paddingBottom:20, */  marginLeft:Platform.OS==='ios' ? -7 :null}]}>
+         <View style={{flex:1,flexDirection:'row',justifyContent:'flex-start'}}>
           <Button
             iconLeft
             rounded
@@ -204,20 +204,21 @@ const ProfileDescription = props => {
               About Us
             </Text>
           </Button>
+          {/* </View> */}
         </View>
-        <View style={{flex:.87,paddingBottom:h+15+'%',justifyContent:'center'}}>
+        <View style={{paddingBottom:h+15+'%',marginLeft:'-3.2%',marginTop:10,justifyContent:'flex-start'}}>
         <Button
             onPress={props.jobOpening}
             iconLeft
             rounded
-            style={[{paddingHorizontal:'20%',alignSelf:'center'},styles.aboutBtn]}
+            style={[/* {paddingHorizontal:'20%',alignSelf:'center'}, */styles.aboutBtn]}
           >
-          {/* <Image stepIndicatorCurrentColor={require('../images/ic_launcher.png')} /> */}
-            <Icon type='FontAwesome' name="search" style={{ color: COLOR.PINK }} />
+            <Icon name="search" type='FontAwesome' style={{ color: COLOR.PINK }} />
             <Text uppercase={false} style={styles.btnText}>
               JOB OPENINGS 
             </Text>
           </Button>
+          </View>
           </View>
       </ProfileBlock>
     </Fragment>
