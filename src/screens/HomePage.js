@@ -8,7 +8,8 @@ import {
   TouchableHighlight,
   BackHandler,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  NetInfo
 } from "react-native";
 import {
   Container,
@@ -40,6 +41,8 @@ import Permissions from 'react-native-permissions';
 var { height, width } = Dimensions.get("window");
 class HomePage extends Component {
   constructor(props) {
+    // console.log('ffffffffffff');
+    
     super(props);
     this.state = {
       linkOpening: false,
@@ -150,6 +153,8 @@ class HomePage extends Component {
         this.askStoragePermission()
       }
     })
+    NetInfo.isConnected.fetch().then(async isConnected => {
+      if(isConnected){
   await this.setCandidateProfile();
   const appIntro = await getItem("appintro");
   if (appIntro !== undefined && appIntro.shown) {
@@ -179,6 +184,11 @@ class HomePage extends Component {
     }else{
       this.setState({isNotify:false})
     }
+  }else{
+    this.setState({isNotify:false})
+    // alert('Please! connect to the internet first')
+  }
+})
  
   };
   componentDidUpdate = async () => {

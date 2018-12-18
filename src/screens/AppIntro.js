@@ -47,57 +47,70 @@ class AppIntro extends Component {
       mobile_no: null,
       textColor: false,
       notification: "",
-      index:0
+      index: 0
     };
   }
   static navigationOptions = {
     header: null
   };
-  // static getDerivedStateFromProps(nextProps) {
-  //   const { error, success, msg, message } = nextProps.interviewSignUp;
-  //   if (error !== undefined && error === 1 && message !== undefined) {
-  //     alert(message);
-  //   }
-  //   if (success !== undefined && !success) {
-  //     notify("Something went wrong");
-  //   }
-  //   if (msg !== undefined) {
-  //     alert(msg);
-  //   }
-  //   return null;
-  // }
+  static getDerivedStateFromProps(nextProps) {
+    const { error, success, msg, message } = nextProps.interviewSignUp;
+    if (error !== undefined && error === 1 && message !== undefined) {
+      alert(message);
+    }
+    if (success !== undefined && !success) {
+      notify("Something went wrong");
+    }
+    if (msg !== undefined) {
+      alert(msg);
+    }
+    return null;
+  }
 
-  _handleAppStateChange =async nextAppState => {
+  _handleAppStateChange = async nextAppState => {
     this.setState({ didPreviouslyLaunch: nextAppState });
+    // console.log(nextAppState,'appstate');
     const appIntro = await getItem("appintro");
-    if (this.state.didPreviouslyLaunch === "active" && (appIntro !== undefined && appIntro.shown) ) {
+    const candidateJob = await getItem("mongo_id");
+    if (
+      this.state.didPreviouslyLaunch === "background" &&
+      ((appIntro !== undefined && appIntro.shown) || candidateJob)
+    ) {
       this.props.navigation.replace("HomePage");
     }
     SplashScreen.hide();
   };
   componentDidMount = async () => {
-    await this.props.getJobLists();
-    AppState.addEventListener("change", this._handleAppStateChange);
-    await this._checkDeepLink();
-    NetInfo.isConnected.fetch().done(async isConnected => {
-      if(!isConnected){
+    NetInfo.isConnected.fetch().then(async isConnected => {
+      if (isConnected) {
+        await this.props.getJobLists();
+        await this._checkDeepLink();
+      } else {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
           this.props.navigation.replace("HomePage");
         }
-        SplashScreen.hide()
+        SplashScreen.hide();
+        alert("Please! Connect to the internet first");
       }
-    })
+    });
+    AppState.addEventListener("change", this._handleAppStateChange);
   };
 
   _checkDeepLink = async () => {
-    branch.subscribe(async ({ errors, params }) => {
+    branch.subscribe(async ({ params }) => {
       if (
         this.props.joblist.data !== "" &&
         this.props.joblist.data !== undefined &&
-        params.$share_data !== undefined
+        params.$share_data !== undefined &&
+        this.props.joblist !== null
       ) {
+        const appIntro = await getItem("appintro");
+        const candidateJob = await getItem("mongo_id");
+        if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+          this.props.navigation.replace("HomePage");
+        }
         this.props.joblist.data.forEach((item, i) => {
           if (item.id == params.$share_data) {
             this.props.navigation.navigate("FullDescription", {
@@ -108,10 +121,11 @@ class AppIntro extends Component {
               jobDetail: item,
               currentJob: this.props.joblist
             });
+            // SplashScreen.hide();
           }
         });
       }
-      if (errors && errors !==undefined ) {
+      if (params.errors && params.errors !== undefined) {
         alert("Error from Branch: " + errors);
         return;
       }
@@ -121,24 +135,37 @@ class AppIntro extends Component {
         const { status } = this.props.interviewSignUp;
         if (status == 1) {
           this.setState({ deepLink: true, fb_id: fb_id });
-        } else if (error == 1) {
+        } else if (params.error == 1 && params.error !== undefined) {
           this.setState({ deepLink: false });
         }
-      }
-      else if(params.$deeplink_path == undefined){
+      } else if (
+        params.$deeplink_path == undefined &&
+        params.$share_data == undefined
+      ) {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
           this.props.navigation.replace("HomePage");
+          console.log('noonce');
+          
         }
-      }
-      else if (params.$share_data !== undefined) {
+      } else if (params.$share_data !== undefined) {
         this.setState({ sharing: true });
       }
+      //   });
+
+      // }
+      // else{
+      // const appIntro = await getItem("appintro");
+      //     const candidateJob = await getItem("mongo_id");
+      //     if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+      //       this.props.navigation.replace("HomePage");
+      //     }
+      // }
     });
     SplashScreen.hide();
   };
-  _onNext = (index) => {
+  _onNext = index => {
     let items = AppDetails;
     let moveToIndex = items.length - 1 <= index;
     if (!moveToIndex) {
@@ -172,7 +199,6 @@ class AppIntro extends Component {
     }
   };
   _renderItem = ({ item, index }) => {
-    
     let imgMargin;
     switch (index) {
       case 0:
@@ -186,7 +212,7 @@ class AppIntro extends Component {
         break;
     }
     let font_size = index === 0 || index === 3 ? 15 : 24;
-           
+
     return (
       <Grid>
         <Col size={9} style={[styles.container]}>
@@ -196,7 +222,7 @@ class AppIntro extends Component {
           >
             <CardTrail />
             <Card style={[styles.appIntroCardStyle]}>
-            {/* <View style={{borderWidth:1}}> */}
+              {/* <View style={{borderWidth:1}}> */}
               <Image
                 resizeMode="contain"
                 style={[
@@ -210,9 +236,11 @@ class AppIntro extends Component {
               <View
                 style={[
                   // { marginLeft: index === 0 ? "17%" : null,marginTop:index === 0 ? 0 :null },
-                  index === 0 ? {position:'relative',left:'14%',top:0} : {}, 
+                  index === 0
+                    ? { position: "relative", left: "14%", top: 0 }
+                    : {},
                   index === 1 ? styles.secondImageTextView : {},
-                  index === 3 ? styles.fourthImageTextView : {},
+                  index === 3 ? styles.fourthImageTextView : {}
                   // {borderWidth:1}
                 ]}
               >
@@ -237,7 +265,7 @@ class AppIntro extends Component {
                   {item.boldText}
                 </Text>
               </View>
-            {/* </View> */}
+              {/* </View> */}
             </Card>
           </LinearGradient>
         </Col>
@@ -275,64 +303,63 @@ class AppIntro extends Component {
       </Grid>
     );
   };
-handleScroll(event) {
-  let index = Math.ceil(
-    event.nativeEvent.contentOffset.x / 300
-  );
-  if(index == 0 || index ==1){
-    this.setState({index:0}) 
-  }else if(index ==2){
-    this.setState({index:1})
-  }else if(index ==3){
-    this.setState({index:2})
-  }else if(index ==4){
-    this.setState({index:3})
+  handleScroll(event) {
+    let index = Math.ceil(event.nativeEvent.contentOffset.x / 300);
+    if (index == 0 || index == 1) {
+      this.setState({ index: 0 });
+    } else if (index == 2) {
+      this.setState({ index: 1 });
+    } else if (index == 3) {
+      this.setState({ index: 2 });
+    } else if (index == 4) {
+      this.setState({ index: 3 });
+    }
   }
-
-}
   render() {
-    console.log(this.state.deepLink ,this.state.fb_id , 'deeplink');
-    
-    let iconName =this.state.index == 3 ? "checkmark" : "arrow-forward";
+    // console.log(this.state.deepLink ,this.state.fb_id , 'deeplink');
+
+    let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
     return (
       <Container>
-        <View style={{zIndex:1,width:'100%' ,position:'absolute' ,bottom:20}}>
-        <Row style={styles.bottomContainer}>
-          <Text
-            style={styles.skipText}
-            onPress={() => {
-              this._onSkip();
-            }}
-          >
-             {this.state.index == 3 ? "" : "Skip"}
-          </Text>
-          <ProgressBar items={AppDetails} index={this.state.index} />
-          <View
-            onPress={() => {
-              this._onNext(this.state.index);
-            }}
-            style={styles.nextView}
-          >
-            <TouchableOpacity
+        <View
+          style={{ zIndex: 1, width: "100%", position: "absolute", bottom: 20 }}
+        >
+          <Row style={styles.bottomContainer}>
+            <Text
+              style={styles.skipText}
+              onPress={() => {
+                this._onSkip();
+              }}
+            >
+              {this.state.index == 3 ? "" : "Skip"}
+            </Text>
+            <ProgressBar items={AppDetails} index={this.state.index} />
+            <View
               onPress={() => {
                 this._onNext(this.state.index);
               }}
-              style={styles.btnBack}
-            />
-            <Icon
-              onPress={() => {
-                this._onNext(this.state.index);
-              }}
-              style={styles.nextIcon}
-              name={iconName}
-            />
-          </View>
-        </Row>
+              style={styles.nextView}
+            >
+              <TouchableOpacity
+                onPress={() => {
+                  this._onNext(this.state.index);
+                }}
+                style={styles.btnBack}
+              />
+              <Icon
+                onPress={() => {
+                  this._onNext(this.state.index);
+                }}
+                style={styles.nextIcon}
+                name={iconName}
+              />
+            </View>
+          </Row>
         </View>
         <FlatList
           pagingEnabled
           horizontal
-          onScroll={(e) => this.handleScroll(e)} 
+          onScroll={e => this.handleScroll(e)}
           showsHorizontalScrollIndicator={false}
           ref={ref => {
             this.flatListRef = ref;
@@ -346,15 +373,20 @@ handleScroll(event) {
   }
 }
 const mapStateToProps = state => {
-  // console.log(state ,'appintro');
-  
-  return{
-  appliedJob: state.appliedJob,
-  interviewSignUp: state.interviewSignUp,
-  joblist: state.joblist
-  }
-}
+  console.log(state, "appintro");
+
+  return {
+    appliedJob: state.appliedJob,
+    interviewSignUp: state.interviewSignUp,
+    joblist: state.joblist
+  };
+};
 export default connect(
   mapStateToProps,
-  { getCandidateJobDetails, getCandidateDetails, getJobLists,getCandidateRoundDetails }
+  {
+    getCandidateJobDetails,
+    getCandidateDetails,
+    getJobLists,
+    getCandidateRoundDetails
+  }
 )(AppIntro);
