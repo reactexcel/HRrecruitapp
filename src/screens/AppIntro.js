@@ -100,6 +100,8 @@ class AppIntro extends Component {
 
   _checkDeepLink = async () => {
     branch.subscribe(async ({ params }) => {
+      console.log(params);
+      
       if (
         this.props.joblist.data !== "" &&
         this.props.joblist.data !== undefined &&
@@ -316,7 +318,7 @@ class AppIntro extends Component {
     }
   }
   render() {
-    // console.log(this.state.deepLink ,this.state.fb_id , 'deeplink');
+    console.log(branch , 'deeplink');
 
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
     return (
