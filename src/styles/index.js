@@ -1,0 +1,137 @@
+import { StyleSheet, Platform, Dimensions } from "react-native";
+var { height, width } = Dimensions.get("window");
+
+import { COLOR } from "./color";
+import { CardItem } from "native-base";
+
+export default StyleSheet.create({
+  container: {
+    backgroundColor: COLOR.LGONE,
+  },
+  logoView: {
+    flexBasis: "25%",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  linearGradientView: {
+    flex: 1,
+  },
+  blockView: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: width * 0.93,
+    borderRadius: 5,
+    padding: 10,
+    borderWidth: 0,
+  },
+  headerText: {
+    color: COLOR.Black,
+    fontSize: Platform.OS === "ios" ? 22 : 20,
+    fontWeight: Platform.OS === "ios" ? "700" : "500",
+    letterSpacing: 1,
+    textAlign: "center"
+  },
+  text: {
+    fontFamily: "Montserrat-Medium",
+    textAlign: "center",
+    // letterSpacing: 0.4,
+    color: COLOR.TEXTCOLOR,
+    fontSize: 13.5
+  },
+  inputText: {
+    color: "#7d7885",
+    fontSize: Platform.OS === "ios" ? 19 : 17,
+    fontWeight: "400",
+    fontFamily: "Montserrat-Regular"
+  },
+  itemView: {
+    paddingVertical: 10,
+    borderBottomWidth: 0
+  },
+  footerView: {
+    height: 15,
+    backgroundColor: COLOR.BGCOLOR,
+    borderTopWidth: 0
+  },
+  footerText: {
+    letterSpacing: 1,
+    textAlign: "left",
+    fontSize: 10,
+    color: "#fff"
+  },
+  buttonPadder: {
+    margin: 10,
+    height: 35,
+    backgroundColor: COLOR.LGONE,
+    marginBottom: 15
+  },
+  descriptionText: {
+    width: width * 0.88,
+    marginBottom: -20
+  },
+  cardItem: {
+    justifyContent: "space-between",
+    padding: 0,
+  },
+  viewDesign: {
+    flexDirection: "column"
+  },
+  viewText: {
+    fontFamily: "Montserrat-SemiBold",
+    fontSize: 13.8,
+    color: COLOR.TURQUOISE,
+    // width:width-120
+    
+  },
+  iconView: {
+    flexDirection: "row",
+    marginTop: 10
+  },
+  viewRow: {
+    flexDirection: "row"
+  },
+  viewIcon: {
+    marginTop: 1
+  },
+  rowText: {
+    fontFamily: "Montserrat-Medium",
+    color: COLOR.TEXTCOLOR,
+    fontSize: 10.5,
+    marginLeft: 2,
+    marginRight: 10
+  },
+  viewRight:{
+    // marginLeft:70,
+    // position:'absolute',
+    // top:'25%',
+    // right:'2.5%',
+    // bottom:0,
+    // borderWidth:1
+    // right:'2%'
+    // right:-25,
+    // marginBottom:5,
+  },
+  applyBtn: {
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 1,
+    paddingLeft: 1,
+    width: 70,
+    height: 27,
+    // marginRight: 10,
+    // marginTop:-20,
+
+    backgroundColor: COLOR.YELLOW,
+    justifyContent: "center"
+  },
+  applyBtnText: {
+    fontFamily: "Montserrat-Bold",
+    fontSize: 9,
+    alignSelf: "center",
+    textAlign: "center",
+    color: COLOR.BGCOLOR
+  },
+  mainCard: {
+    borderRadius:5
+  }
+});
