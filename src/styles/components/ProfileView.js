@@ -15,11 +15,11 @@ export default StyleSheet.create({
   },
   nameText: {
     fontSize: 20,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   number: {
     color: COLOR.TURQUOISE,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   plusIcon: {
     // color: COLOR.PINK,

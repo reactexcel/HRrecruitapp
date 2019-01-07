@@ -19,7 +19,7 @@ export default StyleSheet.create({
   errorText: {
     color: COLOR.Red,
     fontSize: 12,
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     marginLeft: 15
   },
   text: {
@@ -40,7 +40,7 @@ export default StyleSheet.create({
     fontSize: Platform.OS === "ios" ? 16 : 14,
     color: COLOR.DarkGrey,
     fontWeight: Platform.OS === "ios" ? "400" : "400",
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   uploadSection: {
     flexDirection: "row",
@@ -78,17 +78,17 @@ export default StyleSheet.create({
   checkedBtnText: {
     fontSize: 11,
     color: "black",
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   uncheckedBtnText: {
     fontSize: 11,
     color: COLOR.WHITE,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   labelText: {
     color: COLOR.TURQUOISE,
     marginLeft:3,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   jobTitleView: {
     margin: 6,
@@ -96,7 +96,7 @@ export default StyleSheet.create({
   },
   jobTitleText: {
     alignSelf: "flex-start",
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   jobTitleBtnView: {
     flexDirection: "row",
@@ -108,7 +108,7 @@ export default StyleSheet.create({
     marginLeft: 8
   },
   resumeText: {
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   cloudBtn: {
     marginTop: 5
@@ -121,19 +121,19 @@ export default StyleSheet.create({
     textAlign: "center",
     fontSize: 13,
     color: COLOR.WHITE,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   acquaintedDescription: {
     textAlign: "center",
     color: COLOR.WHITE,
     fontSize: 11.5,
-    fontFamily: "Montserrat-Regular"
+    // fontFamily: "Montserrat-Regular"
   },
   joinNowBtn: {
     backgroundColor: COLOR.MUSTARD
   },
   joinNowBtnText: {
     color: "black",
-    fontFamily: "Montserrat-Bold"
+    // fontFamily: "Montserrat-Bold"
   }
 });

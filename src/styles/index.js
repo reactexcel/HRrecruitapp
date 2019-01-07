@@ -32,7 +32,7 @@ export default StyleSheet.create({
     textAlign: "center"
   },
   text: {
-    fontFamily: "Montserrat-Medium",
+    // fontFamily: "Montserrat-Medium",
     textAlign: "center",
     // letterSpacing: 0.4,
     color: COLOR.TEXTCOLOR,
@@ -42,7 +42,7 @@ export default StyleSheet.create({
     color: "#7d7885",
     fontSize: Platform.OS === "ios" ? 19 : 17,
     fontWeight: "400",
-    fontFamily: "Montserrat-Regular"
+    // fontFamily: "Montserrat-Regular"
   },
   itemView: {
     paddingVertical: 10,
@@ -77,7 +77,7 @@ export default StyleSheet.create({
     flexDirection: "column"
   },
   viewText: {
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     fontSize: 13.8,
     color: COLOR.TURQUOISE,
     // width:width-120
@@ -94,7 +94,7 @@ export default StyleSheet.create({
     marginTop: 1
   },
   rowText: {
-    fontFamily: "Montserrat-Medium",
+    // fontFamily: "Montserrat-Medium",
     color: COLOR.TEXTCOLOR,
     fontSize: 10.5,
     marginLeft: 2,
@@ -125,7 +125,7 @@ export default StyleSheet.create({
     justifyContent: "center"
   },
   applyBtnText: {
-    fontFamily: "Montserrat-Bold",
+    // fontFamily: "Montserrat-Bold",
     fontSize: 9,
     alignSelf: "center",
     textAlign: "center",

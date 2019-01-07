@@ -9,7 +9,7 @@ export default StyleSheet.create({
     paddingHorizontal: 10
   },
   textStyle: {
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     color: COLOR.TURQUOISE
   },
   aboutUsView: {
@@ -17,7 +17,7 @@ export default StyleSheet.create({
     paddingBottom:12
   },
   aboutUs: {
-    fontFamily: "Montserrat-Regular",
+    // fontFamily: "Montserrat-Regular",
     textAlign: "center",
     fontSize: 13.5,
     textAlignVertical: "center"

@@ -71,16 +71,16 @@ export default StyleSheet.create({
     paddingVertical: 1
   },
   optionText: {
-    fontFamily: "Montserrat-Medium",
+    // fontFamily: "Montserrat-Medium",
     color: COLOR.TEXTCOLOR
   },
   questionTextStyle: {
     fontSize: 16,
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     color: COLOR.TURQUOISE
   },
   accordionHeaderText: {
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     color: COLOR.TEXTCOLOR,
     textAlign: "center"
   },
@@ -97,15 +97,15 @@ export default StyleSheet.create({
   },
   remainingTimeText: {
     color: COLOR.Red,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   timerStyle: {
     color: COLOR.Red,
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     fontSize: 16
   },
   submitButtonText: {
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-Bold"
+    // fontFamily: "Montserrat-Bold"
   }
 });

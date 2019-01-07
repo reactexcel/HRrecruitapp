@@ -9,16 +9,16 @@ export default StyleSheet.create({
   },
   jobTitle: {
     color: COLOR.TURQUOISE,
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     fontSize: 18
   },
   headerTextStyle: {
-    fontFamily: "Montserrat-Bold",
+    // fontFamily: "Montserrat-Bold",
     color: COLOR.TEXTCOLOR
   },
   descriptionText: {
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   btnView: {
     flex: 1,
@@ -27,7 +27,7 @@ export default StyleSheet.create({
     marginBottom: 50
   },
   btnText: {
-    fontFamily: "Montserrat-Bold",
+    // fontFamily: "Montserrat-Bold",
     color: COLOR.TEXTCOLOR
   },
   btnStyle: { backgroundColor: COLOR.MUSTARD },
@@ -45,7 +45,7 @@ export default StyleSheet.create({
   keySkillsButtonText: {
     color: COLOR.TEXTCOLOR,
     paddingHorizontal: 15,
-    fontFamily: "Montserrat-Bold",
+    // fontFamily: "Montserrat-Bold",
     fontSize:12
   },
   loginBtnStyle: {

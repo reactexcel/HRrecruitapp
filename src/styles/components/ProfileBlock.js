@@ -9,7 +9,7 @@ export default StyleSheet.create({
   titleStyle: {
     color: COLOR.TURQUOISE,
     fontSize: 18,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   },
   borderStyle: {
     borderWidth: 0.5,

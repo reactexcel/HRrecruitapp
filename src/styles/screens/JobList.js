@@ -7,7 +7,7 @@ export default StyleSheet.create({
     textAlign: "auto"
   },
   fullDescriptionText: {
-    fontFamily: "Montserrat-Bold",
+    // fontFamily: "Montserrat-Bold",
     fontSize: 13
   },
   jobCardView: {

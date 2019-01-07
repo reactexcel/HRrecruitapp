@@ -4,7 +4,7 @@ export default StyleSheet.create({
   textStyle: {
     color: "white",
     marginTop: 6,
-    fontFamily: "Montserrat-Regular"
+    // fontFamily: "Montserrat-Regular"
   },
   btnView: {
     flex: 1,
@@ -21,6 +21,6 @@ export default StyleSheet.create({
     elevation:0
   },
   btnText: {
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   }
 });

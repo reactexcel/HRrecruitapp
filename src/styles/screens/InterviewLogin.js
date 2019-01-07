@@ -18,6 +18,6 @@ export default StyleSheet.create({
   },
   textStyle: {
     color: COLOR.LGONE,
-    fontFamily: "Montserrat-Bold"
+    // fontFamily: "Montserrat-Bold"
   }
 });

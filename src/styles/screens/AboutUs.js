@@ -26,7 +26,7 @@ export default StyleSheet.create({
     color: COLOR.TURQUOISE,
     marginTop: 2,
     marginBottom: 5,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   ecom: {
     width: "96%",
@@ -35,19 +35,19 @@ export default StyleSheet.create({
     marginTop: 0,
     marginLeft: 6,
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   ux: {
     textAlign: "center",
     fontSize: 11,
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   edge: {
     textAlign: "center",
     fontSize: 12,
     color: COLOR.EDGECOLOR,
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     marginLeft: 5,
     marginRight: 5,
     fontWeight: "100"
@@ -55,7 +55,7 @@ export default StyleSheet.create({
   grw: {
     marginTop: 18,
     textAlign: "center",
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     fontSize: 16,
     color: COLOR.TURQUOISE
   },
@@ -84,7 +84,7 @@ export default StyleSheet.create({
     fontSize: 11,
     width: "98%",
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   cloudview: {
     width: "50%",
@@ -100,7 +100,7 @@ export default StyleSheet.create({
     fontSize: 11,
     marginLeft: 6,
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   blockchainname: {
     textAlign: "center",
@@ -108,7 +108,7 @@ export default StyleSheet.create({
     color: COLOR.TURQUOISE,
     marginTop: 2,
     marginBottom: 5,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   blockchaintext: {
     textAlign: "center",
@@ -116,7 +116,7 @@ export default StyleSheet.create({
     width: "52%",
     alignSelf: "center",
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   aboutcover: {
     width: "94%",
@@ -135,7 +135,7 @@ export default StyleSheet.create({
   },
   ourServices: {
     fontSize: 18,
-    fontFamily: "Montserrat",
+    // fontFamily: "Montserrat",
     color: COLOR.TURQUOISE,
     textAlign: "center",
     marginBottom: 20
@@ -153,7 +153,7 @@ export default StyleSheet.create({
   },
   excelbelieve: {
     fontSize: 14,
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     color: COLOR.TEXTCOLOR
   },
   masterview: {

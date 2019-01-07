@@ -5481,7 +5481,7 @@ react-native-fcm@^16.2.3:
   version "16.2.4"
   resolved "https://registry.yarnpkg.com/react-native-fcm/-/react-native-fcm-16.2.4.tgz#1ed0cf6a9712949c178ee01265cc0b98b103dfc3"
 
-react-native-fs@^2.12.0, react-native-fs@^2.5.1:
+react-native-fs@^2.5.1:
   version "2.13.3"
   resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.13.3.tgz#a422f0ecd8a093a7e99d8d51ff51440e090a18a8"
   dependencies:

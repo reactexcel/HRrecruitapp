@@ -13,7 +13,7 @@ export default StyleSheet.create({
   },
   cnfrm: {
     textAlign: "center",
-    fontFamily: "Montserrat-SemiBold",
+    // fontFamily: "Montserrat-SemiBold",
     fontSize: 20,
     color: "#253055"
   },
@@ -52,12 +52,12 @@ export default StyleSheet.create({
     marginBottom: 15,
     marginTop: -5,
     color: "#109aaa",
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   modalText: {
     fontSize: 12,
     marginBottom: 15,
-    fontFamily: "Montserrat-SemiBold"
+    // fontFamily: "Montserrat-SemiBold"
   },
   modalBtnView: {
     flexDirection: "row",
@@ -82,6 +82,6 @@ export default StyleSheet.create({
   btnTextStyle: {
     fontSize: 10,
     color: COLOR.TEXTCOLOR,
-    fontFamily: "Montserrat-Medium"
+    // fontFamily: "Montserrat-Medium"
   }
 });
