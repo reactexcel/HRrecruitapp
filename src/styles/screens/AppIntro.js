@@ -56,15 +56,15 @@ export default StyleSheet.create({
   },
   rawText: {
     color: "#263051",
-    // fontFamily: "Montserrat-Bold"
+    fontFamily: "Montserrat-Bold"
   },
   boldText: {
     color: COLOR.MUSTARD,
-    // fontFamily: "Montserrat-Bold"
+    fontFamily: "Montserrat-Bold"
   },
   skipText: {
     color: "white",
-    // fontFamily: "Montserrat-Regular"
+    fontFamily: "Montserrat-Regular"
   },
   nextView: {
     marginRight: 7,

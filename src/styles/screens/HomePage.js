@@ -72,7 +72,7 @@ export default StyleSheet.create({
   },
   text: {
     fontSize: 15,
-    // fontFamily: "Montserrat-Bold",
+    fontFamily: "Montserrat-Bold",
     color: COLOR.LGONE,
     alignSelf: "center",
 
@@ -89,7 +89,7 @@ export default StyleSheet.create({
     // backgroundColor:'red'
   },
   joinBtnStyles: {
-    // fontFamily: "Montserrat-Bold",
+    fontFamily: "Montserrat-Bold",
     fontSize: 14,
     fontWeight: "100",
     color: COLOR.LGONE

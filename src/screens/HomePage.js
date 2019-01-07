@@ -24,22 +24,22 @@ import {
   Spinner,
   TabHeading
 } from "native-base";
-// import { connect } from "react-redux";
+import { connect } from "react-redux";
 import styles from "../styles/screens/HomePage";
 import { COLOR } from "../styles/color";
-// import CustomButton from "../components/CustomButton";
+import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
 import { pageDetails, candidatePageDetails } from "../helper/json";
-// import { setItem, getItem } from "../helper/storage";
-// import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails } from "../actions";
-import {LinearGradient} from 'expo'
+import { setItem, getItem } from "../helper/storage";
+import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails } from "../actions";
+import {LinearGradient} from "expo";
 // import SplashScreen from "react-native-splash-screen";
 // import FCM from "react-native-fcm";
-// import {ProfileOnChange,UploadProfile} from '../actions/actions'
+import {ProfileOnChange,UploadProfile} from '../actions/actions'
 
 // import Permissions from 'react-native-permissions';
 var { height, width } = Dimensions.get("window");
-export default class HomePage extends Component {
+class HomePage extends Component {
   constructor(props) {
     // console.log('ffffffffffff');
     
@@ -61,7 +61,7 @@ export default class HomePage extends Component {
       backgroundColor:false
       // index:''
     };
-    // this.handleViewClick = this.handleViewClick.bind(this);
+    this.handleViewClick = this.handleViewClick.bind(this);
   }
   static navigationOptions = {
     header: null
@@ -80,148 +80,148 @@ export default class HomePage extends Component {
   //   }
   //   return null;
   // }
-//   setCandidateProfile = async () => {
-//     const mongo_id = await getItem("mongo_id");
+  setCandidateProfile = async () => {
+    const mongo_id = await getItem("mongo_id");
     
-//     if(mongo_id){
-//       this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
-//       })
-//     }
-//   await this.props.getCandidateUpdateProfileDetails(this.state.mongo_id)
-//     const candidateJob = await getItem("mongo_id");
-//     if (candidateJob) {
-//       this.props.UploadProfile(candidateJob)
-//       this.setState({mongo_id:candidateJob.candidate.data._id})
-//         let email = candidateJob.candidate.data.sender_mail;
-//         let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
-//         let mobile_no = candidateJob.candidate.data.mobile_no;
-//         let userName = candidateJob.candidate.data.from;
-//         await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-//         this.setState({
-//           candidateJob,
-//           profile_pic,
-//           userName,
-//           mobile_no,
-//           linkOpening: false,
-//           notification: "",
-//           sender_mail:candidateJob.candidate.data.sender_mail,
-//         });
-//       }
-//     else {
-//       this.setState({ linkOpening: false });
-//     }
-// }
-//   async handleViewClick(data) {
-//     const { appliedJob } = this.props;
-//     console.log(appliedJob,'appliedjob');
+    if(mongo_id){
+      this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
+      })
+    }
+  await this.props.getCandidateUpdateProfileDetails(this.state.mongo_id)
+    const candidateJob = await getItem("mongo_id");
+    if (candidateJob) {
+      this.props.UploadProfile(candidateJob)
+      this.setState({mongo_id:candidateJob.candidate.data._id})
+        let email = candidateJob.candidate.data.sender_mail;
+        let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
+        let mobile_no = candidateJob.candidate.data.mobile_no;
+        let userName = candidateJob.candidate.data.from;
+        await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        this.setState({
+          candidateJob,
+          profile_pic,
+          userName,
+          mobile_no,
+          linkOpening: false,
+          notification: "",
+          sender_mail:candidateJob.candidate.data.sender_mail,
+        });
+      }
+    else {
+      this.setState({ linkOpening: false });
+    }
+}
+  async handleViewClick(data) {
+    const { appliedJob } = this.props;
+    console.log(appliedJob,'appliedjob');
     
-//     if (data == "JobList" && this.state.candidateJob) {
-//       this.props.navigation.navigate(data, {
-//         appliedJob: appliedJob,
-//         title: "Your Applied Jobs"
-//       });
-//     } else if (data == "Profile") {
-//       const {
-//         linkOpening,
-//         textColor,
-//         candidateJob,
-//         ...profileDetails
-//       } = this.state;
-//       this.props.navigation.navigate("Profile", {
-//         appliedJob,
-//         profileDetails,
-//         sender_mail:this.state.sender_mail,
-//         mongo_id:this.state.mongo_id,
-//         profile_picture:this.state.profile_picture,
-//         latestImage:this.props.candidateProfileUpdateDetails.profilePicture
-//       });
-//     } else {
-//       this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
-//     }
-//   }
-//   askStoragePermission = async () =>{
-//     await Permissions.request('storage').then(response => {
-//       console.log(response);
+    if (data == "JobList" && this.state.candidateJob) {
+      this.props.navigation.navigate(data, {
+        appliedJob: appliedJob,
+        title: "Your Applied Jobs"
+      });
+    } else if (data == "Profile") {
+      const {
+        linkOpening,
+        textColor,
+        candidateJob,
+        ...profileDetails
+      } = this.state;
+      this.props.navigation.navigate("Profile", {
+        appliedJob,
+        profileDetails,
+        sender_mail:this.state.sender_mail,
+        mongo_id:this.state.mongo_id,
+        profile_picture:this.state.profile_picture,
+        latestImage:this.props.candidateProfileUpdateDetails.profilePicture
+      });
+    } else {
+      this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
+    }
+  }
+  // askStoragePermission = async () =>{
+  //   await Permissions.request('storage').then(response => {
+  //     console.log(response);
       
-//     })
-//   }
-//   componentDidMount = async () => {
-//     this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
-//     )
-//     Permissions.checkMultiple(['location']).then(response => {
-//       if(response.storage != 'authorized'){
-//         this.askStoragePermission()
-//       }
-//     })
-//     NetInfo.isConnected.fetch().then(async isConnected => {
-//       if(isConnected){
-//   await this.setCandidateProfile();
-//   const appIntro = await getItem("appintro");
-//   if (appIntro !== undefined && appIntro.shown) {
-//     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
-//   }
-//     const notif = await FCM.getInitialNotification().then(notif => {
-//       return notif;
-//     });
-//     const candidateJob = await getItem("mongo_id");
-//     const mongo_id = await getItem("mongo_id");
-//     this.setState({ notification: notif.from });
-//     if (this.state.notification !== undefined) {
-//         if (this.state.candidateJob !== null) {
-//           const { appliedJob } = this.props;
-//           const {
-//             linkOpening,
-//             textColor,
-//             candidateJob,
-//             ...profileDetails
-//           } = this.state;
-//           this.props.navigation.navigate("Profile", {
-//             appliedJob,
-//             profileDetails
-//           });
-//           this.setState({ notification: "", opacity: 0,isNotify:false });
-//         }
-//     }else{
-//       this.setState({isNotify:false})
-//     }
-//   }else{
-//     this.setState({isNotify:false})
-//     // alert('Please! connect to the internet first')
-//   }
-// })
+  //   })
+  // }
+  componentDidMount = async () => {
+    this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
+    )
+    // Permissions.checkMultiple(['location']).then(response => {
+    //   if(response.storage != 'authorized'){
+    //     this.askStoragePermission()
+    //   }
+    // })
+    NetInfo.isConnected.fetch().then(async isConnected => {
+      if(isConnected){
+  await this.setCandidateProfile();
+  const appIntro = await getItem("appintro");
+  if (appIntro !== undefined && appIntro.shown) {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+  }
+    // const notif = await FCM.getInitialNotification().then(notif => {
+    //   return notif;
+    // });
+    const candidateJob = await getItem("mongo_id");
+    const mongo_id = await getItem("mongo_id");
+    // this.setState({ notification: notif.from });
+    // if (this.state.notification !== undefined) {
+    //     if (this.state.candidateJob !== null) {
+    //       const { appliedJob } = this.props;
+    //       const {
+    //         linkOpening,
+    //         textColor,
+    //         candidateJob,
+    //         ...profileDetails
+    //       } = this.state;
+    //       this.props.navigation.navigate("Profile", {
+    //         appliedJob,
+    //         profileDetails
+    //       });
+    //       this.setState({ notification: "", opacity: 0,isNotify:false });
+    //     }
+    // }else{
+      this.setState({isNotify:false})
+    // }
+  }else{
+    this.setState({isNotify:false})
+    // alert('Please! connect to the internet first')
+  }
+})
  
-//   };
-//   componentDidUpdate = async () => {
-//     const applied = this.props.navigation.getParam("applied");
-//     if (applied ) {
-//       await this.setCandidateProfile();
-//       this.props.navigation.setParams({ applied: false});
-//     }
+  };
+  componentDidUpdate = async () => {
+    const applied = this.props.navigation.getParam("applied");
+    if (applied ) {
+      await this.setCandidateProfile();
+      this.props.navigation.setParams({ applied: false});
+    }
     
-//   };
-//   componentWillUnmount() {
-//     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
-//   }
-//   handleBackPress = () => {
-//     BackHandler.exitApp(); // works best when the goBack is async
-//   };
-//   onPressIn = k => {
-//     this.setState({ textColor: true, index: k ,backgroundColor:true});
-//   };
-//   onPressOut = () => {
-//     this.setState({ textColor: false,backgroundColor:false });
-//   };
+  };
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
+  }
+  handleBackPress = () => {
+    BackHandler.exitApp(); // works best when the goBack is async
+  };
+  onPressIn = k => {
+    this.setState({ textColor: true, index: k ,backgroundColor:true});
+  };
+  onPressOut = () => {
+    this.setState({ textColor: false,backgroundColor:false });
+  };
   render() {
-    // let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
+    let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
-    // let profilepic = profile_pic
-    //   ? { uri: profile_pic }
-    //   : require("../images/profilepic.png");
-    // let userNames = userName ? userName : "";
-    // const details = this.state.candidateJob 
-    //   ? candidatePageDetails
-    //   : pageDetails;
-    let renderCustomView = pageDetails.map((data, k) => {
+    let profilepic = profile_pic
+      ? { uri: profile_pic }
+      : require("../images/profilepic.png");
+    let userNames = userName ? userName : "";
+    const details = this.state.candidateJob 
+      ? candidatePageDetails
+      : pageDetails;
+    let renderCustomView = details.map((data, k) => {
       return (
         <TouchableHighlight
           onPressIn={() => {
@@ -242,7 +242,7 @@ export default class HomePage extends Component {
               <Image
                 resizeMode='contain'
                 style={[{width:'100%',height:'100%',}, k == 2 ? {marginLeft:-17} : null ,k==1 ? {marginLeft:-5} :null  ]}
-                source={/* textColor && index == k ? data.image[1] : */ data.image[0]}
+                source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>
             <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 0 && data.name=='PROFILE' ? {left:'75%'}:null,k == 0 ? {left:'55%'}:null,k == 1 ? {left:'75%'}:null,k == 2 ? {left:'60%'}:null]}>
@@ -250,7 +250,7 @@ export default class HomePage extends Component {
                 style={[
                   styles.text,
                   {alignSelf:'center'},
-                 /*  textColor && index == k ?  */{ color:'black' /* COLOR.WHITE */ } /* : {} */
+                  textColor && index == k ? { color: COLOR.WHITE } : {}
                 ,]}
               >
                 {data.name}
@@ -280,11 +280,11 @@ export default class HomePage extends Component {
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={styles.container}
         >
-          {/* {linkOpening ? (
+          {linkOpening ? (
             <View style={styles.spinnerView}>
               <Spinner color={COLOR.Spinner} />
             </View>
-          ) : ( */}
+          ) : (
             <View style={styles.subContainer}>
               <View style={styles.logoCnt}>
                 <View style={styles.logoView}>
@@ -295,24 +295,24 @@ export default class HomePage extends Component {
               </View>
               {renderCustomView}
             </View>
-          {/* )} */}
+          )}
         </LinearGradient>
       </View>
     );
   }
 }
 
-// const mapStateToProps = state => {
-//   console.log(state ,'state');
+const mapStateToProps = state => {
+  console.log(state ,'state');
   
-//   return {
-//   state_data: state,
-//   appliedJob: state.appliedJob,
-//   interviewSignUp: state.interviewSignUp,
-//   candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
-//   }};
+  return {
+  state_data: state,
+  appliedJob: state.appliedJob,
+  interviewSignUp: state.interviewSignUp,
+  candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
+  }};
 
-// export default connect(
-//   mapStateToProps,
-//   { getCandidateJobDetails, getCandidateDetails, ProfileOnChange,UploadProfile,getCandidateUpdateProfileDetails}
-// )(HomePage);
+export default connect(
+  mapStateToProps,
+  { getCandidateJobDetails, getCandidateDetails, ProfileOnChange,UploadProfile,getCandidateUpdateProfileDetails}
+)(HomePage);

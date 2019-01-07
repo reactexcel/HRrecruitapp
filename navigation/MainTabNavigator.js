@@ -1,64 +1,61 @@
 import React from 'react';
 import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
-
+import { Easing, Animated } from "react-native";
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import HomePage from '../src/screens/HomePage'
-import AppIntro from '../src/screens/AppIntro'
+import HomePage from '../src/screens/HomePage';
+import AppIntro from '../src/screens/AppIntro';
+import JobList from '../src/screens/JobList';
+import InterviewLogin from '../src/screens/InterviewLogin';
+import VerifyingCandidate from '../src/screens/VerifyingCandidate';
+import OTPpage from '../src/screens/OTPpage';
+import candidateValidation from '../src/screens/candidateValidation';
+import AddCandidate from '../src/screens/AddCandidate';
+import Instructions from '../src/screens/Instructions';
+import TestPage from '../src/screens/TestPage';
+import SubmitTest from '../src/screens/SubmitTest';
+import AboutUs from '../src/screens/AboutUs';
+import Profile from '../src/screens/Profile';
+import FullDescription from '../src/screens/FullDescription';
+import ProfileDescription from '../src/components/ProfileDescription'
 
-// const HomeStack = createStackNavigator({
-//   Home: HomeScreen,
-// });
+const transitionConfig = () => {
+  return {
+    transitionSpec: {
+      duration: 700,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+      useNativeDriver: true
+    },
+    screenInterpolator: sceneProps => {
+      const { position, layout, scene, index, scenes } = sceneProps;
+      const toIndex = index;
+      const thisSceneIndex = scene.index;
+      const width = layout.initWidth;
 
-// HomeStack.navigationOptions = {
-//   tabBarLabel: 'Home',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={
-//         Platform.OS === 'ios'
-//           ? `ios-information-circle${focused ? '' : '-outline'}`
-//           : 'md-information-circle'
-//       }
-//     />
-//   ),
-// };
+      const translateX = position.interpolate({
+        inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
+        outputRange: [width, 0, 0]
+      });
 
-// const LinksStack = createStackNavigator({
-//   Links: LinksScreen,
-// });
+      const slideFromRight = { transform: [{ translateX }] };
 
-// LinksStack.navigationOptions = {
-//   tabBarLabel: 'Links',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
-//     />
-//   ),
-// };
+      const lastSceneIndex = scenes[scenes.length - 1].index;
 
-// const SettingsStack = createStackNavigator({
-//   Settings: SettingsScreen,
-// });
+      if (lastSceneIndex - toIndex > 1) {
+        if (scene.index === toIndex) return;
 
-// SettingsStack.navigationOptions = {
-//   tabBarLabel: 'Settings',
-//   tabBarIcon: ({ focused }) => (
-//     <TabBarIcon
-//       focused={focused}
-//       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
-//     />
-//   ),
-// };
+        if (scene.index !== lastSceneIndex) return { opacity: 0 };
 
-// export default createBottomTabNavigator({
-//   HomeStack,
-//   LinksStack,
-//   SettingsStack,
-// });
+        return slideFromRight;
+      }
+      return slideFromRight;
+    }
+  };
+};
+
  const Rootstack = createStackNavigator(
   {
     AppIntro: {
@@ -67,8 +64,51 @@ import AppIntro from '../src/screens/AppIntro'
     HomePage: {
       screen: HomePage
     },
-    // SettingsScreen: {
-    //   screen: SettingsScreen
-    // },
-  })
+    InterviewLogin: {
+      screen: InterviewLogin
+    },
+    VerifyingCandidate: {
+      screen: VerifyingCandidate
+    },
+    OTPpage: {
+      screen: OTPpage
+    },
+    candidateValidation:{
+      screen:candidateValidation
+    },
+    AddCandidate: {
+      screen: AddCandidate
+    },
+    Instructions: {
+      screen: Instructions
+    },
+    TestPage: {
+      screen: TestPage
+    },
+    SubmitTest: {
+      screen: SubmitTest
+    },
+    JobList: {
+      screen: JobList
+    },
+    AboutUs: {
+      screen: AboutUs
+    },
+    Profile: {
+      screen: Profile
+    },
+    FullDescription: {
+      screen: FullDescription
+    },
+    ProfileDescription:{
+      screen:ProfileDescription
+    }
+    
+  },
+  {
+    initialScreen: "AppIntro",
+    transitionConfig
+  }
+);
+
   export default Rootstack;
