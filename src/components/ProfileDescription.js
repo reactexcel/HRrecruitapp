@@ -199,7 +199,8 @@ const ProfileDescription = props => {
             rounded
             style={styles.aboutBtn}
           >
-            <Icon name="volume-up" style={{ color: COLOR.PINK }} />
+            <Icon  name="map-pin"
+              type="FontAwesome"  /* name="volume-up" */ style={{ color: COLOR.PINK }} />
             <Text uppercase={false} style={styles.btnText}>
               About Us
             </Text>

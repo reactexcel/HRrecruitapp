@@ -13,6 +13,7 @@
   "dependencies": {
     "@expo/samples": "2.1.1",
     "axios": "^0.18.0",
+    "base-64": "^0.1.0",
     "expo": "^31.0.2",
     "immutability-helper": "^2.9.0",
     "lodash": "^4.17.11",
@@ -34,6 +35,7 @@
     "redux-actions": "^2.6.4",
     "redux-form": "^8.1.0",
     "redux-thunk": "^2.3.0",
+    "utf8": "^3.0.0",
     "validator": "^10.10.0"
   },
   "devDependencies": {

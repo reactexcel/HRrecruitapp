@@ -39,7 +39,7 @@ import { getJobLists } from "../actions";
 // var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
 // import SplashScreen from "react-native-splash-screen";
-import {LinearGradient} from "expo"; 
+import {LinearGradient ,SplashScreen ,Permissions, Notifications} from "expo"; 
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import {load as loadAccount} from '../reducers/initialStateReducer' 
 
@@ -90,7 +90,8 @@ class AddCandidate extends Component {
       valiSpinner:false,
       forvali:false,
       isExistUser:true,
-      emailVefication:true
+      emailVefication:true,
+      permissionGranted:'none'
 
   
     };
@@ -136,7 +137,29 @@ async  componentDidMount(){
           ]);
         }
       }
-    // FCM.requestPermissions();
+      // console.log(token ,' push notification token');
+      
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+      console.log(finalStatus ,'finalstatus');
+      
+      if (existingStatus !== 'granted') {
+        // Android remote notification permissions are granted during the app
+        // install, so this will only ask on iOS
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }else{
+        console.log(finalStatus );
+        // alert(finalStatus)
+            await Notifications.getExpoPushTokenAsync().then((token)=>{
+              console.log(token ,'push notification token');
+                    })
+
+
+      }
+      // FCM.requestPermissions();
     // FCM.getFCMToken().then(token => {
     //   this.setState({fcm_token_Id:token})
     //   this.setState({deviceId: DeviceInfo.getUniqueID()})
@@ -569,59 +592,73 @@ exitingCandidate = async () => {
     this.props.change({ resume_file: [] });
     let resumeData = this.state.resumeData;
     this.setState({ converting: true });
-    // if (Platform.OS !== "ios") {
-    //   //Android Only
-    //   DocumentPicker.show(
-    //     {
-    //       filetype: [DocumentPickerUtil.allFiles()]
-    //     },
-    //     (error, res) => {
-    //       console.log(res);
-          
-    //       SplashScreen.hide();
-    //       this.scroll.scrollToEnd()
-    //       this.setState({whenAddedResume:true})
-    //       if (res) {
-    //         let check =
-    //           this.state.resumeData.length >= 1
-    //             ? this.state.currentType == res.type
-    //             : true;
-    //         if (check) {
-    //           let type = res.type.split("/");
-    //           RNFetchBlob.fs.readFile(res.uri, "base64").then(
-    //             data => {
-    //               resumeData.push({
-    //                 fileName: res.fileName,
-    //                 dataBase64: data,
-    //                 filetype: type[1]
-    //               });
-    //               let base64 = require('base-64');
-    //               let decodedData = base64.decode(data);
-    //               let bytes = decodedData.length;
-    //               let fileSizeInMB=(bytes / 1000000)
-    //               if(fileSizeInMB > 2 ){
-    //                 alert("File size can't be larger than 2MB");
-    //               }
-    //               this.setState({
-    //                 converting: false,
-    //                 resumeData,
-    //                 currentType: res.type
-    //               });
-    //             },
-    //             error => {
-    //               this.setState({ converting: false });
-    //             }
-    //           );
-    //         } else {
-    //           this.setState({ converting: false, resumeError: null });
-    //           alert("Please select same format for files");
-    //         }
-    //       } else {
-    //         this.setState({ converting: false, resumeError: null });
-    //       }
+    if (Platform.OS !== "ios") {
+      //Android Only
+      // DocumentPicker.show(
+      //   {
+      //     filetype: [DocumentPickerUtil.allFiles()]
+      //   },
+      //   (error, res) => {
+      //     console.log(res);
+      const res=  await Expo.DocumentPicker.getDocumentAsync({
+        base64 :true,
+        copyToCacheDirectory: false,
+       })
+  // await Expo.FileSystem.readAsStringAsync((res.uri ,{ encoding: Expo.FileSystem.EncodingTypes.Base64 }).then((result)=>{
+  //             console.log(result ,'pre base64 file in expo');
+                  
+  //     }) , error =>{ console.log(error);
+  //     });
+       console.log(res ,'>>>>>>>>>>>>>>>>');
+       
+          SplashScreen.hide();
+          this.scroll.scrollToEnd()
+          this.setState({whenAddedResume:true})
+          if (res) {
+            let check =
+              this.state.resumeData.length >= 1
+                ? this.state.currentType == res.type
+                : true;
+            if (check) {
+              let type = res.type/* .split("/"); */
+              // RNFetchBlob.fs.readFile(res.uri, "base64").then(
+              //   data => {
+                const data = await Expo.FileSystem.readAsStringAsync(res.uri ,{ encoding: Expo.FileSystem.EncodingTypes.Base64 });
+                      console.log(data ,'base64 data');
+                      if(data !=='' && data !==undefined){
+                resumeData.push({
+                    fileName: res.name,
+                    dataBase64: data,
+                    filetype: type[1]
+                  });
+                  // let base64 = require('base-64');
+                  // let decodedData = base64.decode(data);
+                  // let bytes = decodedData.length;
+                  let fileSizeInMB=(res.size / 1000)
+                  if(fileSizeInMB > 2000 ){
+                    alert("File size can't be larger than 2MB");
+                  }
+                  this.setState({
+                    converting: false,
+                    resumeData,
+                    currentType: res.type
+                  });
+                }
+              //   error => {
+                else {  this.setState({ converting: false })}
+              //   }
+              // );
+            } else {
+              this.setState({ converting: false, resumeError: null });
+              alert("Please select same format for files");
+            }
+          } else {
+            this.setState({ converting: false, resumeError: null });
+          }
     //     }
     //   );
-    // } else {
+    }
+    //  else {
     //   DocumentPicker.show(
     //     {
     //       filetype: [DocumentPickerUtil.allFiles()]

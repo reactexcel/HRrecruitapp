@@ -61,7 +61,7 @@ class ReviewButton extends Component {
               style={{
                 color: isPressed && index === id ? COLOR.LGTWO : "white",
                 fontSize: 10,
-                fontFamily: "Montserrat",
+                fontFamily: "Montserrat-Regular",
                 // letterSpacing: 0.2
               }}
             >

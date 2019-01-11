@@ -148,6 +148,10 @@ class HomePage extends Component {
   componentDidMount = async () => {
     this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
     )
+  //   const { Permissions } = Expo;
+  // const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  // console.log(status ,'permissions for files picker');
+  
     // Permissions.checkMultiple(['location']).then(response => {
     //   if(response.storage != 'authorized'){
     //     this.askStoragePermission()

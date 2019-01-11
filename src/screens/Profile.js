@@ -8,7 +8,7 @@ import {
   View,
   Animated
 } from "react-native";
-import {LinearGradient} from "expo";
+import {LinearGradient ,SplashScreen} from "expo";
 import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
 import ProfileDescription from "../components/ProfileDescription";
@@ -22,7 +22,8 @@ import styles from "../styles/screens/FullDescription";
 import { connect } from "react-redux";
 import { getJobLists, candidateUploadImage ,getCandidateUpdateProfileDetails} from "../actions";
 import { ProfileOnChange } from "../actions/actions";
-
+import base64 from 'base-64';
+import utf8 from 'utf8';
 // import {
 //   DocumentPicker,
 //   DocumentPickerUtil
@@ -112,44 +113,65 @@ class Profile extends Component {
     //   }
     // ).start();  
   }
-  onPhotoUpload = () => {
-    // let resumeData = this.state.resumeData;
+  onPhotoUpload =async () => {
+    console.log('docuemntpicker is working ');
+    
+    let res = await Expo.ImagePicker.launchImageLibraryAsync();
+    console.log(res ,'>>>>>>>>>>>>>>');
+    
+    // let base64 = require('base-64');
+    // let utf8= require('utf8');
+//  const res=  await Expo.DocumentPicker.getDocumentAsync({
+//      base64 :true,
+//      copyToCacheDirectory: false,
+//     })
+//     console.log(res ,'????????????????????????');
+    const data = await Expo.FileSystem.readAsStringAsync(res.uri ,{ encoding: Expo.FileSystem.EncodingTypes.Base64 });
+            console.log(data ,'real base64 file');
+            
+//     const bytes = utf8.encode(data);
+// console.log(bytes , 'its in utf8');
+
+// const encoded = base64.encode(bytes);
+// console.log(encoded ,'encoded in base64');
+
+    let resumeData = this.state.resumeData;
     // if (Platform.OS !== "ios") {
     //   DocumentPicker.show(
     //     {
     //       filetype: [DocumentPickerUtil.images()]
     //     },
     //     async(error, res) => {
-    //       SplashScreen.hide();
-    //       if (res) {
-    //         let check = true;
-    //         if (check) {
-    //           let type = res.type.split("/");
-    //           const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
-    //             let base64 = require('base-64');
-    //             let decodedData = base64.decode(data);
-    //             let bytes = decodedData.length;
-    //             let fileSizeInMB=(bytes / 1000000)
-    //             if(fileSizeInMB > .8 ){
-    //               alert("Image size can't exceed 800KB");
-    //             }
-    //             else if(fileSizeInMB <.03){
-    //               alert("Image size can't be less than 30KB")
-    //             }
-    //             else{ 
-    //               resumeData.push({
-    //                 fileName: res.fileName,
-    //                 file: data,
-    //                 mongo_id:this.props.navigation.state.params.mongo_id
-    //               });
-    //               this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
-    //               this.props.candidateUploadImage(resumeData)
-    //           }
-    //         }
-    //       }
+      // let type = res.type.split("/");
+      // const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
+        // let decodedData = base64.decode(data);
+        // let bytes = decodedData.length;
+          // SplashScreen.hide();
+          if (res) {
+            let check = true;
+            if (check) {
+                let fileSizeInKB=(res.size / 1000)
+                if(fileSizeInKB > 800 ){
+                  alert("Image size can't exceed 800KB");
+                }
+                else if(fileSizeInKB <30){
+                  alert("Image size can't be less than 30KB")
+                }
+                else{ 
+                  resumeData.push({
+                    fileName: "res.name",
+                    file: data,
+                    mongo_id:this.props.navigation.state.params.mongo_id
+                  });
+                  this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
+                  this.props.candidateUploadImage(resumeData)
+              }
+            }
+          }
     //     }
     //   );
-    // }else{
+    // }
+    // else{
     //     DocumentPicker.show(
     //       {
     //         filetype: [DocumentPickerUtil.images()]
@@ -249,7 +271,7 @@ class Profile extends Component {
     return (
       <ScrollView overScrollMode="never">
         <ProfileView
-          // onPress={() => this.onPhotoUpload()}
+          onPress={() => this.onPhotoUpload()}
           profileDetails={profileDetails}
           imageSource={this.state.imageSource}
           profile_picture={this.state.profile_picture}
