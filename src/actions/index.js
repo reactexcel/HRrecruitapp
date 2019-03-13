@@ -245,9 +245,11 @@ export const connectionState = isConnected => async dispatch => {
 };
 
 export const getCandidateDetails = fb_id => async dispatch => {
+  console.log('iscall',fb_id)
   try {
     const res = await _axios().get(`exams/candidateDetails/${fb_id}`);
     PubSub.publish("CANDIDATE_DETAILS_SUCCESS", { API_URL, fb_id, res });
+    console.log(res.data,'asdas')
     dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
     // console.log(res,'666666666');
     

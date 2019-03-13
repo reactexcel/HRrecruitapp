@@ -227,8 +227,8 @@ class InterviewLogin extends Component {
     this.setState({spinner:true})
    await this.props.candidateValidationapi(this.state.email)}})}
     if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
-     await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id)
-    await this.props.getCandidateUpdateProfileDetails(this.props.candidateValidation.data._id);     
+      await this.props.getCandidateUpdateProfileDetails(this.props.candidateValidation.data._id);
+      await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id);
      if(this.props.appliedJob.status !==undefined && this.props.appliedJob.status !==null){
      if(this.props.appliedJob.status=='Reject' || this.props.appliedJob.status=='Selected'){
        Alert.alert(
@@ -284,12 +284,19 @@ class InterviewLogin extends Component {
               this.setState({ email: "" ,spinner:false});
               return;
             }
-            console.log(this.props,'asdasd',this.props )
+            console.log(this.props,'asdasd',this.props.candidateProfileUpdateDetails )
             if(this.props.candidateProfileUpdateDetails && this.props.candidateProfileUpdateDetails.fb_id){
               this.props.navigation.navigate("Instructions", {
                 fb_id: this.props.candidateProfileUpdateDetails.fb_id,
                 profile_pic: this.props.candidateProfileUpdateDetails.profile_pic ? this.props.candidateProfileUpdateDetails.profile_pic: '',
                 name: this.props.candidateProfileUpdateDetails.from,
+                email: this.state.email
+              });
+            } else {
+              this.props.navigation.navigate("Instructions", {
+                fb_id: this.props.candidateValidation.data.fb_id,
+                profile_pic: '',
+                name: this.props.candidateValidation.data.from,
                 email: this.state.email
               });
             }
@@ -356,12 +363,19 @@ class InterviewLogin extends Component {
               this.setState({ email: "",spinner:false });
               return;
             }
-            console.log(this.props,'asdasd444444')
+            console.log(this.props,'asdasd444444',this.props.candidateProfileUpdateDetails)
             if(this.props.candidateProfileUpdateDetails && this.props.candidateProfileUpdateDetails.fb_id){
               this.props.navigation.navigate("Instructions", {
                 fb_id: this.props.candidateProfileUpdateDetails.fb_id,
                 profile_pic: this.props.candidateProfileUpdateDetails.profile_pic ? this.props.candidateProfileUpdateDetails.profile_pic: '',
                 name: this.props.candidateProfileUpdateDetails.from,
+                email: this.state.email
+              });
+            } else {
+              this.props.navigation.navigate("Instructions", {
+                fb_id: this.props.candidateValidation.data.fb_id,
+                profile_pic: '',
+                name: this.props.candidateValidation.data.from,
                 email: this.state.email
               });
             }
