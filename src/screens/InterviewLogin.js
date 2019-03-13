@@ -228,6 +228,7 @@ class InterviewLogin extends Component {
    await this.props.candidateValidationapi(this.state.email)}})}
     if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
      await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id)
+    await this.props.getCandidateUpdateProfileDetails(this.props.candidateValidation.data._id);     
      if(this.props.appliedJob.status !==undefined && this.props.appliedJob.status !==null){
      if(this.props.appliedJob.status=='Reject' || this.props.appliedJob.status=='Selected'){
        Alert.alert(
@@ -283,7 +284,16 @@ class InterviewLogin extends Component {
               this.setState({ email: "" ,spinner:false});
               return;
             }
-            this.props.navigation.navigate("OTPpage");
+            console.log(this.props,'asdasd',this.props )
+            if(this.props.candidateProfileUpdateDetails && this.props.candidateProfileUpdateDetails.fb_id){
+              this.props.navigation.navigate("Instructions", {
+                fb_id: this.props.candidateProfileUpdateDetails.fb_id,
+                profile_pic: this.props.candidateProfileUpdateDetails.profile_pic ? this.props.candidateProfileUpdateDetails.profile_pic: '',
+                name: this.props.candidateProfileUpdateDetails.from,
+                email: this.state.email
+              });
+            }
+            // this.props.navigation.navigate("OTPpage");
             this.setState({ email: "",spinner:false });
           }
         } else {
@@ -346,7 +356,17 @@ class InterviewLogin extends Component {
               this.setState({ email: "",spinner:false });
               return;
             }
-            this.props.navigation.navigate("OTPpage");
+            console.log(this.props,'asdasd444444')
+            if(this.props.candidateProfileUpdateDetails && this.props.candidateProfileUpdateDetails.fb_id){
+              this.props.navigation.navigate("Instructions", {
+                fb_id: this.props.candidateProfileUpdateDetails.fb_id,
+                profile_pic: this.props.candidateProfileUpdateDetails.profile_pic ? this.props.candidateProfileUpdateDetails.profile_pic: '',
+                name: this.props.candidateProfileUpdateDetails.from,
+                email: this.state.email
+              });
+            }
+            // this.props.navigation.navigate("OTPpage");
+            
             this.setState({ email: "",spinner:false });
           }
         } else {
@@ -435,6 +455,7 @@ const mapStateToProps = state => {
   isConnected: state.network.isConnected,
   candidateInfo: state.candidateInfo,
   candidateValidation:state.candidateValidation,
+  candidateProfileUpdateDetails:state.candidateProfileUpdateDetails,
   appliedJob:state.appliedJob
 }};
 export default connect(
