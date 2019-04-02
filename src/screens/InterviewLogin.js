@@ -294,7 +294,7 @@ class InterviewLogin extends Component {
               });
             } else {
               this.props.navigation.navigate("Instructions", {
-                fb_id: this.props.candidateValidation.data.fb_id,
+                fb_id: this.props.interviewSignUp.fb_id,
                 profile_pic: '',
                 name: this.props.candidateValidation.data.from,
                 email: this.state.email
@@ -373,7 +373,7 @@ class InterviewLogin extends Component {
               });
             } else {
               this.props.navigation.navigate("Instructions", {
-                fb_id: this.props.candidateValidation.data.fb_id,
+                fb_id: this.props.interviewSignUp.fb_id,
                 profile_pic: '',
                 name: this.props.candidateValidation.data.from,
                 email: this.state.email

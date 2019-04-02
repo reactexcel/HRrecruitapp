@@ -101,8 +101,8 @@ android {
         applicationId "com.hrrecruits"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 41
-        versionName "1.41"
+        versionCode 42
+        versionName "1.42"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
