@@ -8,6 +8,7 @@ import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -15,6 +16,9 @@ import cl.json.RNSharePackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import io.branch.rnbranch.RNBranchPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+
 
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -23,7 +27,7 @@ import com.imagepicker.ImagePickerPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 // import com.facebook.reactnative.androidsdk.FBSDKPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.evollu.react.fcm.FIRMessagingPackage;
+// import com.evollu.react.fcm.FIRMessagingPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.BV.LinearGradient.LinearGradientPackage;
@@ -64,6 +68,7 @@ public class MainApplication extends Application implements ReactApplication {
             new ImageResizerPackage(),
             new ImagePickerPackage(),
             new MainReactPackage(),
+            new RNFirebasePackage(),
             new RNFetchBlobPackage(),
             new RNVersionNumberPackage(),
             new SplashScreenReactPackage(),
@@ -71,11 +76,12 @@ public class MainApplication extends Application implements ReactApplication {
             new GoogleAnalyticsBridgePackage(),
             new ReactNativeDocumentPicker(),
             new RNBranchPackage(),
-
+            new RNFirebaseMessagingPackage(),
+            new RNFirebaseNotificationsPackage(),
 
 
             new RNDeviceInfo(),
-            new FIRMessagingPackage(),
+            // new FIRMessagingPackage(),
             // new LinearGradientPackage(),
             // new SplashScreenReactPackage(),
             new LinearGradientPackage(),

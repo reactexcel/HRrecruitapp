@@ -149,6 +149,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
     compile project(':rn-fetch-blob')
     compile project(':react-native-version-number')
     compile project(':react-native-splash-screen')
@@ -165,13 +166,17 @@ dependencies {
     // compile project(':react-native-share')
     compile project(':react-native-fbsdk')
     compile project(':react-native-device-info')
-    compile project(':react-native-fcm')
+    // compile project(':react-native-fcm')
     compile project(':react-native-linear-gradient')
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
     implementation project(':react-native-fbsdk')
-    implementation "com.google.android.gms:play-services-base:15.0.1"
-    implementation "com.google.firebase:firebase-core:16.0.3"
-    implementation 'com.google.firebase:firebase-messaging:17.3.2'
+    // implementation 'com.google.firebase:firebase-messaging:17.3.0'
+    // implementation "com.google.firebase:firebase-core:16.0.3"
+    // implementation "com.google.android.gms:play-services-base:15.0.1"
+    implementation "com.google.android.gms:play-services-base:16.1.0"
+     implementation "com.google.firebase:firebase-core:16.0.8"
+     implementation "com.google.firebase:firebase-messaging:17.5.0"
+
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-linear-gradient')
     implementation project(':react-native-share')
@@ -195,4 +200,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
 
 apply plugin: 'com.google.gms.google-services'
 com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
+
 // canOverrideExistingModule=true

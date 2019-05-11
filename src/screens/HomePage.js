@@ -34,9 +34,9 @@ import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 import SplashScreen from "react-native-splash-screen";
-import FCM from "react-native-fcm";
+import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
-
+import  { RemoteMessage } from 'react-native-firebase';
 import Permissions from 'react-native-permissions';
 var { height, width } = Dimensions.get("window");
 class HomePage extends Component {
@@ -113,7 +113,7 @@ class HomePage extends Component {
 }
   async handleViewClick(data) {
     const { appliedJob } = this.props;
-    console.log(appliedJob,'appliedjob');
+    // console.log(appliedJob,'appliedjob');
     
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
@@ -141,8 +141,7 @@ class HomePage extends Component {
   }
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      console.log(response);
-      
+      // console.log(response);
     })
   }
   componentDidMount = async () => {
@@ -153,6 +152,7 @@ class HomePage extends Component {
         this.askStoragePermission()
       }
     })
+    const notificationOpen = await firebase.notifications().getInitialNotification();
     NetInfo.isConnected.fetch().then(async isConnected => {
       if(isConnected){
   await this.setCandidateProfile();
@@ -160,13 +160,10 @@ class HomePage extends Component {
   if (appIntro !== undefined && appIntro.shown) {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
   }
-    const notif = await FCM.getInitialNotification().then(notif => {
-      return notif;
-    });
     const candidateJob = await getItem("mongo_id");
     const mongo_id = await getItem("mongo_id");
-    this.setState({ notification: notif.from });
-    if (this.state.notification !== undefined) {
+    // this.setState({ notification: notif.from });
+    if (notificationOpen !== null && notificationOpen !== undefined) {
         if (this.state.candidateJob !== null) {
           const { appliedJob } = this.props;
           const {
@@ -186,10 +183,9 @@ class HomePage extends Component {
     }
   }else{
     this.setState({isNotify:false})
-    // alert('Please! connect to the internet first')
+    alert('Please! connect to the internet first')
   }
 })
- 
   };
   componentDidUpdate = async () => {
     const applied = this.props.navigation.getParam("applied");
@@ -212,6 +208,7 @@ class HomePage extends Component {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
+    
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
     let profilepic = profile_pic

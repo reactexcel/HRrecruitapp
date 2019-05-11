@@ -31,7 +31,7 @@ import {
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
 import CardTrail from "../components/CardTrail";
-import FCM, { FCMEvent } from "react-native-fcm";
+// import FCM, { FCMEvent } from "react-native-fcm";
 class AppIntro extends Component {
   constructor(props) {
     super(props);
@@ -318,23 +318,21 @@ class AppIntro extends Component {
     }
   }
   render() {
-    console.log(branch , 'deeplink');
-
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
     return (
       <Container>
         <View
-          style={{ zIndex: 1, width: "100%", position: "absolute", bottom: 20 }}
+          style={{ zIndex: 1, width: "100%", position: "absolute", bottom: 20,paddingLeft:width*.4 }}
         >
           <Row style={styles.bottomContainer}>
-            <Text
+            {/* <Text
               style={styles.skipText}
               onPress={() => {
                 this._onSkip();
               }}
             >
               {this.state.index == 3 ? "" : "Skip"}
-            </Text>
+            </Text> */}
             <ProgressBar items={AppDetails} index={this.state.index} />
             <View
               onPress={() => {
@@ -375,8 +373,6 @@ class AppIntro extends Component {
   }
 }
 const mapStateToProps = state => {
-  console.log(state, "appintro");
-
   return {
     appliedJob: state.appliedJob,
     interviewSignUp: state.interviewSignUp,

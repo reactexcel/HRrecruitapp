@@ -17,7 +17,7 @@ import {
   Form
 } from "native-base";
 import Permissions from 'react-native-permissions';
-import FCM,{FCMEvent} from 'react-native-fcm'
+// import FCM,{FCMEvent} from 'react-native-fcm'
 import DeviceInfo from 'react-native-device-info';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
@@ -40,6 +40,7 @@ var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
 import LinearGradient from "react-native-linear-gradient"; 
+import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import {load as loadAccount} from '../reducers/initialStateReducer' 
 
@@ -136,13 +137,19 @@ async  componentDidMount(){
           ]);
         }
       }
-    FCM.requestPermissions();
-    FCM.getFCMToken().then(token => {
-      this.setState({fcm_token_Id:token})
-      this.setState({deviceId: DeviceInfo.getUniqueID()})
-    });
-    FCM.getInitialNotification().then(notif => {
-    });
+    // FCM.requestPermissions();
+    const fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      console.log(fcmToken,'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL');
+      this.setState({fcm_token_Id:fcmToken})
+        // user has a device token
+    }
+    // FCM.getFCMToken().then(token => {
+    //   this.setState({fcm_token_Id:token})
+    //   this.setState({deviceId: DeviceInfo.getUniqueID()})
+    // });
+    // FCM.getInitialNotification().then(notif => {
+    // });
   }
   sendRemote(notif) {
     FCM.presentLocalNotification({
