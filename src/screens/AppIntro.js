@@ -47,7 +47,8 @@ class AppIntro extends Component {
       mobile_no: null,
       textColor: false,
       notification: "",
-      index: 0
+      index: 0,
+      deepLinkParams:{}
     };
   }
   static navigationOptions = {
@@ -81,6 +82,7 @@ class AppIntro extends Component {
     SplashScreen.hide();
   };
   componentDidMount = async () => {
+    const {deepLinkParams} =this.state;
     NetInfo.isConnected.fetch().then(async isConnected => {
       if (isConnected) {
         await this.props.getJobLists();
@@ -96,12 +98,16 @@ class AppIntro extends Component {
       }
     });
     AppState.addEventListener("change", this._handleAppStateChange);
+    setTimeout(() => {
+      if(deepLinkParams.$share_data ==undefined && deepLinkParams.$deeplink_path ==undefined){
+        this._onSkip()
+      }
+    }, 10000);
   };
 
   _checkDeepLink = async () => {
     branch.subscribe(async ({ params }) => {
-      console.log(params);
-      
+      this.setState({deepLinkParams:params})
       if (
         this.props.joblist.data !== "" &&
         this.props.joblist.data !== undefined &&
@@ -123,7 +129,7 @@ class AppIntro extends Component {
               jobDetail: item,
               currentJob: this.props.joblist
             });
-            // SplashScreen.hide();
+            SplashScreen.hide();
           }
         });
       }
@@ -137,6 +143,7 @@ class AppIntro extends Component {
         const { status } = this.props.interviewSignUp;
         if (status == 1) {
           this.setState({ deepLink: true, fb_id: fb_id });
+          this._linkCheck()
         } else if (params.error == 1 && params.error !== undefined) {
           this.setState({ deepLink: false });
         }
@@ -148,8 +155,7 @@ class AppIntro extends Component {
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
           this.props.navigation.replace("HomePage");
-          console.log('noonce');
-          
+          SplashScreen.hide();
         }
       } else if (params.$share_data !== undefined) {
         this.setState({ sharing: true });
@@ -165,7 +171,7 @@ class AppIntro extends Component {
       //     }
       // }
     });
-    SplashScreen.hide();
+    // SplashScreen.hide();
   };
   _onNext = index => {
     let items = AppDetails;
@@ -193,11 +199,14 @@ class AppIntro extends Component {
         name: data.from,
         email: data.sender_mail
       });
+      SplashScreen.hide();
     } else if (sharing) {
       this.props.navigation.navigate("JobList", { title: "Apply for Jobs" });
+      SplashScreen.hide();
     } else {
       setItem("appintro", JSON.stringify({ shown: true }));
       this.props.navigation.navigate("HomePage");
+      SplashScreen.hide();
     }
   };
   _renderItem = ({ item, index }) => {
@@ -319,6 +328,8 @@ class AppIntro extends Component {
   }
   render() {
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
+    console.log(this.state.deepLinkParams,'deepLinkParams');
+    
     return (
       <Container>
         <View
