@@ -185,15 +185,29 @@ class HomePage extends Component {
     this.setState({isNotify:false})
     alert('Please! connect to the internet first')
   }
+   const {interviewSignUp} =this.props;
+  const { error, success, msg, message } = interviewSignUp;
+  if(this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto ==true ){
+    if (msg !== undefined) {
+      alert(msg);
+    }
+    if (error !== undefined && error === 1 && message !== undefined) {
+          alert(message);
+    }
+    if (success !== undefined && !success) {
+      notify("Something went wrong");
+    }
+    this.props.navigation.setParams({errorFromAppinto:false})
+  }
 })
   };
-  componentDidUpdate = async () => {
+  componentDidUpdate = async (nextProps) => {
     const applied = this.props.navigation.getParam("applied");
+    const {interviewSignUp}=this.props;
     if (applied ) {
       await this.setCandidateProfile();
       this.props.navigation.setParams({ applied: false});
     }
-    
   };
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
@@ -208,6 +222,7 @@ class HomePage extends Component {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
+    console.log(this.props,'KKKKKKKKKKKKKKKKKKKKKKKKK');
     
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   

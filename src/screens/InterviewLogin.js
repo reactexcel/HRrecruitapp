@@ -35,7 +35,8 @@ import {
   getCandidateDetails,
   getCandidateRoundDetails,
   getCandidateJobDetails,
-  candidateValidationapi
+  candidateValidationapi,
+  interviewLoginClearData,
 } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
@@ -51,7 +52,8 @@ class InterviewLogin extends Component {
       email: "",
     spinner:false,
     alertMessage:false,
-    activity:true
+    activity:true,
+    isError:false
     };
   }
   static navigationOptions = {
@@ -62,30 +64,47 @@ class InterviewLogin extends Component {
     headerTintColor: COLOR.PINK
   };
 
-   componentDidUpdate() {
+   componentDidUpdate(nextProps) {
     const { error, success, msg, message } = this.props.interviewSignUp;
-  
-    if (error !== undefined && error === 1 && message !== undefined) {
+    const {isError}=this.state;
+    if(this.props.interviewSignUp.jobNotAssign !== nextProps.interviewSignUp.jobNotAssign){
+    if (error !== undefined && error === 1 && message !== undefined  ) {
       if(this.state.activity){
         this.setState({spinner:false,activity:false})
       }
-      alert(message);
-    }return null;
-    if (success !== undefined && !success) {
+      Alert.alert(
+        "Info",
+        message,
+        [
+          {
+            text: "Ok",
+            onPress: () => this.interviewLoginClearData()
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+    if (success !== undefined && !success  ) {
       if(this.state.activity){
         this.setState({spinner:false,activity:false})
       }
       notify("Something went wrong");
-    }return null;
-    if (msg !== undefined) {
-      if(this.state.activity){
-        this.setState({spinner:false,activity:false})
-      }
-      alert(msg);
     }
-    return null;
+    // if(this.props.interviewSignUp.isError !== nextProps.interviewSignUp.isError){
+    //   if (msg !== undefined  ) {
+    //     if(this.state.activity){
+    //       this.setState({spinner:false,activity:false})
+    //     }
+    //     alert(msg);
+  
+    //   }
+    // }
   }
-
+  interviewLoginClearData=()=>{
+    this.props.interviewLoginClearData("cleared data")
+    this.props.navigation.navigate("HomePage")
+  }
   async componentDidMount() {
     if(Platform.OS !=='ios'){
     StatusBar.setBackgroundColor(COLOR.LGONE);}
@@ -192,6 +211,7 @@ class InterviewLogin extends Component {
               onPress:
                 Platform.OS === "ios" || email.email === "test_123@gmail.com"
                   ? () => {}
+
                   : () => this.props.navigation.goBack()
             }
           ],
@@ -299,7 +319,7 @@ class InterviewLogin extends Component {
           {
             text: "OK",
             onPress: () =>
-            this.props.navigation.navigate("HomePage")
+            this.interviewLoginClearData()
           }
         ]
       );
@@ -377,7 +397,7 @@ class InterviewLogin extends Component {
   // }
 
   render() {
-    console.log(this.props.appliedJob.status,'status');
+    console.log(this.props.appliedJob.status,this.props.interviewSignUp,this.props.candidateInfo,'status');
     
     const {
       interviewSignUp: { registering, success }
@@ -439,5 +459,5 @@ const mapStateToProps = state => {
 }};
 export default connect(
   mapStateToProps,
-  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi }
+  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi,interviewLoginClearData }
 )(InterviewLogin);

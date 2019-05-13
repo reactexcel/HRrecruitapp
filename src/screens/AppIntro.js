@@ -6,7 +6,8 @@ import {
   Image,
   TouchableOpacity,
   AppState,
-  NetInfo
+  NetInfo,
+  ActivityIndicator,
 } from "react-native";
 import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -48,24 +49,35 @@ class AppIntro extends Component {
       textColor: false,
       notification: "",
       index: 0,
-      deepLinkParams:{}
+      deepLinkParams:{},
+      isError:false,
     };
   }
   static navigationOptions = {
     header: null
   };
-  static getDerivedStateFromProps(nextProps) {
-    const { error, success, msg, message } = nextProps.interviewSignUp;
-    if (error !== undefined && error === 1 && message !== undefined) {
+   componentDidUpdate(nextProps) {
+     const {isError}=this.state;
+     const {interviewSignUp} =this.props;
+     if(interviewSignUp.jobNotAssign !== nextProps.interviewSignUp.jobNotAssign){
+    const { error, success, msg, message } = interviewSignUp;
+    if (error !== undefined && error === 1 && message !== undefined && !isError) {
       alert(message);
+      this.setState({isError:true})
     }
-    if (success !== undefined && !success) {
-      notify("Something went wrong");
+    // if (success !== undefined && !success && !isError) {
+    //   notify("Something went wrong");
+    //   this.setState({isError:true})
+    // }
+  }
+    if(interviewSignUp.isError !== nextProps.interviewSignUp.isError){
+      const { error, success, msg, message } = interviewSignUp;
+    if (msg !== undefined && !isError) {
+      // alert(msg);
+      this.props.navigation.navigate("HomePage",{errorFromAppinto:true})
+      this.setState({isError:true})
     }
-    if (msg !== undefined) {
-      alert(msg);
-    }
-    return null;
+  }
   }
 
   _handleAppStateChange = async nextAppState => {
@@ -77,7 +89,7 @@ class AppIntro extends Component {
       this.state.didPreviouslyLaunch === "background" &&
       ((appIntro !== undefined && appIntro.shown) || candidateJob)
     ) {
-      this.props.navigation.replace("HomePage");
+      this.props.navigation.replace("HomePage",{errorFromAppinto:false});
     }
     SplashScreen.hide();
   };
@@ -91,18 +103,18 @@ class AppIntro extends Component {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-          this.props.navigation.replace("HomePage");
+          this.props.navigation.replace("HomePage",{errorFromAppinto:false});
         }
         SplashScreen.hide();
         alert("Please! Connect to the internet first");
       }
     });
     AppState.addEventListener("change", this._handleAppStateChange);
-    setTimeout(() => {
-      if(deepLinkParams.$share_data ==undefined && deepLinkParams.$deeplink_path ==undefined){
-        this._onSkip()
-      }
-    }, 10000);
+    // setTimeout(() => {
+    //   if(deepLinkParams.$share_data ==undefined && deepLinkParams.$deeplink_path ==undefined){
+    //     this._onSkip()
+    //   }
+    // }, 10000);
   };
 
   _checkDeepLink = async () => {
@@ -117,7 +129,7 @@ class AppIntro extends Component {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-          this.props.navigation.replace("HomePage");
+          this.props.navigation.replace("HomePage",{errorFromAppinto:false});
         }
         this.props.joblist.data.forEach((item, i) => {
           if (item.id == params.$share_data) {
@@ -154,7 +166,7 @@ class AppIntro extends Component {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-          this.props.navigation.replace("HomePage");
+          this.props.navigation.replace("HomePage",{errorFromAppinto:false});
           SplashScreen.hide();
         }
       } else if (params.$share_data !== undefined) {
@@ -205,7 +217,7 @@ class AppIntro extends Component {
       SplashScreen.hide();
     } else {
       setItem("appintro", JSON.stringify({ shown: true }));
-      this.props.navigation.navigate("HomePage");
+      this.props.navigation.navigate("HomePage",{errorFromAppinto:false});
       SplashScreen.hide();
     }
   };
@@ -328,10 +340,21 @@ class AppIntro extends Component {
   }
   render() {
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
-    console.log(this.state.deepLinkParams,'deepLinkParams');
+    console.log(this.state.deepLinkParams,this.props.interviewSignUp,'deepLinkParams');
+    const {interviewSignUp}=this.props;
     
     return (
       <Container>
+         {interviewSignUp.isLoading && <View
+          style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
+        >
+          <ActivityIndicator
+            animating={true}
+            // style={{ opacity: this.state.opacity }}
+            size="large"
+            color={COLOR.MUSTARD}
+          />
+        </View>}
         <View
           style={{ zIndex: 1, width: "100%", position: "absolute", bottom: 20,paddingLeft:width*.4 }}
         >
