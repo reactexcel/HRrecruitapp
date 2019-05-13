@@ -10,7 +10,8 @@ import {
   ScrollView,
   Animated,
   PanResponder,
-  Dimensions
+  Dimensions,
+  ActivityIndicator,
   // BackHandler
 } from "react-native";
 import {
@@ -24,7 +25,9 @@ import {
   Spinner,
   Radio,
   View,
-  Icon
+  Icon,
+  Input,
+  Item
 } from "native-base";
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
@@ -41,7 +44,9 @@ import TimerCountdown from "react-native-timer-countdown";
 import { setItem, getItem } from "../helper/storage";
 import LinearGradient from "react-native-linear-gradient";
 import CustomSubmitAlert from "../components/CustomSubmitAlert";
-
+import styless from '../styles/index';
+import Modal from 'react-native-modalbox';
+var { height, width } = Dimensions.get("window");
 class TestPage extends Component {
   scroll = new Animated.Value(0);
   headerY;
@@ -57,7 +62,10 @@ class TestPage extends Component {
       show: false,
       time: 0,
       isOpen: false,
-      scrollTop: true
+      scrollTop: true,
+      isHelpModal:false,
+      userMessage:'',
+      message:"",
     };
     this.handleNetwork = this.handleNetwork.bind(this);
     this.headerY = Animated.multiply(
@@ -168,22 +176,36 @@ class TestPage extends Component {
   };
 
   handleCallHelp = async () => {
+    this.setState({isHelpModal:true})
+  };
+
+  askHelp=async()=>{
+    let userMessage =this.state.userMessage.trim()
+    if(userMessage !==""){
+      this.setState({message:""})
     const fb_id = this.props.navigation.getParam("fb_id");
     const accessToken = fb_id ? true : null;
-    await this.props.callingHelp(accessToken, fb_id);
+    const message = this.state.userMessage
+    await this.props.callingHelp(accessToken, fb_id,message);
     const { data } = this.props.callHelp;
     if (data !== undefined) {
       if (data.status === SUCCESS_STATUS) {
+        this.setState({isHelpModal:false})
         notify("Please Wait. The message has been sent to HR");
       }
     }
     const { success } = this.props.callHelp;
     if (success !== undefined) {
       if (success === false) {
+        this.setState({isHelpModal:false})
         notify("Something went wrong");
       }
     }
-  };
+  }
+  else{
+    this.setState({message:"Ask something from HR"})
+  }
+  }
 
   scrollToTopLogical = (expanded, group_name) => {
     if(expanded && !this.state.scrollTop && group_name === "Aptitude"){
@@ -290,6 +312,53 @@ class TestPage extends Component {
 
     return (
       <View style={{ flex: 1 }}>
+      
+      { <Modal
+          isDisabled={false}
+          coverScreen={true}
+          backdropPressToClose={true}
+          swipeToClose={false}
+          style={{width:width-50,height:width-50,backgroundColor:COLOR.LGONE,flexDirection:"column",justifyContent:"space-around"}}
+          isOpen={this.state.isHelpModal}
+          position={"center"}
+          onClosed={()=>{this.setState({userMessage:"",isHelpModal:false})}}
+        >
+        {this.props.callHelp.isLoading && <View
+          style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
+        >
+          <ActivityIndicator
+            animating={true}
+            // style={{ opacity: this.state.opacity }}
+            size="large"
+            color={COLOR.MUSTARD}
+          />
+        </View>}
+        <View >
+        <View>
+            <Text style={{color:"#fff",fontSize:16,alignSelf:"center",fontFamily:"Montserrat-Regular"}}>Write your messag,You need help for?</Text>
+          </View>
+          <Item style={[styless.itemView,{marginLeft:20,marginRight:20}]}>
+          <Input
+              style={styless.inputText}
+              placeholder="Write your message"
+              placeholderTextColor={COLOR.DARKGREY}
+              name="email"
+              value={this.state.userMessage}
+              keyboardType="email-address"
+              selectionColor={COLOR.DARKGREY}
+              underlineColorAndroid={COLOR.PURPLE}
+              onChangeText={text => this.setState({ userMessage: text })}
+              autoCapitalize="none"
+              Textbox
+            />
+            </Item>
+            <Text style={{color:COLOR.Red,fontSize:12,alignSelf:"flex-start",marginLeft:20,fontFamily:"Montserrat-Regular"}}>{this.state.message}</Text>
+          </View>
+          <View style={{justifyContent:"center",flexDirection:'row'}}>
+          <Button disabled ={this.props.callHelp.isLoading} onPress={this.askHelp} warning><Text> Send Message </Text></Button>
+          </View>
+        </Modal>
+      }
         {show && (
           <Animated.View
             style={{

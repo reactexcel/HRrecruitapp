@@ -5,22 +5,24 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  calling: false
+  calling: false,
+  isLoading:false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case CALL_HELP_REQUEST:
       return {
-        calling: true
+        calling: true,
+        isLoading:true
       };
       break;
     case CALL_HELP_SUCCESS:
-      return { calling: false, ...action.payload };
+      return { calling: false,isLoading:false, ...action.payload };
       break;
 
     case CALL_HELP_FAILURE:
-      return { success: false };
+      return { success: false ,isLoading:false};
 
     default:
       return state;

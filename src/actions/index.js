@@ -194,11 +194,11 @@ export const getQuestions = (email, fb_id) => async dispatch => {
 
 // Action to call for HR help
 
-export const callingHelp = (accessToken, fb_id) => async dispatch => {
+export const callingHelp = (accessToken, fb_id,message) => async dispatch => {
   dispatch({ type: CALL_HELP_REQUEST });
   try {
     const res = await _axios().post("exams/askHrForHelp?accessToken=${accessToken}", {
-      fb_id
+      fb_id,message
     });
     dispatch({ type: CALL_HELP_SUCCESS, payload: res });
   } catch (err) {

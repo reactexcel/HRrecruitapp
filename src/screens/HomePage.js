@@ -26,6 +26,8 @@ import {
 } from "native-base";
 import { connect } from "react-redux";
 import styles from "../styles/screens/HomePage";
+import styless from '../styles/index';
+import _styles from '../styles/screens/InterviewLogin';
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
@@ -38,6 +40,8 @@ import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import  { RemoteMessage } from 'react-native-firebase';
 import Permissions from 'react-native-permissions';
+import Modal from 'react-native-modalbox'
+import {Input,Item,Button} from 'native-base';
 var { height, width } = Dimensions.get("window");
 class HomePage extends Component {
   constructor(props) {
@@ -274,6 +278,7 @@ class HomePage extends Component {
     });
     return (
       <View style={{ flex: 1 }}>
+      
         <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
