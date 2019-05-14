@@ -335,7 +335,7 @@ class TestPage extends Component {
         </View>}
         <View >
         <View>
-            <Text style={{color:"#fff",fontSize:16,alignSelf:"center",fontFamily:"Montserrat-Regular"}}>Write your messag,You need help for?</Text>
+            <Text style={{color:"#fff",fontSize:16,alignSelf:"center",fontFamily:"Montserrat-Regular"}}>Write your message,You need help for?</Text>
           </View>
           <Item style={[styless.itemView,{marginLeft:20,marginRight:20}]}>
           <Input

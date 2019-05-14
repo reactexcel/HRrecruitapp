@@ -415,6 +415,10 @@ class InterviewLogin extends Component {
           <Logo />
         </View>
         <View style={_styles.textInputView}>
+        <View style={{flexDirection:"column",justifyContent:"center",alignItems:"center",alignContent:"center"}}>
+          <Text style={{color:"#fff",fontSize:14,fontFamily:"Montserrat-SemiBold"}}>Put in your email address which you used while</Text>
+          <Text style={{justifyContent:"center",color:"#fff",fontSize:14,fontFamily:"Montserrat-SemiBold"}}>applying for job</Text>
+        </View>
           <Item style={styles.itemView}>
             <Input
               style={styles.inputText}

@@ -119,7 +119,11 @@ class AppIntro extends Component {
 
   _checkDeepLink = async () => {
     branch.subscribe(async ({ params }) => {
-      this.setState({deepLinkParams:params})
+      setTimeout(() => {
+        if(params.$share_data ==undefined && params.$deeplink_path ==undefined){
+          this._onSkip()
+        }
+      }, 60000);
       if (
         this.props.joblist.data !== "" &&
         this.props.joblist.data !== undefined &&
