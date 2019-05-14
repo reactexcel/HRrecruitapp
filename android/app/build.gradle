@@ -101,10 +101,10 @@ android {
         applicationId "com.hrrecruits"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 41
-        versionName "1.41"
+        versionCode 43
+        versionName "1.43"
         ndk {
-            abiFilters "armeabi-v7a", "x86"
+            abiFilters 'armeabi-v7a','arm64-v8a','x86','x86_64'
         }
     }
     signingConfigs {
@@ -122,7 +122,7 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include "armeabi-v7a", "x86"
+            include 'armeabi-v7a','arm64-v8a','x86','x86_64'
         }
     }
     buildTypes {
