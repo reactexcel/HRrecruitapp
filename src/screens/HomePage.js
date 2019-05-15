@@ -257,7 +257,7 @@ class HomePage extends Component {
             <View style={{width:height * 0.1350,height: height * 0.1350,zIndex:1,position:'absolute',left:0,top:'12.2%',/* borderWidth:1,borderColor:'red' */}}>
               <Image
                 resizeMode='contain'
-                style={[{width:'100%',height:'100%',}, k == 2 ? {marginLeft:-17} : null ,k==1 ? {marginLeft:-5} :null  ]}
+                style={[{width:'100%',height:'100%',}, k == 0 ? {marginLeft:-17} : null ,k==2 ? {marginLeft:-5} :null  ]}
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>

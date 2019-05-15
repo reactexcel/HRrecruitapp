@@ -291,7 +291,7 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
-            if (this.state.email === "test_123@gmail.com") {
+            // if (this.state.email === "test_123@gmail.com") {
               this.props.navigation.navigate("Instructions", {
                 fb_id: fb_id,
                 profile_pic: `https://pikmail.herokuapp.com/${
@@ -301,9 +301,9 @@ class InterviewLogin extends Component {
                 email: this.state.email
               });
               this.setState({ email: "" ,spinner:false});
-              return;
-            }
-            this.props.navigation.navigate("OTPpage");
+              // return;
+            // }
+            // this.props.navigation.navigate("OTPpage");
             this.setState({ email: "",spinner:false });
           }
         } else {
@@ -354,7 +354,7 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
-            if (this.state.email === "test_123@gmail.com") {
+            // if (this.state.email === "test_123@gmail.com") {
               this.props.navigation.navigate("Instructions", {
                 fb_id: fb_id,
                 profile_pic: `https://pikmail.herokuapp.com/${
@@ -364,10 +364,10 @@ class InterviewLogin extends Component {
                 email: this.state.email
               });
               this.setState({ email: "",spinner:false });
-              return;
-            }
-            this.props.navigation.navigate("OTPpage");
-            this.setState({ email: "",spinner:false });
+              // return;
+            // }
+            // this.props.navigation.navigate("OTPpage");
+            // this.setState({ email: "",spinner:false });
           }
         } else {
           alert("Please connect to internet");
@@ -415,9 +415,8 @@ class InterviewLogin extends Component {
           <Logo />
         </View>
         <View style={_styles.textInputView}>
-        <View style={{flexDirection:"column",justifyContent:"center",alignItems:"center",alignContent:"center"}}>
-          <Text style={{color:"#fff",fontSize:14,fontFamily:"Montserrat-SemiBold"}}>Put in your email address which you used while</Text>
-          <Text style={{justifyContent:"center",color:"#fff",fontSize:14,fontFamily:"Montserrat-SemiBold"}}>applying for job</Text>
+        <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",alignContent:"center"}}>
+          <Text style={{color:"#fff",fontSize:14,fontFamily:"Montserrat-SemiBold",textAlign:"center"}}>Put in your email address which you used while applying for job</Text>
         </View>
           <Item style={styles.itemView}>
             <Input

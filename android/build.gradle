@@ -49,8 +49,8 @@ allprojects {
 // }
 }
 ext {
-    compileSdkVersion = 28 // default: 23
-    buildToolsVersion = "28.0.2" // default: "23.0.1"
+    compileSdkVersion = 26 // default: 23
+    buildToolsVersion = "26.0.1" // default: "23.0.1"
     targetSdkVersion = 26 // default: 23
     supportLibVersion = "27.1.1" // default: 23.1.1
 }
