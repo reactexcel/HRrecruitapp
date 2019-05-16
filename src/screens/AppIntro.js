@@ -110,16 +110,14 @@ class AppIntro extends Component {
       }
     });
     AppState.addEventListener("change", this._handleAppStateChange);
-    // setTimeout(() => {
-    //   if(deepLinkParams.$share_data ==undefined && deepLinkParams.$deeplink_path ==undefined){
-    //     this._onSkip()
-    //   }
-    // }, 10000);
   };
+  componentWillUnmount(){
+    clearTimeout(this.timer);
+  }
 
   _checkDeepLink = async () => {
     branch.subscribe(async ({ params }) => {
-      setTimeout(() => {
+      this.timer =setTimeout(() => {
         if(params.$share_data ==undefined && params.$deeplink_path ==undefined){
           this._onSkip()
         }

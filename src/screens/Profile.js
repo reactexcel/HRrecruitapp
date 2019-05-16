@@ -248,6 +248,7 @@ class Profile extends Component {
     // console.log(this.state.uploading,'profile');
     
     const profileDetails = this.props.navigation.getParam("profileDetails");
+    console.log(profileDetails,this.props,'profileDetails');
     const appliedJob = this.props.navigation.getParam("appliedJob");
     return (
       <ScrollView overScrollMode="never">
@@ -276,6 +277,7 @@ class Profile extends Component {
             job_profile={this.state.job_profile}
             onChange={value => this.onChange(value)}
             jobOpening={()=>this.jobOpening()}
+            profileDetails={profileDetails}
           />
           <Popup
           isVisible={this.state.isLocation}

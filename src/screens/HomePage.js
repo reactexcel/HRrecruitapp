@@ -261,7 +261,7 @@ class HomePage extends Component {
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>
-            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 0 && data.name=='PROFILE' ? {left:'75%'}:null,k == 0 ? {left:'55%'}:null,k == 1 ? {left:'75%'}:null,k == 2 ? {left:'60%'}:null]}>
+            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 1 && data.name==='PROFILE' ? {left:'75%'}:null,k == 1 ? {left:'55%'}:null,k == 2 ? {left:'75%'}:null,k == 0 ? {left:'60%'}:null]}>
               <Text
                 style={[
                   styles.text,
