@@ -25,7 +25,8 @@ class SubmitTest extends Component {
   constructor() {
     super();
     this.state = {
-      isOnline: false
+      isOnline: false,
+      fontSize:13.5
     };
   }
   componentDidMount() {
@@ -141,6 +142,13 @@ class SubmitTest extends Component {
     }
     this.props.submitTest(email, data);
   };
+  fontSize=()=>{
+    if(this.state.fontSize ==13.5)
+    this.setState({fontSize:15.5})
+    else if(this.state.fontSize ==15.5){
+      this.setState({fontSize:13.5})
+    }
+  }
 
   render() {
     const { isOnline } = this.state;
@@ -157,12 +165,12 @@ class SubmitTest extends Component {
             </CardItem>
             <HorizontalLine />
             <CardItem>
-              <Text style={styles.text}>
+              <Text style={[styles.text,{fontSize:this.state.fontSize}]}>
                 {LOW_CONN_ALERT}
               </Text>
             </CardItem>
             {!isOnline ? (
-              <Button disabled block>
+              <Button onPress={this.fontSize} block>
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (
