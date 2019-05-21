@@ -35,7 +35,7 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Medium",
     textAlign: "center",
     // letterSpacing: 0.4,
-    color: COLOR.TEXTCOLOR,
+    // color: COLOR.TEXTCOLOR,
     fontSize: 13.5
   },
   inputText: {

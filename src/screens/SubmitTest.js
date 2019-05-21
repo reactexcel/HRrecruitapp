@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, NetInfo, Alert, Platform } from "react-native";
+import { BackHandler, NetInfo, Alert, Platform ,Animated} from "react-native";
 import {
   Container,
   Content,
@@ -26,7 +26,8 @@ class SubmitTest extends Component {
     super();
     this.state = {
       isOnline: false,
-      fontSize:13.5
+      fontSize:new Animated.Value(13.5),
+      fontColor:new Animated.Value(0),
     };
   }
   componentDidMount() {
@@ -35,6 +36,8 @@ class SubmitTest extends Component {
       "connectionChange",
       this.handleNetwork
     );
+    this.fontsieChanger();
+    this.fontColor()
   }
   handleNetwork = isconnect => {
     //functinality for net connection at time of answering paper
@@ -142,20 +145,45 @@ class SubmitTest extends Component {
     }
     this.props.submitTest(email, data);
   };
-  fontSize=()=>{
-    if(this.state.fontSize ==13.5)
-    this.setState({fontSize:15.5})
-    else if(this.state.fontSize ==15.5){
-      this.setState({fontSize:13.5})
-    }
-  }
+  fontsieChanger=()=>{
+    Animated.timing(this.state.fontSize,{
+      toValue:18,
+      duration:1000
+    }).start(()=>{
+      Animated.timing(this.state.fontSize,{
+        toValue:13.5,
+        duration:1000
+      }).start(()=>{
+        this.fontsieChanger()
+      })
+    })
+}
+fontColor=()=>{
+  Animated.timing(this.state.fontColor,{
+    toValue:1,
+    duration:1000
+  }).start(()=>{
+    Animated.timing(this.state.fontColor,{
+      toValue:0,
+      duration:1000
+    }).start(()=>{
+      this.fontColor()
+    })
+  })
+}
 
   render() {
     const { isOnline } = this.state;
     const {
       test: { submitting }
     } = this.props;
+    const BackgroundColorConfig = this.state.fontColor.interpolate(
+      {
+          inputRange: [ 0, 1 ],
+          
+          outputRange: [ '#253055', '#ed1040']
 
+      });
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -165,12 +193,12 @@ class SubmitTest extends Component {
             </CardItem>
             <HorizontalLine />
             <CardItem>
-              <Text style={[styles.text,{fontSize:this.state.fontSize}]}>
+              <Animated.Text style={[styles.text,{fontSize:this.state.fontSize,color:BackgroundColorConfig}]}>
                 {LOW_CONN_ALERT}
-              </Text>
+              </Animated.Text>
             </CardItem>
             {!isOnline ? (
-              <Button onPress={this.fontSize} block>
+              <Button /* onPress={this.fontSize} */ disabled block>
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (

@@ -9,7 +9,9 @@ import {
   BackHandler,
   Dimensions,
   ActivityIndicator,
-  NetInfo
+  NetInfo,
+  Animated,
+  Easing,
 } from "react-native";
 import {
   Container,
@@ -62,7 +64,9 @@ class HomePage extends Component {
       profile_picture:'',
       latestImage:null,
       isNotify:true,
-      backgroundColor:false
+      backgroundColor:false,
+      // fontSize:new Animated.Value(12),
+      // opacityy:new Animated.Value(1)
       // index:''
     };
     this.handleViewClick = this.handleViewClick.bind(this);
@@ -204,6 +208,7 @@ class HomePage extends Component {
     this.props.navigation.setParams({errorFromAppinto:false})
   }
 })
+
   };
   componentDidUpdate = async (nextProps) => {
     const applied = this.props.navigation.getParam("applied");
@@ -226,7 +231,7 @@ class HomePage extends Component {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
-    console.log(this.props,'KKKKKKKKKKKKKKKKKKKKKKKKK');
+    console.log(this.state.fontSize,'KKKKKKKKKKKKKKKKKKKKKKKKK');
     
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
@@ -261,11 +266,11 @@ class HomePage extends Component {
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>
-            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 1 && data.name==='PROFILE' ? {left:'75%'}:null,k == 1 ? {left:'55%'}:null,k == 2 ? {left:'75%'}:null,k == 0 ? {left:'60%'}:null]}>
+            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%',/* backgroundColor:"red",opacity:this.state.opacityy */},k == 1 && data.name==='PROFILE' ? {left:'75%'}:null,k == 1 ? {left:'55%'}:null,k == 2 ? {left:'75%'}:null,k == 0 ? {left:'60%'}:null]}>
               <Text
                 style={[
                   styles.text,
-                  {alignSelf:'center'},
+                  {alignSelf:'center',/* fontSize:this.state.fontSize */},
                   textColor && index == k ? { color: COLOR.WHITE } : {}
                 ,]}
               >
