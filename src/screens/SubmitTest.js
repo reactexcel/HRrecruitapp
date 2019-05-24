@@ -36,8 +36,7 @@ class SubmitTest extends Component {
       "connectionChange",
       this.handleNetwork
     );
-    this.fontsieChanger();
-    this.fontColor()
+    
   }
   handleNetwork = isconnect => {
     //functinality for net connection at time of answering paper
@@ -145,33 +144,28 @@ class SubmitTest extends Component {
     }
     this.props.submitTest(email, data);
   };
-  fontsieChanger=()=>{
-    Animated.timing(this.state.fontSize,{
-      toValue:18,
-      duration:1000
-    }).start(()=>{
-      Animated.timing(this.state.fontSize,{
-        toValue:13.5,
-        duration:1000
-      }).start(()=>{
-        this.fontsieChanger()
-      })
-    })
-}
-fontColor=()=>{
-  Animated.timing(this.state.fontColor,{
-    toValue:1,
-    duration:1000
-  }).start(()=>{
-    Animated.timing(this.state.fontColor,{
-      toValue:0,
-      duration:1000
-    }).start(()=>{
-      this.fontColor()
-    })
-  })
-}
-
+    onSubmitNoInternet=()=>{
+      Animated.parallel([
+        Animated.timing(this.state.fontSize,{
+          toValue:18,
+          duration:1000
+        }).start(()=>{
+          Animated.timing(this.state.fontSize,{
+            toValue:13.5,
+            duration:1000
+          }).start()
+        }),
+        Animated.timing(this.state.fontColor,{
+          toValue:1,
+          duration:1000
+        }).start(()=>{
+          Animated.timing(this.state.fontColor,{
+            toValue:0,
+            duration:1000
+          }).start()
+        })
+      ]).start()
+  }
   render() {
     const { isOnline } = this.state;
     const {
@@ -179,9 +173,9 @@ fontColor=()=>{
     } = this.props;
     const BackgroundColorConfig = this.state.fontColor.interpolate(
       {
-          inputRange: [ 0, 1 ],
+          inputRange: [ 0, .5, 1 ],
           
-          outputRange: [ '#253055', '#ed1040']
+          outputRange: [ '#253055', '#ed1040', '#253055']
 
       });
     return (
@@ -198,7 +192,7 @@ fontColor=()=>{
               </Animated.Text>
             </CardItem>
             {!isOnline ? (
-              <Button /* onPress={this.fontSize} */ disabled block>
+              <Button style={{backgroundColor:"#cccccc"}} onPress={this.onSubmitNoInternet} /* disabled */ block>
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (

@@ -99,6 +99,7 @@ class AppIntro extends Component {
       if (isConnected) {
         await this.props.getJobLists();
         await this._checkDeepLink();
+        SplashScreen.hide();
       } else {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
@@ -116,19 +117,19 @@ class AppIntro extends Component {
   }
 
   _checkDeepLink = async () => {
+    const appIntro = await getItem("appintro");
     branch.subscribe(async ({ params }) => {
-      this.timer =setTimeout(() => {
-        if(params.$share_data ==undefined && params.$deeplink_path ==undefined){
-          this._onSkip()
-        }
-      }, 60000);
+      if(params.$share_data ==undefined && params.$deeplink_path ==undefined && appIntro ==undefined){
+        this.timer =setTimeout(() => {
+            this._onSkip();
+          }, 60000);
+      }
       if (
         this.props.joblist.data !== "" &&
         this.props.joblist.data !== undefined &&
         params.$share_data !== undefined &&
         this.props.joblist !== null
       ) {
-        const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
         if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
           this.props.navigation.replace("HomePage",{errorFromAppinto:false});
@@ -342,7 +343,7 @@ class AppIntro extends Component {
   }
   render() {
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
-    console.log(this.state.deepLinkParams,this.props.interviewSignUp,'deepLinkParams');
+    console.log(this.props.joblist,'deepLinkParams');
     const {interviewSignUp}=this.props;
     
     return (
