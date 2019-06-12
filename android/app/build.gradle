@@ -164,12 +164,12 @@ dependencies {
     compile project(':react-native-image-resizer')
     compile project(':react-native-image-picker')
     // compile project(':react-native-share')
-    compile project(':react-native-fbsdk')
+    // compile project(':react-native-fbsdk')
     compile project(':react-native-device-info')
     // compile project(':react-native-fcm')
     compile project(':react-native-linear-gradient')
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
-    implementation project(':react-native-fbsdk')
+    // implementation project(':react-native-fbsdk')
     // implementation 'com.google.firebase:firebase-messaging:17.3.0'
     // implementation "com.google.firebase:firebase-core:16.0.3"
     // implementation "com.google.android.gms:play-services-base:15.0.1"
