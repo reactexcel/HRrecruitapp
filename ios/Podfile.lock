@@ -12,40 +12,31 @@ PODS:
     - AppCenter/Core
   - AppCenterReactNativeShared (1.10.0):
     - AppCenter/Core (= 1.11.0)
-  - Bolts (1.9.0):
-    - Bolts/AppLinks (= 1.9.0)
-    - Bolts/Tasks (= 1.9.0)
-  - Bolts/AppLinks (1.9.0):
-    - Bolts/Tasks
-  - Bolts/Tasks (1.9.0)
   - boost-for-react-native (1.63.0)
   - BVLinearGradient (2.4.0):
     - React
   - DoubleConversion (1.1.5)
-  - FBSDKCoreKit (4.38.1):
-    - Bolts (~> 1.9)
-  - FBSDKLoginKit (4.38.1):
-    - FBSDKCoreKit
-  - FBSDKShareKit (4.38.1):
-    - FBSDKCoreKit
-  - Firebase/CoreOnly (5.13.0):
-    - FirebaseCore (= 5.1.8)
-  - Firebase/Messaging (5.13.0):
+  - Firebase/CoreOnly (6.2.0):
+    - FirebaseCore (= 6.0.2)
+  - Firebase/Messaging (6.2.0):
     - Firebase/CoreOnly
-    - FirebaseMessaging (= 3.2.1)
-  - FirebaseAnalyticsInterop (1.1.0)
-  - FirebaseCore (5.1.8):
-    - GoogleUtilities/Logger (~> 5.2)
-  - FirebaseInstanceID (3.3.0):
-    - FirebaseCore (~> 5.1)
-    - GoogleUtilities/Environment (~> 5.3)
-    - GoogleUtilities/UserDefaults (~> 5.3)
-  - FirebaseMessaging (3.2.1):
+    - FirebaseMessaging (~> 4.0.2)
+  - FirebaseAnalyticsInterop (1.2.0)
+  - FirebaseCore (6.0.2):
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/Logger (~> 6.0)
+  - FirebaseInstanceID (4.1.1):
+    - FirebaseCore (~> 6.0)
+    - GoogleUtilities/Environment (~> 6.0)
+    - GoogleUtilities/UserDefaults (~> 6.0)
+  - FirebaseMessaging (4.0.2):
     - FirebaseAnalyticsInterop (~> 1.1)
-    - FirebaseCore (~> 5.1)
-    - FirebaseInstanceID (~> 3.0)
-    - GoogleUtilities/Environment (~> 5.2)
-    - GoogleUtilities/Reachability (~> 5.2)
+    - FirebaseCore (~> 6.0)
+    - FirebaseInstanceID (~> 4.1)
+    - GoogleUtilities/AppDelegateSwizzler (~> 6.2)
+    - GoogleUtilities/Environment (~> 6.2)
+    - GoogleUtilities/Reachability (~> 6.2)
+    - GoogleUtilities/UserDefaults (~> 6.2)
     - Protobuf (~> 3.1)
   - FLAnimatedImage (1.0.12)
   - Folly (2016.09.26.00):
@@ -53,33 +44,28 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.4)
-  - GoogleUtilities/Environment (5.3.6)
-  - GoogleUtilities/Logger (5.3.6):
+  - GoogleUtilities/AppDelegateSwizzler (6.2.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/Reachability (5.3.6):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (5.3.6):
+    - GoogleUtilities/Network
+  - GoogleUtilities/Environment (6.2.0)
+  - GoogleUtilities/Logger (6.2.0):
+    - GoogleUtilities/Environment
+  - GoogleUtilities/Network (6.2.0):
     - GoogleUtilities/Logger
-  - Protobuf (3.6.1)
+    - "GoogleUtilities/NSData+zlib"
+    - GoogleUtilities/Reachability
+  - "GoogleUtilities/NSData+zlib (6.2.0)"
+  - GoogleUtilities/Reachability (6.2.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (6.2.0):
+    - GoogleUtilities/Logger
+  - Protobuf (3.8.0)
   - React (0.55.4):
     - React/Core (= 0.55.4)
   - react-native-document-picker (2.1.0):
     - React
-  - react-native-fbsdk (0.8.0):
-    - React
-    - react-native-fbsdk/Core (= 0.8.0)
-    - react-native-fbsdk/Login (= 0.8.0)
-    - react-native-fbsdk/Share (= 0.8.0)
-  - react-native-fbsdk/Core (0.8.0):
-    - FBSDKCoreKit
-    - React
-  - react-native-fbsdk/Login (0.8.0):
-    - FBSDKLoginKit
-    - React
-  - react-native-fbsdk/Share (0.8.0):
-    - FBSDKShareKit
-    - React
-  - react-native-fcm (16.2.3):
+  - react-native-fcm (16.2.4):
     - Firebase/Messaging
     - React
   - react-native-image-picker (0.14.3):
@@ -143,8 +129,8 @@ PODS:
     - React
   - RNShare (1.1.3):
     - React
-  - SDWebImage/Core (4.4.2)
-  - SDWebImage/GIF (4.4.2):
+  - SDWebImage/Core (4.4.7)
+  - SDWebImage/GIF (4.4.7):
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
   - yoga (0.55.4.React)
@@ -156,7 +142,6 @@ DEPENDENCIES:
   - AppCenterReactNativeShared (~> 1.10.0)
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
-  - react-native-fbsdk (from `../node_modules/react-native-fbsdk`)
   - react-native-fcm (from `../node_modules/react-native-fcm`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-image-resizer (from `../node_modules/react-native-image-resizer`)
@@ -186,12 +171,8 @@ SPEC REPOS:
     - Appboy-iOS-SDK
     - AppCenter
     - AppCenterReactNativeShared
-    - Bolts
     - boost-for-react-native
     - DoubleConversion
-    - FBSDKCoreKit
-    - FBSDKLoginKit
-    - FBSDKShareKit
     - Firebase
     - FirebaseAnalyticsInterop
     - FirebaseCore
@@ -211,8 +192,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
-  react-native-fbsdk:
-    :path: "../node_modules/react-native-fbsdk"
   react-native-fcm:
     :path: "../node_modules/react-native-fcm"
   react-native-image-picker:
@@ -240,27 +219,22 @@ SPEC CHECKSUMS:
   Appboy-iOS-SDK: e23e1ce284ff810998111d9ba50dfd2dd85f0cd3
   AppCenter: 3bccf8d733e337d0db574dd4cb0e33ab9637b7f2
   AppCenterReactNativeShared: a77b000c2ac6dc2e44472621d7d0770f196e5822
-  Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: 8913bd8fdc47b85abc801ae8bae007bbfb6b4ce5
   DoubleConversion: e22e0762848812a87afd67ffda3998d9ef29170c
-  FBSDKCoreKit: 8d47857400e2f5bdea697a80daff882e91c84ef6
-  FBSDKLoginKit: 4621c690d9dd8628031a4791497062183ea34b0d
-  FBSDKShareKit: 6ffe22f0a0618eb7424d4104ab0ef3ce9643d42a
-  Firebase: 6df9a6114bc9f106a98fe83d5438d4d9833c2019
-  FirebaseAnalyticsInterop: e5f21be9af6548372e2f0815834ff909bff395a2
-  FirebaseCore: fba2bfaa691c49028309b92e4dd37cc4b5512fbe
-  FirebaseInstanceID: e2fa4cb35ef5558c200f7f0ad8a53e212215f93e
-  FirebaseMessaging: 0f14a264b0d7f867e8eff5d3556bc5d0d4e57888
+  Firebase: 5965bac23e7fcb5fa6d926ed429c9ecef8a2014e
+  FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
+  FirebaseCore: b0f0262acebfa540e5f97b3832dbb13186980822
+  FirebaseInstanceID: cdb3827746d53ece7ae87a5c51c25c3055443366
+  FirebaseMessaging: 20b6626c41be7840aed7a3dd9a14003efae3d588
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   Folly: 211775e49d8da0ca658aebc8eab89d642935755c
   glog: 1de0bb937dccdc981596d3b5825ebfb765017ded
-  GoogleUtilities: 95996bea7c7d9b8fb811b7507669a4a8762f80c7
-  Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
+  GoogleUtilities: 996e0db07153674fd1b54b220fda3a3dc3547cba
+  Protobuf: 3f617b9a6e73605565086864c9bc26b2bf2dd5a3
   React: 755b16d9a9387e856d4dce6528130c51e4d409b8
   react-native-document-picker: 1e75650447a24dd5621d0d02884f004c619547f9
-  react-native-fbsdk: 5c3ff4dda057e17d3b4b5491033fc653d423e71d
-  react-native-fcm: cf78eac41b567de3022eb8f728a17b9e034077dd
+  react-native-fcm: fcbafc64ed69bd681fceba7405145d6bfbb6af53
   react-native-image-picker: 3693786b3d5958c8f71deed66ec068b323565e0d
   react-native-image-resizer: aa1600566fd336a044daf9273dcec5033c1d41ca
   react-native-splash-screen: 25447292d379e3c247a773137ff85bbf6523604a
@@ -270,9 +244,9 @@ SPEC CHECKSUMS:
   RNDeviceInfo: e7c5fcde13d40e161d8a27f6c5dc69c638936002
   RNFS: adcee9a3e7cec0469b7709535504aac628a9ed2e
   RNShare: 4f206fa36e384e95a0cbf79f2a92490647e93127
-  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
   yoga: c3ce6137f85f60c93a834235d7f08e2b44a42eed
 
-PODFILE CHECKSUM: 055d680f3c606c570475789166d72f4f7157b534
+PODFILE CHECKSUM: 9ccef3315371afe9c283774080b297c479408f9f
 
-COCOAPODS: 1.6.0.beta.2
+COCOAPODS: 1.7.1

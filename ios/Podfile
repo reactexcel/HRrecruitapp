@@ -26,7 +26,7 @@ target 'HRrecruit' do
 
   pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
 
-  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+  pod 'react-native-firebase', :path => '../node_modules/react-native-firebase'
 
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
 
