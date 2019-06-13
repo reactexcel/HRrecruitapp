@@ -9,6 +9,8 @@ import com.facebook.appevents.AppEventsLogger;
 
 import com.facebook.react.ReactApplication;
 import io.invertase.firebase.RNFirebasePackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import io.invertase.firebase.RNFirebasePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -18,7 +20,6 @@ import com.reactnativedocumentpicker.ReactNativeDocumentPicker;
 import io.branch.rnbranch.RNBranchPackage;
 import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
-
 
 import com.rnfs.RNFSPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
@@ -68,6 +69,8 @@ public class MainApplication extends Application implements ReactApplication {
             new ImageResizerPackage(),
             new ImagePickerPackage(),
             new MainReactPackage(),
+            new RNFirebasePackage(),
+            new FIRMessagingPackage(),
             new RNFirebasePackage(),
             new RNFetchBlobPackage(),
             new RNVersionNumberPackage(),

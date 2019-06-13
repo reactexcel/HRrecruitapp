@@ -8,6 +8,7 @@ import {
   AppState,
   NetInfo,
   ActivityIndicator,
+  Platform,
 } from "react-native";
 import { Container, Text, Button, Icon, Card } from "native-base";
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -95,26 +96,49 @@ class AppIntro extends Component {
   };
   componentDidMount = async () => {
     const {deepLinkParams} =this.state;
-    NetInfo.isConnected.fetch().then(async isConnected => {
-      if (isConnected) {
-        await this.props.getJobLists();
-        await this._checkDeepLink();
-        SplashScreen.hide();
-      } else {
-        const appIntro = await getItem("appintro");
-        const candidateJob = await getItem("mongo_id");
-        if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-          this.props.navigation.replace("HomePage",{errorFromAppinto:false});
+    if(Platform.OS === "ios"){
+      NetInfo.isConnected.addEventListener('change', this.handleConnectionChange);
+    }else{
+      NetInfo.isConnected.fetch().then(async isConnected => {
+        if (isConnected) {
+          await this.props.getJobLists();
+          await this._checkDeepLink();
+          SplashScreen.hide();
+        } else {
+          const appIntro = await getItem("appintro");
+          const candidateJob = await getItem("mongo_id");
+          if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+            this.props.navigation.replace("HomePage",{errorFromAppinto:false});
+          }
+          SplashScreen.hide();
+          alert("Please! Connect to the internet first");
         }
-        SplashScreen.hide();
-        alert("Please! Connect to the internet first");
-      }
-    });
+      });
+    }
+    
     AppState.addEventListener("change", this._handleAppStateChange);
   };
   componentWillUnmount(){
     clearTimeout(this.timer);
+    NetInfo.isConnected.removeEventListener('change', this.handleConnectionChange);
+
   }
+
+  handleConnectionChange =async (isConnected) => {
+    if (isConnected) {
+      await this.props.getJobLists();
+      await this._checkDeepLink();
+      SplashScreen.hide();
+    } else {
+      const appIntro = await getItem("appintro");
+      const candidateJob = await getItem("mongo_id");
+      if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+        this.props.navigation.replace("HomePage",{errorFromAppinto:false});
+      }
+      SplashScreen.hide();
+      alert("Please! Connect to the internet first");
+    }
+}
 
   _checkDeepLink = async () => {
     const appIntro = await getItem("appintro");

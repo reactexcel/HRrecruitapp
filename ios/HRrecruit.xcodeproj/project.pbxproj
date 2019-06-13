@@ -1839,7 +1839,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.hrrecruits;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hrrecruitss;
 				PRODUCT_NAME = HRrecruit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1875,7 +1875,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.hrrecruits;
+				PRODUCT_BUNDLE_IDENTIFIER = com.hrrecruitss;
 				PRODUCT_NAME = HRrecruit;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
