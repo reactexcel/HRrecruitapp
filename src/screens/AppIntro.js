@@ -112,9 +112,11 @@ class AppIntro extends Component {
     });
     AppState.addEventListener("change", this._handleAppStateChange);
   };
-  componentWillUnmount(){
-    clearTimeout(this.timer);
-  }
+  // componentWillUnmount(){
+  //   clearTimeout(this.timer);
+  //   console.log("unmonnnnnnnnnnnnnnnnnnnntttttttttttttttttt");
+    
+  // }
 
   _checkDeepLink = async () => {
     const appIntro = await getItem("appintro");
@@ -122,7 +124,10 @@ class AppIntro extends Component {
       if(params.$share_data ==undefined && params.$deeplink_path ==undefined && appIntro ==undefined){
         this.timer =setTimeout(() => {
             this._onSkip();
+            
           }, 60000);
+        console.log("timerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
+        
       }
       if (
         this.props.joblist.data !== "" &&
@@ -199,6 +204,7 @@ class AppIntro extends Component {
     }
   };
   _onSkip = () => {
+    clearTimeout(this.timer);
     this._linkCheck();
   };
   _linkCheck = async () => {
