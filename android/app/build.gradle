@@ -101,8 +101,8 @@ android {
         applicationId "com.hrrecruits"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 51
-        versionName "1.51"
+        versionCode 53
+        versionName "1.53"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -145,6 +145,9 @@ android {
             }
         }
     }
+//     configurations.all {
+//    resolutionStrategy.force 'com.android.support:support-v4:26.1.0' // old dependencies version;       
+// }
        
 }
 
