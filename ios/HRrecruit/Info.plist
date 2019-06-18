@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>HR Recruit</string>
+	<string>Excellence Career</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -22,6 +22,8 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>20</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,6 +41,20 @@
 			<string>http://api.recruit.excellencetechnologies.in/exams/</string>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app requires access to your media storage</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Excellence Career app  would like to save photos from the app to your gallery</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Excellence Career app  would like to location your location.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Excellence Career app  would like to location your location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app requires access to your location</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Excellence Career app  would like to save photos from the app to your gallery</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Excellence Career app  would like to save photos from the app to your gallery</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Regular.ttf</string>
@@ -60,24 +76,6 @@
 		<string>Feather.ttf</string>
 		<string>Entypo.ttf</string>
 	</array>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app requires access to your location</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string/>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string/>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>This app requires access to your media storage</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string/>
-	<key>NSCameraUsageDescription</key>
-	<string/>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string/>
-	<key>LSApplicationCategoryType</key>
-	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -88,5 +86,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 </dict>
 </plist>

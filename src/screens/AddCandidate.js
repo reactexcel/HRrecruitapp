@@ -639,18 +639,20 @@ exitingCandidate = async () => {
           this.scroll.scrollToEnd()
           this.setState({whenAddedResume:true})
           if (res) {
+            console.log(res,'resssssssssssssss');
+            
             let check =
               this.state.resumeData.length >= 1
                 ? this.state.currentType == res.type
                 : true;
-              let type = res.type
+              let type = []
               RNFS.readFile(res.uri, "base64").then(
                 data => {
                   console.log(data, 'base64');
                   resumeData.push({
                     fileName: res.fileName,
                     dataBase64: data,
-                    filetype: type[1]
+                    filetype:type
                   });
                   let base64 = require('base-64');
                   let decodedData = base64.decode(data);

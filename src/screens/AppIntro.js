@@ -97,7 +97,7 @@ class AppIntro extends Component {
   componentDidMount = async () => {
     const {deepLinkParams} =this.state;
     if(Platform.OS === "ios"){
-      NetInfo.isConnected.addEventListener('change', this.handleConnectionChange);
+      NetInfo.isConnected.addEventListener('connectionChange', this.handleConnectionChange);
     }else{
       NetInfo.isConnected.fetch().then(async isConnected => {
         if (isConnected) {
@@ -120,11 +120,13 @@ class AppIntro extends Component {
   };
   componentWillUnmount(){
     clearTimeout(this.timer);
-    NetInfo.isConnected.removeEventListener('change', this.handleConnectionChange);
+    NetInfo.isConnected.removeEventListener('connectionChange', this.handleConnectionChange);
 
   }
 
   handleConnectionChange =async (isConnected) => {
+    console.log(isConnected,'KKkkkkkkkkkkkkkkk connected');
+    
     if (isConnected) {
       await this.props.getJobLists();
       await this._checkDeepLink();
@@ -142,7 +144,10 @@ class AppIntro extends Component {
 
   _checkDeepLink = async () => {
     const appIntro = await getItem("appintro");
+    console.log(branch,"preeeeee  branch paramsssssssss");
     branch.subscribe(async ({ params }) => {
+      console.log(params,"paramsssssssss");
+      
       if(params.$share_data ==undefined && params.$deeplink_path ==undefined && appIntro ==undefined){
         this.timer =setTimeout(() => {
             this._onSkip();
