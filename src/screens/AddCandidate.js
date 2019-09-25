@@ -18,7 +18,6 @@ import {
 } from "native-base";
 import Permissions from 'react-native-permissions';
 // import FCM,{FCMEvent} from 'react-native-fcm'
-import DeviceInfo from 'react-native-device-info';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";

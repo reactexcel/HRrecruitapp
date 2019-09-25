@@ -168,7 +168,6 @@ dependencies {
     compile project(':react-native-image-picker')
     // compile project(':react-native-share')
     compile project(':react-native-fbsdk')
-    compile project(':react-native-device-info')
     // compile project(':react-native-fcm')
     compile project(':react-native-linear-gradient')
     implementation 'com.facebook.android:facebook-android-sdk:4.34.0'
