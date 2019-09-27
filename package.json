@@ -1,0 +1,54 @@
+{
+  "name": "hrrecruits",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@react-native-community/async-storage": "^1.6.2",
+    "@react-native-community/netinfo": "^4.2.2",
+    "axios": "^0.19.0",
+    "immutability-helper": "^3.0.1",
+    "native-base": "^2.13.8",
+    "prop-types": "^15.7.2",
+    "pubsub-js": "^1.7.0",
+    "react": "16.9.0",
+    "react-native": "^0.61.1",
+    "react-native-gesture-handler": "^1.4.1",
+    "react-native-linear-gradient": "^2.5.6",
+    "react-native-permissions": "^1.2.1",
+    "react-native-snap-carousel": "^3.8.1",
+    "react-navigation": "^4.0.10",
+    "react-navigation-stack": "^1.9.0",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "redux-actions": "^2.6.5",
+    "redux-form": "^8.2.6",
+    "redux-thunk": "^2.3.0",
+    "validator": "^11.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.6.2",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0"
+  },
+  "jest": {
+    "preset": "react-native",
+    "setupFiles": [
+      "./node_modules/appcenter/test/AppCenterMock.js",
+      "./node_modules/appcenter-analytics/test/AppCenterAnalyticsMock.js",
+      "./node_modules/appcenter-crashes/test/AppCenterCrashesMock.js",
+      "<rootDir>/node_modules/appcenter/test/AppCenterMock.js",
+      "<rootDir>/node_modules/appcenter-analytics/test/AppCenterAnalyticsMock.js",
+      "<rootDir>/node_modules/appcenter-crashes/test/AppCenterCrashesMock.js"
+    ]
+  }
+}
