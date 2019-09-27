@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {
   Alert,
-  NetInfo,
+  
   BackHandler,
   AsyncStorage,
   Platform,
@@ -26,6 +26,7 @@ import {
   View,
   Icon
 } from "native-base";
+import NetInfo from "@react-native-community/netinfo"
 import map from "lodash/map";
 import uniqWith from "lodash/uniqWith";
 import isEqual from "lodash/isEqual";

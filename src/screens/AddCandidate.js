@@ -30,10 +30,7 @@ import { notify } from "../helper/notify";
 import { connect } from "react-redux";
 import { addCandidate,candidateValidationapi,candidateUploadImage,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails} from "../actions";
 import { getJobLists } from "../actions";
-import {
-  DocumentPicker,
-  DocumentPickerUtil
-} from "react-native-document-picker";
+import  DocumentPicker from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
 // var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
@@ -558,7 +555,6 @@ exitingCandidate = async () => {
      //response is an object mapping type to permission
      if(Platform.OS !== "ios"){
     await Permissions.checkMultiple(['location']).then(response => {
-      console.log(response,'check')
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       } else {
@@ -570,104 +566,107 @@ exitingCandidate = async () => {
     this.setState({ converting: true });
     if (Platform.OS !== "ios") {
       //Android Only
-      DocumentPicker.show(
-        {
-          filetype: [DocumentPickerUtil.allFiles()]
-        },
-        (error, res) => {
-          console.log(res);
-          
-          // SplashScreen.hide();
-          this.scroll.scrollToEnd()
-          this.setState({whenAddedResume:true})
-          if (res) {
-            let check =
-              this.state.resumeData.length >= 1
-                ? this.state.currentType == res.type
-                : true;
-            if (check) {
-              let type = res.type.split("/");
-              RNFetchBlob.fs.readFile(res.uri, "base64").then(
-                data => {
-                  resumeData.push({
-                    fileName: res.fileName,
-                    dataBase64: data,
-                    filetype: type[1]
-                  });
-                  let base64 = require('base-64');
-                  let decodedData = base64.decode(data);
-                  let bytes = decodedData.length;
-                  let fileSizeInMB=(bytes / 1000000)
-                  if(fileSizeInMB > 2 ){
-                    alert("File size can't be larger than 2MB");
-                  }
-                  this.setState({
-                    converting: false,
-                    resumeData,
-                    currentType: res.type
-                  });
-                },
-                error => {
-                  // console.log(error,'asdas')
-                  this.setState({ converting: false });
+    try {
+      const resume = await DocumentPicker.pickMultiple({
+      type: [DocumentPicker.types.images],
+      });
+        if (resume) {
+          console.log(resume,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+          const res =resume[0]
+          let check =
+            this.state.resumeData.length >= 1
+              ? this.state.currentType == res.type
+              : true;
+          if (check) {
+            let type = res.type.split("/");
+            RNFetchBlob.fs.readFile(res.uri, "base64").then(
+              data => {
+                resumeData.push({
+                  fileName: res.name,
+                  dataBase64: data,
+                  filetype: type[1]
+                });
+                let base64 = require('base-64');
+                let decodedData = base64.decode(data);
+                let bytes = decodedData.length;
+                let fileSizeInMB=(bytes / 1000000)
+                if(fileSizeInMB > 2 ){
+                  alert("File size can't be larger than 2MB");
                 }
-              );
-            } else {
-              this.setState({ converting: false, resumeError: null });
-              alert("Please select same format for files");
-            }
+                this.setState({
+                  converting: false,
+                  resumeData,
+                  currentType: res.type
+                });
+              },
+              error => {
+                // console.log(error,'asdas')
+                this.setState({ converting: false });
+              }
+            );
           } else {
             this.setState({ converting: false, resumeError: null });
+            alert("Please select same format for files");
           }
+        } else {
+          this.setState({ converting: false, resumeError: null });
         }
-      );
+
+  } catch (err) {
+      if (DocumentPicker.isCancel(err)) {
+          console.log("Canceled")
+      // User cancelled the picker, exit any dialogs or menus and move on
+      }else {
+        throw err;
+      }
+  }
     } else {
-      DocumentPicker.show(
-        {
-          filetype: [DocumentPickerUtil.allFiles()]
-        },
-        (error, res) => {
-          // SplashScreen.hide();
-          this.scroll.scrollToEnd()
-          this.setState({whenAddedResume:true})
-          if (res) {
-            let check =
-              this.state.resumeData.length >= 1
-                ? this.state.currentType == res.type
-                : true;
-              let type = res.type
-              RNFS.readFile(res.uri, "base64").then(
-                data => {
-                  console.log(data, 'base64');
-                  resumeData.push({
-                    fileName: res.fileName,
-                    dataBase64: data,
-                    filetype: type[1]
-                  });
-                  let base64 = require('base-64');
-                  let decodedData = base64.decode(data);
-                  let bytes = decodedData.length;
-                  let fileSizeInMB=(bytes / 1000000)
-                  if(fileSizeInMB > 2 ){
-                    alert("File size can't be larger than 2MB");
-                  }
-                  this.setState({
-                    converting: false,
-                    resumeData,
-                    currentType: res.type
-                  });
-                },
-                error => {
-                  // console.log(error,'asdas')
-                  this.setState({ converting: false });
-                }
-              );
-            } else {
-              this.setState({ converting: false, resumeError: null });
-              alert("Please select same format for files");
-            }
-        }
-      );
+      // DocumentPicker.show(
+      //   {
+      //     filetype: [DocumentPickerUtil.allFiles()]
+      //   },
+      //   (error, res) => {
+      //     // SplashScreen.hide();
+      //     this.scroll.scrollToEnd()
+      //     this.setState({whenAddedResume:true})
+      //     if (res) {
+      //       let check =
+      //         this.state.resumeData.length >= 1
+      //           ? this.state.currentType == res.type
+      //           : true;
+      //         let type = res.type
+      //         RNFS.readFile(res.uri, "base64").then(
+      //           data => {
+      //             console.log(data, 'base64');
+      //             resumeData.push({
+      //               fileName: res.fileName,
+      //               dataBase64: data,
+      //               filetype: type[1]
+      //             });
+      //             let base64 = require('base-64');
+      //             let decodedData = base64.decode(data);
+      //             let bytes = decodedData.length;
+      //             let fileSizeInMB=(bytes / 1000000)
+      //             if(fileSizeInMB > 2 ){
+      //               alert("File size can't be larger than 2MB");
+      //             }
+      //             this.setState({
+      //               converting: false,
+      //               resumeData,
+      //               currentType: res.type
+      //             });
+      //           },
+      //           error => {
+      //             // console.log(error,'asdas')
+      //             this.setState({ converting: false });
+      //           }
+      //         );
+      //       } else {
+      //         this.setState({ converting: false, resumeError: null });
+      //         alert("Please select same format for files");
+      //       }
+      //   }
+      // );
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, NetInfo, Alert, Platform } from "react-native";
+import { BackHandler, Alert, Platform } from "react-native";
 import {
   Container,
   Content,
@@ -10,6 +10,7 @@ import {
   Thumbnail,
   Spinner
 } from "native-base";
+import NetInfo from "@react-native-community/netinfo"
 import HorizontalLine from "../components/HorizontalLine";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";

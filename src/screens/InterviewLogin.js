@@ -2,7 +2,6 @@ import React, { Component, Fragment } from "react";
 import {
   BackHandler,
   Alert,
-  NetInfo,
   View,
   AsyncStorage,
   Platform,
@@ -23,6 +22,7 @@ import {
   Button,
   Header
 } from "native-base";
+import NetInfo  from "@react-native-community/netinfo"
 import { connect } from "react-redux";
 import Logo from "../components/Logo";
 import styles from "../styles";
@@ -93,8 +93,8 @@ class InterviewLogin extends Component {
     const email = await getItem("email");
     const fb_id = await getItem("fb_id");
     if (ans !== undefined && email !== undefined && fb_id !== undefined) {
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if (isConnected) {
+      NetInfo.fetch().then(async state => {
+        if (state.isConnected) {
           await this.props.getCandidateDetails(fb_id.fb_id);
           const { data, message, error, status } = this.props.interviewSignUp;
           if (status == SUCCESS_STATUS) {
@@ -157,7 +157,8 @@ class InterviewLogin extends Component {
         }
       });
     }
-    NetInfo.isConnected.addEventListener(
+    
+    NetInfo.addEventListener(
       "connectionChange",
       this.handleNetworks
     );
@@ -222,8 +223,8 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if(Object.keys(errors).length === 0){
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if(isConnected){
+      NetInfo.fetch().then(async state => {
+        if(state.isConnected){
     this.setState({spinner:true})
    await this.props.candidateValidationapi(this.state.email)}})}
     if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
@@ -244,8 +245,8 @@ class InterviewLogin extends Component {
      }
     else if (Object.keys(errors).length === 0) {
       this.setState({spinner:false})
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if (isConnected) {
+      NetInfo.fetch().then(async state => {
+        if (state.isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
             "INTERVIEWLOGIN",
             this.state.email
@@ -283,7 +284,7 @@ class InterviewLogin extends Component {
               this.setState({ email: "" ,spinner:false});
               return;
             }
-            this.props.navigation.navigate("OTPpage");
+            // this.props.navigation.navigate("OTPpage");
             this.setState({ email: "",spinner:false });
           }
         } else {
@@ -307,8 +308,8 @@ class InterviewLogin extends Component {
     }
    else if (Object.keys(errors).length === 0) {
     this.setState({spinner:false})
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if (isConnected) {
+      NetInfo.fetch().then(async state => {
+        if (state.isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
             "INTERVIEWLOGIN",
             this.state.email
@@ -346,7 +347,7 @@ class InterviewLogin extends Component {
               this.setState({ email: "",spinner:false });
               return;
             }
-            this.props.navigation.navigate("OTPpage");
+            // this.props.navigation.navigate("OTPpage");
             this.setState({ email: "",spinner:false });
           }
         } else {

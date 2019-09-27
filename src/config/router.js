@@ -3,20 +3,20 @@ import { Easing, Animated } from "react-native";
 import { createStackNavigator } from "react-navigation-stack";
 import {createAppContainer} from 'react-navigation';
 import HomePage from "../screens/HomePage";
-// import InterviewLogin from "../screens/InterviewLogin";
-// import VerifyingCandidate from "../screens/VerifyingCandidate";
+import InterviewLogin from "../screens/InterviewLogin";
+import VerifyingCandidate from "../screens/VerifyingCandidate";
 // import OTPpage from "../screens/OTPpage";
 import AddCandidate from "../screens/AddCandidate";
 import Instructions from "../screens/Instructions";
-// import TestPage from "../screens/TestPage";
+import TestPage from "../screens/TestPage";
 import SubmitTest from "../screens/SubmitTest";
 import JobList from "../screens/JobList";
 import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
 import Profile from "../screens/Profile";
 import FullDescription from "../screens/FullDescription";
-import ProfileDescription from '../components/ProfileDescription'
-// import candidateValidation from '../screens/candidateValidation'
+// import ProfileDescription from '../components/ProfileDescription'
+import candidateValidation from '../screens/candidateValidation'
 const transitionConfig = () => {
   return {
     transitionSpec: {
@@ -60,27 +60,27 @@ const Rootstack = createStackNavigator(
     HomePage: {
       screen: HomePage
     },
-    // InterviewLogin: {
-    //   screen: InterviewLogin
+    InterviewLogin: {
+      screen: InterviewLogin
+    },
+    VerifyingCandidate: {
+      screen: VerifyingCandidate
+    },
+    // OTPpage: {
+    //   screen: OTPpage
     // },
-    // // VerifyingCandidate: {
-    // //   screen: VerifyingCandidate
-    // // },
-    // // OTPpage: {
-    // //   screen: OTPpage
-    // // },
-    // // candidateValidation:{
-    // //   screen:candidateValidation
-    // // },
+    candidateValidation:{
+      screen:candidateValidation
+    },
     AddCandidate: {
       screen: AddCandidate
     },
     Instructions: {
       screen: Instructions
     },
-    // // TestPage: {
-    // //   screen: TestPage
-    // // },
+    TestPage: {
+      screen: TestPage
+    },
     SubmitTest: {
       screen: SubmitTest
     },
