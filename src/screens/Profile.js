@@ -22,16 +22,12 @@ import styles from "../styles/screens/FullDescription";
 import { connect } from "react-redux";
 import { getJobLists, candidateUploadImage ,getCandidateUpdateProfileDetails} from "../actions";
 import { ProfileOnChange } from "../actions/actions";
-
-import {
-  DocumentPicker,
-  DocumentPickerUtil
-} from "react-native-document-picker";
-import SplashScreen from "react-native-splash-screen";
+import  DocumentPicker from "react-native-document-picker";
+// import SplashScreen from "react-native-splash-screen";
 import RNFetchBlob from "rn-fetch-blob";
 import { Popup } from 'react-native-map-link';
 import { setItem, getItem } from "../helper/storage";
-var RNFS = require('react-native-fs');
+// var RNFS = require('react-native-fs');
 
 class Profile extends Component {
   static navigationOptions = props => {
@@ -112,81 +108,106 @@ class Profile extends Component {
     //   }
     // ).start();  
   }
-  onPhotoUpload = () => {
+  onPhotoUpload =async () => {
     let resumeData = this.state.resumeData;
     if (Platform.OS !== "ios") {
+
+    //   try {
+    //     const res = await DocumentPicker.pickMultiple({
+    //     type: [DocumentPicker.types.images],
+    //     });
+    //     if(res && res.length){
+
+    //     }
+    //     this.setState({fabExtraData,base64Data,isBase64:true})
+
+    // } catch (err) {
+    //     if (DocumentPicker.isCancel(err)) {
+    //         alert("Canceled")
+    //     // User cancelled the picker, exit any dialogs or menus and move on
+    //     } else {
+    //     throw err;
+    //     }
+    // }
+
       //Android Only
-      DocumentPicker.show(
-        {
-          filetype: [DocumentPickerUtil.images()]
-        },
-        async(error, res) => {
-          SplashScreen.hide();
-          if (res) {
-            let check = true;
-            if (check) {
-              let type = res.type.split("/");
-              const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
-                let base64 = require('base-64');
-                let decodedData = base64.decode(data);
-                let bytes = decodedData.length;
-                let fileSizeInMB=(bytes / 1000000)
-                if(fileSizeInMB > .8 ){
-                  alert("Image size can't exceed 800KB");
-                }
-                else if(fileSizeInMB <.03){
-                  alert("Image size can't be less than 30KB")
-                }
-                else{ 
-                  resumeData.push({
-                    fileName: res.fileName,
-                    file: data,
-                    mongo_id:this.props.navigation.state.params.mongo_id
-                  });
-                  this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
-                  this.props.candidateUploadImage(resumeData)
+      try {
+        const res = await DocumentPicker.pickMultiple({
+        type: [DocumentPicker.types.images],
+        });
+        if (res) {
+          let check = true;
+          if (check) {
+            // let type = res.type.split("/");
+            const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
+              let base64 = require('base-64');
+              let decodedData = base64.decode(data);
+              let bytes = decodedData.length;
+              let fileSizeInMB=(bytes / 1000000)
+              if(fileSizeInMB > .8 ){
+                alert("Image size can't exceed 800KB");
               }
+              else if(fileSizeInMB <.03){
+                alert("Image size can't be less than 30KB")
+              }
+              else{ 
+                resumeData.push({
+                  fileName: res.fileName,
+                  file: data,
+                  mongo_id:this.props.navigation.state.params.mongo_id
+                });
+                this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
+                this.props.candidateUploadImage(resumeData)
             }
           }
         }
-      );
+
+    } catch (err) {
+        if (DocumentPicker.isCancel(err)) {
+            console.log("Canceled")
+        // User cancelled the picker, exit any dialogs or menus and move on
+        }else {
+          throw err;
+        }
+    }
+
     }else{
       // if (Platform.OS !== "ios") {
         //Android Only
-        DocumentPicker.show(
-          {
-            filetype: [DocumentPickerUtil.images()]
-          },
-          async(error, res) => {
-            SplashScreen.hide();
-            if (res) {
-              let check = true;
-              if (check) {
-                let type = res.type.split("/");
-                const data = await RNFS.readFile(res.uri, "base64")
-                  let base64 = require('base-64');
-                  let decodedData = base64.decode(data);
-                  let bytes = decodedData.length;
-                  let fileSizeInMB=(bytes / 1000000)
-                  if(fileSizeInMB > .8 ){
-                    alert("Image size can't exceed 800KB");
-                  }
-                  else if(fileSizeInMB <.03){
-                    alert("Image size can't be less than 30KB")
-                  }
-                  else{ 
-                    resumeData.push({
-                      fileName: res.fileName,
-                      file: data,
-                      mongo_id:this.props.navigation.state.params.mongo_id
-                    });
-                    this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
-                    this.props.candidateUploadImage(resumeData)
-                }
-              }
-            }
-          }
-        );
+        // DocumentPicker.show(
+        //   {
+        //     filetype: [DocumentPickerUtil.images()]
+        //   },
+        //   async(error, res) => {
+        //     // SplashScreen.hide();
+        //     if (res) {
+        //       let check = true;
+        //       if (check) {
+        //         let type = res.type.split("/");
+        //         const data = await RNFS.readFile(res.uri, "base64")
+        //           let base64 = require('base-64');
+        //           let decodedData = base64.decode(data);
+        //           let bytes = decodedData.length;
+        //           let fileSizeInMB=(bytes / 1000000)
+        //           if(fileSizeInMB > .8 ){
+        //             alert("Image size can't exceed 800KB");
+        //           }
+        //           else if(fileSizeInMB <.03){
+        //             alert("Image size can't be less than 30KB")
+        //           }
+        //           else{ 
+        //             resumeData.push({
+        //               fileName: res.fileName,
+        //               file: data,
+        //               mongo_id:this.props.navigation.state.params.mongo_id
+        //             });
+        //             this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
+        //             this.props.candidateUploadImage(resumeData)
+        //         }
+        //       }
+        //     }
+        //   }
+        // );
       // }
     }
   };

@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, Thumbnail, Icon, Item, } from "native-base";
 import styles from "../styles/components/ProfileView";
-import PhotoUpload from "react-native-photo-upload";
 import { Image,Animated,TouchableOpacity ,ToastAndroid} from "react-native";
 import { COLOR } from "../styles/color";
 import { Spinner } from "native-base";

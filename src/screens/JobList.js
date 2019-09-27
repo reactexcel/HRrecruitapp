@@ -34,7 +34,6 @@ import AboutUsText from "../components/AboutUsText";
 import Share, { ShareSheet, Button } from "react-native-share";
 import { SHAREURL } from "../config/dev";
 import LinearGradient from "react-native-linear-gradient";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import JobSalaryDetails from "../components/JobSalaryDetails";
 
 class JobList extends Component {

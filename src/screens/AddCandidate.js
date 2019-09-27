@@ -18,7 +18,6 @@ import {
 } from "native-base";
 import Permissions from 'react-native-permissions';
 // import FCM,{FCMEvent} from 'react-native-fcm'
-import DeviceInfo from 'react-native-device-info';
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
@@ -36,9 +35,9 @@ import {
   DocumentPickerUtil
 } from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
-var RNFS = require('react-native-fs');
+// var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
-import SplashScreen from "react-native-splash-screen";
+// import SplashScreen from "react-native-splash-screen";
 import LinearGradient from "react-native-linear-gradient"; 
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import {load as loadAccount} from '../reducers/initialStateReducer' 
@@ -340,7 +339,7 @@ exitingCandidate = async () => {
       this.setState({SelectJOb:title,isJobEmpty:true,jobId:id})
   }
   renderJobField(props) {
-    const { input, ...inputProps, } = props;
+    const { input, ...inputProps } = props;
     const {
       meta: { touched, error, active }
     } = props;
@@ -578,7 +577,7 @@ exitingCandidate = async () => {
         (error, res) => {
           console.log(res);
           
-          SplashScreen.hide();
+          // SplashScreen.hide();
           this.scroll.scrollToEnd()
           this.setState({whenAddedResume:true})
           if (res) {
@@ -628,7 +627,7 @@ exitingCandidate = async () => {
           filetype: [DocumentPickerUtil.allFiles()]
         },
         (error, res) => {
-          SplashScreen.hide();
+          // SplashScreen.hide();
           this.scroll.scrollToEnd()
           this.setState({whenAddedResume:true})
           if (res) {

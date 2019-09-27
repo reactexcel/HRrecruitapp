@@ -6,16 +6,16 @@ import HomePage from "../screens/HomePage";
 // import InterviewLogin from "../screens/InterviewLogin";
 // import VerifyingCandidate from "../screens/VerifyingCandidate";
 // import OTPpage from "../screens/OTPpage";
-// import AddCandidate from "../screens/AddCandidate";
-// import Instructions from "../screens/Instructions";
+import AddCandidate from "../screens/AddCandidate";
+import Instructions from "../screens/Instructions";
 // import TestPage from "../screens/TestPage";
-// import SubmitTest from "../screens/SubmitTest";
-// import JobList from "../screens/JobList";
+import SubmitTest from "../screens/SubmitTest";
+import JobList from "../screens/JobList";
 import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
-// import Profile from "../screens/Profile";
-// import FullDescription from "../screens/FullDescription";
-// import ProfileDescription from '../components/ProfileDescription'
+import Profile from "../screens/Profile";
+import FullDescription from "../screens/FullDescription";
+import ProfileDescription from '../components/ProfileDescription'
 // import candidateValidation from '../screens/candidateValidation'
 const transitionConfig = () => {
   return {
@@ -60,9 +60,9 @@ const Rootstack = createStackNavigator(
     HomePage: {
       screen: HomePage
     },
-    // // InterviewLogin: {
-    // //   screen: InterviewLogin
-    // // },
+    // InterviewLogin: {
+    //   screen: InterviewLogin
+    // },
     // // VerifyingCandidate: {
     // //   screen: VerifyingCandidate
     // // },
@@ -72,34 +72,33 @@ const Rootstack = createStackNavigator(
     // // candidateValidation:{
     // //   screen:candidateValidation
     // // },
-    // // AddCandidate: {
-    // //   screen: AddCandidate
-    // // },
-    // // Instructions: {
-    // //   screen: Instructions
-    // // },
+    AddCandidate: {
+      screen: AddCandidate
+    },
+    Instructions: {
+      screen: Instructions
+    },
     // // TestPage: {
     // //   screen: TestPage
     // // },
-    // // SubmitTest: {
-    // //   screen: SubmitTest
-    // // },
-    // JobList: {
-    //   screen: JobList
-    // },
+    SubmitTest: {
+      screen: SubmitTest
+    },
+    JobList: {
+      screen: JobList
+    },
     AboutUs: {
       screen: AboutUs
     },
-    // Profile: {
-    //   screen: Profile
-    // },
-    // FullDescription: {
-    //   screen: FullDescription
-    // },
+    Profile: {
+      screen: Profile
+    },
+    FullDescription: {
+      screen: FullDescription
+    },
     // ProfileDescription:{
     //   screen:ProfileDescription
     // }
-    
   },
   {
     initialScreen: "AppIntro",
