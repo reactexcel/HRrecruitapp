@@ -21,7 +21,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { AppDetails } from "../helper/json";
 import { getItem, setItem } from "../helper/storage";
 // import SplashScreen from "react-native-splash-screen";
-// import branch, { RegisterViewEvent } from "react-native-branch";
+import branch, { RegisterViewEvent } from "react-native-branch";
 import { connect } from "react-redux";
 import {
   getCandidateJobDetails,
@@ -98,7 +98,7 @@ class AppIntro extends Component {
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
         await this.props.getJobLists();
-        // await this._checkDeepLink();
+        await this._checkDeepLink();
         // SplashScreen.hide();
       } else {
         const appIntro = await getItem("appintro");
@@ -121,12 +121,12 @@ class AppIntro extends Component {
   _checkDeepLink = async () => {
     const appIntro = await getItem("appintro");
     branch.subscribe(async ({ params }) => {
+      console.log(params,"timerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
       if(params.$share_data ==undefined && params.$deeplink_path ==undefined && appIntro ==undefined){
         this.timer =setTimeout(() => {
             this._onSkip();
             
           }, 60000);
-        console.log("timerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
         
       }
       if (
@@ -349,7 +349,7 @@ class AppIntro extends Component {
   }
   render() {
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
-    console.log(this.props.joblist,'deepLinkParams');
+    console.log(branch,'deepLinkParams');
     const {interviewSignUp}=this.props;
     
     return (
