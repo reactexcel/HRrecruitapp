@@ -82,6 +82,7 @@ class AppIntro extends Component {
   };
   componentDidMount = async () => {
     NetInfo.fetch().then(async state => {
+      console.log(state,'statestate')
       if (state.isConnected) {
         await this.props.getJobLists();
         // await this._checkDeepLink();
@@ -362,8 +363,6 @@ class AppIntro extends Component {
   }
 }
 const mapStateToProps = state => {
-  console.log(state, "appintro");
-
   return {
     appliedJob: state.appliedJob,
     interviewSignUp: state.interviewSignUp,
