@@ -23,10 +23,7 @@ import { connect } from "react-redux";
 import { getJobLists, candidateUploadImage ,getCandidateUpdateProfileDetails} from "../actions";
 import { ProfileOnChange } from "../actions/actions";
 
-import {
-  DocumentPicker,
-  DocumentPickerUtil
-} from "react-native-document-picker";
+import  DocumentPicker from "react-native-document-picker";
 // import SplashScreen from "react-native-splash-screen";
 import RNFetchBlob from "rn-fetch-blob";
 import { Popup } from 'react-native-map-link';
@@ -89,7 +86,7 @@ class Profile extends Component {
   componentDidMount = async () => {
     this.props.navigation.setParams({ increaseCount: this.onEditing});
     const profileDetails = this.props.navigation.getParam("profileDetails");
-  this.setState({profile_picture:this.props.navigation.state.params.latestImage})
+    this.setState({profile_picture:this.props.navigation.state.params.latestImage})
     await this.props.getJobLists();
     const { data, error } = this.props.joblist;
     if (data) {
@@ -101,93 +98,42 @@ class Profile extends Component {
     this.props.navigation.navigate('JobList',{ title: "Job Openings",isCandidate:true })
   }
 
-  ImageUpdatedPopUp=()=>{
-    console.log('updated message');
-    
-    // Animated.timing(  
-    //   this.state.fadeAnim,           
-    //   {
-    //     toValue: 1,             
-    //     duration: 1000,
-    //   }
-    // ).start();  
-  }
-  onPhotoUpload = () => {
+  onPhotoUpload =async () => {
     let resumeData = this.state.resumeData;
-    if (Platform.OS !== "ios") {
-      //Android Only
-      DocumentPicker.show(
-        {
-          filetype: [DocumentPickerUtil.images()]
-        },
-        async(error, res) => {
-          // SplashScreen.hide();
-          if (res) {
-            let check = true;
-            if (check) {
-              let type = res.type.split("/");
-              const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
-                let base64 = require('base-64');
-                let decodedData = base64.decode(data);
-                let bytes = decodedData.length;
-                let fileSizeInMB=(bytes / 1000000)
-                if(fileSizeInMB > .8 ){
-                  alert("Image size can't exceed 800KB");
-                }
-                else if(fileSizeInMB <.03){
-                  alert("Image size can't be less than 30KB")
-                }
-                else{ 
-                  resumeData.push({
-                    fileName: res.fileName,
-                    file: data,
-                    mongo_id:this.props.navigation.state.params.mongo_id
-                  });
-                  this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
-                  this.props.candidateUploadImage(resumeData)
+    try {
+        const profilePic = await DocumentPicker.pickMultiple({
+        type: [DocumentPicker.types.images],
+        });
+        if (profilePic) {
+          let res = profilePic[0]
+          let check = true;
+          if (check) {
+            let type = res.type.split("/");
+            const data = await RNFetchBlob.fs.readFile(res.uri, "base64")
+              let base64 = require('base-64');
+              let decodedData = base64.decode(data);
+              let bytes = decodedData.length;
+              let fileSizeInMB=(bytes / 1000000)
+              if(fileSizeInMB > .8 ){
+                alert("Image size can't exceed 800KB");
               }
+              else if(fileSizeInMB <.03){
+                alert("Image size can't be less than 30KB")
+              }
+              else{ 
+                resumeData.push({
+                  fileName: res.fileName,
+                  file: data,
+                  mongo_id:this.props.navigation.state.params.mongo_id
+                });
+                this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
+                this.props.candidateUploadImage(resumeData)
             }
           }
         }
-      );
-    }else{
-      // if (Platform.OS !== "ios") {
-        //Android Only
-        // DocumentPicker.show(
-        //   {
-        //     filetype: [DocumentPickerUtil.images()]
-        //   },
-        //   async(error, res) => {
-        //     // SplashScreen.hide();
-        //     if (res) {
-        //       let check = true;
-        //       if (check) {
-        //         let type = res.type.split("/");
-        //         const data = await RNFS.readFile(res.uri, "base64")
-        //           let base64 = require('base-64');
-        //           let decodedData = base64.decode(data);
-        //           let bytes = decodedData.length;
-        //           let fileSizeInMB=(bytes / 1000000)
-        //           if(fileSizeInMB > .8 ){
-        //             alert("Image size can't exceed 800KB");
-        //           }
-        //           else if(fileSizeInMB <.03){
-        //             alert("Image size can't be less than 30KB")
-        //           }
-        //           else{ 
-        //             resumeData.push({
-        //               fileName: res.fileName,
-        //               file: data,
-        //               mongo_id:this.props.navigation.state.params.mongo_id
-        //             });
-        //             this.setState({imageSource:res.uri,uploading:true,catch:true,profile_picture:undefined})
-        //             this.props.candidateUploadImage(resumeData)
-        //         }
-        //       }
-        //     }
-        //   }
-        // );
-      // }
+      }
+      catch(e){
+
     }
   };
   handleLocate = () => {
@@ -200,12 +146,15 @@ class Profile extends Component {
     // Linking.openURL(url);
     this.setState({ isLocation: true })
   };
+
   closeLocationModal = () => {
     this.setState({ isLocation: false })
   }
+
   aboutUs=()=>{
     this.props.navigation.navigate('AboutUs')
   }
+
   forEditing=()=>{
     const appliedJob = this.props.navigation.getParam("appliedJob");
     this.setState({
@@ -214,9 +163,11 @@ class Profile extends Component {
       profileImage: ""
     });
   };
+
   onChange = value => {
     this.setState({ job_profile: value });
   };
+
   onEditing = async () => {
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");

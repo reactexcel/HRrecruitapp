@@ -1,12 +1,20 @@
 import { GET_JOBLIST_SUCCESS, GET_JOBLIST_FAILURE } from "../actions/types";
 
-export default function (state = null, action) {
+const initialState = {
+    isLoading:false,
+    isSuccess:false,
+    isError:false,
+}
+export default function (state = initialState, action) {
     switch (action.type) {
         case GET_JOBLIST_SUCCESS:
-            return action.payload;
+            state.isSuccess=true;
+            return  {...state, ...action.payload}
             break;
+            
         case GET_JOBLIST_FAILURE:
-            return action.payload;
+            state.isError=true;
+            return{...state, ...action.payload}
 
         default:
             return state;

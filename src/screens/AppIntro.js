@@ -21,7 +21,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { AppDetails } from "../helper/json";
 import { getItem, setItem } from "../helper/storage";
 // import SplashScreen from "react-native-splash-screen";
-import branch, { RegisterViewEvent } from "react-native-branch";
+// import branch, { RegisterViewEvent } from "react-native-branch";
 import { connect } from "react-redux";
 import {
   getCandidateJobDetails,
@@ -97,9 +97,10 @@ class AppIntro extends Component {
     const {deepLinkParams} =this.state;
     NetInfo.fetch().then(async state => {
       if (state.isConnected) {
-        await this.props.getJobLists();
-        await this._checkDeepLink();
+        // await this.props.getJobLists();
+        // await this._checkDeepLink();
         // SplashScreen.hide();
+        this.props.navigation.replace("HomePage",{errorFromAppinto:false});
       } else {
         const appIntro = await getItem("appintro");
         const candidateJob = await getItem("mongo_id");
@@ -118,81 +119,62 @@ class AppIntro extends Component {
     
   // }
 
-  _checkDeepLink = async () => {
-    const appIntro = await getItem("appintro");
-    branch.subscribe(async ({ params }) => {
-      console.log(params,"timerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-      if(params.$share_data ==undefined && params.$deeplink_path ==undefined && appIntro ==undefined){
-        this.timer =setTimeout(() => {
-            this._onSkip();
-            
-          }, 60000);
-        
-      }
-      if (
-        this.props.joblist.data !== "" &&
-        this.props.joblist.data !== undefined &&
-        params.$share_data !== undefined &&
-        this.props.joblist !== null
-      ) {
-        const candidateJob = await getItem("mongo_id");
-        if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-          this.props.navigation.replace("HomePage",{errorFromAppinto:false});
-        }
-        this.props.joblist.data.forEach((item, i) => {
-          if (item.id == params.$share_data) {
-            this.props.navigation.navigate("FullDescription", {
-              subject: item.subject,
-              job_description: item.job_description,
-              keyword: item.keyword,
-              candidate_profile: item.candidate_profile,
-              jobDetail: item,
-              currentJob: this.props.joblist
-            });
-            // SplashScreen.hide();
-          }
-        });
-      }
-      if (params.errors && params.errors !== undefined) {
-        alert("Error from Branch: " + errors);
-        return;
-      }
-      if (params.$deeplink_path !== undefined) {
-        let fb_id = params.$deeplink_path;
-        await this.props.getCandidateDetails(fb_id);
-        const { status } = this.props.interviewSignUp;
-        if (status == 1) {
-          this.setState({ deepLink: true, fb_id: fb_id });
-          this._linkCheck()
-        } else if (params.error == 1 && params.error !== undefined) {
-          this.setState({ deepLink: false });
-        }
-      } else if (
-        params.$deeplink_path == undefined &&
-        params.$share_data == undefined
-      ) {
-        const appIntro = await getItem("appintro");
-        const candidateJob = await getItem("mongo_id");
-        if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-          this.props.navigation.replace("HomePage",{errorFromAppinto:false});
-          // SplashScreen.hide();
-        }
-      } else if (params.$share_data !== undefined) {
-        this.setState({ sharing: true });
-      }
-      //   });
+  // _checkDeepLink = async () => {
+  //   const appIntro = await getItem("appintro");
+  //   branch.subscribe(async ({ params }) => {
+  //     if (
+  //       this.props.joblist.data !== "" &&
+  //       this.props.joblist.data !== undefined &&
+  //       params.$share_data !== undefined &&
+  //       this.props.joblist !== null
+  //     ) {
+  //       const candidateJob = await getItem("mongo_id");
+  //       if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
+  //         this.props.navigation.replace("HomePage",{errorFromAppinto:false});
+  //       }
+  //       this.props.joblist.data.forEach((item, i) => {
+  //         if (item.id == params.$share_data) {
+  //           this.props.navigation.navigate("FullDescription", {
+  //             subject: item.subject,
+  //             job_description: item.job_description,
+  //             keyword: item.keyword,
+  //             candidate_profile: item.candidate_profile,
+  //             jobDetail: item,
+  //             currentJob: this.props.joblist
+  //           });
+  //           // SplashScreen.hide();
+  //         }
+  //       });
+  //     }
+  //     if (params.errors && params.errors !== undefined) {
+  //       alert("Error from Branch: " + errors);
+  //       return;
+  //     }
+  //     if (params.$deeplink_path !== undefined) {
+  //       let fb_id = params.$deeplink_path;
+  //       await this.props.getCandidateDetails(fb_id);
+  //       const { status } = this.props.interviewSignUp;
+  //       if (status == 1) {
+  //         this.setState({ deepLink: true, fb_id: fb_id });
+  //         this._linkCheck()
+  //       } else if (params.error == 1 && params.error !== undefined) {
+  //         this.setState({ deepLink: false });
+  //       }
+  //     } else if (
+  //       params.$deeplink_path == undefined &&
+  //       params.$share_data == undefined
+  //     ) {
 
-      // }
-      // else{
-      // const appIntro = await getItem("appintro");
-      //     const candidateJob = await getItem("mongo_id");
-      //     if (candidateJob || (appIntro !== undefined && appIntro.shown)) {
-      //       this.props.navigation.replace("HomePage");
-      //     }
-      // }
-    });
-    // SplashScreen.hide();
-  };
+  //       const candidateJob = await getItem("mongo_id");
+  //       if (candidateJob) {
+  //         this.props.navigation.replace("HomePage",{errorFromAppinto:false});
+  //         // SplashScreen.hide();
+  //       }
+  //     } else if (params.$share_data !== undefined) {
+  //       this.setState({ sharing: true });
+  //     }
+  //   });
+  // };
   _onNext = index => {
     let items = AppDetails;
     let moveToIndex = items.length - 1 <= index;
@@ -349,8 +331,8 @@ class AppIntro extends Component {
   }
   render() {
     let iconName = this.state.index == 3 ? "checkmark" : "arrow-forward";
-    console.log(branch,'deepLinkParams');
     const {interviewSignUp}=this.props;
+    console.log(this.props.joblist,'this.props.joblist');
     
     return (
       <Container>

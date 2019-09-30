@@ -54,9 +54,9 @@ const transitionConfig = () => {
 
 const Rootstack = createStackNavigator(
   {
-    AppIntro: {
-      screen: AppIntro
-    },
+    // AppIntro: {
+    //   screen: AppIntro
+    // },
     HomePage: {
       screen: HomePage
     },
@@ -102,7 +102,7 @@ const Rootstack = createStackNavigator(
     
   },
   {
-    initialScreen: "AppIntro",
+    initialScreen: "HomePage",
     transitionConfig
   }
 );

@@ -35,10 +35,11 @@ import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
 import { pageDetails, candidatePageDetails } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
-import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails } from "../actions";
+import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails, getJobLists } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 // import SplashScreen from "react-native-splash-screen";
-// import firebase from 'react-native-firebase';
+import {branch} from "react-native-branch";
+import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 // import  { RemoteMessage } from 'react-native-firebase';
 import Permissions from 'react-native-permissions';
@@ -160,9 +161,9 @@ class HomePage extends Component {
         this.askStoragePermission()
       }
     })
-    const notificationOpen = "await firebase.notifications().getInitialNotification();"
+    await this.props.getJobLists()
+    const notificationOpen = await firebase.notifications().getInitialNotification();
     NetInfo.fetch().then(async state => {
-      console.log(state,'????????????????????????????????????????????')
       if(state.isConnected){
   await this.setCandidateProfile();
   const appIntro = await getItem("appintro");
@@ -192,33 +193,61 @@ class HomePage extends Component {
     }
   }else{
     this.setState({isNotify:false})
-    alert('Please! connect to the internet firstx')
+    alert('Please! connect to the internet first')
   }
-   const {interviewSignUp} =this.props;
-  const { error, success, msg, message } = interviewSignUp;
-  if(this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto ==true ){
-    if (msg !== undefined) {
-      alert(msg);
-    }
-    if (error !== undefined && error === 1 && message !== undefined) {
-          alert(message);
-    }
-    if (success !== undefined && !success) {
-      notify("Something went wrong");
-    }
-    this.props.navigation.setParams({errorFromAppinto:false})
-  }
+  //  const {interviewSignUp} =this.props;
+  // const { error, success, msg, message } = interviewSignUp;
+  // if(this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto ==true ){
+  //   if (msg !== undefined) {
+  //     alert(msg);
+  //   }
+  //   if (error !== undefined && error === 1 && message !== undefined) {
+  //         alert(message);
+  //   }
+  //   if (success !== undefined && !success) {
+  //     notify("Something went wrong");
+  //   }
+  //   this.props.navigation.setParams({errorFromAppinto:false})
+  // }
 })
 
   };
-  componentDidUpdate = async (nextProps) => {
+
+  async componentDidUpdate (props) {
     const applied = this.props.navigation.getParam("applied");
-    const {interviewSignUp}=this.props;
-    if (applied ) {
-      await this.setCandidateProfile();
-      this.props.navigation.setParams({ applied: false});
+    const {joblist}=this.props;
+    if(joblist.isSuccess){
+
+      console.log(joblist,'appliedapplied');
     }
-  };
+    
+    // if (applied ) {
+    //   await this.setCandidateProfile();
+    //   this.props.navigation.setParams({ applied: false});
+    // }
+    if(joblist.isSuccess !== props.joblist.isSuccess){
+      console.log("params",'>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+      branch.subscribe(async ({ params }) => {
+        
+        if(params.$share_data !== undefined ){
+          joblist.data.forEach((item, i) => {
+            if (item.id == params.$share_data) {
+              this.props.navigation.navigate("FullDescription", {
+                subject: item.subject,
+                job_description: item.job_description,
+                keyword: item.keyword,
+                candidate_profile: item.candidate_profile,
+                jobDetail: item,
+                currentJob: this.props.joblist
+              });
+              // SplashScreen.hide();
+            }
+          });
+        }
+    })
+  }
+}
+
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
   }
@@ -327,11 +356,12 @@ const mapStateToProps = state => {
   return {
   state_data: state,
   appliedJob: state.appliedJob,
+  joblist: state.joblist,
   interviewSignUp: state.interviewSignUp,
   candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
   }};
 
 export default connect(
   mapStateToProps,
-  { getCandidateJobDetails, getCandidateDetails, ProfileOnChange,UploadProfile,getCandidateUpdateProfileDetails}
+  { getCandidateJobDetails, getCandidateDetails,getJobLists, ProfileOnChange,UploadProfile,getCandidateUpdateProfileDetails}
 )(HomePage);
