@@ -9,6 +9,8 @@ import {
   BackHandler,
   Dimensions,
   ActivityIndicator,
+  Animated,
+  Easing,
 } from "react-native";
 import {
   Container,
@@ -23,9 +25,11 @@ import {
   Spinner,
   TabHeading
 } from "native-base";
-import NetInfo from "@react-native-community/netinfo";
+import NetInfo from "@react-native-community/netinfo"
 import { connect } from "react-redux";
 import styles from "../styles/screens/HomePage";
+import styless from '../styles/index';
+import _styles from '../styles/screens/InterviewLogin';
 import { COLOR } from "../styles/color";
 import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
@@ -34,10 +38,12 @@ import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 // import SplashScreen from "react-native-splash-screen";
-// import FCM from "react-native-fcm";
+// import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
-
-// import Permissions from 'react-native-permissions';
+// import  { RemoteMessage } from 'react-native-firebase';
+import Permissions from 'react-native-permissions';
+import Modal from 'react-native-modalbox'
+import {Input,Item,Button} from 'native-base';
 var { height, width } = Dimensions.get("window");
 class HomePage extends Component {
   constructor(props) {
@@ -58,7 +64,9 @@ class HomePage extends Component {
       profile_picture:'',
       latestImage:null,
       isNotify:false,
-      backgroundColor:false
+      backgroundColor:false,
+      // fontSize:new Animated.Value(12),
+      // opacityy:new Animated.Value(1)
       // index:''
     };
     this.handleViewClick = this.handleViewClick.bind(this);
@@ -113,7 +121,7 @@ class HomePage extends Component {
 }
   async handleViewClick(data) {
     const { appliedJob } = this.props;
-    console.log(appliedJob,'appliedjob');
+    // console.log(appliedJob,'appliedjob');
     
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
@@ -141,32 +149,30 @@ class HomePage extends Component {
   }
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      console.log(response);
-      
+      // console.log(response);
     })
   }
   componentDidMount = async () => {
     this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
     )
-    // Permissions.checkMultiple(['location']).then(response => {
-    //   if(response.storage != 'authorized'){
-    //     this.askStoragePermission()
-    //   }
-    // })
+    Permissions.checkMultiple(['location']).then(response => {
+      if(response.storage != 'authorized'){
+        this.askStoragePermission()
+      }
+    })
+    const notificationOpen = "await firebase.notifications().getInitialNotification();"
     NetInfo.fetch().then(async state => {
+      console.log(state,'????????????????????????????????????????????')
       if(state.isConnected){
   await this.setCandidateProfile();
   const appIntro = await getItem("appintro");
   if (appIntro !== undefined && appIntro.shown) {
     BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
   }
-    // const notif = await FCM.getInitialNotification().then(notif => {
-    //   return notif;
-    // });
     const candidateJob = await getItem("mongo_id");
     const mongo_id = await getItem("mongo_id");
     // this.setState({ notification: notif.from });
-    if (this.state.notification !== undefined) {
+    if (notificationOpen !== null && notificationOpen !== undefined) {
         if (this.state.candidateJob !== null) {
           const { appliedJob } = this.props;
           const {
@@ -186,18 +192,32 @@ class HomePage extends Component {
     }
   }else{
     this.setState({isNotify:false})
-    // alert('Please! connect to the internet first')
+    alert('Please! connect to the internet firstx')
+  }
+   const {interviewSignUp} =this.props;
+  const { error, success, msg, message } = interviewSignUp;
+  if(this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto ==true ){
+    if (msg !== undefined) {
+      alert(msg);
+    }
+    if (error !== undefined && error === 1 && message !== undefined) {
+          alert(message);
+    }
+    if (success !== undefined && !success) {
+      notify("Something went wrong");
+    }
+    this.props.navigation.setParams({errorFromAppinto:false})
   }
 })
- 
+
   };
-  componentDidUpdate = async () => {
+  componentDidUpdate = async (nextProps) => {
     const applied = this.props.navigation.getParam("applied");
+    const {interviewSignUp}=this.props;
     if (applied ) {
       await this.setCandidateProfile();
       this.props.navigation.setParams({ applied: false});
     }
-    
   };
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
@@ -241,15 +261,15 @@ class HomePage extends Component {
             <View style={{width:height * 0.1350,height: height * 0.1350,zIndex:1,position:'absolute',left:0,top:'12.2%',/* borderWidth:1,borderColor:'red' */}}>
               <Image
                 resizeMode='contain'
-                style={[{width:'100%',height:'100%',}, k == 2 ? {marginLeft:-17} : null ,k==1 ? {marginLeft:-5} :null  ]}
+                style={[{width:'100%',height:'100%',}, k == 0 ? {marginLeft:-17} : null ,k==2 ? {marginLeft:-5} :null  ]}
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>
-            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 0 && data.name=='PROFILE' ? {left:'75%'}:null,k == 0 ? {left:'55%'}:null,k == 1 ? {left:'75%'}:null,k == 2 ? {left:'60%'}:null]}>
+            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%',/* backgroundColor:"red",opacity:this.state.opacityy */},k == 1 && data.name==='PROFILE' ? {left:'75%'}:null,k == 1 ? {left:'55%'}:null,k == 2 ? {left:'75%'}:null,k == 0 ? {left:'60%'}:null]}>
               <Text
                 style={[
                   styles.text,
-                  {alignSelf:'center'},
+                  {alignSelf:'center',/* fontSize:this.state.fontSize */},
                   textColor && index == k ? { color: COLOR.WHITE } : {}
                 ,]}
               >
@@ -262,6 +282,7 @@ class HomePage extends Component {
     });
     return (
       <View style={{ flex: 1 }}>
+      
         <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
@@ -302,9 +323,7 @@ class HomePage extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  console.log(state ,'state');
-  
+const mapStateToProps = state => {  
   return {
   state_data: state,
   appliedJob: state.appliedJob,

@@ -10,7 +10,7 @@ import {Dimensions,Platform} from 'react-native';
 const  {height, width} = Dimensions.get('window');
 const h=height/100;
 const ProfileDescription = props => {
-
+  const {profileDetails} =props
   const labels = [
     "CV Sent",
     "First Round",
@@ -62,6 +62,9 @@ const ProfileDescription = props => {
   return (
     // <View style={{height:400}}>
     <Fragment>
+      <ProfileBlock title="EMAIL">
+        <Text style={styles.textStyle}>{profileDetails && profileDetails.sender_mail && profileDetails.sender_mail}</Text>
+      </ProfileBlock>
       <ProfileBlock title="JOB TITLE">
         <Text style={styles.textStyle}>{job_profile}</Text>
         {/* <Form>

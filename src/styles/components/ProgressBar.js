@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 export default StyleSheet.create({
   container: {
     flexDirection: "row",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   block: {
     width: 7,

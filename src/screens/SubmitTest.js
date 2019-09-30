@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BackHandler, Alert, Platform } from "react-native";
+import { BackHandler, Alert, Platform ,Animated} from "react-native";
 import {
   Container,
   Content,
@@ -10,7 +10,7 @@ import {
   Thumbnail,
   Spinner
 } from "native-base";
-import NetInfo from "@react-native-community/netinfo"
+import NetInfo from "@react-native-community/netinfo";
 import HorizontalLine from "../components/HorizontalLine";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles";
@@ -26,7 +26,9 @@ class SubmitTest extends Component {
   constructor() {
     super();
     this.state = {
-      isOnline: false
+      isOnline: false,
+      fontSize:new Animated.Value(13.5),
+      fontColor:new Animated.Value(0),
     };
   }
   componentDidMount() {
@@ -35,6 +37,7 @@ class SubmitTest extends Component {
       "connectionChange",
       this.handleNetwork
     );
+    
   }
   handleNetwork = isconnect => {
     //functinality for net connection at time of answering paper
@@ -142,13 +145,40 @@ class SubmitTest extends Component {
     }
     this.props.submitTest(email, data);
   };
-
+    onSubmitNoInternet=()=>{
+      Animated.parallel([
+        Animated.timing(this.state.fontSize,{
+          toValue:18,
+          duration:1000
+        }).start(()=>{
+          Animated.timing(this.state.fontSize,{
+            toValue:13.5,
+            duration:1000
+          }).start()
+        }),
+        Animated.timing(this.state.fontColor,{
+          toValue:1,
+          duration:1000
+        }).start(()=>{
+          Animated.timing(this.state.fontColor,{
+            toValue:0,
+            duration:1000
+          }).start()
+        })
+      ]).start()
+  }
   render() {
     const { isOnline } = this.state;
     const {
       test: { submitting }
     } = this.props;
+    const BackgroundColorConfig = this.state.fontColor.interpolate(
+      {
+          inputRange: [ 0, .5, 1 ],
+          
+          outputRange: [ '#253055', '#ed1040', '#253055']
 
+      });
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -158,12 +188,12 @@ class SubmitTest extends Component {
             </CardItem>
             <HorizontalLine />
             <CardItem>
-              <Text style={styles.text}>
+              <Animated.Text style={[styles.text,{fontSize:this.state.fontSize,color:BackgroundColorConfig}]}>
                 {LOW_CONN_ALERT}
-              </Text>
+              </Animated.Text>
             </CardItem>
             {!isOnline ? (
-              <Button disabled block>
+              <Button style={{backgroundColor:"#cccccc"}} onPress={this.onSubmitNoInternet} /* disabled */ block>
                 <Text>Click Here</Text>
               </Button>
             ) : submitting ? (

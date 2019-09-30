@@ -26,6 +26,7 @@ import { Icon } from "native-base";
 import AboutUsHeader from "../components/AboutUsHeader";
 import AboutUsCarousel from "../components/AboutUsCarousel";
 import ReviewButton from "../components/ReviewButton";
+// import {LoginManager,LoginButton} from 'react-native-fbsdk'
 
 class AboutUs extends Component {
   static navigationOptions = {

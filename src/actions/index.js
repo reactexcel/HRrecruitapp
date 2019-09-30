@@ -3,7 +3,8 @@ import {
   INTERVIEW_EMAIL_SIGN_UP,
   INTERVIEW_EMAIL_SIGN_UP_REQUEST,
   INTERVIEW_EMAIL_SIGN_UP_FAILURE,
-  INTERVIEW_EMAIL_SIGN_UP_ERROR
+  INTERVIEW_EMAIL_SIGN_UP_ERROR,
+
 } from "./types";
 import {
   ADD_CANDIDATE_REQUEST,
@@ -23,7 +24,7 @@ import {
   SUBMIT_TEST_FAILURE
 } from "./types";
 import { CHANGE_CONNECTION_STATUS } from "./types";
-import { CANDIDATE_DETAILS_SUCCESS, CANDIDATE_DETAILS_FAILURE } from "./types";
+import {CANDIDATE_DETAILS_REQUEST, CANDIDATE_DETAILS_SUCCESS, CANDIDATE_DETAILS_FAILURE ,CANDIDATE_DETAILS_CLEAR_REQUEST ,CANDIDATE_DETAILS_CLEAR_SUCCESS} from "./types";
 import {
   CANDIDATE_ROUND_DETAILS_SUCCESS,
   CANDIDATE_ROUND_DETAILS_FAILURE,
@@ -193,11 +194,11 @@ export const getQuestions = (email, fb_id) => async dispatch => {
 
 // Action to call for HR help
 
-export const callingHelp = (accessToken, fb_id) => async dispatch => {
+export const callingHelp = (accessToken, fb_id,message) => async dispatch => {
   dispatch({ type: CALL_HELP_REQUEST });
   try {
     const res = await _axios().post("exams/askHrForHelp?accessToken=${accessToken}", {
-      fb_id
+      fb_id,message
     });
     dispatch({ type: CALL_HELP_SUCCESS, payload: res });
   } catch (err) {
@@ -209,6 +210,7 @@ export const callingHelp = (accessToken, fb_id) => async dispatch => {
     }
   }
 };
+
 
 // Action for submitting Test
 export const submitTest = (email, data) => async dispatch => {
@@ -245,8 +247,10 @@ export const connectionState = isConnected => async dispatch => {
 };
 
 export const getCandidateDetails = fb_id => async dispatch => {
+  dispatch({ type: CANDIDATE_DETAILS_REQUEST});
   try {
     const res = await _axios().get(`exams/candidateDetails/${fb_id}`);
+
     PubSub.publish("CANDIDATE_DETAILS_SUCCESS", { API_URL, fb_id, res });
     dispatch({ type: CANDIDATE_DETAILS_SUCCESS, payload: res.data });
     // console.log(res,'666666666');
@@ -369,6 +373,13 @@ export const candidateUploadProfile = data => async dispatch => {
     }
   }
 };
+
+export const interviewLoginClearData = data => async dispatch => {
+  console.log(data,'KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
+  
+  dispatch({ type: CANDIDATE_DETAILS_CLEAR_REQUEST });
+}
+
 
 export const getCandidateUpdateProfileDetails = (_id) => async dispatch => {
   try {

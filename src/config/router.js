@@ -5,7 +5,7 @@ import {createAppContainer} from 'react-navigation';
 import HomePage from "../screens/HomePage";
 import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
-// import OTPpage from "../screens/OTPpage";
+import OTPpage from "../screens/OTPpage";
 import AddCandidate from "../screens/AddCandidate";
 import Instructions from "../screens/Instructions";
 import TestPage from "../screens/TestPage";
@@ -15,7 +15,7 @@ import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
 import Profile from "../screens/Profile";
 import FullDescription from "../screens/FullDescription";
-// import ProfileDescription from '../components/ProfileDescription'
+import ProfileDescription from '../components/ProfileDescription'
 import candidateValidation from '../screens/candidateValidation'
 const transitionConfig = () => {
   return {
@@ -66,9 +66,9 @@ const Rootstack = createStackNavigator(
     VerifyingCandidate: {
       screen: VerifyingCandidate
     },
-    // OTPpage: {
-    //   screen: OTPpage
-    // },
+    OTPpage: {
+      screen: OTPpage
+    },
     candidateValidation:{
       screen:candidateValidation
     },
@@ -96,9 +96,10 @@ const Rootstack = createStackNavigator(
     FullDescription: {
       screen: FullDescription
     },
-    // ProfileDescription:{
-    //   screen:ProfileDescription
-    // }
+    ProfileDescription:{
+      screen:ProfileDescription
+    }
+    
   },
   {
     initialScreen: "AppIntro",

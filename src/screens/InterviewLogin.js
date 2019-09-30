@@ -22,7 +22,7 @@ import {
   Button,
   Header
 } from "native-base";
-import NetInfo  from "@react-native-community/netinfo"
+import NetInfo from "@react-native-community/netinfo";
 import { connect } from "react-redux";
 import Logo from "../components/Logo";
 import styles from "../styles";
@@ -35,7 +35,8 @@ import {
   getCandidateDetails,
   getCandidateRoundDetails,
   getCandidateJobDetails,
-  candidateValidationapi
+  candidateValidationapi,
+  interviewLoginClearData,
 } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
@@ -51,7 +52,8 @@ class InterviewLogin extends Component {
       email: "",
     spinner:false,
     alertMessage:false,
-    activity:true
+    activity:true,
+    isError:false
     };
   }
   static navigationOptions = {
@@ -62,30 +64,47 @@ class InterviewLogin extends Component {
     headerTintColor: COLOR.PINK
   };
 
-   componentDidUpdate() {
+   componentDidUpdate(nextProps) {
     const { error, success, msg, message } = this.props.interviewSignUp;
-  
-    if (error !== undefined && error === 1 && message !== undefined) {
+    const {isError}=this.state;
+    if(this.props.interviewSignUp.jobNotAssign !== nextProps.interviewSignUp.jobNotAssign){
+    if (error !== undefined && error === 1 && message !== undefined  ) {
       if(this.state.activity){
         this.setState({spinner:false,activity:false})
       }
-      alert(message);
-    }return null;
-    if (success !== undefined && !success) {
+      Alert.alert(
+        "Info",
+        message,
+        [
+          {
+            text: "Ok",
+            onPress: () => this.interviewLoginClearData()
+          }
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+    if (success !== undefined && !success  ) {
       if(this.state.activity){
         this.setState({spinner:false,activity:false})
       }
       notify("Something went wrong");
-    }return null;
-    if (msg !== undefined) {
-      if(this.state.activity){
-        this.setState({spinner:false,activity:false})
-      }
-      alert(msg);
     }
-    return null;
+    // if(this.props.interviewSignUp.isError !== nextProps.interviewSignUp.isError){
+    //   if (msg !== undefined  ) {
+    //     if(this.state.activity){
+    //       this.setState({spinner:false,activity:false})
+    //     }
+    //     alert(msg);
+  
+    //   }
+    // }
   }
-
+  interviewLoginClearData=()=>{
+    this.props.interviewLoginClearData("cleared data")
+    this.props.navigation.navigate("HomePage")
+  }
   async componentDidMount() {
     if(Platform.OS !=='ios'){
     StatusBar.setBackgroundColor(COLOR.LGONE);}
@@ -93,8 +112,8 @@ class InterviewLogin extends Component {
     const email = await getItem("email");
     const fb_id = await getItem("fb_id");
     if (ans !== undefined && email !== undefined && fb_id !== undefined) {
-      NetInfo.fetch().then(async state => {
-        if (state.isConnected) {
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if (isConnected) {
           await this.props.getCandidateDetails(fb_id.fb_id);
           const { data, message, error, status } = this.props.interviewSignUp;
           if (status == SUCCESS_STATUS) {
@@ -157,8 +176,7 @@ class InterviewLogin extends Component {
         }
       });
     }
-    
-    NetInfo.addEventListener(
+    NetInfo.isConnected.addEventListener(
       "connectionChange",
       this.handleNetworks
     );
@@ -193,6 +211,7 @@ class InterviewLogin extends Component {
               onPress:
                 Platform.OS === "ios" || email.email === "test_123@gmail.com"
                   ? () => {}
+
                   : () => this.props.navigation.goBack()
             }
           ],
@@ -223,8 +242,8 @@ class InterviewLogin extends Component {
   handleSubmit = async () => {
     const errors = this.validate(this.state.email);
     if(Object.keys(errors).length === 0){
-      NetInfo.fetch().then(async state => {
-        if(state.isConnected){
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if(isConnected){
     this.setState({spinner:true})
    await this.props.candidateValidationapi(this.state.email)}})}
     if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
@@ -245,8 +264,8 @@ class InterviewLogin extends Component {
      }
     else if (Object.keys(errors).length === 0) {
       this.setState({spinner:false})
-      NetInfo.fetch().then(async state => {
-        if (state.isConnected) {
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if (isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
             "INTERVIEWLOGIN",
             this.state.email
@@ -272,7 +291,7 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
-            if (this.state.email === "test_123@gmail.com") {
+            // if (this.state.email === "test_123@gmail.com") {
               this.props.navigation.navigate("Instructions", {
                 fb_id: fb_id,
                 profile_pic: `https://pikmail.herokuapp.com/${
@@ -282,8 +301,8 @@ class InterviewLogin extends Component {
                 email: this.state.email
               });
               this.setState({ email: "" ,spinner:false});
-              return;
-            }
+              // return;
+            // }
             // this.props.navigation.navigate("OTPpage");
             this.setState({ email: "",spinner:false });
           }
@@ -300,7 +319,7 @@ class InterviewLogin extends Component {
           {
             text: "OK",
             onPress: () =>
-            this.props.navigation.navigate("HomePage")
+            this.interviewLoginClearData()
           }
         ]
       );
@@ -308,8 +327,8 @@ class InterviewLogin extends Component {
     }
    else if (Object.keys(errors).length === 0) {
     this.setState({spinner:false})
-      NetInfo.fetch().then(async state => {
-        if (state.isConnected) {
+      NetInfo.isConnected.fetch().done(async isConnected => {
+        if (isConnected) {
           GOOGLE_ANALYTICS_TRACKER.trackEvent(
             "INTERVIEWLOGIN",
             this.state.email
@@ -335,7 +354,7 @@ class InterviewLogin extends Component {
               this.state.email,
               status.toString()
             );
-            if (this.state.email === "test_123@gmail.com") {
+            // if (this.state.email === "test_123@gmail.com") {
               this.props.navigation.navigate("Instructions", {
                 fb_id: fb_id,
                 profile_pic: `https://pikmail.herokuapp.com/${
@@ -345,10 +364,10 @@ class InterviewLogin extends Component {
                 email: this.state.email
               });
               this.setState({ email: "",spinner:false });
-              return;
-            }
+              // return;
+            // }
             // this.props.navigation.navigate("OTPpage");
-            this.setState({ email: "",spinner:false });
+            // this.setState({ email: "",spinner:false });
           }
         } else {
           alert("Please connect to internet");
@@ -378,7 +397,7 @@ class InterviewLogin extends Component {
   // }
 
   render() {
-    console.log(this.props.appliedJob.status,'status');
+    console.log(this.props.appliedJob.status,this.props.interviewSignUp,this.props.candidateInfo,'status');
     
     const {
       interviewSignUp: { registering, success }
@@ -396,6 +415,9 @@ class InterviewLogin extends Component {
           <Logo />
         </View>
         <View style={_styles.textInputView}>
+        <View style={{flexDirection:"row",justifyContent:"center",alignItems:"center",alignContent:"center"}}>
+          <Text style={{color:"#fff",fontSize:14,fontFamily:"Montserrat-SemiBold",textAlign:"center"}}>Put in your email address which you used while applying for job</Text>
+        </View>
           <Item style={styles.itemView}>
             <Input
               style={styles.inputText}
@@ -440,5 +462,5 @@ const mapStateToProps = state => {
 }};
 export default connect(
   mapStateToProps,
-  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi }
+  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi,interviewLoginClearData }
 )(InterviewLogin);

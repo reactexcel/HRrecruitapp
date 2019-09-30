@@ -30,7 +30,7 @@ export default StyleSheet.create({
     color: "black"
   },
   bottomContainer: {
-    justifyContent: "space-between",
+    justifyContent: 'space-between',
     alignItems: "center",
     paddingLeft: 15,
     paddingRight: 15,
@@ -67,8 +67,13 @@ export default StyleSheet.create({
     fontFamily: "Montserrat-Regular"
   },
   nextView: {
+    // position:"absolute",
+    // right:0,
+    // bottom:0,
+    // width:"100%",
+    // borderWidth:1,
     marginRight: 7,
-    marginTop: -10
+    // marginTop: -10,
   },
   nextIcon: {
     opacity: 1,

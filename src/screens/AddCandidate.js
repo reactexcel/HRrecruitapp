@@ -35,6 +35,8 @@ import RNFetchBlob from "rn-fetch-blob";
 // var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
 // import SplashScreen from "react-native-splash-screen";
+import firebase from 'react-native-firebase';
+
 import LinearGradient from "react-native-linear-gradient"; 
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import {load as loadAccount} from '../reducers/initialStateReducer' 
@@ -132,6 +134,8 @@ async  componentDidMount(){
           ]);
         }
       }
+      const fcmToken = await firebase.messaging().getToken();
+      console.log(fcmToken,'fcmTokenfcmToken')
     // FCM.requestPermissions();
     // FCM.getFCMToken().then(token => {
     //   this.setState({fcm_token_Id:token})

@@ -34,6 +34,7 @@ import AboutUsText from "../components/AboutUsText";
 import Share, { ShareSheet, Button } from "react-native-share";
 import { SHAREURL } from "../config/dev";
 import LinearGradient from "react-native-linear-gradient";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import JobSalaryDetails from "../components/JobSalaryDetails";
 
 class JobList extends Component {
@@ -85,8 +86,6 @@ class JobList extends Component {
     };
   };
   onApplyJob = item => {
-    // console.log(item,this.state.jobList,'cccccccccccccccccccccc');
-    // console.log(item,this.state.jobList,'{{{{{{{{{{{{{{{{{[');
     this.props.navigation.navigate("AddCandidate", {
       jobDetail: item,
       currentJob: this.state.joblist,
@@ -108,8 +107,6 @@ class JobList extends Component {
     this.setState({ visible: true, shareOptions: shareDetails });
   };
   renderCardItem = ({ item }) => {
-    console.log(item);
-    
     return (
       <Card style={styles.mainCard} padder>
       
@@ -175,8 +172,6 @@ class JobList extends Component {
     );
   };
   render() {
-    // console.log(this.props,'////////////////////////////');
-    
     const {
       joblist,
       shareOptions,
