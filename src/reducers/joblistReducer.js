@@ -8,13 +8,11 @@ const initialState = {
 export default function (state = initialState, action) {
     switch (action.type) {
         case GET_JOBLIST_SUCCESS:
-            state.isSuccess=true;
-            return  {...state, ...action.payload}
+            return  {isSuccess:true,isError:false,...action.payload}
             break;
             
         case GET_JOBLIST_FAILURE:
-            state.isError=true;
-            return{...state, ...action.payload}
+            return{isError:true,isSuccess:false, ...action.payload}
 
         default:
             return state;

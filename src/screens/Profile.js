@@ -8,6 +8,7 @@ import {
   View,
   Animated
 } from "react-native";
+import toastAlert from "../helper/toastAlert";
 import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
@@ -96,6 +97,21 @@ class Profile extends Component {
 
   jobOpening=()=>{
     this.props.navigation.navigate('JobList',{ title: "Job Openings",isCandidate:true })
+  }
+
+  componentDidUpdate(props){
+    const {UploadProfilePic, candidateProfileUpdateDetails} = this.props;
+    if(UploadProfilePic.isSuccess !== props.UploadProfilePic.isSuccess){
+      const user_mongo_id = this.props.navigation.state.params.mongo_id
+      this.props.getCandidateUpdateProfileDetails(user_mongo_id)
+      toastAlert("Successfully Uploaded")
+    }
+    if(UploadProfilePic.isError !== props.UploadProfilePic.isError){
+      toastAlert("Something went wrong please try gain!")
+    }
+    if(candidateProfileUpdateDetails.isSuccess !== props.candidateProfileUpdateDetails.isSuccess){
+      setItem("mongo_id", JSON.stringify({ candidate:{ data:candidateProfileUpdateDetails} }));
+    }
   }
 
   onPhotoUpload =async () => {
@@ -196,10 +212,9 @@ class Profile extends Component {
 //   }
 // }
   render() {
-    // console.log(this.state.uploading,'profile');
+    console.log(this.props.candidateProfileUpdateDetails,'profile');
     
     const profileDetails = this.props.navigation.getParam("profileDetails");
-    console.log(profileDetails,this.props,'profileDetails');
     const appliedJob = this.props.navigation.getParam("appliedJob");
     return (
       <ScrollView overScrollMode="never">
@@ -209,7 +224,7 @@ class Profile extends Component {
           imageSource={this.state.imageSource}
           profile_picture={this.state.profile_picture}
           uploading={this.state.uploading}
-          uploadStatus={this.props.state.UploadProfilePic.data}
+          uploadStatus={this.props.UploadProfilePic.data}
           latestImage={this.state.latestImage}
           updateMessage={this.state.updateMessage}
           // ImageUpdatedPopUp={()=>this.ImageUpdatedPopUp()}
@@ -399,7 +414,8 @@ const mapStateToProps = state => {
     joblist: state.joblist,
     state:state,
     candidateDataToUpdate: state.UpdateProfile,
-    candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
+    candidateProfileUpdateDetails:state.candidateProfileUpdateDetails,
+    UploadProfilePic:state.UploadProfilePic
   };
 };
 const mapDispatchToProps = dispatch => {

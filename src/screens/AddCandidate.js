@@ -134,32 +134,8 @@ async  componentDidMount(){
           ]);
         }
       }
-      const fcmToken = await firebase.messaging().getToken();
-      console.log(fcmToken,'fcmTokenfcmToken')
-    // FCM.requestPermissions();
-    // FCM.getFCMToken().then(token => {
-    //   this.setState({fcm_token_Id:token})
-    //   this.setState({deviceId: DeviceInfo.getUniqueID()})
-    // });
-    // FCM.getInitialNotification().then(notif => {
-    // });
-  }
-  sendRemote(notif) {
-    FCM.presentLocalNotification({
-      data: {
-        type:"MEASURE_CHANGE",
-        custom_notification: {
-          body: "test body",
-          title: "test title",
-          color:"#00ACD4",
-          priority:"high",
-          icon:"ic_notif",
-          group: "GROUP",
-          id: "id",
-          show_in_foreground: true
-        }
-      }
-    });
+      const fcm_token_Id = await firebase.messaging().getToken();
+      this.setState({fcm_token_Id})
   }
 
   setCandidateProfile = async () => {

@@ -61,7 +61,8 @@ import{
 
 import{
   CANDIDATE_UPDATE_PROFILE_DETAILS_SUCCESS,
-  CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE
+  CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE,
+  CANDIDATE_UPDATE_PROFILE_DETAILS_REQUEST
 } from './types';
 
 
@@ -382,6 +383,7 @@ export const interviewLoginClearData = data => async dispatch => {
 
 
 export const getCandidateUpdateProfileDetails = (_id) => async dispatch => {
+  dispatch({ type: CANDIDATE_UPDATE_PROFILE_DETAILS_REQUEST, payload:'' });
   try {
     const res = await _axios().get(`/exam/candidateProfile?id=${_id}`);
     dispatch({ type: CANDIDATE_UPDATE_PROFILE_DETAILS_SUCCESS, payload: res.data });

@@ -38,7 +38,7 @@ import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails, getJobLists } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 // import SplashScreen from "react-native-splash-screen";
-import {branch} from "react-native-branch";
+import branch from "react-native-branch";
 import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
 // import  { RemoteMessage } from 'react-native-firebase';
@@ -66,9 +66,12 @@ class HomePage extends Component {
       latestImage:null,
       isNotify:false,
       backgroundColor:false,
-      // fontSize:new Animated.Value(12),
-      // opacityy:new Animated.Value(1)
-      // index:''
+      deepLink: false,
+      sharing: false,
+      fb_id: null,
+      params:"",
+      isError:false,
+      isNotification:false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -76,19 +79,6 @@ class HomePage extends Component {
     header: null
   };
 
-  // static getDerivedStateFromProps(nextProps) {
-  //   const { error, success, msg, message } = nextProps.interviewSignUp;
-  //   if (error !== undefined && error === 1 && message !== undefined) {
-  //     alert(message);
-  //   }return null;
-  //   if (success !== undefined && !success) {
-  //     notify("Something went wrong");
-  //   }return null;
-  //   if (msg !== undefined) {
-  //     alert(msg);
-  //   }
-  //   return null;
-  // }
   setCandidateProfile = async () => {
     const mongo_id = await getItem("mongo_id");
     
@@ -96,7 +86,7 @@ class HomePage extends Component {
       this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
       })
     }
-  await this.props.getCandidateUpdateProfileDetails(this.state.mongo_id)
+  // await this.props.getCandidateUpdateProfileDetails(this.state.mongo_id)
     const candidateJob = await getItem("mongo_id");
     if (candidateJob) {
       this.props.UploadProfile(candidateJob)
@@ -120,10 +110,26 @@ class HomePage extends Component {
       this.setState({ linkOpening: false });
     }
 }
+
+ handleSetProfile= async(candidateJob)=>{
+  let email = candidateJob.sender_mail;
+  let profile_pic = candidateJob.hasOwnProperty("profilePicture") ? 
+                    candidateJob.profilePicture : `https://pikmail.herokuapp.com/${email}?size=60`;
+  let mobile_no = candidateJob.mobile_no;
+  let userName = candidateJob.from;
+  this.setState({
+    candidateJob,
+    profile_pic,
+    userName,
+    mobile_no,
+    linkOpening: false,
+    notification: "",
+    sender_mail:candidateJob.sender_mail,
+    mongo_id:candidateJob._id
+  });
+ }
   async handleViewClick(data) {
     const { appliedJob } = this.props;
-    // console.log(appliedJob,'appliedjob');
-    
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
         appliedJob: appliedJob,
@@ -150,103 +156,136 @@ class HomePage extends Component {
   }
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      // console.log(response);
     })
   }
   componentDidMount = async () => {
-    this.props.navigation.addListener("didFocus", () =>this.setCandidateProfile()/* .then(()=>{ */
-    )
+    const candidateJob = await getItem("mongo_id");    
+    if(candidateJob){
+      this.handleSetProfile(candidateJob.candidate.data)
+    }
+
+    let willFocused = false
+    this.props.navigation.addListener("willFocus",async () =>{
+      if(willFocused){
+        const candidateJob = await getItem("mongo_id");
+        this.handleSetProfile(candidateJob.candidate.data)
+      }
+    })
+    this.props.navigation.addListener("didBlur",async () =>{
+      willFocused = true
+    })
+    
     Permissions.checkMultiple(['location']).then(response => {
       if(response.storage != 'authorized'){
         this.askStoragePermission()
       }
     })
-    await this.props.getJobLists()
-    const notificationOpen = await firebase.notifications().getInitialNotification();
     NetInfo.fetch().then(async state => {
       if(state.isConnected){
-  await this.setCandidateProfile();
-  const appIntro = await getItem("appintro");
-  if (appIntro !== undefined && appIntro.shown) {
-    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
-  }
-    const candidateJob = await getItem("mongo_id");
-    const mongo_id = await getItem("mongo_id");
-    // this.setState({ notification: notif.from });
-    if (notificationOpen !== null && notificationOpen !== undefined) {
-        if (this.state.candidateJob !== null) {
-          const { appliedJob } = this.props;
-          const {
-            linkOpening,
-            textColor,
-            candidateJob,
-            ...profileDetails
-          } = this.state;
-          this.props.navigation.navigate("Profile", {
-            appliedJob,
-            profileDetails
-          });
-          this.setState({ notification: "", opacity: 0,isNotify:false });
-        }
-    }else{
-      this.setState({isNotify:false})
-    }
-  }else{
-    this.setState({isNotify:false})
-    alert('Please! connect to the internet first')
-  }
-  //  const {interviewSignUp} =this.props;
-  // const { error, success, msg, message } = interviewSignUp;
-  // if(this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto !==undefined && this.props.navigation.state.params.errorFromAppinto ==true ){
-  //   if (msg !== undefined) {
-  //     alert(msg);
-  //   }
-  //   if (error !== undefined && error === 1 && message !== undefined) {
-  //         alert(message);
-  //   }
-  //   if (success !== undefined && !success) {
-  //     notify("Something went wrong");
-  //   }
-  //   this.props.navigation.setParams({errorFromAppinto:false})
-  // }
-})
-
+        branch.subscribe(async ({ params }) => {
+          if (params.errors && params.errors !== undefined) {
+            this.branchError(params.errors)
+          }
+          else if(params.$share_data !== undefined ){
+            this.setState({params})
+            await this.props.getJobLists()
+          }else if(params.$deeplink_path !== undefined){
+            this._checkDeepLink(params)
+          }else{
+            const notificationOpen =await firebase.notifications().getInitialNotification();
+            if(notificationOpen !==null &&  notificationOpen !==undefined){
+                this.setState({isNotification:true});
+                await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+              }else{
+                await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+            }
+          }
+        })
+      }
+      else{
+        alert('Please! connect to the internet first')
+      }
+    })
   };
+
+  branchError=(error)=>{
+    alert("Error from Branch: " + error);
+  }
 
   async componentDidUpdate (props) {
     const applied = this.props.navigation.getParam("applied");
-    const {joblist}=this.props;
-    if(joblist.isSuccess){
-
-      console.log(joblist,'appliedapplied');
+    const {joblist,interviewSignUp, appliedJob}=this.props;
+    const {params, isError, isNotification} = this.state;
+    if (applied ) {
+      await this.setCandidateProfile();
+      this.props.navigation.setParams({ applied: false});
     }
-    
-    // if (applied ) {
-    //   await this.setCandidateProfile();
-    //   this.props.navigation.setParams({ applied: false});
-    // }
     if(joblist.isSuccess !== props.joblist.isSuccess){
-      console.log("params",'>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-      branch.subscribe(async ({ params }) => {
-        
-        if(params.$share_data !== undefined ){
-          joblist.data.forEach((item, i) => {
-            if (item.id == params.$share_data) {
-              this.props.navigation.navigate("FullDescription", {
-                subject: item.subject,
-                job_description: item.job_description,
-                keyword: item.keyword,
-                candidate_profile: item.candidate_profile,
-                jobDetail: item,
-                currentJob: this.props.joblist
-              });
-              // SplashScreen.hide();
-            }
+      joblist.data.forEach((item, i) => {
+        if (item.id == params.$share_data) {
+          this.props.navigation.navigate("FullDescription", {
+            subject: item.subject,
+            job_description: item.job_description,
+            keyword: item.keyword,
+            candidate_profile: item.candidate_profile,
+            jobDetail: item,
+            currentJob: this.props.joblist
           });
         }
-    })
+      });
+    }
+    if(appliedJob.success !== props.appliedJob.success){
+      if(isNotification){
+        const {
+          linkOpening,
+          textColor,
+          candidateJob,
+          ...profileDetails
+        } = this.state;
+        this.props.navigation.navigate("Profile", {
+          appliedJob,
+          profileDetails
+        });
+      }
+    }
+    if(interviewSignUp.isError !== props.interviewSignUp.isError){
+    const { error, success, msg, message } = interviewSignUp;
+    if (error ==1) {
+      Alert.alert(
+        'Alert',
+        (msg || message) ,
+      )
+    }
+  }
+  if(interviewSignUp.isSuccess !== props.interviewSignUp.isSuccess){ 
+    const {status} = interviewSignUp ;  
+    if (status==1){
+      this._linkCheck()
+    }
   }
 }
+
+_checkDeepLink = async (params) => {
+  let fb_id = params.$deeplink_path;
+      this.setState({ deepLink: true,fb_id });
+      await this.props.getCandidateDetails(fb_id);
+};
+
+_linkCheck = async () => {
+  const { deepLink, sharing, fb_id } = this.state;
+  if (deepLink) {
+    const { data, message, error, status } = this.props.interviewSignUp;
+    setItem("mongo_id", JSON.stringify({ candidate: { data: data } }));
+    this.props.navigation.navigate("Instructions", {
+      fb_id: fb_id,
+      profile_pic: `https://pikmail.herokuapp.com/${
+        data.sender_mail
+      }?size=60`,
+      name: data.from,
+      email: data.sender_mail
+    });
+  }
+};
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
@@ -261,6 +300,8 @@ class HomePage extends Component {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
+    console.log(this.props.interviewSignUp,'candidateProfileUpdateDetails');
+    
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
     let profilepic = profile_pic

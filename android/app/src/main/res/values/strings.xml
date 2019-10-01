@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Hello App Display Name</string>
+    <string name="app_name">Excellence Career</string>
+    <string name="appCenterAnalytics_whenToEnableAnalytics" moduleConfig="true">ALWAYS_SEND</string>
+    <string name="appCenterCrashes_whenToSendCrashes" moduleConfig="true">ALWAYS_SEND</string>
+    <string name="facebook_app_id">319234285522727</string>
+<string name="fb_login_protocol_scheme">fb319234285522727</string>
+
 </resources>
