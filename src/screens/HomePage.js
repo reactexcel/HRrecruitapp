@@ -37,7 +37,7 @@ import { pageDetails, candidatePageDetails } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
 import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails, getJobLists } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
-// import SplashScreen from "react-native-splash-screen";
+import SplashScreen from "react-native-splash-screen";
 import branch from "react-native-branch";
 import firebase from 'react-native-firebase';
 import {ProfileOnChange,UploadProfile} from '../actions/actions'
@@ -79,38 +79,6 @@ class HomePage extends Component {
     header: null
   };
 
-  setCandidateProfile = async () => {
-    const mongo_id = await getItem("mongo_id");
-    
-    if(mongo_id){
-      this.setState({profile_picture:mongo_id.candidate.data.profilePicture,mongo_id:mongo_id.candidate.data._id
-      })
-    }
-  // await this.props.getCandidateUpdateProfileDetails(this.state.mongo_id)
-    const candidateJob = await getItem("mongo_id");
-    if (candidateJob) {
-      this.props.UploadProfile(candidateJob)
-      this.setState({mongo_id:candidateJob.candidate.data._id})
-        let email = candidateJob.candidate.data.sender_mail;
-        let profile_pic = `https://pikmail.herokuapp.com/${email}?size=60`;
-        let mobile_no = candidateJob.candidate.data.mobile_no;
-        let userName = candidateJob.candidate.data.from;
-        await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-        this.setState({
-          candidateJob,
-          profile_pic,
-          userName,
-          mobile_no,
-          linkOpening: false,
-          notification: "",
-          sender_mail:candidateJob.candidate.data.sender_mail,
-        });
-      }
-    else {
-      this.setState({ linkOpening: false });
-    }
-}
-
  handleSetProfile= async(candidateJob)=>{
   let email = candidateJob.sender_mail;
   let profile_pic = candidateJob.hasOwnProperty("profilePicture") ? 
@@ -128,6 +96,7 @@ class HomePage extends Component {
     mongo_id:candidateJob._id
   });
  }
+
   async handleViewClick(data) {
     const { appliedJob } = this.props;
     if (data == "JobList" && this.state.candidateJob) {
@@ -154,10 +123,12 @@ class HomePage extends Component {
       this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
     }
   }
+
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
     })
   }
+
   componentDidMount = async () => {
     const candidateJob = await getItem("mongo_id");    
     if(candidateJob){
@@ -184,6 +155,7 @@ class HomePage extends Component {
       if(state.isConnected){
         branch.subscribe(async ({ params }) => {
           if (params.errors && params.errors !== undefined) {
+            SplashScreen.hide()
             this.branchError(params.errors)
           }
           else if(params.$share_data !== undefined ){
@@ -197,12 +169,14 @@ class HomePage extends Component {
                 this.setState({isNotification:true});
                 await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
               }else{
+                SplashScreen.hide()
                 await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
             }
           }
         })
       }
       else{
+        SplashScreen.hide()
         alert('Please! connect to the internet first')
       }
     })
@@ -221,6 +195,7 @@ class HomePage extends Component {
       this.props.navigation.setParams({ applied: false});
     }
     if(joblist.isSuccess !== props.joblist.isSuccess){
+      SplashScreen.hide()
       joblist.data.forEach((item, i) => {
         if (item.id == params.$share_data) {
           this.props.navigation.navigate("FullDescription", {
@@ -235,6 +210,7 @@ class HomePage extends Component {
       });
     }
     if(appliedJob.success !== props.appliedJob.success){
+      SplashScreen.hide()
       if(isNotification){
         const {
           linkOpening,
@@ -260,6 +236,7 @@ class HomePage extends Component {
   if(interviewSignUp.isSuccess !== props.interviewSignUp.isSuccess){ 
     const {status} = interviewSignUp ;  
     if (status==1){
+      SplashScreen.hide()
       this._linkCheck()
     }
   }

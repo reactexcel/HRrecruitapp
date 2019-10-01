@@ -29,6 +29,7 @@ import  DocumentPicker from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
 import { Popup } from 'react-native-map-link';
 import { setItem, getItem } from "../helper/storage";
+import SplashScreen from "react-native-splash-screen";
 // var RNFS = require('react-native-fs');
 
 class Profile extends Component {
@@ -121,6 +122,7 @@ class Profile extends Component {
         type: [DocumentPicker.types.images],
         });
         if (profilePic) {
+          SplashScreen.hide()
           let res = profilePic[0]
           let check = true;
           if (check) {
