@@ -4,6 +4,7 @@ import {
   INTERVIEW_EMAIL_SIGN_UP_REQUEST,
   INTERVIEW_EMAIL_SIGN_UP_FAILURE,
   INTERVIEW_EMAIL_SIGN_UP_ERROR,
+  GET_JOBLIST_REQUEST,
 
 } from "./types";
 import {
@@ -33,6 +34,7 @@ import {
 } from "./types";
 
 import {
+  CANDIDATE_JOB_REQUEST,
   CANDIDATE_JOB_SUCCESS,
   CANDIDATE_JOB_FAILURE
 } from './types';
@@ -296,12 +298,9 @@ export const getCandidateRoundDetails = fb_id => async dispatch => {
 };
 
 export const getJobLists = () => async dispatch => {
-  // console.log('jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj');
-  
+  dispatch({ type: GET_JOBLIST_REQUEST, payload: "" });
   try {
     const res = await _axios().get(`tag/jobProfile`);
-    // console.log(res,'JJJJJJJJJJJJJJJJJJJJJJJJJJ');
-    
     dispatch({ type: GET_JOBLIST_SUCCESS, payload: res.data });
   } catch (err) {
     console.log(err,'err');
@@ -321,6 +320,7 @@ export const getJobLists = () => async dispatch => {
 };
 
 export const getCandidateJobDetails = (_id) => async dispatch => {
+  dispatch({ type: CANDIDATE_JOB_REQUEST, payload: "" });
   try {
     const res = await _axios().get(`/exams/candidateJobDetails/${_id}`);
     dispatch({ type: CANDIDATE_JOB_SUCCESS, payload: res.data });

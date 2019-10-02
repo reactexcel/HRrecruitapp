@@ -55,12 +55,13 @@ class JobList extends Component {
     if (params.appliedJob !== undefined) {
       this.setState({
         appliedJobDetails: params.appliedJob,
-        isLoading: false,
         userLogin: true
       });
     } else {
-      await this.props.getJobLists();
       const { data, error } = this.props.joblist;
+      if(!data){
+        await this.props.getJobLists();
+      }
       if (data) {
         this.setState({ joblist: data, isLoading: false });
       }
@@ -98,7 +99,12 @@ class JobList extends Component {
   onCancel() {
     this.setState({ visible: false });
   }
-
+  componentDidUpdate(props){
+    const { joblist} = this.props;
+    if(joblist.isSuccess !== props.joblist.isSuccess){
+      this.setState({ joblist:joblist.data, isLoading:false });
+    }
+  }
   onShareClick = item => {
     let shareDetails = {};
     shareDetails["title"] = item.title;

@@ -46,6 +46,7 @@ import {ProfileOnChange,UploadProfile} from '../actions/actions'
 import Permissions from 'react-native-permissions';
 import Modal from 'react-native-modalbox'
 import {Input,Item,Button} from 'native-base';
+import AlertMessage from "../helper/toastAlert";
 var { height, width } = Dimensions.get("window");
 class HomePage extends Component {
   constructor(props) {
@@ -73,7 +74,8 @@ class HomePage extends Component {
       params:"",
       isError:false,
       isNotification:false,
-      didPreviouslyLaunch:false
+      didPreviouslyLaunch:false,
+      sharedJobLink:false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -164,16 +166,19 @@ class HomePage extends Component {
             this.branchError(params.errors)
           }
           else if(params.$share_data !== undefined ){
-            this.setState({params})
+            SplashScreen.hide()
+            this.setState({params,sharedJobLink:true})
             await this.props.getJobLists()
             if(candidateJob){
               await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
             }
           }else if(params.$deeplink_path !== undefined){
+            SplashScreen.hide()
             this._checkDeepLink(params)
           }else{
             const notificationOpen =await firebase.notifications().getInitialNotification();
             if(notificationOpen !==null &&  notificationOpen !==undefined){
+                SplashScreen.hide()
                 this.setState({isNotification:true});
                 await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
               }else{
@@ -187,7 +192,7 @@ class HomePage extends Component {
       }
       else{
         SplashScreen.hide()
-        alert('Please! connect to the internet first')
+        AlertMessage('Please! connect to the internet first', "alert")
       }
     })
   };
@@ -199,7 +204,7 @@ class HomePage extends Component {
   };
 
   branchError=(error)=>{
-    alert("Error from Branch: " + error);
+    AlertMessage(`Error from Branch: " + ${error}`,'alert');
   }
 
   async componentDidUpdate (props) {
@@ -221,22 +226,23 @@ class HomePage extends Component {
       this.props.navigation.setParams({ fromBitlyLink: false});
     }
     if(joblist.isSuccess !== props.joblist.isSuccess){
-      joblist.data.forEach((item, i) => {
-        if (item.id == params.$share_data) {
-          this.props.navigation.navigate("FullDescription", {
-            subject: item.subject,
-            job_description: item.job_description,
-            keyword: item.keyword,
-            candidate_profile: item.candidate_profile,
-            jobDetail: item,
-            currentJob: this.props.joblist
-          });
-        }
-      });
-      SplashScreen.hide()
+      if(joblist.isSuccess && this.state.sharedJobLink){
+        this.setState({sharedJobLink:false})
+        joblist.data.forEach((item, i) => {
+          if (item.id == params.$share_data) {
+            this.props.navigation.navigate("FullDescription", {
+              subject: item.subject,
+              job_description: item.job_description,
+              keyword: item.keyword,
+              candidate_profile: item.candidate_profile,
+              jobDetail: item,
+              currentJob: this.props.joblist
+            });
+          }
+        });
+      }
     }
     if(appliedJob.success !== props.appliedJob.success){
-      SplashScreen.hide()
       if(isNotification){
         const {
           linkOpening,
@@ -253,17 +259,12 @@ class HomePage extends Component {
     if(interviewSignUp.isError !== props.interviewSignUp.isError){
       const { error, success, msg, message } = interviewSignUp;
     if (error ==1) {
-      SplashScreen.hide()
-      Alert.alert(
-        'Alert',
-        (msg || message) ,
-      )
+      AlertMessage((msg || message), 'alert')
     }
   }
   if(interviewSignUp.isSuccess !== props.interviewSignUp.isSuccess){ 
     const {status} = interviewSignUp ;  
     if (status==1){
-      SplashScreen.hide()
       this._linkCheck()
     }
   }
@@ -304,8 +305,8 @@ _linkCheck = async () => {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
-    console.log(this.props.interviewSignUp,'candidateProfileUpdateDetails');
-    
+    const {appliedJob, joblist} = this.props;
+    console.log(this.props.interviewSignUp,appliedJob, joblist,'candidateProfileUpdateDetails');
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
     let profilepic = profile_pic
@@ -357,16 +358,14 @@ _linkCheck = async () => {
     return (
       <View style={{ flex: 1 }}>
       
-        <View
+        {(appliedJob.isLoading || joblist.isLoading ) && <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
           <ActivityIndicator
-            animating={true}
-            style={{ opacity: this.state.opacity }}
             size="large"
             color={COLOR.MUSTARD}
           />
-        </View>
+        </View>}
          {this.state.isNotify && 
          <View style={{zIndex:1,position:'absolute',top:'31%',left:'45%'}}>
       <Spinner color={COLOR.MUSTARD} />
