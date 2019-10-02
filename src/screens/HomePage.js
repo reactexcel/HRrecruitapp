@@ -139,7 +139,9 @@ class HomePage extends Component {
     this.props.navigation.addListener("willFocus",async () =>{
       if(willFocused){
         const candidateJob = await getItem("mongo_id");
-        this.handleSetProfile(candidateJob.candidate.data)
+        if(candidateJob){
+          this.handleSetProfile(candidateJob.candidate.data)
+        }
       }
     })
     this.props.navigation.addListener("didBlur",async () =>{
@@ -161,6 +163,9 @@ class HomePage extends Component {
           else if(params.$share_data !== undefined ){
             this.setState({params})
             await this.props.getJobLists()
+            if(candidateJob){
+              await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+            }
           }else if(params.$deeplink_path !== undefined){
             this._checkDeepLink(params)
           }else{
@@ -170,7 +175,9 @@ class HomePage extends Component {
                 await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
               }else{
                 SplashScreen.hide()
-                await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+                if(candidateJob){
+                  await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+                }
             }
           }
         })
@@ -188,14 +195,23 @@ class HomePage extends Component {
 
   async componentDidUpdate (props) {
     const applied = this.props.navigation.getParam("applied");
+    const fromBitlyLink  = this.props.navigation.getParam("fromBitlyLink")
     const {joblist,interviewSignUp, appliedJob}=this.props;
     const {params, isError, isNotification} = this.state;
     if (applied ) {
-      await this.setCandidateProfile();
+      const candidateJob = await getItem("mongo_id");
+       this.handleSetProfile(candidateJob.candidate.data);
+      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
       this.props.navigation.setParams({ applied: false});
     }
+    if (fromBitlyLink ) {
+      console.log("fromBitlyLink",">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      
+      const candidateJob = await getItem("mongo_id");
+      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+      this.props.navigation.setParams({ fromBitlyLink: false});
+    }
     if(joblist.isSuccess !== props.joblist.isSuccess){
-      SplashScreen.hide()
       joblist.data.forEach((item, i) => {
         if (item.id == params.$share_data) {
           this.props.navigation.navigate("FullDescription", {
@@ -208,6 +224,7 @@ class HomePage extends Component {
           });
         }
       });
+      SplashScreen.hide()
     }
     if(appliedJob.success !== props.appliedJob.success){
       SplashScreen.hide()
@@ -225,8 +242,9 @@ class HomePage extends Component {
       }
     }
     if(interviewSignUp.isError !== props.interviewSignUp.isError){
-    const { error, success, msg, message } = interviewSignUp;
+      const { error, success, msg, message } = interviewSignUp;
     if (error ==1) {
+      SplashScreen.hide()
       Alert.alert(
         'Alert',
         (msg || message) ,

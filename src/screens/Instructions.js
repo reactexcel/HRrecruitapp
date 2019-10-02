@@ -122,7 +122,9 @@ class Instructions extends Component {
                       style={{ backgroundColor: COLOR.MUSTARD }}
                       text="Click Here"
                       onPress={() =>
-                        this.props.navigation.navigate("HomePage")
+                        this.props.navigation.navigate("HomePage",{
+                          fromBitlyLink: true
+                        })
                       }
                     />
                   </Fragment>
