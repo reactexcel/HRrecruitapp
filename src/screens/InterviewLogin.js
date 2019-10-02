@@ -40,7 +40,7 @@ import {
 } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
-import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
+// import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
 import LinearGradient from "react-native-linear-gradient";
@@ -266,10 +266,10 @@ class InterviewLogin extends Component {
       this.setState({spinner:false})
       NetInfo.isConnected.fetch().done(async isConnected => {
         if (isConnected) {
-          GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            "INTERVIEWLOGIN",
-            this.state.email
-          );
+          // GOOGLE_ANALYTICS_TRACKER.trackEvent(
+          //   "INTERVIEWLOGIN",
+          //   this.state.email
+          // );
           await this.props.signUp(this.state.email);
           const {
             interviewSignUp: { status, fb_id }
@@ -277,20 +277,20 @@ class InterviewLogin extends Component {
           console.log(this.props.interviewSignUp,'>>>');
           
           if (status === 0) {
-            GOOGLE_ANALYTICS_TRACKER.trackEvent(
-              this.state.email,
-              status.toString()
-            );
+            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            //   this.state.email,
+            //   status.toString()
+            // );
             this.props.navigation.navigate("JobList", {
               title: "Job Openings"
             });
             
             this.setState({ email: "",spinner:false });
           } else if (status === SUCCESS_STATUS) {
-            GOOGLE_ANALYTICS_TRACKER.trackEvent(
-              this.state.email,
-              status.toString()
-            );
+            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            //   this.state.email,
+            //   status.toString()
+            // );
             // if (this.state.email === "test_123@gmail.com") {
               this.props.navigation.navigate("Instructions", {
                 fb_id: fb_id,
@@ -329,10 +329,10 @@ class InterviewLogin extends Component {
     this.setState({spinner:false})
       NetInfo.isConnected.fetch().done(async isConnected => {
         if (isConnected) {
-          GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            "INTERVIEWLOGIN",
-            this.state.email
-          );
+          // GOOGLE_ANALYTICS_TRACKER.trackEvent(
+          //   "INTERVIEWLOGIN",
+          //   this.state.email
+          // );
           await this.props.signUp(this.state.email);
           const {
             interviewSignUp: { status, fb_id }
@@ -340,20 +340,20 @@ class InterviewLogin extends Component {
           console.log(this.props.interviewSignUp,'>>>');
           
           if (status === 0) {
-            GOOGLE_ANALYTICS_TRACKER.trackEvent(
-              this.state.email,
-              status.toString()
-            );
+            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            //   this.state.email,
+            //   status.toString()
+            // );
             this.props.navigation.navigate("JobList", {
               title: "Job Openings"
             });
             
             this.setState({ email: "",spinner:false });
           } else if (status === SUCCESS_STATUS) {
-            GOOGLE_ANALYTICS_TRACKER.trackEvent(
-              this.state.email,
-              status.toString()
-            );
+            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
+            //   this.state.email,
+            //   status.toString()
+            // );
             // if (this.state.email === "test_123@gmail.com") {
               this.props.navigation.navigate("Instructions", {
                 fb_id: fb_id,

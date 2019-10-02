@@ -10,6 +10,7 @@ import {
   Dimensions,
   ActivityIndicator,
   Animated,
+  AppState,
   Easing,
 } from "react-native";
 import {
@@ -71,7 +72,8 @@ class HomePage extends Component {
       fb_id: null,
       params:"",
       isError:false,
-      isNotification:false
+      isNotification:false,
+      didPreviouslyLaunch:false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -130,6 +132,7 @@ class HomePage extends Component {
   }
 
   componentDidMount = async () => {
+    AppState.addEventListener("change", this._handleAppStateChange);
     const candidateJob = await getItem("mongo_id");    
     if(candidateJob){
       this.handleSetProfile(candidateJob.candidate.data)
@@ -189,6 +192,12 @@ class HomePage extends Component {
     })
   };
 
+  _handleAppStateChange = async nextAppState => {
+    if (nextAppState == "active") {
+      SplashScreen.hide();
+    }
+  };
+
   branchError=(error)=>{
     alert("Error from Branch: " + error);
   }
@@ -205,7 +214,7 @@ class HomePage extends Component {
       this.props.navigation.setParams({ applied: false});
     }
     if (fromBitlyLink ) {
-      console.log("fromBitlyLink",">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      console.log("fromBitlyLink",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
       
       const candidateJob = await getItem("mongo_id");
       await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);

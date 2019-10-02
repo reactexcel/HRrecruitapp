@@ -7,7 +7,7 @@ const CustomButton = props => {
   const { text, type = 'block', btnStyle = {}, btnTextStyle={} ,style ={},textColor={},IconStyle={},key} = props;
   if(type == 'rounded'){
     return (
-    <Button onPress={props.onPress} style={[styles.removeShadow,btnStyle]} rounded info>
+    <Button onPress={props.onPress} style={[styles.removeShadow,btnStyle,]} rounded info>
       <Text uppercase={false} style={[styles.btnText,btnTextStyle]}>
         {text}
       </Text>

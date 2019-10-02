@@ -6,6 +6,7 @@ import {
   Linking,
   Platform,
   TouchableOpacity,
+  VirtualizedList,
   FlatList,
   Clipboard,
   ToastAndroid,
@@ -151,6 +152,8 @@ class JobList extends Component {
             </Text>
           </Body>
         </CardItem>
+        <View style={{flexDirection:"row"}}>
+          <Text></Text>
         <CustomButton
           btnStyle={styles.buttonPadder}
           btnTextStyle={_styles.fullDescriptionText}
@@ -168,6 +171,7 @@ class JobList extends Component {
             });
           }}
         />
+        </View>
       </Card>
     );
   };
