@@ -48,10 +48,10 @@ import Modal from 'react-native-modalbox'
 import {Input,Item,Button} from 'native-base';
 import AlertMessage from "../helper/toastAlert";
 var { height, width } = Dimensions.get("window");
+
+let bitlyLink = false
 class HomePage extends Component {
   constructor(props) {
-    // console.log('ffffffffffff');
-    
     super(props);
     this.state = {
       linkOpening: false,
@@ -108,7 +108,7 @@ class HomePage extends Component {
         appliedJob: appliedJob,
         title: "Your Applied Jobs"
       });
-    } else if (data == "Profile") {
+    } else if (data == "Profile" && appliedJob.success) {
       const {
         linkOpening,
         textColor,
@@ -212,18 +212,18 @@ class HomePage extends Component {
     const fromBitlyLink  = this.props.navigation.getParam("fromBitlyLink")
     const {joblist,interviewSignUp, appliedJob}=this.props;
     const {params, isError, isNotification} = this.state;
-    if (applied ) {
+    if (applied && !bitlyLink) {
+      bitlyLink =true
+      this.props.navigation.setParams({ applied: false});
       const candidateJob = await getItem("mongo_id");
        this.handleSetProfile(candidateJob.candidate.data);
       await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      this.props.navigation.setParams({ applied: false});
     }
-    if (fromBitlyLink ) {
-      console.log("fromBitlyLink",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ">>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-      
+    if (fromBitlyLink && !bitlyLink ) {
+      bitlyLink =true
+      this.props.navigation.setParams({ fromBitlyLink: false});
       const candidateJob = await getItem("mongo_id");
       await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-      this.props.navigation.setParams({ fromBitlyLink: false});
     }
     if(joblist.isSuccess !== props.joblist.isSuccess){
       if(joblist.isSuccess && this.state.sharedJobLink){
@@ -305,8 +305,7 @@ _linkCheck = async () => {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
-    const {appliedJob, joblist} = this.props;
-    console.log(this.props.interviewSignUp,appliedJob, joblist,'candidateProfileUpdateDetails');
+    const {appliedJob, joblist, interviewSignUp} = this.props;
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
     let profilepic = profile_pic
@@ -358,7 +357,7 @@ _linkCheck = async () => {
     return (
       <View style={{ flex: 1 }}>
       
-        {(appliedJob.isLoading || joblist.isLoading ) && <View
+        {(appliedJob.isLoading || joblist.isLoading || interviewSignUp.isLoading ) && <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
           <ActivityIndicator
