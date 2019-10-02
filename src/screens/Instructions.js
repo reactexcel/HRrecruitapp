@@ -80,11 +80,7 @@ class Instructions extends Component {
   };
   render() {
     const name = this.props.navigation.getParam("name");
-    const { questions } = this.props;
-    console.log(questions,'???????????????????????????');
-    // console.log(questions,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-    
-    
+    const { questions } = this.props;    
     return (
       <Container style={styles.container}>
         <Content padder>

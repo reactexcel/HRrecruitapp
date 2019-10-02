@@ -148,8 +148,6 @@ class InterviewLogin extends Component {
       });
     } else {
       branch.subscribe(async ({ errors, params }) => {
-        console.log(params,'interviewLogin');
-        
         if (errors) {
           alert("Error from Branch: " + errors);
           return;
@@ -274,8 +272,6 @@ class InterviewLogin extends Component {
           const {
             interviewSignUp: { status, fb_id }
           } = this.props;
-          console.log(this.props.interviewSignUp,'>>>');
-          
           if (status === 0) {
             // GOOGLE_ANALYTICS_TRACKER.trackEvent(
             //   this.state.email,
@@ -337,8 +333,6 @@ class InterviewLogin extends Component {
           const {
             interviewSignUp: { status, fb_id }
           } = this.props;
-          console.log(this.props.interviewSignUp,'>>>');
-          
           if (status === 0) {
             // GOOGLE_ANALYTICS_TRACKER.trackEvent(
             //   this.state.email,
@@ -397,8 +391,6 @@ class InterviewLogin extends Component {
   // }
 
   render() {
-    console.log(this.props.appliedJob.status,this.props.interviewSignUp,this.props.candidateInfo,'status');
-    
     const {
       interviewSignUp: { registering, success }
     } = this.props;
@@ -452,7 +444,6 @@ class InterviewLogin extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log(state,'))))))))))))))');
   return{
   interviewSignUp: state.interviewSignUp,
   isConnected: state.network.isConnected,

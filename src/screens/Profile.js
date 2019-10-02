@@ -105,10 +105,10 @@ class Profile extends Component {
     if(UploadProfilePic.isSuccess !== props.UploadProfilePic.isSuccess){
       const user_mongo_id = this.props.navigation.state.params.mongo_id
       this.props.getCandidateUpdateProfileDetails(user_mongo_id)
-      toastAlert("Successfully Uploaded")
+      toastAlert("Successfully Uploaded", "toast")
     }
     if(UploadProfilePic.isError !== props.UploadProfilePic.isError){
-      toastAlert("Something went wrong please try gain!")
+      toastAlert("Something went wrong please try gain!", "toast")
     }
     if(candidateProfileUpdateDetails.isSuccess !== props.candidateProfileUpdateDetails.isSuccess){
       setItem("mongo_id", JSON.stringify({ candidate:{ data:candidateProfileUpdateDetails} }));
