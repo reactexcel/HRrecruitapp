@@ -40,7 +40,7 @@ import { callingHelp } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { COLOR } from "../styles/color";
-import TimerCountdown from "react-native-timer-countdown";
+import CountDown from "react-native-countdown-component";
 import { setItem, getItem } from "../helper/storage";
 import LinearGradient from "react-native-linear-gradient";
 import CustomSubmitAlert from "../components/CustomSubmitAlert";
@@ -119,7 +119,6 @@ class TestPage extends Component {
         ? navigation.state.params.time
         : navigation.state.params.data.timeForExam;
     const round = navigation.state.params.data.round;
-
     return {
       headerLeft: <View />,
       headerRight: <View />,
@@ -141,32 +140,36 @@ class TestPage extends Component {
                 >
                   Remaining Time
                 </Text>
-                <Text style={_styles.timerStyle}>
-                  <TimerCountdown
-                    initialSecondsRemaining={counter}
-                    onTick={counter => {
+              {/* <Text style={_styles.timerStyle}> */}                             
+                  <CountDown
+                    until={counter/1000}
+                    onChange	={counter => {
                       setItem(
                         "remaining_time",
                         JSON.stringify({ remaining_time: counter })
                       );
-
-                      if (counter < 180000 && counter > 175000) {
+                      if (counter < 180 && counter > 175) {
                         notify(
                           "You have less than 3 minutes left to complete your test.Your marked responses are saved. If you don't submit manually, you will be directed to next page where you will submit your test"
                         );
                       }
                     }}
-                    onTimeElapsed={() => {
+                    onFinish={() => {
                       navigation.navigate("SubmitTest", {
                         ...navigation.state.params,
                         taken_time_minutes:
                           navigation.state.params.data.timeForExam
                       });
                     }}
-                    allowFontScaling={true}
-                    style={{ fontSize: Platform.OS === "ios" ? 13 : 15 }}
+                    digitStyle={{backgroundColor:"transparent"}}
+                    timeLabels={{m: null, s: null}}
+                    timeToShow={['H', 'M', 'S']}
+                    size={Platform.OS === "ios" ? 13 : 15 }
+                    showSeparator={true}
+                    separatorStyle={_styles.timerStyle}
+                    digitTxtStyle={_styles.timerStyle}
                   />
-                </Text>
+                {/* </Text> */}
               </React.Fragment>
             ) : null
           ) : null}

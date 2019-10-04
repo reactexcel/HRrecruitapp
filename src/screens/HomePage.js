@@ -47,6 +47,7 @@ import Permissions from 'react-native-permissions';
 import Modal from 'react-native-modalbox'
 import {Input,Item,Button} from 'native-base';
 import AlertMessage from "../helper/toastAlert";
+import CountDown from 'react-native-countdown-component';
 var { height, width } = Dimensions.get("window");
 
 let bitlyLink = false
@@ -136,7 +137,9 @@ class HomePage extends Component {
   componentDidMount = async () => {
     AppState.addEventListener("change", this._handleAppStateChange);
     const candidateJob = await getItem("mongo_id");    
-    if(candidateJob){
+    console.log(candidateJob,'candidateJobcandidateJob');
+    
+    if(candidateJob && Object.keys(candidateJob).length){
       this.handleSetProfile(candidateJob.candidate.data)
     }
 
@@ -144,13 +147,14 @@ class HomePage extends Component {
     this.props.navigation.addListener("willFocus",async () =>{
       if(willFocused){
         const candidateJob = await getItem("mongo_id");
-        if(candidateJob){
+        if(candidateJob && Object.keys(candidateJob).length){
           this.handleSetProfile(candidateJob.candidate.data)
         }
       }
     })
     this.props.navigation.addListener("didBlur",async () =>{
       willFocused = true
+      bitlyLink = false
     })
     
     Permissions.checkMultiple(['location']).then(response => {
@@ -217,13 +221,15 @@ class HomePage extends Component {
       this.props.navigation.setParams({ applied: false});
       const candidateJob = await getItem("mongo_id");
        this.handleSetProfile(candidateJob.candidate.data);
-      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
     }
     if (fromBitlyLink && !bitlyLink ) {
       bitlyLink =true
       this.props.navigation.setParams({ fromBitlyLink: false});
-      const candidateJob = await getItem("mongo_id");
-      await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        const candidateJob = await getItem("mongo_id");
+        if(candidateJob){
+          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        }
     }
     if(joblist.isSuccess !== props.joblist.isSuccess){
       if(joblist.isSuccess && this.state.sharedJobLink){
@@ -305,6 +311,8 @@ _linkCheck = async () => {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
+    console.log(this.props.interviewSignUp,'this.props.interviewSignUp');
+    
     const {appliedJob, joblist, interviewSignUp} = this.props;
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
@@ -357,7 +365,7 @@ _linkCheck = async () => {
     return (
       <View style={{ flex: 1 }}>
       
-        {(appliedJob.isLoading || joblist.isLoading || interviewSignUp.isLoading ) && <View
+        {(appliedJob.isLoading || joblist.isLoading /* || interviewSignUp.isLoading */ ) && <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
           <ActivityIndicator

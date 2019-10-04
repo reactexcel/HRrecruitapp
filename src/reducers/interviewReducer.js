@@ -25,7 +25,7 @@ export default function(state = initialState, action) {
         isLoading:true,
       };
     case INTERVIEW_EMAIL_SIGN_UP:
-      return { registering: false,isLoading:true,isSuccess:false, ...action.payload };
+      return { registering: false,isLoading:false,isSuccess:true, ...action.payload };
       break;
     case INTERVIEW_EMAIL_SIGN_UP_FAILURE:
       return {isLoading:false,isSuccess:false,isError:true,jobNotAssign:true, ...action.payload};
