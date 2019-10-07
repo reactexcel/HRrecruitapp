@@ -7,7 +7,7 @@ if (__DEV__) {
 }
 
 export default API_URL; 
-// http://5.9.144.226:3000/
+// http://176.9.137.77/
 // http://api.recruit.excellencetechnologies.in/
 // import { GoogleAnalyticsTracker } from "react-native-google-analytics-bridge";
 // export const GOOGLE_ANALYTICS_TRACKER = new GoogleAnalyticsTracker(

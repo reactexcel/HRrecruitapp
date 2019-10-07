@@ -202,14 +202,15 @@ const ProfileDescription = props => {
             rounded
             style={styles.aboutBtn}
           >
-            <Icon name="volume-up" style={{ color: COLOR.PINK }} />
+            <Icon type="FontAwesome" name="volume-up" style={{ color: COLOR.PINK }} />
             <Text uppercase={false} style={styles.btnText}>
               About Us
             </Text>
           </Button>
           {/* </View> */}
         </View>
-        <View style={{paddingBottom:h+15+'%',marginLeft:'-3.2%',marginTop:10,justifyContent:'flex-start'}}>
+        <View style={{flexDirection:"row", paddingBottom:h+15+'%',marginLeft:'-3.2%',marginTop:10,justifyContent:'flex-start'}}>
+        <Text></Text>
         <Button
             onPress={props.jobOpening}
             iconLeft

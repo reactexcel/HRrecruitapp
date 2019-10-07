@@ -281,6 +281,8 @@ exitingCandidate = async () => {
     }
   }
   renderField(props) {
+    console.log(props,'propsprops');
+    
     const { input, ...inputProps } = props;
     const {
       meta: { touched, error, active }

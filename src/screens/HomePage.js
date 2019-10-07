@@ -76,7 +76,8 @@ class HomePage extends Component {
       isError:false,
       isNotification:false,
       didPreviouslyLaunch:false,
-      sharedJobLink:false
+      sharedJobLink:false,
+      isConnected:false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -103,28 +104,37 @@ class HomePage extends Component {
  }
 
   async handleViewClick(data) {
+    const {isConnected} = this.state;
     const { appliedJob } = this.props;
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
         appliedJob: appliedJob,
         title: "Your Applied Jobs"
       });
-    } else if (data == "Profile" && appliedJob.success) {
-      const {
-        linkOpening,
-        textColor,
-        candidateJob,
-        ...profileDetails
-      } = this.state;
-      this.props.navigation.navigate("Profile", {
-        appliedJob,
-        profileDetails,
-        sender_mail:this.state.sender_mail,
-        mongo_id:this.state.mongo_id,
-        profile_picture:this.state.profile_picture,
-        latestImage:this.props.candidateProfileUpdateDetails.profilePicture
-      });
-    } else {
+    } else if (data == "Profile") {
+        if(isConnected){
+          if(appliedJob.success){
+            const {
+              linkOpening,
+              textColor,
+              candidateJob,
+              ...profileDetails
+            } = this.state;
+            this.props.navigation.navigate("Profile", {
+              appliedJob,
+              profileDetails,
+              sender_mail:this.state.sender_mail,
+              mongo_id:this.state.mongo_id,
+              profile_picture:this.state.profile_picture,
+              latestImage:this.props.candidateProfileUpdateDetails.profilePicture
+            });
+          }else{
+            AlertMessage("Please wait! we are getting your profile.", "toast")
+          }
+        }else{
+          AlertMessage("Please! connect to the internet first to fetch your profile.", "toast")
+        }
+    } else if(data !== "Profile") {
       this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
     }
   }
@@ -137,8 +147,6 @@ class HomePage extends Component {
   componentDidMount = async () => {
     AppState.addEventListener("change", this._handleAppStateChange);
     const candidateJob = await getItem("mongo_id");    
-    console.log(candidateJob,'candidateJobcandidateJob');
-    
     if(candidateJob && Object.keys(candidateJob).length){
       this.handleSetProfile(candidateJob.candidate.data)
     }
@@ -147,6 +155,10 @@ class HomePage extends Component {
     this.props.navigation.addListener("willFocus",async () =>{
       if(willFocused){
         const candidateJob = await getItem("mongo_id");
+        const {appliedJob} = this.props;
+        if(candidateJob && Object.keys(candidateJob).length && !appliedJob.success){
+          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        }
         if(candidateJob && Object.keys(candidateJob).length){
           this.handleSetProfile(candidateJob.candidate.data)
         }
@@ -156,41 +168,34 @@ class HomePage extends Component {
       willFocused = true
       bitlyLink = false
     })
-    
-    Permissions.checkMultiple(['location']).then(response => {
-      if(response.storage != 'authorized'){
-        this.askStoragePermission()
-      }
-    })
     NetInfo.fetch().then(async state => {
+      this.setState({isConnected:state.isConnected})
       if(state.isConnected){
+        SplashScreen.hide()
+        if(candidateJob && Object.keys(candidateJob).length){
+          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        }
         branch.subscribe(async ({ params }) => {
           if (params.errors && params.errors !== undefined) {
-            SplashScreen.hide()
             this.branchError(params.errors)
           }
           else if(params.$share_data !== undefined ){
-            SplashScreen.hide()
             this.setState({params,sharedJobLink:true})
             await this.props.getJobLists()
-            if(candidateJob){
-              await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-            }
           }else if(params.$deeplink_path !== undefined){
-            SplashScreen.hide()
             this._checkDeepLink(params)
           }else{
             const notificationOpen =await firebase.notifications().getInitialNotification();
             if(notificationOpen !==null &&  notificationOpen !==undefined){
-                SplashScreen.hide()
                 this.setState({isNotification:true});
-                await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-              }else{
-                SplashScreen.hide()
-                if(candidateJob){
-                  await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-                }
-            }
+              }
+              else{
+                Permissions.checkMultiple(['location']).then(response => {
+                  if(response.storage != 'authorized'){
+                    this.askStoragePermission()
+                  }
+                })
+              }
           }
         })
       }
@@ -221,15 +226,10 @@ class HomePage extends Component {
       this.props.navigation.setParams({ applied: false});
       const candidateJob = await getItem("mongo_id");
        this.handleSetProfile(candidateJob.candidate.data);
-        await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
     }
     if (fromBitlyLink && !bitlyLink ) {
       bitlyLink =true
       this.props.navigation.setParams({ fromBitlyLink: false});
-        const candidateJob = await getItem("mongo_id");
-        if(candidateJob){
-          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-        }
     }
     if(joblist.isSuccess !== props.joblist.isSuccess){
       if(joblist.isSuccess && this.state.sharedJobLink){
@@ -248,8 +248,8 @@ class HomePage extends Component {
         });
       }
     }
-    if(appliedJob.success !== props.appliedJob.success){
-      if(isNotification){
+    if(appliedJob.success && isNotification){
+      this.setState({isNotification:false})
         const {
           linkOpening,
           textColor,
@@ -260,6 +260,10 @@ class HomePage extends Component {
           appliedJob,
           profileDetails
         });
+    }
+    if(appliedJob.isError !== props.appliedJob.isError){
+      if(appliedJob.isError){
+      AlertMessage("Something went wrong", "toast")
       }
     }
     if(interviewSignUp.isError !== props.interviewSignUp.isError){
@@ -311,8 +315,6 @@ _linkCheck = async () => {
     this.setState({ textColor: false,backgroundColor:false });
   };
   render() {
-    console.log(this.props.interviewSignUp,'this.props.interviewSignUp');
-    
     const {appliedJob, joblist, interviewSignUp} = this.props;
     let { linkOpening, profile_pic, userName, textColor, index ,backgroundColor} = this.state;
   
@@ -365,7 +367,7 @@ _linkCheck = async () => {
     return (
       <View style={{ flex: 1 }}>
       
-        {(appliedJob.isLoading || joblist.isLoading /* || interviewSignUp.isLoading */ ) && <View
+        {(appliedJob.isLoading || joblist.isLoading || interviewSignUp.isLoading ) && <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
           <ActivityIndicator
