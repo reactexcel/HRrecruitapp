@@ -3,7 +3,6 @@ import {
   BackHandler,
   Alert,
   View,
-  AsyncStorage,
   Platform,
   PermissionsAndroid,
   StatusBar
@@ -22,6 +21,7 @@ import {
   Button,
   Header
 } from "native-base";
+import AsyncStorage from "@react-native-community/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { connect } from "react-redux";
 import Logo from "../components/Logo";
@@ -391,6 +391,8 @@ class InterviewLogin extends Component {
   // }
 
   render() {
+    console.log(this.props.candidateInfo,'candidateInfocandidateInfo');
+    
     const {
       interviewSignUp: { registering, success }
     } = this.props;

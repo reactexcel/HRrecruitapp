@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Image, Alert, AsyncStorage, StyleSheet } from "react-native";
+import { Image, Alert, StyleSheet } from "react-native";
 import {
   Container,
   Content,
@@ -10,6 +10,7 @@ import {
   Spinner
 } from "native-base";
 import { connect } from "react-redux";
+import AsyncStorage from "@react-native-community/async-storage"
 import { getQuestions } from "../actions";
 import styles from "../styles";
 import CustomButton from "../components/CustomButton";

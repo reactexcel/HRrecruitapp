@@ -3,7 +3,6 @@ import {
   BackHandler,
   Alert,
   View,
-  AsyncStorage,
   Platform,
   PermissionsAndroid,
   StatusBar
@@ -38,6 +37,7 @@ import {
   candidateValidationapi
 } from "../actions";
 import { notify } from "../helper/notify";
+import AsyncStorage from "@react-native-community/async-storage";
 import { SUCCESS_STATUS } from "../helper/constant";
 import { GOOGLE_ANALYTICS_TRACKER } from "../config/dev";
 import { getItem } from "../helper/storage";

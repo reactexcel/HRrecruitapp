@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import {
   Alert,
   BackHandler,
-  AsyncStorage,
   Platform,
   Image,
   ScrollView,
@@ -13,6 +12,7 @@ import {
   ActivityIndicator,
   // BackHandler
 } from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 import {
   Container,
   Content,
