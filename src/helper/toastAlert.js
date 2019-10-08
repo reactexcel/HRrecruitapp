@@ -1,6 +1,6 @@
 import {ToastAndroid, Alert} from "react-native";
 
-export default AlertMessage = (message, type) => { 
+export default AlertMessage = (message, type,onPress) => { 
     if(type == 'toast') {
        return  ToastAndroid.showWithGravityAndOffset(
           message,
@@ -10,9 +10,14 @@ export default AlertMessage = (message, type) => {
           50,
         );
       } else{
+        // if(onPress)
        return  Alert.alert(
           'Alert',
           message,
+          [{
+            text: "Ok",
+            onPress:  () => {onPress ? onPress() : null}
+          }]
         );
      }
 }

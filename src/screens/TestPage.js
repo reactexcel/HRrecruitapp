@@ -117,7 +117,7 @@ class TestPage extends Component {
     const counter =
       navigation.state.params.time !== undefined
         ? navigation.state.params.time
-        : navigation.state.params.data.timeForExam;
+        : navigation.state.params.data.timeForExam/1000;
     const round = navigation.state.params.data.round;
     return {
       headerLeft: <View />,
@@ -139,11 +139,11 @@ class TestPage extends Component {
                   }
                 >
                   Remaining Time
-                </Text>
-              {/* <Text style={_styles.timerStyle}> */}                             
+                </Text>                          
                   <CountDown
-                    until={counter/1000}
+                    until={counter}
                     onChange	={counter => {
+                      console.log(counter,'countercountercountercounter')
                       setItem(
                         "remaining_time",
                         JSON.stringify({ remaining_time: counter })
@@ -169,7 +169,6 @@ class TestPage extends Component {
                     separatorStyle={_styles.timerStyle}
                     digitTxtStyle={_styles.timerStyle}
                   />
-                {/* </Text> */}
               </React.Fragment>
             ) : null
           ) : null}
@@ -308,6 +307,7 @@ class TestPage extends Component {
 
 
   render() {
+    console.log(this.props.navigation.state,'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
     const name = this.props.navigation.getParam("name");
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;

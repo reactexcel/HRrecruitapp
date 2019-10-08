@@ -146,10 +146,6 @@ class HomePage extends Component {
   }
 
   componentDidMount = async () => {
-   const solution = await getItem("solution");
-   const  remaining = await getItem("remaining_time");
-   console.log(solution, remaining,'remainingremainingremaining');
-   
     AppState.addEventListener("change", this._handleAppStateChange);
     const candidateJob = await getItem("mongo_id");    
     if(candidateJob && Object.keys(candidateJob).length){

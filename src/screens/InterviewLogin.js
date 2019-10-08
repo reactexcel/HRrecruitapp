@@ -44,6 +44,7 @@ import { SUCCESS_STATUS } from "../helper/constant";
 import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
 import LinearGradient from "react-native-linear-gradient";
+import AlertMessage from "../helper/toastAlert";
 
 class InterviewLogin extends Component {
   constructor() {
@@ -53,7 +54,8 @@ class InterviewLogin extends Component {
     spinner:false,
     alertMessage:false,
     activity:true,
-    isError:false
+    isError:false,
+    isConnected:false,
     };
   }
   static navigationOptions = {
@@ -64,9 +66,9 @@ class InterviewLogin extends Component {
     headerTintColor: COLOR.PINK
   };
 
-   componentDidUpdate(nextProps) {
+   async componentDidUpdate(nextProps) {
     const { error, success, msg, message } = this.props.interviewSignUp;
-    const {isError}=this.state;
+    const {isError, email}=this.state;
     if(this.props.interviewSignUp.jobNotAssign !== nextProps.interviewSignUp.jobNotAssign){
     if (error !== undefined && error === 1 && message !== undefined  ) {
       if(this.state.activity){
@@ -91,142 +93,136 @@ class InterviewLogin extends Component {
       }
       notify("Something went wrong");
     }
-    // if(this.props.interviewSignUp.isError !== nextProps.interviewSignUp.isError){
-    //   if (msg !== undefined  ) {
-    //     if(this.state.activity){
-    //       this.setState({spinner:false,activity:false})
-    //     }
-    //     alert(msg);
-  
-    //   }
-    // }
+
+    const {candidateValidation, appliedJob, interviewSignUp} = this.props;
+    if(candidateValidation.isSuccess !== nextProps.candidateValidation.isSuccess){
+      if(candidateValidation.isSuccess){
+        if(candidateValidation.data ){
+          await this.props.getCandidateJobDetails(candidateValidation.data._id)
+        }else if(candidateValidation.data == null || candidateValidation.data == undefined){
+          this.setState({email:""})
+          AlertMessage("User not found", "toast")
+          this.props.navigation.navigate("JobList", {
+              title: "Job Openings"
+          });
+        }
+      }
+    }
+
+    if(candidateValidation.isError !== nextProps.candidateValidation.isError){
+      if(candidateValidation.isError){
+        AlertMessage("Something went wrong.", "toast")
+      }
+    }
+
+    if(appliedJob.success !== nextProps.appliedJob.success){
+      if(appliedJob.success){
+        if(appliedJob.status == null ){
+          AlertMessage("You have not been assigned any Job Round,Please contact to HR","alert", this.handleBackToHome)
+        }
+        else if(appliedJob.status == 'Reject'){
+          AlertMessage("Sorry! You have been rejected, Please check your job status.","alert", this.handleBackToHome)
+         }
+         else if(appliedJob.status=='Selected'){
+          AlertMessage("Congratulations! You have been Selected, Please ask hr to further process.","alert", this.handleBackToHome)
+         }
+         else{
+          await this.props.signUp(email);
+         }
+      }
+    }
+
+    if(interviewSignUp.isSuccess !== nextProps.interviewSignUp.isSuccess){
+      if(interviewSignUp.isSuccess){
+        const {fb_id, status} = interviewSignUp
+        if(status ==1 ){
+          this.props.navigation.navigate("Instructions", {
+            fb_id: fb_id,
+            profile_pic: `https://pikmail.herokuapp.com/${email}?size=60`,
+            name: "Test",
+            email
+          });
+        }
+      }
+    }
+
+    if(interviewSignUp.isError !== nextProps.interviewSignUp.isError){
+      const { error, success, msg, message } = interviewSignUp;
+      if (error ==1) {
+        AlertMessage((msg || message), 'alert', this.handleBackToHome)
+      }
+    }
   }
+
+  handleBackToHome=()=>{
+    this.props.navigation.navigate("HomePage")
+  }
+
   interviewLoginClearData=()=>{
     this.props.interviewLoginClearData("cleared data")
     this.props.navigation.navigate("HomePage")
   }
   async componentDidMount() {
     if(Platform.OS !=='ios'){
-    StatusBar.setBackgroundColor(COLOR.LGONE);}
-    const ans = await getItem("solution");
-    const email = await getItem("email");
-    const fb_id = await getItem("fb_id");
-    if (ans !== undefined && email !== undefined && fb_id !== undefined) {
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if (isConnected) {
-          await this.props.getCandidateDetails(fb_id.fb_id);
-          const { data, message, error, status } = this.props.interviewSignUp;
-          if (status == SUCCESS_STATUS) {
-            this.setState({ linkOpening: false });
-            this.props.navigation.navigate("Instructions", {
-              fb_id: fb_id.fb_id,
-              profile_pic: `https://pikmail.herokuapp.com/${
-                data.sender_mail
-              }?size=60`,
-              name: data.from,
-              email: data.sender_mail
-            });
-          } else if (error == 1) {
-            this.setState({ linkOpening: false });
-          }
-        } else {
-          Alert.alert(
-            "Info",
-            `Please connect to internet and then Re-Open the App`,
-            [
-              {
-                text: "Ok",
-                onPress:
-                  Platform.OS === "ios" || email.email === "test_123@gmail.com"
-                    ? () => {}
-                    : () => BackHandler.exitApp()
-              }
-            ],
-            { cancelable: false }
-          );
-        }
-      });
-    } else {
-      branch.subscribe(async ({ errors, params }) => {
-        if (errors) {
-          alert("Error from Branch: " + errors);
-          return;
-        }
-        if (params.$deeplink_path !== undefined) {
-          let fb_id = params.$deeplink_path;
-          await this.props.getCandidateDetails(fb_id);
-          const { data, message, error, status } = this.props.interviewSignUp;
-          if (status == SUCCESS_STATUS) {
-            this.setState({ linkOpening: false });
-            this.props.navigation.navigate("Instructions", {
-              fb_id: fb_id,
-              profile_pic: `https://pikmail.herokuapp.com/${
-                data.sender_mail
-              }?size=60`,
-              name: data.from,
-              email: data.sender_mail
-            });
-          } else if (error == 1) {
-            this.setState({ linkOpening: false });
-          }
-        } else {
-          this.setState({ linkOpening: false });
-        }
-      });
-    }
-    NetInfo.isConnected.addEventListener(
-      "connectionChange",
-      this.handleNetworks
-    );
+        StatusBar.setBackgroundColor(COLOR.LGONE);}
+        const ans = await getItem("solution");
+        const email = await getItem("email");
+        const fb_id = await getItem("fb_id");
+
+        NetInfo.fetch().done(async state => {
+          this.setState({isConnected:state.isConnected})
+        });
+        NetInfo.isConnected.addEventListener("connectionChange",this.handleNetworks);
 
     //Alert for round information
 
-    if (fb_id !== undefined) {
-      await this.props.getCandidateRoundDetails(fb_id.fb_id);
-    }
-    const round = await getItem("round");
+        if (fb_id !== undefined) {
+          await this.props.getCandidateRoundDetails(fb_id.fb_id);
+        }
+        const round = await getItem("round");
 
-    if (round !== undefined) {
-      const email = await getItem("email");
-      const {
-        currentRound,
-        appearedInFirstRound,
-        appearedInSecondRound
-      } = this.props.candidateInfo.data;
-      if (appearedInFirstRound) {
-        AsyncStorage.removeItem("solution");
-        AsyncStorage.removeItem("remaining_time");
-      }
-      const roundType =
-        currentRound === "First Round" ? "Objective" : "Subjective";
-      if (currentRound === round.round) {
-        Alert.alert(
-          "Info",
-          `You have submitted your ${roundType} paper. Please contact HR to proceed further.`,
-          [
-            {
-              text: "Ok",
-              onPress:
-                Platform.OS === "ios" || email.email === "test_123@gmail.com"
-                  ? () => {}
-
-                  : () => this.props.navigation.goBack()
-            }
-          ],
-          { cancelable: false }
-        );
-      } else if (currentRound !== round.round) {
-        Alert.alert("Info", `You have been moved to ${roundType} round.`, [
-          {
-            text: "Ok",
-            onPress: () => {}
+        if (round !== undefined) {
+          const email = await getItem("email");
+          const {
+            currentRound,
+            appearedInFirstRound,
+            appearedInSecondRound
+          } = this.props.candidateInfo.data;
+          if (appearedInFirstRound) {
+            AsyncStorage.removeItem("solution");
+            AsyncStorage.removeItem("remaining_time");
           }
-        ]);
-      }
-    }
+          const roundType =
+            currentRound === "First Round" ? "Objective" : "Subjective";
+          if (currentRound === round.round) {
+            Alert.alert(
+              "Info",
+              `You have submitted your ${roundType} paper. Please contact HR to proceed further.`,
+              [
+                {
+                  text: "Ok",
+                  onPress:
+                    Platform.OS === "ios" || email.email === "test_123@gmail.com"
+                      ? () => {}
+
+                      : () => this.props.navigation.goBack()
+                }
+              ],
+              { cancelable: false }
+            );
+          } else if (currentRound !== round.round) {
+            Alert.alert("Info", `You have been moved to ${roundType} round.`, [
+                   {
+                text: "Ok",
+                onPress: () => {}
+              }
+            ]);
+          }
+        }
   }
 
   handleNetworks = async isconnect => {
+    this.setState({isConnected:isconnect})
     await this.props.connectionState(isconnect);
   };
 
@@ -238,135 +234,14 @@ class InterviewLogin extends Component {
   }
 
   handleSubmit = async () => {
-    const errors = this.validate(this.state.email);
-    if(Object.keys(errors).length === 0){
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if(isConnected){
-    this.setState({spinner:true})
-   await this.props.candidateValidationapi(this.state.email)}})}
-    if(this.props.candidateValidation.data !==undefined && this.props.candidateValidation.data !==null && this.state.email !=="test_123@gmail.com"){
-     await this.props.getCandidateJobDetails(this.props.candidateValidation.data._id)
-     if(this.props.appliedJob.status !==undefined && this.props.appliedJob.status !==null){
-     if(this.props.appliedJob.status=='Reject' || this.props.appliedJob.status=='Selected'){
-       Alert.alert(
-        "Thank You",
-        "You are not allowed to take online test,Please check your job status!",
-        [
-          {
-            text: "OK",
-            onPress: () =>
-            this.props.navigation.navigate("HomePage")
-          }
-        ]
-      );
-     }
-    else if (Object.keys(errors).length === 0) {
-      this.setState({spinner:false})
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if (isConnected) {
-          // GOOGLE_ANALYTICS_TRACKER.trackEvent(
-          //   "INTERVIEWLOGIN",
-          //   this.state.email
-          // );
-          await this.props.signUp(this.state.email);
-          const {
-            interviewSignUp: { status, fb_id }
-          } = this.props;
-          if (status === 0) {
-            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            //   this.state.email,
-            //   status.toString()
-            // );
-            this.props.navigation.navigate("JobList", {
-              title: "Job Openings"
-            });
-            
-            this.setState({ email: "",spinner:false });
-          } else if (status === SUCCESS_STATUS) {
-            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            //   this.state.email,
-            //   status.toString()
-            // );
-            // if (this.state.email === "test_123@gmail.com") {
-              this.props.navigation.navigate("Instructions", {
-                fb_id: fb_id,
-                profile_pic: `https://pikmail.herokuapp.com/${
-                  this.state.email
-                }?size=60`,
-                name: "Test",
-                email: this.state.email
-              });
-              this.setState({ email: "" ,spinner:false});
-              // return;
-            // }
-            // this.props.navigation.navigate("OTPpage");
-            this.setState({ email: "",spinner:false });
-          }
-        } else {
-          alert("Please connect to internet");
-        }
-      });
-    }
-     }else{
-      Alert.alert(
-        "Thank You",
-        "You have not been assigned any Job Round,Please contact to HR",
-        [
-          {
-            text: "OK",
-            onPress: () =>
-            this.interviewLoginClearData()
-          }
-        ]
-      );
-     }
-    }
-   else if (Object.keys(errors).length === 0) {
-    this.setState({spinner:false})
-      NetInfo.isConnected.fetch().done(async isConnected => {
-        if (isConnected) {
-          // GOOGLE_ANALYTICS_TRACKER.trackEvent(
-          //   "INTERVIEWLOGIN",
-          //   this.state.email
-          // );
-          await this.props.signUp(this.state.email);
-          const {
-            interviewSignUp: { status, fb_id }
-          } = this.props;
-          if (status === 0) {
-            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            //   this.state.email,
-            //   status.toString()
-            // );
-            this.props.navigation.navigate("JobList", {
-              title: "Job Openings"
-            });
-            
-            this.setState({ email: "",spinner:false });
-          } else if (status === SUCCESS_STATUS) {
-            // GOOGLE_ANALYTICS_TRACKER.trackEvent(
-            //   this.state.email,
-            //   status.toString()
-            // );
-            // if (this.state.email === "test_123@gmail.com") {
-              this.props.navigation.navigate("Instructions", {
-                fb_id: fb_id,
-                profile_pic: `https://pikmail.herokuapp.com/${
-                  this.state.email
-                }?size=60`,
-                name: "Test",
-                email: this.state.email
-              });
-              this.setState({ email: "",spinner:false });
-              // return;
-            // }
-            // this.props.navigation.navigate("OTPpage");
-            // this.setState({ email: "",spinner:false });
-          }
-        } else {
-          alert("Please connect to internet");
-        }
-      });
+    const {isConnected,email} = this.state;
+    const errors = this.validate(email);
+    if(isConnected){
+      if(Object.keys(errors).length == 0){
+        await this.props.candidateValidationapi(email)
+      }
+    }else{
+      AlertMessage("Please! connect to the internet.", "alert")
     }
   };
 
@@ -384,16 +259,12 @@ class InterviewLogin extends Component {
     }
     return errors;
   }
-  // componentDidUpdate(){
-  //   if(this.props.interviewSignUp.    ){
-
-  //   }
-  // }
 
   render() {
-    console.log(this.props.candidateInfo,'candidateInfocandidateInfo');
+    console.log(this.props.candidateInfo,this.props.interviewSignUp,'candidateValidationcandidateValidation');
     
-    const {
+    const {candidateValidation,
+      appliedJob,
       interviewSignUp: { registering, success }
     } = this.props;
     const{spinner} =this.state
@@ -428,7 +299,7 @@ class InterviewLogin extends Component {
           </Item>
         </View>
         <View style={_styles.btnView}>
-          {/* registering || */ spinner ? (
+          {(candidateValidation.isLoading || appliedJob.isLoading) ? (
             <Spinner color={COLOR.MUSTARD} />
           ) : (
             <Button

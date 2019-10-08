@@ -410,8 +410,8 @@ export const candidateValidationapi = (data,fcm_token) => async dispatch => {
   dispatch({ type: CANDIDATE_VALIDATION_REQUEST });
   try {
     const res = await _axios().post("exam/candidateValidate", {email:data,device_id:fcm_token});    
-    // console.log(res,'fffffffffffffffffffffff');
-    dispatch({ type: CANDIDATE_VALIDATION_SUCCESS, payload: res });
+    console.log(res,'fffffffffffffffffffffff');
+    dispatch({ type: CANDIDATE_VALIDATION_SUCCESS, payload: res.data });
   }
   catch (err) {
     console.log(err,'err');
