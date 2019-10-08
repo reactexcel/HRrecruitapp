@@ -17,7 +17,6 @@ import {
   Form
 } from "native-base";
 import Permissions from 'react-native-permissions';
-// import FCM,{FCMEvent} from 'react-native-fcm'
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { reduxForm, Field } from "redux-form";
 import { isEmail, isMobilePhone, isLowercase } from "validator";
@@ -28,18 +27,22 @@ import _styles from "../styles/screens/AddCandidate";
 import { COLOR } from "../styles/color";
 import { notify } from "../helper/notify";
 import { connect } from "react-redux";
-import { addCandidate,candidateValidationapi,candidateUploadImage,candidateUploadProfile,getCandidateUpdateProfileDetails,getCandidateJobDetails} from "../actions";
-import { getJobLists } from "../actions";
+import { addCandidate,
+  candidateValidationapi,
+  candidateUploadImage,
+  candidateUploadProfile,
+  getCandidateUpdateProfileDetails,
+  getCandidateJobDetails
+} from "../actions";
 import  DocumentPicker from "react-native-document-picker";
 import RNFetchBlob from "rn-fetch-blob";
 // var RNFS = require('react-native-fs');
 import { setItem, getItem } from "../helper/storage";
-// import SplashScreen from "react-native-splash-screen";
 import firebase from 'react-native-firebase';
-
 import LinearGradient from "react-native-linear-gradient"; 
-import {ProfileOnChange,UploadProfile} from '../actions/actions'
-import {load as loadAccount} from '../reducers/initialStateReducer' 
+import {UploadProfile} from '../actions/actions'
+import SplashScreen from "react-native-splash-screen";
+import toastMessage from "../helper/toastAlert";
 
 
 class AddCandidate extends Component {
@@ -84,13 +87,8 @@ class AddCandidate extends Component {
       adding:false,
       haveData:false,
       resumeUpdate:'',
-      isExisting:false,
-      valiSpinner:false,
       forvali:false,
-      isExistUser:true,
       emailVefication:true
-
-  
     };
   }
 
@@ -165,24 +163,24 @@ async  componentDidMount(){
           candidateJob,
           ...profileDetails
         } = this.state;
-                this.setState({updating:false})
-                Alert.alert(
-                  "Thank You",
-                  "Your profile has updated successfully!",
-                  [
-                    {
-                      text: "OK",
-                      onPress: () =>
-                      this.props.navigation.navigate("Profile", {
-                        appliedJob,
-                        profileDetails,
-                        sender_mail:this.state.sender_mail,
-                        mongo_id:this.state.mongo_id,
-                        profile_picture:this.state.profile_picture
-                      })
-                    }
-                  ]
-                );
+        this.setState({updating:false})
+        Alert.alert(
+          "Thank You",
+          "Your profile has updated successfully!",
+          [
+            {
+              text: "OK",
+              onPress: () =>
+              this.props.navigation.navigate("Profile", {
+                appliedJob,
+                profileDetails,
+                sender_mail:this.state.sender_mail,
+                mongo_id:this.state.mongo_id,
+                profile_picture:this.state.profile_picture
+              })
+            }
+          ]
+        );
       }
 }
 exitingCandidate = async () => {
@@ -217,21 +215,22 @@ exitingCandidate = async () => {
           mongo_id:this.state.mongo_id,
           profile_picture:this.state.profile_picture
         });
-        this.setState({valiSpinner:false})   
       });     
     }
 }
-  componentDidUpdate() {
-    const { candidate} = this.props;
-    if(this.props.candidateValidation.data !== undefined && this.props.candidateValidation.data !==null){
-      if(this.state.isExisting){
-        this.setdata()
-        this.setState({isExisting:false})
-      }}else if(this.props.candidateValidation.data === null){
-        if(this.state.isExisting){
-        this.setState({forvali:true,isExisting:false,valiSpinner:false,isExistUser:false,bottomBotton:'JOIN NOW',emailVefication:false})
-      }      
+  componentDidUpdate(props) {
+    const { candidate, candidateValidation} = this.props;
+    if(candidateValidation.isSuccess !== props.candidateValidation.isSuccess){
+      if(candidateValidation.isSuccess){
+        if(candidateValidation.data){
+          this.setdata()
         }
+        else{
+          this.setState({forvali:true,bottomBotton:'JOIN NOW',emailVefication:false})
+        }
+      }
+    }
+
     if (candidate.data !== undefined && this.props.navigation.state.params.isEditing ==false && this.props.navigation.state.params.addCandidate ==true) {
       if (candidate.data.candidate_status === true ) {
         setItem("mongo_id", JSON.stringify({ candidate }));
@@ -281,8 +280,6 @@ exitingCandidate = async () => {
     }
   }
   renderField(props) {
-    console.log(props,'propsprops');
-    
     const { input, ...inputProps } = props;
     const {
       meta: { touched, error, active }
@@ -314,9 +311,11 @@ exitingCandidate = async () => {
       </Fragment>
     );
   }
+
   SelectJOb=(i,title,id)=>{
       this.setState({SelectJOb:title,isJobEmpty:true,jobId:id})
   }
+
   renderJobField(props) {
     const { input, ...inputProps } = props;
     const {
@@ -358,6 +357,7 @@ exitingCandidate = async () => {
       </Fragment>
     );
   }
+
   renderPicker({
     input: { onChange, value, ...inputProps },
     children,
@@ -388,11 +388,9 @@ exitingCandidate = async () => {
       </Fragment>
     );
   }
+
   renderButtonField(props) {
     const { onPress, resumeError, input, onClosePress } = props;
-    if(props.forEditing ==true){
-
-    }
     const resumeContainer = input.map((data, i) => {
       return (
           <View key={i} style={_styles.uploadSection}>
@@ -529,126 +527,80 @@ exitingCandidate = async () => {
 
   askStoragePermission = async () =>{
     await Permissions.request('storage').then(response => {
-      console.log(response,'per storage')
       return true;
     })
   }
    onResumeAdd = async () => {
      //response is an object mapping type to permission
      if(Platform.OS !== "ios"){
-    await Permissions.checkMultiple(['location']).then(response => {
-      if(response.storage != 'authorized'){
-        this.askStoragePermission()
-      } else {
-        return true;
-      }
-    })}
-    this.props.change({ resume_file: [] });
-    let resumeData = this.state.resumeData;
-    this.setState({ converting: true });
-    if (Platform.OS !== "ios") {
-      //Android Only
-    try {
-      const resume = await DocumentPicker.pickMultiple({
-      type: [DocumentPicker.types.images],
-      });
-        if (resume) {
-          console.log(resume,'>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-          const res =resume[0]
-          let check =
-            this.state.resumeData.length >= 1
-              ? this.state.currentType == res.type
-              : true;
-          if (check) {
-            let type = res.type.split("/");
-            RNFetchBlob.fs.readFile(res.uri, "base64").then(
-              data => {
-                resumeData.push({
-                  fileName: res.name,
-                  dataBase64: data,
-                  filetype: type[1]
-                });
-                let base64 = require('base-64');
-                let decodedData = base64.decode(data);
-                let bytes = decodedData.length;
-                let fileSizeInMB=(bytes / 1000000)
-                if(fileSizeInMB > 2 ){
-                  alert("File size can't be larger than 2MB");
-                }
-                this.setState({
-                  converting: false,
-                  resumeData,
-                  currentType: res.type
-                });
-              },
-              error => {
-                // console.log(error,'asdas')
-                this.setState({ converting: false });
-              }
-            );
+        await Permissions.checkMultiple(['location']).then(response => {
+          if(response.storage != 'authorized'){
+            this.askStoragePermission()
           } else {
-            this.setState({ converting: false, resumeError: null });
-            alert("Please select same format for files");
+            return true;
           }
-        } else {
-          this.setState({ converting: false, resumeError: null });
-        }
-
-  } catch (err) {
-      if (DocumentPicker.isCancel(err)) {
-          console.log("Canceled")
-      // User cancelled the picker, exit any dialogs or menus and move on
-      }else {
-        throw err;
+        })
       }
-  }
-    } else {
-      // DocumentPicker.show(
-      //   {
-      //     filetype: [DocumentPickerUtil.allFiles()]
-      //   },
-      //   (error, res) => {
-      //     // SplashScreen.hide();
-      //     this.scroll.scrollToEnd()
-      //     this.setState({whenAddedResume:true})
-      //     if (res) {
-      //       let check =
-      //         this.state.resumeData.length >= 1
-      //           ? this.state.currentType == res.type
-      //           : true;
-      //         let type = res.type
-      //         RNFS.readFile(res.uri, "base64").then(
-      //           data => {
-      //             console.log(data, 'base64');
-      //             resumeData.push({
-      //               fileName: res.fileName,
-      //               dataBase64: data,
-      //               filetype: type[1]
-      //             });
-      //             let base64 = require('base-64');
-      //             let decodedData = base64.decode(data);
-      //             let bytes = decodedData.length;
-      //             let fileSizeInMB=(bytes / 1000000)
-      //             if(fileSizeInMB > 2 ){
-      //               alert("File size can't be larger than 2MB");
-      //             }
-      //             this.setState({
-      //               converting: false,
-      //               resumeData,
-      //               currentType: res.type
-      //             });
-      //           },
-      //           error => {
-      //             // console.log(error,'asdas')
-      //             this.setState({ converting: false });
-      //           }
-      //         );
-      //       } else {
-      //         this.setState({ converting: false, resumeError: null });
-      //         alert("Please select same format for files");
-      //       }
-      //   }
-      // );
+      this.props.change({ resume_file: [] });
+      let resumeData = this.state.resumeData;
+      this.setState({ converting: true });
+      if (Platform.OS !== "ios") {
+        //Android Only
+          try {
+            const resume = await DocumentPicker.pickMultiple({
+            type: [DocumentPicker.types.images],
+            });
+              if (resume) {
+                SplashScreen.hide()
+                const res =resume[0]
+                let check =
+                  this.state.resumeData.length >= 1
+                    ? this.state.currentType == res.type
+                    : true;
+                if (check) {
+                  let type = res.type.split("/");
+                  RNFetchBlob.fs.readFile(res.uri, "base64").then(
+                    data => {
+                      resumeData.push({
+                        fileName: res.name,
+                        dataBase64: data,
+                        filetype: type[1]
+                      });
+                      let base64 = require('base-64');
+                      let decodedData = base64.decode(data);
+                      let bytes = decodedData.length;
+                      let fileSizeInMB=(bytes / 1000000)
+                      if(fileSizeInMB > 2 ){
+                        alert("File size can't be larger than 2MB");
+                      }
+                      this.setState({
+                        converting: false,
+                        resumeData,
+                        currentType: res.type
+                      });
+                    }, (error) => {
+                      this.setState({ converting: false });
+                    }
+                  );
+                }else {
+                  this.setState({ converting: false, resumeError: null });
+                  alert("Please select same format for files");
+                }
+              } else {
+                this.setState({ converting: false, resumeError: null });
+              }
+
+        } catch (err) {
+            if (DocumentPicker.isCancel(err)) {
+              toastMessage("cancelled","toast")
+              this.setState({ converting: false });
+            // User cancelled the picker, exit any dialogs or menus and move on
+            }else {
+              throw err;
+            }
+        }
+    }else {
+        //write here code for ios
     }
   };
 
@@ -676,10 +628,11 @@ exitingCandidate = async () => {
    await setItem("mongo_id", JSON.stringify({ candidate }))
     this.exitingCandidate();
   }
+
   emailValidation=(values)=>{
     this.props.candidateValidationapi(values.sender_mail,this.state.fcm_token_Id)
-    this.setState({isExisting:true,valiSpinner:true})
   }
+
   toAddCandidate=(values)=>{
       if(this.state.bottomBotton=='JOIN'){
         this.emailValidation(values)
@@ -693,8 +646,8 @@ exitingCandidate = async () => {
   }
   render() 
   {         
-    const { handleSubmit } = this.props;
-    const { converting, resumeData, resumeError ,updating,adding,valiSpinner,forvali} = this.state;
+    const { handleSubmit, candidateValidation } = this.props;
+    const { converting, resumeData, resumeError ,updating,adding,forvali} = this.state;
     return (
       <Container style={styles.container}>
         <LinearGradient style={styles.linearGradientView} colors={[COLOR.LGONE, COLOR.LGTWO]} >
@@ -783,7 +736,7 @@ exitingCandidate = async () => {
           </Grid>
           </Content>
           </ScrollView>
-        {adding || converting || updating ||valiSpinner ? (
+        {(adding || converting || updating ||candidateValidation.isLoading) ? (
           <Spinner color={COLOR.MUSTARD} />
         ) : (
           <CustomButton
@@ -826,13 +779,12 @@ validate = values => {
 };
 
 const mapStateToProps = (state ) =>{
-  // console.log(state,'77');
- return{
-  candidateValidation:state.candidateValidation,
- candidate:state.candidate,
- appliedJob:state.appliedJob,
- candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
-};
+  return{
+    candidateValidation:state.candidateValidation,
+    candidate:state.candidate,
+    appliedJob:state.appliedJob,
+    candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
+  };
 }
 export default reduxForm({
   form: "AddCandidate",

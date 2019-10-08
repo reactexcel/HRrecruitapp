@@ -14,6 +14,7 @@ const ProfileView = props => {
     mobile_no,
     addToProfilePage,
   } = props.profileDetails;
+  const {loader} = props
   let url="https://cdn4.iconfinder.com/data/icons/men-avatars-icons-set-2/256/4-512.png";
   let spinner;
   if(props.profile_picture ==undefined && props.imageSource ==null){
@@ -31,9 +32,6 @@ const ProfileView = props => {
   else{
     spinner =false
   }
-  // if(props.uploadStatus !==undefined && props.uploaded ){
-  //   ToastAndroid.show('Image uploaded',ToastAndroid.SHORT)
-  // }
   return (
     <View style={styles.profileView}>
       <Thumbnail
@@ -51,7 +49,7 @@ const ProfileView = props => {
       </TouchableOpacity>
       <Text style={styles.nameText}>{userName}</Text>
       <Text style={styles.number}>{mobile_no}</Text>
-    {spinner &&  <View style={{zIndex:1,position:'absolute',top:'12%'}}>
+    {(spinner || loader) &&  <View style={{zIndex:1,position:'absolute',top:'12%'}}>
       <Spinner color={COLOR.MUSTARD} />
   </View> }
  <Animated.View style={[{opacity:props.fadeAnim} , {zIndex:1,position:'absolute',top:'30%',left:'40%',width:130,height:25}]}>

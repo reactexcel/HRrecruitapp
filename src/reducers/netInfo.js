@@ -3,7 +3,7 @@ import {
   } from "../actions/types";
   
   const initialState = {
-    isConnected: false
+    isConnected: true
   };
   
   export default function(state = initialState, action) {

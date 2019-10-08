@@ -9,11 +9,10 @@ import {
     isLoading:false,
     isSuccess:false,
     isError:false,
-    data:[]
+    data:null,
   };
   
   export default function(state = initialState, action) {
-    // console.log(state,action,'IIIIIIIIIIIIIIIi');
     switch (action.type) {
       case CANDIDATE_VALIDATION_REQUEST:
         return { adding:false, isLoading:true, isSuccess:false , isError:false,data:null};

@@ -13,6 +13,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { COLOR } from "../styles/color";
 import ProfileView from "../components/ProfileView";
 import ProfileDescription from "../components/ProfileDescription";
+import NetInfo from "@react-native-community/netinfo";
 import { Icon } from "native-base";
 import Modal from "react-native-modalbox";
 import { Text, StyleSheet } from "react-native";
@@ -21,15 +22,19 @@ import { Form, Item, Input, Label } from "native-base";
 import CustomButton from "../components/CustomButton";
 import styles from "../styles/screens/FullDescription";
 import { connect } from "react-redux";
-import { getJobLists, candidateUploadImage ,getCandidateUpdateProfileDetails} from "../actions";
+import { getJobLists,
+        candidateUploadImage,
+        getCandidateUpdateProfileDetails,
+        connectionState
+      } from "../actions";
 import { ProfileOnChange } from "../actions/actions";
 
 import  DocumentPicker from "react-native-document-picker";
-// import SplashScreen from "react-native-splash-screen";
 import RNFetchBlob from "rn-fetch-blob";
 import { Popup } from 'react-native-map-link';
 import { setItem, getItem } from "../helper/storage";
 import SplashScreen from "react-native-splash-screen";
+let componentRendered = false
 // var RNFS = require('react-native-fs');
 
 class Profile extends Component {
@@ -86,32 +91,67 @@ class Profile extends Component {
     };
   }
   componentDidMount = async () => {
+    NetInfo.isConnected.addEventListener("connectionChange",this.handleNetworks);
     this.props.navigation.setParams({ increaseCount: this.onEditing});
     const profileDetails = this.props.navigation.getParam("profileDetails");
     this.setState({profile_picture:this.props.navigation.state.params.latestImage})
-    await this.props.getJobLists();
-    const { data, error } = this.props.joblist;
+    const { data, error, isSuccess } = this.props.joblist;
+    const {isConnected} = this.props.network
     if (data) {
       this.setState({ joblist: data });
     }
+    if(isConnected && !isSuccess){
+        await this.props.getJobLists();
+      }
   };
+
+  handleNetworks = async isConnected => {
+    this.props.connectionState(isConnected)
+  };
+
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this.handleNetworks
+    );
+  }
 
   jobOpening=()=>{
     this.props.navigation.navigate('JobList',{ title: "Job Openings",isCandidate:true })
   }
 
-  componentDidUpdate(props){
-    const {UploadProfilePic, candidateProfileUpdateDetails} = this.props;
+ async componentDidUpdate(props){
+    const {UploadProfilePic, candidateProfileUpdateDetails, joblist, network} = this.props;
     if(UploadProfilePic.isSuccess !== props.UploadProfilePic.isSuccess){
       const user_mongo_id = this.props.navigation.state.params.mongo_id
       this.props.getCandidateUpdateProfileDetails(user_mongo_id)
       toastAlert("Successfully Uploaded", "toast")
     }
+
     if(UploadProfilePic.isError !== props.UploadProfilePic.isError){
       toastAlert("Something went wrong please try gain!", "toast")
     }
+
     if(candidateProfileUpdateDetails.isSuccess !== props.candidateProfileUpdateDetails.isSuccess){
       setItem("mongo_id", JSON.stringify({ candidate:{ data:candidateProfileUpdateDetails} }));
+    }
+
+    if(joblist.isSuccess !== props.joblist.isSuccess){
+      if(joblist.isSuccess){
+        this.setState({ joblist: joblist.data });
+      }
+    }
+
+    if(network.isConnected !== props.network.isConnected){
+      if(network.isConnected){
+        AlertMessage("Internet connection is back.","toast");
+        const {joblist} = this.props;
+        if(!joblist.isSuccess && !joblist.isLoading){
+          await this.props.getJobLists();
+        }
+      }else{
+          AlertMessage("Internet connection is lost.", "toast")
+        }
     }
   }
 
@@ -155,13 +195,6 @@ class Profile extends Component {
     }
   };
   handleLocate = () => {
-    // let url = "";
-    // if (Platform.OS === "ios") {
-    //   url = `http://maps.apple.com/maps?q=${28.5965789},${77.3287437}`;
-    // } else if (Platform.OS === "android") {
-    //   url = `geo:${28.5965789},${77.3287437}`;
-    // }
-    // Linking.openURL(url);
     this.setState({ isLocation: true })
   };
 
@@ -187,37 +220,41 @@ class Profile extends Component {
   };
 
   onEditing = async () => {
-    const profileDetails = this.props.navigation.getParam("profileDetails");
-    const appliedJob = this.props.navigation.getParam("appliedJob");
-    const candidateJob =await getItem("mongo_id");
-    // console.log(candidateJob);
-    this.state.joblist.forEach((item, i) => {
-      if (item.title == appliedJob.job_profile) {
-        this.props.navigation.navigate("AddCandidate", {
-          currentJob: this.state.joblist,
-          jobDetail: item,
-          profileDetails: profileDetails,
-          appliedJob: appliedJob,
-          candidateDataToUpdate:candidateJob,
-          isEditing: true,
-          mongo_id:this.props.navigation.state.params.mongo_id,
-          updatedData:true,
-          addCandidate:false,
-          isCandidate:false
-        });
+    const {network:{isConnected}, joblist} = this.props;
+    if(joblist.isSuccess){
+      const profileDetails = this.props.navigation.getParam("profileDetails");
+      const appliedJob = this.props.navigation.getParam("appliedJob");
+      const candidateJob =await getItem("mongo_id");
+      for(i=0; i<this.state.joblist.length; i++) {
+        if (this.state.joblist[i].title == appliedJob.job_profile) {
+          this.props.navigation.navigate("AddCandidate", {
+            currentJob: this.state.joblist,
+            jobDetail: this.state.joblist[i],
+            profileDetails: profileDetails,
+            appliedJob: appliedJob,
+            candidateDataToUpdate:candidateJob,
+            isEditing: true,
+            mongo_id:this.props.navigation.state.params.mongo_id,
+            updatedData:true,
+            addCandidate:false,
+            isCandidate:false
+          });
+          break;
+        }
+      };
+    }else {
+      if(!isConnected){
+        toastAlert("Connect to the internet to update your profile.", "toast")
+      }else if(isConnected && joblist.isLoading) {
+        toastAlert("Wait, we are fetchting your details.", "toast")
       }
-    });
+    }
   };
-// componentDidUpdate(){
-//   if(this.props.state.UploadProfilePic.data !==undefined && this.state.uploaded ==false){
-//     this.setState({uploaded:true})
-//   }
-// }
+
   render() {
-    console.log(this.props.candidateProfileUpdateDetails,'profile');
-    
     const profileDetails = this.props.navigation.getParam("profileDetails");
     const appliedJob = this.props.navigation.getParam("appliedJob");
+    const {joblist} = this.props;
     return (
       <ScrollView overScrollMode="never">
         <ProfileView
@@ -229,7 +266,7 @@ class Profile extends Component {
           uploadStatus={this.props.UploadProfilePic.data}
           latestImage={this.state.latestImage}
           updateMessage={this.state.updateMessage}
-          // ImageUpdatedPopUp={()=>this.ImageUpdatedPopUp()}
+          loader={joblist.isLoading}
           fadeAnim={this.state.fadeAnim}
         />
         <LinearGradient
@@ -262,162 +299,18 @@ class Profile extends Component {
           }}
         />
         </LinearGradient>
-        {/* <Modal
-          isDisabled={false}
-          coverScreen={true}
-          backdropPressToClose={true}
-          swipeToClose={false}
-          style={styless.modal}
-          isOpen={this.state.isEditing}
-          position={"center"}
-        >
-          <View
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor:[COLOR.LGONE,COLOR.LGONE]
-            }}
-          >
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: 20,
-                marginBottom: 20
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 15,
-                  color: "white",
-                  fontFamily: "Montserrat-Medium"
-                }}
-              >
-                EDIT YOUR PROFILE
-              </Text>
-            </View>
-            <View style={{ marginRight: 20 }}>
-              <Form>
-                <Item
-                  style={{
-                    borderColor:
-                      this.state.isName == true ? COLOR.MUSTARD : COLOR.LGTWO
-                  }}
-                  floatingLabel
-                >
-                  <Label
-                    style={{
-                      color: COLOR.TURQUOISE,
-                      fontSize: 18,
-                      fontFamily: "Montserrat-Medium"
-                    }}
-                  >
-                    NAME
-                  </Label>
-                  <Input
-                    style={{ color: "white" }}
-                    value={profileDetails.userName}
-                    onFocus={() => this.setState({ isName: true })}
-                    onBlur={() => this.setState({ isName: false })}
-                  />
-                </Item>
-                <View style={{ height: 15, width: "100%" }} />
-                <Item
-                  style={{
-                    borderColor:
-                      this.state.isMobile == true ? COLOR.MUSTARD : COLOR.LGTWO
-                  }}
-                  floatingLabel
-                >
-                  <Label
-                    style={{
-                      color: COLOR.TURQUOISE,
-                      fontSize: 18,
-                      fontFamily: "Montserrat-Medium"
-                    }}
-                  >
-                    MOBILE NUMBER
-                  </Label>
-                  <Input
-                    onFocus={() => this.setState({ isMobile: true })}
-                    style={{ color: "white" }}
-                    value={profileDetails.mobile_no}
-                    onBlur={() => this.setState({ isMobile: false })}
-                  />
-                </Item>
-                <View style={{ height: 15, width: "100%" }} />
-                <Item
-                  style={{
-                    borderColor:
-                      this.state.isJob == true ? COLOR.MUSTARD : COLOR.LGTWO
-                  }}
-                  floatingLabel
-                >
-                  <Label
-                    style={{
-                      color: COLOR.TURQUOISE,
-                      fontSize: 18,
-                      fontFamily: "Montserrat-Medium"
-                    }}
-                  >
-                    JOB TITLE
-                  </Label>
-                  <Input
-                    onFocus={() => this.setState({ isJob: true })}
-                    style={{ color: "white" }}
-                    value={appliedJob.job_profile}
-                    onBlur={() => this.setState({ isJob: false })}
-                  />
-                </Item>
-              </Form>
-            </View>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 35,
-                marginLeft: 20,
-                marginRight: 20
-              }}
-            >
-              <CustomButton
-                onPress={()=>this.setState({isEditing:false})}
-                type="login_to_apply"
-                btnStyle={[
-                  styles.btnStyle,
-                  styles.loginBtnStyle,
-                  { backgroundColor: COLOR.TURQUOISE }
-                ]}
-                btnTextStyle={[styles.btnText, styles.loginTextStyle]}
-                text="Submit"
-              />
-              <CustomButton
-                onPress={() => this.setState({ isEditing: false })}
-                type="login_to_apply"
-                btnStyle={[
-                  styles.btnStyle,
-                  styles.loginBtnStyle,
-                  { backgroundColor: COLOR.TURQUOISE }
-                ]}
-                btnTextStyle={[styles.btnText, styles.loginTextStyle]}
-                text="Cancel"
-              />
-            </View>
-          </View>
-        </Modal> */}
       </ScrollView>
     );
   }
 }
 const mapStateToProps = state => {
-  // console.log(state, "ddddddddddddddd");
   return {
     joblist: state.joblist,
     state:state,
     candidateDataToUpdate: state.UpdateProfile,
     candidateProfileUpdateDetails:state.candidateProfileUpdateDetails,
-    UploadProfilePic:state.UploadProfilePic
+    UploadProfilePic:state.UploadProfilePic,
+    network:state.network,
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -426,7 +319,8 @@ const mapDispatchToProps = dispatch => {
     ProfileOnChange: v => dispatch(ProfileOnChange(v)),
     candidateUploadImage: data => dispatch(candidateUploadImage(data)),
     getCandidateUpdateProfileDetails:(id)=>dispatch(getCandidateUpdateProfileDetails(id)),
-    getCandidateJobDetails :()=>dispatch(getCandidateJobDetails())
+    getCandidateJobDetails :()=>dispatch(getCandidateJobDetails()),
+    connectionState:(status)=>dispatch(connectionState(status)),
   };
 };
 // export default Profile;

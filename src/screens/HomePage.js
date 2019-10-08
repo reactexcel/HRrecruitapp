@@ -37,7 +37,12 @@ import CustomButton from "../components/CustomButton";
 import Logo from "../components/Logo";
 import { pageDetails, candidatePageDetails } from "../helper/json";
 import { setItem, getItem } from "../helper/storage";
-import { getCandidateJobDetails, getCandidateDetails,getCandidateUpdateProfileDetails, getJobLists } from "../actions";
+import { getCandidateJobDetails,
+         getCandidateDetails,
+         getCandidateUpdateProfileDetails,
+        getJobLists ,
+        connectionState
+      } from "../actions";
 import LinearGradient from "react-native-linear-gradient";
 import SplashScreen from "react-native-splash-screen";
 import branch from "react-native-branch";
@@ -62,8 +67,6 @@ class HomePage extends Component {
       userName: null,
       mobile_no: null,
       textColor: false,
-      animation: false,
-      opacity: 0,
       sender_mail:'',
       mongo_id:'',
       profile_picture:'',
@@ -71,14 +74,12 @@ class HomePage extends Component {
       isNotify:false,
       backgroundColor:false,
       deepLink: false,
-      sharing: false,
       fb_id: null,
       params:"",
       isError:false,
       isNotification:false,
       didPreviouslyLaunch:false,
       sharedJobLink:false,
-      isConnected:false
     };
     this.handleViewClick = this.handleViewClick.bind(this);
   }
@@ -105,35 +106,34 @@ class HomePage extends Component {
  }
 
   async handleViewClick(data) {
-    const {isConnected} = this.state;
-    const { appliedJob } = this.props;
+    const { appliedJob, network } = this.props;
     if (data == "JobList" && this.state.candidateJob) {
       this.props.navigation.navigate(data, {
         appliedJob: appliedJob,
         title: "Your Applied Jobs"
       });
     } else if (data == "Profile") {
-        if(isConnected){
-          if(appliedJob.success){
-            const {
-              linkOpening,
-              textColor,
-              candidateJob,
-              ...profileDetails
-            } = this.state;
-            this.props.navigation.navigate("Profile", {
-              appliedJob,
-              profileDetails,
-              sender_mail:this.state.sender_mail,
-              mongo_id:this.state.mongo_id,
-              profile_picture:this.state.profile_picture,
-              latestImage:this.props.candidateProfileUpdateDetails.profilePicture
-            });
-          }else{
-            AlertMessage("Please wait! we are getting your profile.", "toast")
-          }
+        if(appliedJob.success){
+          const {
+            linkOpening,
+            textColor,
+            candidateJob,
+            ...profileDetails
+          } = this.state;
+          this.props.navigation.navigate("Profile", {
+            appliedJob,
+            profileDetails,
+            sender_mail:this.state.sender_mail,
+            mongo_id:this.state.mongo_id,
+            profile_picture:this.state.profile_picture,
+            latestImage:this.props.candidateProfileUpdateDetails.profilePicture
+          });
         }else{
-          AlertMessage("Please! connect to the internet first to fetch your profile.", "toast")
+          if(network.isConnected){
+            AlertMessage("Please wait! we are fetching your profile.", "toast")
+          }else{
+            AlertMessage("Please! connect to the internet first to fetch your profile.", "toast")
+          }
         }
     } else if(data !== "Profile") {
       this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
@@ -147,6 +147,7 @@ class HomePage extends Component {
 
   componentDidMount = async () => {    
     AppState.addEventListener("change", this._handleAppStateChange);
+    NetInfo.isConnected.addEventListener("connectionChange",this.handleNetworks);
     const candidateJob = await getItem("mongo_id");    
     if(candidateJob && Object.keys(candidateJob).length){
       this.handleSetProfile(candidateJob.candidate.data)
@@ -170,7 +171,6 @@ class HomePage extends Component {
       bitlyLink = false
     })
     NetInfo.fetch().then(async state => {
-      this.setState({isConnected:state.isConnected})
       if(state.isConnected){
         SplashScreen.hide()
         if(candidateJob && Object.keys(candidateJob).length){
@@ -202,9 +202,12 @@ class HomePage extends Component {
       }
       else{
         SplashScreen.hide()
-        AlertMessage('Please! connect to the internet first', "alert")
       }
     })
+  };
+
+  handleNetworks = async isConnected => {
+    this.props.connectionState(isConnected);
   };
 
   _handleAppStateChange = async nextAppState => {
@@ -220,7 +223,7 @@ class HomePage extends Component {
   async componentDidUpdate (props) {
     const applied = this.props.navigation.getParam("applied");
     const fromBitlyLink  = this.props.navigation.getParam("fromBitlyLink")
-    const {joblist,interviewSignUp, appliedJob}=this.props;
+    const {joblist,interviewSignUp, appliedJob, network}=this.props;
     const {params, isError, isNotification} = this.state;
     if (applied && !bitlyLink) {
       bitlyLink =true
@@ -279,6 +282,18 @@ class HomePage extends Component {
       this._linkCheck()
     }
   }
+  if(network.isConnected !== props.network.isConnected){
+       if(network.isConnected){
+        AlertMessage("Internet connection is back.","toast")
+        const candidateJob = await getItem("mongo_id");
+        const {appliedJob} = this.props;
+        if(candidateJob && Object.keys(candidateJob).length && !appliedJob.success && !appliedJob.isLoading){
+          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
+        }
+      }else{
+        AlertMessage("Opps! No internet connection.", "toast")
+      }
+   }
 }
 
 _checkDeepLink = async (params) => {
@@ -288,7 +303,7 @@ _checkDeepLink = async (params) => {
 };
 
 _linkCheck = async () => {
-  const { deepLink, sharing, fb_id } = this.state;
+  const { deepLink, fb_id } = this.state;
   if (deepLink) {
     const { data, message, error, status } = this.props.interviewSignUp;
     setItem("mongo_id", JSON.stringify({ candidate: { data: data } }));
@@ -305,6 +320,7 @@ _linkCheck = async () => {
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
+    NetInfo.isConnected.removeEventListener("connectionChange",this.handleNetworks);
   }
   handleBackPress = () => {
     BackHandler.exitApp(); // works best when the goBack is async
@@ -350,7 +366,7 @@ _linkCheck = async () => {
                 source={textColor && index == k ? data.image[1] : data.image[0]}
               />
             </View>
-            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%',/* backgroundColor:"red",opacity:this.state.opacityy */},k == 1 && data.name==='PROFILE' ? {left:'75%'}:null,k == 1 ? {left:'55%'}:null,k == 2 ? {left:'75%'}:null,k == 0 ? {left:'60%'}:null]}>
+            <View style={[styles.textView,{zIndex:1,position:'relative',top:'2%'},k == 1 && data.name==='PROFILE' ? {left:'75%'}:null,k == 1 ? {left:'55%'}:null,k == 2 ? {left:'75%'}:null,k == 0 ? {left:'60%'}:null]}>
               <Text
                 style={[
                   styles.text,
@@ -412,10 +428,15 @@ const mapStateToProps = state => {
   appliedJob: state.appliedJob,
   joblist: state.joblist,
   interviewSignUp: state.interviewSignUp,
-  candidateProfileUpdateDetails:state.candidateProfileUpdateDetails
+  candidateProfileUpdateDetails:state.candidateProfileUpdateDetails,
+  network:state.network,
   }};
-
 export default connect(
   mapStateToProps,
-  { getCandidateJobDetails, getCandidateDetails,getJobLists, ProfileOnChange,UploadProfile,getCandidateUpdateProfileDetails}
+  { getCandidateJobDetails,
+    getCandidateDetails,getJobLists,
+    ProfileOnChange,UploadProfile,
+    getCandidateUpdateProfileDetails,
+    connectionState,
+  }
 )(HomePage);
