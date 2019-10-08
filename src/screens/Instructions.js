@@ -73,10 +73,12 @@ class Instructions extends Component {
       )
     };
   };
-  handlePress = () => {
+  handlePress = async() => {
+    const remaining_time = await getItem("remaining_time");
     this.props.navigation.navigate("TestPage", {
       ...this.props.questions,
-      ...this.props.navigation.state.params
+      ...this.props.navigation.state.params,
+      remaining_time
     });
   };
   render() {

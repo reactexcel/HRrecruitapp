@@ -376,8 +376,6 @@ export const candidateUploadProfile = data => async dispatch => {
 };
 
 export const interviewLoginClearData = data => async dispatch => {
-  console.log(data,'KKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK');
-  
   dispatch({ type: CANDIDATE_DETAILS_CLEAR_REQUEST });
 }
 
@@ -410,11 +408,9 @@ export const candidateValidationapi = (data,fcm_token) => async dispatch => {
   dispatch({ type: CANDIDATE_VALIDATION_REQUEST });
   try {
     const res = await _axios().post("exam/candidateValidate", {email:data,device_id:fcm_token});    
-    console.log(res,'fffffffffffffffffffffff');
     dispatch({ type: CANDIDATE_VALIDATION_SUCCESS, payload: res.data });
   }
   catch (err) {
-    console.log(err,'err');
     if (err.response.data.message) {
       dispatch({
         type: CANDIDATE_VALIDATION_FAILURE,

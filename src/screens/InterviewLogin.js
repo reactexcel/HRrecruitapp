@@ -123,7 +123,10 @@ class InterviewLogin extends Component {
         else if(appliedJob.status == 'Reject'){
           AlertMessage("Sorry! You have been rejected, Please check your job status.","alert", this.handleBackToHome)
          }
-         else if(appliedJob.status=='Selected'){
+         else if(appliedJob.status =='Third Round'){
+          AlertMessage("Sorry! There is no online test is available for this round, Please ask hr to further process.","alert", this.handleBackToHome)
+         }
+         else if(appliedJob.status == 'Selected'){
           AlertMessage("Congratulations! You have been Selected, Please ask hr to further process.","alert", this.handleBackToHome)
          }
          else{
@@ -162,6 +165,7 @@ class InterviewLogin extends Component {
     this.props.interviewLoginClearData("cleared data")
     this.props.navigation.navigate("HomePage")
   }
+  
   async componentDidMount() {
     if(Platform.OS !=='ios'){
         StatusBar.setBackgroundColor(COLOR.LGONE);}
@@ -179,8 +183,7 @@ class InterviewLogin extends Component {
         if (fb_id !== undefined) {
           await this.props.getCandidateRoundDetails(fb_id.fb_id);
         }
-        const round = await getItem("round");
-
+        const round = await getItem("round");        
         if (round !== undefined) {
           const email = await getItem("email");
           const {
@@ -210,7 +213,10 @@ class InterviewLogin extends Component {
               ],
               { cancelable: false }
             );
-          } else if (currentRound !== round.round) {
+          }else if(appearedInFirstRound && appearedInSecondRound){
+            AlertMessage("You have taken online tests, Please contact to hr for further process.", 'alert')
+          } 
+          else if (currentRound !== round.round) {
             Alert.alert("Info", `You have been moved to ${roundType} round.`, [
                    {
                 text: "Ok",
@@ -219,6 +225,10 @@ class InterviewLogin extends Component {
             ]);
           }
         }
+  }
+
+  handleGoBack=()=>{
+    this.props.navigation.goBack()
   }
 
   handleNetworks = async isconnect => {
@@ -241,7 +251,7 @@ class InterviewLogin extends Component {
         await this.props.candidateValidationapi(email)
       }
     }else{
-      AlertMessage("Please! connect to the internet.", "alert")
+      AlertMessage("Please! connect to the internet.", "alert");
     }
   };
 
@@ -261,8 +271,6 @@ class InterviewLogin extends Component {
   }
 
   render() {
-    console.log(this.props.candidateInfo,this.props.interviewSignUp,'candidateValidationcandidateValidation');
-    
     const {candidateValidation,
       appliedJob,
       interviewSignUp: { registering, success }

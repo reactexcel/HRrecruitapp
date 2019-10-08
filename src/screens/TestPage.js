@@ -115,9 +115,9 @@ class TestPage extends Component {
 
   static navigationOptions = ({ navigation }) => {
     const counter =
-      navigation.state.params.time !== undefined
-        ? navigation.state.params.time
-        : navigation.state.params.data.timeForExam/1000;
+      navigation.state.params.remaining_time !== undefined
+        ? navigation.state.params.remaining_time.remaining_time
+        : navigation.state.params.data.timeForExam*60;
     const round = navigation.state.params.data.round;
     return {
       headerLeft: <View />,
@@ -143,7 +143,6 @@ class TestPage extends Component {
                   <CountDown
                     until={counter}
                     onChange	={counter => {
-                      console.log(counter,'countercountercountercounter')
                       setItem(
                         "remaining_time",
                         JSON.stringify({ remaining_time: counter })
@@ -303,11 +302,7 @@ class TestPage extends Component {
         animated: true
       });
   };
-
-
-
   render() {
-    console.log(this.props.navigation.state,'MMMMMMMMMMMMMMMMMMMMMMMMMMMMMM')
     const name = this.props.navigation.getParam("name");
     const { count, question, isOnline, show } = { ...this.state };
     let solution = this.state.solution;

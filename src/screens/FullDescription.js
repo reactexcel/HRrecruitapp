@@ -67,14 +67,11 @@ class FullDescription extends Component {
     this.setState({ visible: false });
   }
   render() {
-    // console.log(this.props,'>>>>>>>>>>>>>>>.');
     const {
       shareOptions,
     } = this.state;
     let currentJob =this.props.navigation.state.params.currentJob
     let jobDetail=this.props.navigation.state.params.jobDetail
-    // console.log(jobDetail,'jobdetails');
-    
     const job_title = this.props.navigation.getParam("subject");
     const job_desription = this.props.navigation.getParam("job_description");
     const candidate_profile = this.props.navigation.getParam(
