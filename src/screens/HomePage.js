@@ -313,7 +313,8 @@ _linkCheck = async () => {
         data.sender_mail
       }?size=60`,
       name: data.from,
-      email: data.sender_mail
+      email: data.sender_mail,
+      linkOpening:true
     });
   }
 };

@@ -27,6 +27,7 @@ import {
 import { CHANGE_CONNECTION_STATUS } from "./types";
 import {CANDIDATE_DETAILS_REQUEST, CANDIDATE_DETAILS_SUCCESS, CANDIDATE_DETAILS_FAILURE ,CANDIDATE_DETAILS_CLEAR_REQUEST ,CANDIDATE_DETAILS_CLEAR_SUCCESS} from "./types";
 import {
+  CANDIDATE_ROUND_DETAILS_REQUEST,
   CANDIDATE_ROUND_DETAILS_SUCCESS,
   CANDIDATE_ROUND_DETAILS_FAILURE,
   GET_JOBLIST_SUCCESS,
@@ -277,6 +278,7 @@ export const getCandidateDetails = fb_id => async dispatch => {
 };
 
 export const getCandidateRoundDetails = fb_id => async dispatch => {
+  dispatch({ type: CANDIDATE_ROUND_DETAILS_REQUEST});
   try {
     const res = await _axios().get(`exams/candidateExamRoundDetails/${fb_id}`);
     dispatch({ type: CANDIDATE_ROUND_DETAILS_SUCCESS, payload: res.data });

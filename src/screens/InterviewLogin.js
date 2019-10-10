@@ -143,7 +143,8 @@ class InterviewLogin extends Component {
             fb_id: fb_id,
             profile_pic: `https://pikmail.herokuapp.com/${email}?size=60`,
             name: "Test",
-            email
+            email,
+            linkOpening:false
           });
         }
       }
