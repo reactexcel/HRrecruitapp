@@ -14,6 +14,11 @@ import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import io.branch.rnbranch.RNBranchModule;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+import com.apsl.versionnumber.RNVersionNumberPackage;
+import io.invertase.firebase.database.RNFirebaseDatabasePackage;
+
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -32,6 +37,8 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           packages.add(new RNFirebaseMessagingPackage());
           packages.add(new RNFirebaseNotificationsPackage());
+          packages.add(new RNFirebaseAnalyticsPackage());
+          packages.add(new RNFirebaseDatabasePackage());
           return packages;
         }
 

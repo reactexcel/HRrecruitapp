@@ -1,5 +1,5 @@
 import PubSub from 'pubsub-js';
-import * as firebase from "firebase";
+import firebase from "react-native-firebase";
 import VersionNumber from "react-native-version-number";
 import { modifyEmail, modifyDate } from "../helper/index";
 var today = new Date();

@@ -1,39 +1,37 @@
 {
   "project_info": {
-    "project_number": "228638989468",
-    "firebase_url": "https://hrrecruitapp-ff568.firebaseio.com",
-    "project_id": "hrrecruitapp-ff568",
-    "storage_bucket": "hrrecruitapp-ff568.appspot.com"
+    "project_number": "1012197588934",
+    "firebase_url": "https://hrrecruits-ba46b.firebaseio.com",
+    "project_id": "hrrecruits-ba46b",
+    "storage_bucket": "hrrecruits-ba46b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:228638989468:android:5674226fbe8ac18e",
+        "mobilesdk_app_id": "1:1012197588934:android:7100909204e7b246f1fcc7",
         "android_client_info": {
           "package_name": "com.hrrecruits"
         }
       },
       "oauth_client": [
         {
-          "client_id": "228638989468-bpuig6b105i222q7jbtj6ta97eiuhsq3.apps.googleusercontent.com",
+          "client_id": "1012197588934-ksm2e29ikn4474tkl8469l8pkf7hh7uo.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDPsoStt1kUWOrwOk2YMvE-NzJje23I2jk"
+          "current_key": "AIzaSyD0f357K2weGovhwpm_S9n0IyhrqdSWdy8"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1012197588934-ksm2e29ikn4474tkl8469l8pkf7hh7uo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
