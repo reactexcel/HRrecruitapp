@@ -4,8 +4,8 @@ import com.facebook.react.ReactActivity;
 import io.branch.rnbranch.*;
 import android.content.Intent;
 import org.devio.rn.splashscreen.SplashScreen;
-// import com.crashlytics.android.Crashlytics;
-// import io.fabric.sdk.android.Fabric;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class MainActivity extends ReactActivity {
 
@@ -18,7 +18,7 @@ public class MainActivity extends ReactActivity {
         super.onStart();
         SplashScreen.show(this);
         RNBranchModule.initSession(getIntent().getData(), this);
-        // Crashlytics.getInstance().crash();
+        Fabric.with(this, new Crashlytics());
     }
  
     @Override
