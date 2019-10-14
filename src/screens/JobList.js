@@ -37,6 +37,7 @@ import { SHAREURL } from "../config/dev";
 import LinearGradient from "react-native-linear-gradient";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import JobSalaryDetails from "../components/JobSalaryDetails";
+import firebase from "react-native-firebase";
 
 class JobList extends Component {
   constructor(props) {
@@ -51,6 +52,7 @@ class JobList extends Component {
     };
   }
   componentDidMount = async () => {
+    crash() 
     const { params } = this.props.navigation.state;
     if (params.appliedJob !== undefined) {
       this.setState({

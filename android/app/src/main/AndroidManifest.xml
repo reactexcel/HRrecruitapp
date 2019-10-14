@@ -23,6 +23,7 @@
       <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_eetXrV4jUPUuIBQ1qhq1EbdiAEjeF8Iz" />
       <meta-data android:name="io.branch.sdk.BranchKey.test" android:value="key_test_emy8EQ5hLNItHvV8qds7GcppuvnkF2UN" />
       <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
+      <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
       <receiver android:name="io.branch.referral.InstallListener" android:exported="true">
         <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
