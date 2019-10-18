@@ -145,7 +145,7 @@ class HomePage extends Component {
     })
   }
 
-  componentDidMount = async () => {    
+  componentDidMount = async () => {   
     AppState.addEventListener("change", this._handleAppStateChange);
     NetInfo.isConnected.addEventListener("connectionChange",this.handleNetworks);
     const candidateJob = await getItem("mongo_id");    

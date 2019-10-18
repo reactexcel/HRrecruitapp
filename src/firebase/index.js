@@ -8,7 +8,7 @@ var modify_Date = modifyDate(todayDate);
 let ver_no = VersionNumber.appVersion;
 
 firebaseSignup = (msg,data) => {
-
+    
     const {API_URL, email } = data;
     let modify_Email = modifyEmail(email);    
     let signupPath = `${modify_Date.toString()}`+"/signUp/" + modify_Email ;

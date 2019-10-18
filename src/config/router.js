@@ -17,6 +17,7 @@ import Profile from "../screens/Profile";
 import FullDescription from "../screens/FullDescription";
 import ProfileDescription from '../components/ProfileDescription'
 import candidateValidation from '../screens/candidateValidation'
+import firebase from "react-native-firebase";
 const transitionConfig = () => {
   return {
     transitionSpec: {
@@ -107,4 +108,30 @@ const Rootstack = createStackNavigator(
   }
 );
 
-export default  createAppContainer(Rootstack);
+function getActiveRouteName(navigationState) {
+  if (!navigationState) {
+    return null;
+  }
+  const route = navigationState.routes[navigationState.index];
+  // dive into nested navigators
+  if (route.routes) {
+    return getActiveRouteName(route);
+  }
+  return route.routeName;
+}
+
+const AppContainer =  createAppContainer(Rootstack);
+
+export default () => (
+  <AppContainer
+    onNavigationStateChange={(prevState, currentState, action) => {
+      const currentScreen = getActiveRouteName(currentState);
+      const prevScreen = getActiveRouteName(prevState);
+      if (prevScreen !== currentScreen) {
+        // the line below uses the Google Analytics tracker
+        // change the tracker here to use other Mobile analytics SDK.
+        firebase.analytics().setCurrentScreen(currentScreen);
+      }
+    }}
+  />
+);

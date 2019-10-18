@@ -52,7 +52,7 @@ class JobList extends Component {
     };
   }
   componentDidMount = async () => {
-    firebase.crashlytics().log(">>>>>>>>>>>>>>>");
+      firebase.analytics().logEvent("danish");
     const { params } = this.props.navigation.state;
     if (params.appliedJob !== undefined) {
       this.setState({

@@ -11,7 +11,8 @@ import { COLOR } from "./styles/color";
 require("core-js/es6/array"); // USE FOR BACK HANDLER NOT WORKING IN RELEASE MODE IF REMOVED
 
 firebase.initializeApp(FIREBASE_CONFIG);
-firebase.crashlytics().enableCrashlyticsCollection();
+firebase.crashlytics().enableCrashlyticsCollection(true);
+firebase.analytics().setAnalyticsCollectionEnabled(true);
 
 export default class App extends Component {
   async componentDidMount() {
