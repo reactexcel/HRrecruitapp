@@ -45,6 +45,7 @@ import { getItem } from "../helper/storage";
 import branch from "react-native-branch";
 import LinearGradient from "react-native-linear-gradient";
 import AlertMessage from "../helper/toastAlert";
+import firebase from "react-native-firebase"
 
 class InterviewLogin extends Component {
   constructor() {
@@ -98,6 +99,7 @@ class InterviewLogin extends Component {
     if(candidateValidation.isSuccess !== nextProps.candidateValidation.isSuccess){
       if(candidateValidation.isSuccess){
         if(candidateValidation.data ){
+          firebase.analytics().logEvent("GETJOBDETAILS", {email});
           await this.props.getCandidateJobDetails(candidateValidation.data._id)
         }else if(candidateValidation.data == null || candidateValidation.data == undefined){
           this.setState({email:""})
@@ -118,18 +120,23 @@ class InterviewLogin extends Component {
     if(appliedJob.success !== nextProps.appliedJob.success){
       if(appliedJob.success){
         if(appliedJob.status == null ){
+          firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("You have not been assigned any Job Round,Please contact to HR","alert", this.handleBackToHome)
         }
         else if(appliedJob.status == 'Reject'){
+          firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("Sorry! You have been rejected, Please check your job status.","alert", this.handleBackToHome)
          }
          else if(appliedJob.status =='Third Round'){
+          firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("Sorry! There is no online test is available for this round, Please ask hr to further process.","alert", this.handleBackToHome)
          }
          else if(appliedJob.status == 'Selected'){
+          firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("Congratulations! You have been Selected, Please ask hr to further process.","alert", this.handleBackToHome)
          }
          else{
+          firebase.analytics().logEvent("INTERVIEWLOGIN", {email});
           await this.props.signUp(email);
          }
       }
@@ -249,6 +256,7 @@ class InterviewLogin extends Component {
     const errors = this.validate(email);
     if(isConnected){
       if(Object.keys(errors).length == 0){
+        firebase.analytics().logEvent("CANDIDATEVALIDATION", {email});
         await this.props.candidateValidationapi(email)
       }
     }else{

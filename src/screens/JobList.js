@@ -52,7 +52,7 @@ class JobList extends Component {
     };
   }
   componentDidMount = async () => {
-      firebase.analytics().logEvent("danish");
+    // firebase.crashlytics().recordError(37,"Test Error");
     const { params } = this.props.navigation.state;
     if (params.appliedJob !== undefined) {
       this.setState({
@@ -107,6 +107,8 @@ class JobList extends Component {
       this.setState({ joblist:joblist.data, isLoading:false });
     }
   }
+
+
   onShareClick = item => {
     let shareDetails = {};
     shareDetails["title"] = item.title;

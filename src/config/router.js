@@ -128,7 +128,7 @@ export default () => (
       const currentScreen = getActiveRouteName(currentState);
       const prevScreen = getActiveRouteName(prevState);
       if (prevScreen !== currentScreen) {
-        // the line below uses the Google Analytics tracker
+        // the line below uses the fireabse Analytics tracker
         // change the tracker here to use other Mobile analytics SDK.
         firebase.analytics().setCurrentScreen(currentScreen);
       }
