@@ -42,7 +42,10 @@ import {
 } from './types';
 
 import {
-  CANDIDATE_UPDATE_VALUE
+  CANDIDATE_UPDATE_VALUE,
+  ADD_NEW_CANDIDATE_REQUEST,
+  ADD_NEW_CANDIDATE_SUCCESS,
+  ADD_NEW_CANDIDATE_ERROR,
 } from './types';
 
 import{
@@ -66,15 +69,35 @@ import{
 import{
   CANDIDATE_UPDATE_PROFILE_DETAILS_SUCCESS,
   CANDIDATE_UPDATE_PROFILE_DETAILS_FAILURE,
-  CANDIDATE_UPDATE_PROFILE_DETAILS_REQUEST
+  CANDIDATE_UPDATE_PROFILE_DETAILS_REQUEST,
+  GET_EXAM_QUESTIONS_REQUEST,
+  GET_EXAM_QUESTIONS_SUCCESS,
+  GET_EXAM_QUESTIONS_ERROR,
 } from './types';
 
 
 import API_URL from "../config/dev";
 import PubSub from "pubsub-js";
+import AlertMessage from '../helper/toastAlert';
 // import { FORMERR } from "dns";
 
 const _axios = () => axios.create({ baseURL: API_URL, timeout: 20000 }); //TimeOut set to 20 seconds
+
+export const getExamQuestions = (data ) => async dispatch => {
+  dispatch({ type: GET_EXAM_QUESTIONS_REQUEST});
+  try {
+    const res = await axios.get(`http://176.9.137.77:8081/exams/getQuestinsForCandidate/${data}`);
+    dispatch({ type: GET_EXAM_QUESTIONS_SUCCESS, payload: res.data });
+  } catch (err) {
+    if (err.response.data.message) {
+      // Show alert about timeout to user
+      AlertMessage( err.response.data.message || err.message,'toast');
+      dispatch({ type: GET_EXAM_QUESTIONS_ERROR, payload: { msg: err.message } });
+    } else {
+      dispatch({ type: GET_EXAM_QUESTIONS_ERROR, payload: err.response.data });
+    }
+  }
+};
 
 export const verifyCandidate = (data ) => async dispatch => {
   dispatch({ type: CANDIDATE_INTERVIEW_REQUEST});
@@ -82,11 +105,28 @@ export const verifyCandidate = (data ) => async dispatch => {
     const res = await axios.post(`http://176.9.137.77:8081/exams/verify_candidate`, {...data});
     dispatch({ type: CANDIDATE_INTERVIEW_SUCCESS, payload: res.data });
   } catch (err) {
-    if (err.message == "timeout of 10000ms exceeded") {
+    if (err.response.data.message) {
       // Show alert about timeout to user
+      AlertMessage( err.response.data.message || err.message,'toast');
       dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: { msg: err.message } });
     } else {
       dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: err.response.data });
+    }
+  }
+};
+
+export const addNewCandidate = (data ) => async dispatch => {
+  dispatch({ type: ADD_NEW_CANDIDATE_REQUEST});
+  try {
+    const res = await axios.post(`http://176.9.137.77:8081/exams/addNewCandidate`, {...data});
+    dispatch({ type: ADD_NEW_CANDIDATE_SUCCESS, payload: res.data });
+  } catch (err) {
+    if (err.response.data.message) {
+      AlertMessage( err.response.data.message || err.message,'toast');
+      // Show alert about timeout to user
+      dispatch({ type: ADD_NEW_CANDIDATE_ERROR, payload: { msg: err.message } });
+    } else {
+      dispatch({ type: ADD_NEW_CANDIDATE_ERROR, payload: err.response.data });
     }
   }
 };

@@ -6,7 +6,7 @@ import HomePage from "../screens/HomePage";
 import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
 import OTPpage from "../screens/OTPpage";
-import AddCandidate from "../screens/AddCandidate";
+import AddCandidate from "../screens/AddNewCandidate";
 import Instructions from "../screens/Instructions";
 import TestPage from "../screens/TestPage";
 import SubmitTest from "../screens/SubmitTest";
@@ -18,6 +18,8 @@ import FullDescription from "../screens/FullDescription";
 import ProfileDescription from '../components/ProfileDescription'
 import candidateValidation from '../screens/candidateValidation'
 import firebase from "react-native-firebase";
+import ThankYou from '../screens/ThankYou';
+
 const transitionConfig = () => {
   return {
     transitionSpec: {
@@ -55,11 +57,11 @@ const transitionConfig = () => {
 
 const Rootstack = createStackNavigator(
   {
-    // AppIntro: {
-    //   screen: AppIntro
-    // },
     HomePage: {
       screen: HomePage
+    },
+    ThankYou: {
+      screen: ThankYou
     },
     InterviewLogin: {
       screen: InterviewLogin
