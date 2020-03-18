@@ -37,6 +37,7 @@ import {
   getCandidateJobDetails,
   candidateValidationapi,
   interviewLoginClearData,
+  verifyCandidate
 } from "../actions";
 import { notify } from "../helper/notify";
 import { SUCCESS_STATUS } from "../helper/constant";
@@ -99,7 +100,7 @@ class InterviewLogin extends Component {
     if(candidateValidation.isSuccess !== nextProps.candidateValidation.isSuccess){
       if(candidateValidation.isSuccess){
         if(candidateValidation.data ){
-          firebase.analytics().logEvent("GETJOBDETAILS", {email});
+          // firebase.analytics().logEvent("GETJOBDETAILS", {email});
           await this.props.getCandidateJobDetails(candidateValidation.data._id)
         }else if(candidateValidation.data == null || candidateValidation.data == undefined){
           this.setState({email:""})
@@ -120,23 +121,23 @@ class InterviewLogin extends Component {
     if(appliedJob.success !== nextProps.appliedJob.success){
       if(appliedJob.success){
         if(appliedJob.status == null ){
-          firebase.analytics().logEvent(appliedJob.status, {email});
+          // firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("You have not been assigned any Job Round,Please contact to HR","alert", this.handleBackToHome)
         }
         else if(appliedJob.status == 'Reject'){
-          firebase.analytics().logEvent(appliedJob.status, {email});
+          // firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("Sorry! You have been rejected, Please check your job status.","alert", this.handleBackToHome)
          }
          else if(appliedJob.status =='Third Round'){
-          firebase.analytics().logEvent(appliedJob.status, {email});
+          // firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("Sorry! There is no online test is available for this round, Please ask hr to further process.","alert", this.handleBackToHome)
          }
          else if(appliedJob.status == 'Selected'){
-          firebase.analytics().logEvent(appliedJob.status, {email});
+          // firebase.analytics().logEvent(appliedJob.status, {email});
           AlertMessage("Congratulations! You have been Selected, Please ask hr to further process.","alert", this.handleBackToHome)
          }
          else{
-          firebase.analytics().logEvent("INTERVIEWLOGIN", {email});
+          // firebase.analytics().logEvent("INTERVIEWLOGIN", {email});
           await this.props.signUp(email);
          }
       }
@@ -175,6 +176,10 @@ class InterviewLogin extends Component {
   }
   
   async componentDidMount() {
+    const paylaod = {"email":"rgerg@gmail.com","appliedEmail":"rgerg@gmail.com","profile_pic":"https://pikmail.herokuapp.com/rgerg@gmail.com?size=60"}
+    this.props.verifyCandidate(paylaod)
+    console.log('LLLLLLLLLLLLLLLLLLLL');
+    
     if(Platform.OS !=='ios'){
         StatusBar.setBackgroundColor(COLOR.LGONE);}
         const ans = await getItem("solution");
@@ -343,5 +348,5 @@ const mapStateToProps = state => {
 }};
 export default connect(
   mapStateToProps,
-  { signUp, connectionState, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi,interviewLoginClearData }
+  { signUp, connectionState,verifyCandidate, getCandidateDetails, getCandidateRoundDetails,getCandidateJobDetails,candidateValidationapi,interviewLoginClearData }
 )(InterviewLogin);

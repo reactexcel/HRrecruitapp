@@ -34,6 +34,7 @@ import {
   GET_JOBLIST_FAILURE
 } from "./types";
 
+import {CANDIDATE_INTERVIEW_REQUEST, CANDIDATE_INTERVIEW_SUCCESS, CANDIDATE_INTERVIEW_ERROR} from './types';
 import {
   CANDIDATE_JOB_REQUEST,
   CANDIDATE_JOB_SUCCESS,
@@ -74,6 +75,22 @@ import PubSub from "pubsub-js";
 // import { FORMERR } from "dns";
 
 const _axios = () => axios.create({ baseURL: API_URL, timeout: 20000 }); //TimeOut set to 20 seconds
+
+export const verifyCandidate = (data ) => async dispatch => {
+  dispatch({ type: CANDIDATE_INTERVIEW_REQUEST});
+  try {
+    const res = await axios.post(`http://176.9.137.77:8081/exams/verify_candidate`, {...data});
+    dispatch({ type: CANDIDATE_INTERVIEW_SUCCESS, payload: res.data });
+  } catch (err) {
+    if (err.message == "timeout of 10000ms exceeded") {
+      // Show alert about timeout to user
+      dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: { msg: err.message } });
+    } else {
+      dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: err.response.data });
+    }
+  }
+};
+
 
 // Action for Signing Up with email to take interview test paper
 export const signUp = email => async dispatch => {
