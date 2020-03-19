@@ -27,25 +27,28 @@ const Questions = props => {
     scrollTop,
     scrollToTopLogical
   } = props;
+  console.log(question,'questionquestionquestion')
   return (
     <Content style={{ zIndex: 0, paddingBottom: 40 }} padder>
       <Accordion
         style={_styles.accordionStyle}
-        dataArray={question.data}
+        dataArray={question}
         renderHeader={(questionObj, expanded) => {
-          if (
-            scrollTop &&
-            expanded &&
-            questionObj.group_name === "Logical Reasoning"
-          ) {
-            scrollToBegin();
-          }
+          console.log(questionObj, expanded);
+          
+          // if (
+          //   scrollTop &&
+          //   expanded &&
+          //   questionObj.group_name === "Logical Reasoning"
+          // ) {
+          //   scrollToBegin();
+          // }
 
-          if (expanded && questionObj.group_name === "Aptitude") {
-            scrollToTopLogical(
-              expanded && questionObj.group_name === "Aptitude",questionObj.group_name
-            );
-          } 
+          // if (expanded && questionObj.group_name === "Aptitude") {
+          //   scrollToTopLogical(
+          //     expanded && questionObj.group_name === "Aptitude",questionObj.group_name
+          //   );
+          // } 
           return (
             <View
               style={[
@@ -92,6 +95,7 @@ const Questions = props => {
                   </View>
 
                   {map(ques.options, (values, index) => {
+                    console.log(values, index,'values, index')
                     let isSolution =
                       solution[0] != undefined
                         ? findIndex(solution, value => {
@@ -118,7 +122,7 @@ const Questions = props => {
                       >
                         <Row
                           style={{
-                            backgroundColor: selected ? "#e3e5e9" : null
+                            backgroundColor:  selected ? "#e3e5e9" : null
                           }}
                         >
                           <View style={_styles.optionsView}>

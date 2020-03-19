@@ -73,6 +73,7 @@ import{
   GET_EXAM_QUESTIONS_REQUEST,
   GET_EXAM_QUESTIONS_SUCCESS,
   GET_EXAM_QUESTIONS_ERROR,
+  SET_CURRENT_USER
 } from './types';
 
 
@@ -83,18 +84,23 @@ import AlertMessage from '../helper/toastAlert';
 
 const _axios = () => axios.create({ baseURL: API_URL, timeout: 20000 }); //TimeOut set to 20 seconds
 
+export const setCurrentUser = (data ) => async dispatch => {
+  dispatch({ type: SET_CURRENT_USER, payload:data});
+};
+  
+
 export const getExamQuestions = (data ) => async dispatch => {
   dispatch({ type: GET_EXAM_QUESTIONS_REQUEST});
   try {
     const res = await axios.get(`http://176.9.137.77:8081/exams/getQuestinsForCandidate/${data}`);
     dispatch({ type: GET_EXAM_QUESTIONS_SUCCESS, payload: res.data });
   } catch (err) {
-    if (err.response.data.message) {
+    if (err.message || err.response.data.message) {
       // Show alert about timeout to user
-      AlertMessage( err.response.data.message || err.message,'toast');
+      AlertMessage( (err.response && err.response.data.message) || err.message,'toast');
       dispatch({ type: GET_EXAM_QUESTIONS_ERROR, payload: { msg: err.message } });
     } else {
-      dispatch({ type: GET_EXAM_QUESTIONS_ERROR, payload: err.response.data });
+      dispatch({ type: GET_EXAM_QUESTIONS_ERROR, payload: '' });
     }
   }
 };
@@ -105,12 +111,12 @@ export const verifyCandidate = (data ) => async dispatch => {
     const res = await axios.post(`http://176.9.137.77:8081/exams/verify_candidate`, {...data});
     dispatch({ type: CANDIDATE_INTERVIEW_SUCCESS, payload: res.data });
   } catch (err) {
-    if (err.response.data.message) {
+    if (err.message || err.response.data.message) {
       // Show alert about timeout to user
-      AlertMessage( err.response.data.message || err.message,'toast');
+      AlertMessage(err.response && err.response.data.message || err.message,'toast');
       dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: { msg: err.message } });
     } else {
-      dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: err.response.data });
+      dispatch({ type: CANDIDATE_INTERVIEW_ERROR, payload: '' });
     }
   }
 };
@@ -121,12 +127,12 @@ export const addNewCandidate = (data ) => async dispatch => {
     const res = await axios.post(`http://176.9.137.77:8081/exams/addNewCandidate`, {...data});
     dispatch({ type: ADD_NEW_CANDIDATE_SUCCESS, payload: res.data });
   } catch (err) {
-    if (err.response.data.message) {
-      AlertMessage( err.response.data.message || err.message,'toast');
+    if (err.message || err.response.data.message) {
+      AlertMessage(err.response && err.response.data.message || err.message,'toast');
       // Show alert about timeout to user
       dispatch({ type: ADD_NEW_CANDIDATE_ERROR, payload: { msg: err.message } });
     } else {
-      dispatch({ type: ADD_NEW_CANDIDATE_ERROR, payload: err.response.data });
+      dispatch({ type: ADD_NEW_CANDIDATE_ERROR, payload: '' });
     }
   }
 };
@@ -277,14 +283,8 @@ export const callingHelp = (accessToken, fb_id,message) => async dispatch => {
 export const submitTest = (email, data) => async dispatch => {
   dispatch({ type: SUBMIT_TEST_REQUEST });
   try {
-    const res = await _axios().post("exams/submitExam", {
+    const res = await axios().post("http://176.9.137.77:8081/exams/submitExam", {
       ...data
-    });
-    PubSub.publish("FIREBASE_SUBMIT_TEST_SUCCESS", {
-      API_URL,
-      email,
-      data,
-      res
     });
     dispatch({ type: SUBMIT_TEST_SUCCESS, payload: res });
   } catch (err) {
@@ -292,12 +292,6 @@ export const submitTest = (email, data) => async dispatch => {
       // Show alert about timeout to user
       dispatch({ type: SUBMIT_TEST_FAILURE, payload: { msg: err.message } });
     } else {
-      PubSub.publish("FIREBASE_SUBMIT_TEST_FAILURE", {
-        API_URL,
-        email,
-        data,
-        err
-      });
       dispatch({ type: SUBMIT_TEST_FAILURE });
     }
   }

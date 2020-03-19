@@ -12,6 +12,7 @@ import {
   GET_EXAM_QUESTIONS_REQUEST,
   GET_EXAM_QUESTIONS_SUCCESS,
   GET_EXAM_QUESTIONS_ERROR,
+  SET_CURRENT_USER,
 } from '../actions/types';
 const initialState = {
   adding: false,
@@ -27,35 +28,43 @@ const initialState = {
     data: {},
     isError: false,
   },
-  getExamQuestions: {
+  examQuestions: {
     isSuccess: false,
     isLoading: false,
     isError: false,
     data: {},
   },
+  currentUser:''
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case SET_CURRENT_USER:
+      return {
+        ...state,
+        currentUser: action.payload,
+      };
+      break;
     case GET_EXAM_QUESTIONS_REQUEST:
       return {
         ...state,
-        getExamQuestions: {isSuccess: false, isLoading: true, isError: false},
+        examQuestions: {isSuccess: false, isLoading: true, isError: false,data:{}},
       };
       break;
     case GET_EXAM_QUESTIONS_SUCCESS:
       return {
         ...state,
-        getExamQuestions: {isSuccess: true, isLoading: false, isError: false},
+        examQuestions: {isSuccess: true, isLoading: false, isError: false, data:action.payload},
       };
       break;
     case GET_EXAM_QUESTIONS_ERROR:
       return {
         ...state,
-        getExamQuestions: {
+        examQuestions: {
           isSuccess: false,
           isLoading: false,
           isError: true,
+          data:{}
         },
       };
       break;

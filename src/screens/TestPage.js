@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {
   Alert,
   BackHandler,
@@ -11,8 +11,8 @@ import {
   Dimensions,
   ActivityIndicator,
   // BackHandler
-} from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
+} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   Container,
   Content,
@@ -26,27 +26,27 @@ import {
   View,
   Icon,
   Input,
-  Item
-} from "native-base";
-import NetInfo from "@react-native-community/netinfo";
-import map from "lodash/map";
-import uniqWith from "lodash/uniqWith";
-import isEqual from "lodash/isEqual";
-import styles from "../styles";
-import _styles from "../styles/screens/TestPage";
-import Questions from "../components/Questions";
-import StartTest from "../components/StartTest";
-import { callingHelp } from "../actions";
-import { notify } from "../helper/notify";
-import { SUCCESS_STATUS } from "../helper/constant";
-import { COLOR } from "../styles/color";
-import CountDown from "react-native-countdown-component";
-import { setItem, getItem } from "../helper/storage";
-import LinearGradient from "react-native-linear-gradient";
-import CustomSubmitAlert from "../components/CustomSubmitAlert";
+  Item,
+} from 'native-base';
+import NetInfo from '@react-native-community/netinfo';
+import map from 'lodash/map';
+import uniqWith from 'lodash/uniqWith';
+import isEqual from 'lodash/isEqual';
+import styles from '../styles';
+import _styles from '../styles/screens/TestPage';
+import Questions from '../components/Questions';
+import StartTest from '../components/StartTest';
+import {callingHelp} from '../actions';
+import {notify} from '../helper/notify';
+import {SUCCESS_STATUS} from '../helper/constant';
+import {COLOR} from '../styles/color';
+import CountDown from 'react-native-countdown-component';
+import {setItem, getItem} from '../helper/storage';
+import LinearGradient from 'react-native-linear-gradient';
+import CustomSubmitAlert from '../components/CustomSubmitAlert';
 import styless from '../styles/index';
 import Modal from 'react-native-modalbox';
-var { height, width } = Dimensions.get("window");
+var {height, width} = Dimensions.get('window');
 class TestPage extends Component {
   scroll = new Animated.Value(0);
   headerY;
@@ -63,159 +63,158 @@ class TestPage extends Component {
       time: 0,
       isOpen: false,
       scrollTop: true,
-      isHelpModal:false,
-      userMessage:'',
-      message:"",
+      isHelpModal: false,
+      userMessage: '',
+      message: '',
     };
     this.handleNetwork = this.handleNetwork.bind(this);
     this.headerY = Animated.multiply(
       Animated.diffClamp(this.scroll, -46, 0),
-      -1
+      -1,
     );
   }
   async componentDidMount() {
-    const question = await getItem("question");
-    this.setState({ question: question.data, count: question.data.count });
-    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
+    this.props.navigation.setParams({
+      running: false,
+    });
+    // const question = await getItem('question');
+    // this.setState({question: question.data, count: question.data.count});
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     NetInfo.isConnected.addEventListener(
-      "connectionChange",
-      this.handleNetwork
+      'connectionChange',
+      this.handleNetwork,
     );
 
-    const ans = await getItem("solution");
-    const email = await getItem("email");
+    const ans = await getItem('solution');
+    const email = await getItem('email');
     if (
-      ans !== undefined &&
-      email.email === this.props.navigation.state.params.email
+      ans !==
+      undefined /* &&
+      email === this.props.navigation.state.params.email */
     ) {
-      this.setState({ solution: ans.solution });
+      this.setState({solution: ans.solution});
     }
-    if (this.props.questions.data.roundType === "Subjective") {
-      AsyncStorage.removeItem("remaining_time");
-    }
-
+    // if (this.props.questions.data.roundType === 'Subjective') {
+    //   AsyncStorage.removeItem('remaining_time');
+    // }
   }
 
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     NetInfo.isConnected.removeEventListener(
-      "connectionChange",
-      this.handleNetwork
+      'connectionChange',
+      this.handleNetwork,
     );
   }
   handleBackButton = () => {
-    alert("You are not allowed to go back.");
+    alert('You are not allowed to go back.');
     return true;
   };
   handleNetwork(isconnect) {
+    if (isconnect) {
+      this.props.navigation.setParams({
+        running: false,
+      });
+    }
     //functinality for net connection at time of answering paper
-    this.setState({ isOnline: isconnect });
-    this.state.isOnline ? this.setState({ show: false }) : null;
+    this.setState({isOnline: isconnect});
+    this.state.isOnline ? this.setState({show: false}) : null;
   }
 
-  static navigationOptions = ({ navigation }) => {
-    const counter =
-      navigation.state.params.remaining_time !== undefined
-        ? navigation.state.params.remaining_time.remaining_time
-        : navigation.state.params.data.timeForExam*60;
-    const round = navigation.state.params.data.round;
+  static navigationOptions = ({navigation}) => {
+    const counter = navigation.state.params.remaining_time;
+    const {running} = navigation.state.params;
     return {
       headerLeft: <View />,
       headerRight: <View />,
       headerStyle: {
         elevation: 0,
-        backgroundColor: COLOR.LGONE
+        backgroundColor: COLOR.LGONE,
       },
       headerTitle: (
         <View style={_styles.timerView}>
-          {navigation.state.params.show !== undefined ? (
-            navigation.state.params.show ? (
-              <React.Fragment>
-                <Text
-                  style={
-                    Platform.OS === "ios"
-                      ? _styles.remainingTimeTextIOS
-                      : [styles.text, _styles.remainingTimeText]
-                  }
-                >
-                  Remaining Time
-                </Text>                          
-                  <CountDown
-                    until={counter}
-                    onChange	={counter => {
-                      setItem(
-                        "remaining_time",
-                        JSON.stringify({ remaining_time: counter })
-                      );
-                      if (counter < 180 && counter > 175) {
-                        notify(
-                          "You have less than 3 minutes left to complete your test.Your marked responses are saved. If you don't submit manually, you will be directed to next page where you will submit your test"
-                        );
-                      }
-                    }}
-                    onFinish={() => {
-                      navigation.navigate("SubmitTest", {
-                        ...navigation.state.params,
-                        taken_time_minutes:
-                          navigation.state.params.data.timeForExam
-                      });
-                    }}
-                    digitStyle={{backgroundColor:"transparent"}}
-                    timeLabels={{m: null, s: null}}
-                    timeToShow={['H', 'M', 'S']}
-                    size={Platform.OS === "ios" ? 13 : 15 }
-                    showSeparator={true}
-                    separatorStyle={_styles.timerStyle}
-                    digitTxtStyle={_styles.timerStyle}
-                  />
-              </React.Fragment>
-            ) : null
-          ) : null}
+          <React.Fragment>
+            <Text
+              style={
+                Platform.OS === 'ios'
+                  ? _styles.remainingTimeTextIOS
+                  : [styles.text, _styles.remainingTimeText]
+              }>
+              Remaining Time
+            </Text>
+            <CountDown
+              until={counter}
+              onChange={counter => {
+                console.log(counter);
+
+                setItem('remaining_time', JSON.stringify(counter));
+                if (counter < 180 && counter > 175) {
+                  notify(
+                    "You have less than 3 minutes left to complete your test.Your marked responses are saved. If you don't submit manually, you will be directed to next page where you will submit your test",
+                  );
+                }
+              }}
+              onFinish={() => {
+                // navigation.navigate("SubmitTest", {
+                //   ...navigation.state.params,
+                //   taken_time_minutes:
+                //     navigation.state.params.data.timeForExam
+                // });
+              }}
+              running={running}
+              digitStyle={{backgroundColor: 'transparent'}}
+              timeLabels={{m: null, s: null}}
+              timeToShow={['H', 'M', 'S']}
+              size={Platform.OS === 'ios' ? 13 : 15}
+              showSeparator={true}
+              separatorStyle={_styles.timerStyle}
+              digitTxtStyle={_styles.timerStyle}
+            />
+          </React.Fragment>
         </View>
-      )
+      ),
     };
   };
 
   handleCallHelp = async () => {
-    this.setState({isHelpModal:true})
+    this.setState({isHelpModal: true});
   };
 
-  askHelp=async()=>{
-    let userMessage =this.state.userMessage.trim()
-    if(userMessage !==""){
-      this.setState({message:""})
-    const fb_id = this.props.navigation.getParam("fb_id");
-    const accessToken = fb_id ? true : null;
-    const message = this.state.userMessage
-    await this.props.callingHelp(accessToken, fb_id,message);
-    const { data } = this.props.callHelp;
-    if (data !== undefined) {
-      if (data.status === SUCCESS_STATUS) {
-        this.setState({isHelpModal:false})
-        notify("Please Wait. The message has been sent to HR");
+  askHelp = async () => {
+    let userMessage = this.state.userMessage.trim();
+    if (userMessage !== '') {
+      this.setState({message: ''});
+      const fb_id = this.props.navigation.getParam('fb_id');
+      const accessToken = fb_id ? true : null;
+      const message = this.state.userMessage;
+      await this.props.callingHelp(accessToken, fb_id, message);
+      const {data} = this.props.callHelp;
+      if (data !== undefined) {
+        if (data.status === SUCCESS_STATUS) {
+          this.setState({isHelpModal: false});
+          notify('Please Wait. The message has been sent to HR');
+        }
       }
-    }
-    const { success } = this.props.callHelp;
-    if (success !== undefined) {
-      if (success === false) {
-        this.setState({isHelpModal:false})
-        notify("Something went wrong");
+      const {success} = this.props.callHelp;
+      if (success !== undefined) {
+        if (success === false) {
+          this.setState({isHelpModal: false});
+          notify('Something went wrong');
+        }
       }
+    } else {
+      this.setState({message: 'Ask something from HR'});
     }
-  }
-  else{
-    this.setState({message:"Ask something from HR"})
-  }
-  }
+  };
 
   scrollToTopLogical = (expanded, group_name) => {
-    if(expanded && !this.state.scrollTop && group_name === "Aptitude"){
-      this.setState({scrollTop:true})
+    if (expanded && !this.state.scrollTop && group_name === 'Aptitude') {
+      this.setState({scrollTop: true});
     }
-  }
-  
+  };
+
   handleSubmit = async (question, option, group_name) => {
-    if(group_name !== "Aptitude"){
+    if (group_name !== 'Aptitude') {
       this.setState({scrollTop: false});
     }
     const solution = this.state.solution;
@@ -227,11 +226,11 @@ class TestPage extends Component {
           value.ans_id = option;
           found = true;
         } else if (!found) {
-          answer = { Q_id: question, ans_id: option };
+          answer = {Q_id: question, ans_id: option};
         }
       });
     } else {
-      answer = { Q_id: question, ans_id: option };
+      answer = {Q_id: question, ans_id: option};
     }
 
     if (answer != undefined) {
@@ -239,155 +238,194 @@ class TestPage extends Component {
     }
     const uniqSolution = uniqWith(solution, isEqual);
     this.setState({
-      solution: uniqSolution
+      solution: uniqSolution,
     });
-    await setItem("solution", JSON.stringify({ solution: uniqSolution }));
+    await setItem('solution', JSON.stringify({solution: uniqSolution}));
   };
 
-  confirmSubmit = async() => {
+  confirmSubmit = async () => {
     this.showCustomAlert(false);
-    const time = await getItem("remaining_time");
+    const time = await getItem('remaining_time');
     if (this.state.solution.length === 0) {
-      alert("Cannot submit without attempting any question.");
+      alert('Cannot submit without attempting any question.');
     } else {
-      this.props.navigation.navigate("SubmitTest", {
+      this.props.navigation.navigate('SubmitTest', {
         ...this.props.navigation.state.params,
-        taken_time_minutes: 60 - Math.ceil(time.remaining_time / (60 * 1000))
+        taken_time_minutes: 60 - Math.ceil(time.remaining_time / (60 * 1000)),
       });
     }
   };
   confirmSecondRoundSubmit = () => {
     this.showCustomAlert(false);
 
-    this.props.navigation.navigate("SubmitTest", {
-      ...this.props.navigation.state.params
+    this.props.navigation.navigate('SubmitTest', {
+      ...this.props.navigation.state.params,
     });
   };
 
   handleStartTest = async () => {
-    this.setState({ show: true });
-    if (this.props.navigation.state.params.show === undefined) {
-      this.props.navigation.setParams({
-        show: true
-      });
-    } else if (this.props.navigation.state.params.show) {
-      return;
-    }
+    this.setState({show: true});
+    this.props.navigation.setParams({
+      running: true,
+    });
+    // if (this.props.navigation.state.params.show === undefined) {
+    //   this.props.navigation.setParams({
+    //     show: true,
+    //   });
+    // } else if (this.props.navigation.state.params.show) {
+    //   return;
+    // }
 
-    const time =
-      this.props.navigation.state.params.data.timeForExam * 60 * 1000;
-    const remaining_time = await getItem("remaining_time");
+    // const time =
+    //   this.props.navigation.state.params.data.timeForExam * 60 * 1000;
+    // const remaining_time = await getItem('remaining_time');
 
-    if (
-      remaining_time !== undefined &&
-      remaining_time.remaining_time !== null
-    ) {
-      this.props.navigation.setParams({
-        time: remaining_time.remaining_time
-      });
-    } else {
-      this.props.navigation.setParams({
-        time
-      });
-    }
+    // if (
+    //   remaining_time !== undefined &&
+    //   remaining_time.remaining_time !== null
+    // ) {
+    //   this.props.navigation.setParams({
+    //     time: remaining_time.remaining_time,
+    //   });
+    // } else {
+    //   this.props.navigation.setParams({
+    //     time,
+    //   });
+    // }
   };
 
   showCustomAlert = async show => {
-    this.setState({ isOpen: show });
+    this.setState({isOpen: show});
   };
 
   scrollToBegin = () => {
-      this.myRef.getNode().scrollTo({
-        y: 0,
-        animated: true
-      });
+    this.myRef.getNode().scrollTo({
+      y: 0,
+      animated: true,
+    });
   };
   render() {
-    const name = this.props.navigation.getParam("name");
-    const { count, question, isOnline, show } = { ...this.state };
+    // const name = this.props.navigation.getParam("name");
+    const {count, question, isOnline, show} = this.state;
+    console.log(this.state.solution, 'kllllllllllllllllllllllll');
+    const {examQuestions} = this.props.candidate;
+
     let solution = this.state.solution;
-    const { roundType } = this.props.questions.data;
+    // const { roundType } = this.props.questions.data;
 
     return (
-      <View style={{ flex: 1 }}>
-      
-      { <Modal
-          isDisabled={false}
-          coverScreen={true}
-          backdropPressToClose={true}
-          swipeToClose={false}
-          style={{width:width-50,height:width-50,backgroundColor:COLOR.LGONE,flexDirection:"column",justifyContent:"space-around"}}
-          isOpen={this.state.isHelpModal}
-          position={"center"}
-          onClosed={()=>{this.setState({userMessage:"",isHelpModal:false})}}
-        >
-        {this.props.callHelp.isLoading && <View
-          style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
-        >
-          <ActivityIndicator
-            animating={true}
-            // style={{ opacity: this.state.opacity }}
-            size="large"
-            color={COLOR.MUSTARD}
-          />
-        </View>}
-        <View >
-        <View>
-            <Text style={{color:"#fff",fontSize:16,alignSelf:"center",fontFamily:"Montserrat-Regular"}}>Write your message,You need help for?</Text>
-          </View>
-          <Item style={[styless.itemView,{marginLeft:20,marginRight:20}]}>
-          <Input
-              style={styless.inputText}
-              placeholder="Write your message"
-              placeholderTextColor={COLOR.DARKGREY}
-              name="email"
-              value={this.state.userMessage}
-              keyboardType="email-address"
-              selectionColor={COLOR.DARKGREY}
-              underlineColorAndroid={COLOR.PURPLE}
-              onChangeText={text => this.setState({ userMessage: text })}
-              autoCapitalize="none"
-              Textbox
-            />
-            </Item>
-            <Text style={{color:COLOR.Red,fontSize:12,alignSelf:"flex-start",marginLeft:20,fontFamily:"Montserrat-Regular"}}>{this.state.message}</Text>
-          </View>
-          <View style={{justifyContent:"center",flexDirection:'row'}}>
-          <Button disabled ={this.props.callHelp.isLoading} onPress={this.askHelp} warning><Text> Send Message </Text></Button>
-          </View>
-        </Modal>
-      }
+      <View style={{flex: 1}}>
+        {
+          <Modal
+            isDisabled={false}
+            coverScreen={true}
+            backdropPressToClose={true}
+            swipeToClose={false}
+            style={{
+              width: width - 50,
+              height: width - 50,
+              backgroundColor: COLOR.LGONE,
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+            }}
+            isOpen={this.state.isHelpModal}
+            position={'center'}
+            onClosed={() => {
+              this.setState({userMessage: '', isHelpModal: false});
+            }}>
+            {this.props.callHelp.isLoading && (
+              <View
+                style={{
+                  zIndex: 1,
+                  position: 'absolute',
+                  top: '50%',
+                  left: '45%',
+                }}>
+                <ActivityIndicator
+                  animating={true}
+                  // style={{ opacity: this.state.opacity }}
+                  size="large"
+                  color={COLOR.MUSTARD}
+                />
+              </View>
+            )}
+            <View>
+              <View>
+                <Text
+                  style={{
+                    color: '#fff',
+                    fontSize: 16,
+                    alignSelf: 'center',
+                    fontFamily: 'Montserrat-Regular',
+                  }}>
+                  Write your message,You need help for?
+                </Text>
+              </View>
+              <Item
+                style={[styless.itemView, {marginLeft: 20, marginRight: 20}]}>
+                <Input
+                  style={styless.inputText}
+                  placeholder="Write your message"
+                  placeholderTextColor={COLOR.DARKGREY}
+                  name="email"
+                  value={this.state.userMessage}
+                  keyboardType="email-address"
+                  selectionColor={COLOR.DARKGREY}
+                  underlineColorAndroid={COLOR.PURPLE}
+                  onChangeText={text => this.setState({userMessage: text})}
+                  autoCapitalize="none"
+                  Textbox
+                />
+              </Item>
+              <Text
+                style={{
+                  color: COLOR.Red,
+                  fontSize: 12,
+                  alignSelf: 'flex-start',
+                  marginLeft: 20,
+                  fontFamily: 'Montserrat-Regular',
+                }}>
+                {this.state.message}
+              </Text>
+            </View>
+            <View style={{justifyContent: 'center', flexDirection: 'row'}}>
+              <Button
+                disabled={this.props.callHelp.isLoading}
+                onPress={this.askHelp}
+                warning>
+                <Text> Send Message </Text>
+              </Button>
+            </View>
+          </Modal>
+        }
         {show && (
           <Animated.View
             style={{
               zIndex: 1,
-              position: "absolute",
-              width: "100%",
+              position: 'absolute',
+              width: '100%',
               bottom: 0,
               elevation: 0,
               flex: 1,
               transform: [
                 {
-                  translateY: this.headerY
-                }
-              ]
-            }}
-          >
+                  translateY: this.headerY,
+                },
+              ],
+            }}>
             <Button
               full
-              style={{ backgroundColor: COLOR.MUSTARD, width: "100%" }}
+              style={{backgroundColor: COLOR.MUSTARD, width: '100%'}}
               onPress={() => {
                 this.showCustomAlert(true);
-              }}
-            >
+              }}>
               <Text style={_styles.submitButtonText}>Submit Test</Text>
             </Button>
           </Animated.View>
         )}
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
-          style={{ flex: 1, flexDirection: "column" }}
-        >
+          style={{flex: 1, flexDirection: 'column'}}>
           <Animated.ScrollView
             ref={c => (this.myRef = c)}
             scrollEventThrottle={1}
@@ -395,59 +433,48 @@ class TestPage extends Component {
             bounces={false}
             showsVerticalScrollIndicator={false}
             onScroll={Animated.event(
-              [{ nativeEvent: { contentOffset: { y: this.scroll } } }],
-              { useNativeDriver: true, listener: e => {} }
+              [{nativeEvent: {contentOffset: {y: this.scroll}}}],
+              {useNativeDriver: true, listener: e => {}},
             )}
-            overScrollMode="never"
-          >
+            overScrollMode="never">
             {show ? (
-              <Content style={{ flex: 1, flexDirection: "column" }}>
+              <Content style={{flex: 1, flexDirection: 'column'}}>
                 <Text
                   style={[
                     styles.text,
-                    { color: COLOR.TURQUOISE, marginTop: 10 }
-                  ]}
-                >
-                  Hi {name}
+                    {color: COLOR.TURQUOISE, marginTop: 10},
+                  ]}>
+                  Hi 
+                  {/* {name} */}
                 </Text>
-                {roundType !== "Subjective" ? (
-                  <Text style={[styles.text, { color: COLOR.TURQUOISE }]}>
-                    Questions Attempted : {`${solution.length}/`}
-                    {count}{" "}
-                  </Text>
-                ) : (
+                {/* {roundType !== "Subjective" ? ( */}
+                <Text style={[styles.text, {color: COLOR.TURQUOISE}]}>
+                  {/* Questions Attempted : {`${solution.length}/`} */}
+                  {count}{' '}
+                </Text>
+                {/* ) : (
                   <Text style={styles.text}>Total Questions : {count}</Text>
-                )}
+                )} */}
                 <Questions
-                  question={question}
+                  question={examQuestions.data.data}
                   solution={solution}
                   handleSubmit={this.handleSubmit}
                   scrollToBegin={this.scrollToBegin}
-                  scrollTop = {this.state.scrollTop}
-                  scrollToTopLogical = {this.scrollToTopLogical}
+                  scrollTop={this.state.scrollTop}
+                  scrollToTopLogical={this.scrollToTopLogical}
                 />
-                {/* <View style={{height, flexDirection:'column',alignSelf:'flex-end',alignContent:'flex-end'}}> */}
-                {/* <Button
-              full
-              style={{ backgroundColor: COLOR.MUSTARD }}
-              onPress={() => {
-                this.showCustomAlert(true);
-              }}
-            >
-              <Text style={_styles.submitButtonText}>Submit Test</Text>
-            </Button> */}
-                {/* </View> */}
                 <CustomSubmitAlert
                   showCustomAlert={this.showCustomAlert}
                   isOpen={this.state.isOpen}
                   length={this.state.solution.length}
                   count={this.state.count}
                   confirmSubmit={
-                    roundType !== "Subjective"
-                      ? this.confirmSubmit
-                      : this.confirmSecondRoundSubmit
+                    // roundType !== "Subjective"
+                    // ?
+                    this.confirmSubmit
+                    // : this.confirmSecondRoundSubmit
                   }
-                  roundType={roundType}
+                  // roundType={roundType}
                 />
               </Content>
             ) : (
@@ -466,9 +493,17 @@ class TestPage extends Component {
 }
 const mapStateToProps = state => ({
   callHelp: state.callHelp,
-  questions: state.questions
+  questions: state.questions,
+  candidate: state.candidate,
 });
 export default connect(
   mapStateToProps,
-  { callingHelp }
+  {callingHelp},
 )(TestPage);
+
+// {testPaperId: "5e3eafc1a539ca09871594e9", user_id: "4117367680",…}
+// answers: [{Q_id: "5e3eaf58a539ca09871594e7", ans_id: [1]}]
+// questionIds: ["5e3eaf2da539ca09871594e5", "5e3eaf3ea539ca09871594e6", "5e3eaf58a539ca09871594e7",…]
+// taken_time_minutes: 1
+// testPaperId: "5e3eafc1a539ca09871594e9"
+// user_id: "4117367680"

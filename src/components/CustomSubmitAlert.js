@@ -51,16 +51,16 @@ const CustomSubmitAlert = props => {
             <Text style={[styles.cnfrm, styles.confirmText]}>
               CONFIRM PLEASE
             </Text>
-            {roundType === "Objective" && (
+            {/* {roundType === "Objective" && (
               <Text style={[styles.cnfrm, styles.modalText]}>
                 {`You have attempted ${length}/${count} questions`}
               </Text>
-            )}
+            )} */}
             <Text style={[styles.cnfrm, styles.modalText]}>
               Are you sure you want to submit your test?
-              {roundType === "Objective" &&
+              {/* {roundType === "Objective" &&
                 `You Won't be able to
-              change your response after submitting the test`}
+              change your response after submitting the test`} */}
             </Text>
             <View style={styles.modalBtnView}>
               <CustomButton
@@ -94,6 +94,6 @@ CustomSubmitAlert.propTypes = {
   length: PropTypes.number,
   count: PropTypes.number,
   confirmSubmit: PropTypes.func.isRequired,
-  roundType: PropTypes.string
+  // roundType: PropTypes.string
 };
 export default CustomSubmitAlert;

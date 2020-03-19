@@ -35,13 +35,12 @@ class ThankYou extends Component {
     const {candidateInterview,
       candidateInterview: {isSuccess},
     } = this.props.candidate;
-    console.log(candidateInterview,'candidateInterview')
     if (
       isSuccess !== nextProps.candidate.candidateInterview.isSuccess &&
       isSuccess
     ) {
       if (candidateInterview.data.user_id) {
-        this.props.getExamQuestions(candidateInterview.data.user_id);
+        this.props.navigation.replace('Instructions');
       }
     }
   }

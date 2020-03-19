@@ -36,10 +36,11 @@ import {
   candidateValidationapi,
   interviewLoginClearData,
   verifyCandidate,
+  setCurrentUser,
 } from '../actions';
 import LinearGradient from 'react-native-linear-gradient';
 import AlertMessage from '../helper/toastAlert';
-import {setItem} from '../helper/storage';
+import {setItem, getItem} from '../helper/storage';
 class InterviewLogin extends Component {
   constructor() {
     super();
@@ -62,6 +63,7 @@ class InterviewLogin extends Component {
 
   async componentDidUpdate(nextProps) {
     const {
+      candidateInterview,
       candidateInterview: {isSuccess},
     } = this.props.candidate;
     if (
@@ -69,12 +71,21 @@ class InterviewLogin extends Component {
       isSuccess
     ) {
       await setItem('email', JSON.stringify(this.state.email));
+      this.props.setCurrentUser(this.state.email);
       this.setState({email: ''});
+      if(candidateInterview.data.user_id){
+        this.props.navigation.replace('Instructions');
+      }else{
         this.props.navigation.replace('VerifyingCandidate');
+      }
     }
   }
 
-  async componentDidMount() {}
+  async componentDidMount() {
+    remaningTime = await getItem('remaining_time')
+    console.log(remaningTime,'remaningTime');
+    
+  }
 
   handleSubmit = async () => {
     const {email} = this.state;
@@ -189,5 +200,6 @@ export default connect(
     getCandidateJobDetails,
     candidateValidationapi,
     interviewLoginClearData,
+    setCurrentUser
   },
 )(InterviewLogin);
