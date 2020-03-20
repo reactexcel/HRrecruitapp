@@ -28,7 +28,7 @@ const CustomSubmitAlert = props => {
         onClosed={() => showCustomAlert(false)}
       >
         <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-          <Button
+          {/* <Button
             onPress={() => {
               showCustomAlert(false);
             }}
@@ -37,7 +37,7 @@ const CustomSubmitAlert = props => {
             primary
           >
             <Icon style={styles.closeIconStyle} name="close" />
-          </Button>
+          </Button> */}
         </View>
         <View style={styles.modalContentView}>
           <View style={styles.modalImageView}>
@@ -51,11 +51,11 @@ const CustomSubmitAlert = props => {
             <Text style={[styles.cnfrm, styles.confirmText]}>
               CONFIRM PLEASE
             </Text>
-            {/* {roundType === "Objective" && (
+            {/* {roundType === "Objective" && ( */}
               <Text style={[styles.cnfrm, styles.modalText]}>
                 {`You have attempted ${length}/${count} questions`}
               </Text>
-            )} */}
+            {/* )} */}
             <Text style={[styles.cnfrm, styles.modalText]}>
               Are you sure you want to submit your test?
               {/* {roundType === "Objective" &&

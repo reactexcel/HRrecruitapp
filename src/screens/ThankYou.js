@@ -22,11 +22,11 @@ class ThankYou extends Component {
   }
 
   getStatus = async () => {
-    const email = await getItem('email');
+    const {currentUser} = this.props.candidate
     const paylaod = {
-      email,
-      appliedEmail: email,
-      profile_pic: `https://pikmail.herokuapp.com/${email}?size=60`,
+      email:currentUser,
+      appliedEmail: currentUser,
+      profile_pic: `https://pikmail.herokuapp.com/${currentUser}?size=60`,
     };
     await this.props.verifyCandidate(paylaod);
   };
@@ -72,7 +72,7 @@ class ThankYou extends Component {
               <View style={style.seperator} />
               <CountDown
                 id={`${this.state.reset}`}
-                until={6}
+                until={30}
                 size={30}
                 running={true}
                 onFinish={() => this.onFinish()}

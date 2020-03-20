@@ -64,7 +64,7 @@ export default function(state = initialState, action) {
           isSuccess: false,
           isLoading: false,
           isError: true,
-          data:{}
+          data:action.payload
         },
       };
       break;

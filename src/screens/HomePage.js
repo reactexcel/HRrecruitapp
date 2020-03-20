@@ -64,7 +64,7 @@ class HomePage extends Component {
       linkOpening: false,
       candidateJob: null,
       profile_pic: null,
-      userName: null,
+      userName: null,   
       mobile_no: null,
       textColor: false,
       sender_mail:'',
@@ -82,28 +82,12 @@ class HomePage extends Component {
       sharedJobLink:false,
     };
     this.handleViewClick = this.handleViewClick.bind(this);
+    SplashScreen.hide()
   }
   static navigationOptions = {
     header: null
   };
 
- handleSetProfile= async(candidateJob)=>{
-  let email = candidateJob.sender_mail;
-  let profile_pic = candidateJob.hasOwnProperty("profilePicture") ? 
-                    candidateJob.profilePicture : `https://pikmail.herokuapp.com/${email}?size=60`;
-  let mobile_no = candidateJob.mobile_no;
-  let userName = candidateJob.from;
-  this.setState({
-    candidateJob,
-    profile_pic,
-    userName,
-    mobile_no,
-    linkOpening: false,
-    notification: "",
-    sender_mail:candidateJob.sender_mail,
-    mongo_id:candidateJob._id
-  });
- }
 
   async handleViewClick(data) {
     const { appliedJob, network } = this.props;
@@ -112,212 +96,34 @@ class HomePage extends Component {
         appliedJob: appliedJob,
         title: "Your Applied Jobs"
       });
-    } else if (data == "Profile") {
-        if(appliedJob.success){
-          const {
-            linkOpening,
-            textColor,
-            candidateJob,
-            ...profileDetails
-          } = this.state;
-          this.props.navigation.navigate("Profile", {
-            appliedJob,
-            profileDetails,
-            sender_mail:this.state.sender_mail,
-            mongo_id:this.state.mongo_id,
-            profile_picture:this.state.profile_picture,
-            latestImage:this.props.candidateProfileUpdateDetails.profilePicture
-          });
-        }else{
-          if(network.isConnected){
-            AlertMessage("Please wait! we are fetching your profile.", "toast")
-          }else{
-            AlertMessage("Please! connect to the internet first to fetch your profile.", "toast")
-          }
-        }
     } else if(data !== "Profile") {
       this.props.navigation.navigate(data, { title: "Job Openings" ,isCandidate:false});
     }
   }
 
-  askStoragePermission = async () =>{
-    await Permissions.request('storage').then(response => {
-    })
-  }
 
   componentDidMount = async () => {   
-    AppState.addEventListener("change", this._handleAppStateChange);
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
     NetInfo.isConnected.addEventListener("connectionChange",this.handleNetworks);
-    const candidateJob = await getItem("mongo_id");    
-    if(candidateJob && Object.keys(candidateJob).length){
-      this.handleSetProfile(candidateJob.candidate.data)
-    }
-
-    let willFocused = false
-    this.props.navigation.addListener("willFocus",async () =>{
-      if(willFocused){
-        const candidateJob = await getItem("mongo_id");
-        const {appliedJob} = this.props;
-        if(candidateJob && Object.keys(candidateJob).length && !appliedJob.success){
-          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-        }
-        if(candidateJob && Object.keys(candidateJob).length){
-          this.handleSetProfile(candidateJob.candidate.data)
-        }
-      }
-    })
-    this.props.navigation.addListener("didBlur",async () =>{
-      willFocused = true
-      bitlyLink = false
-    })
-    NetInfo.fetch().then(async state => {
-      if(state.isConnected){
-        SplashScreen.hide()
-        if(candidateJob && Object.keys(candidateJob).length){
-          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-        }
-        branch.subscribe(async ({ params }) => {
-          if (params.errors && params.errors !== undefined) {
-            this.branchError(params.errors)
-          }
-          else if(params.$share_data !== undefined ){
-            this.setState({params,sharedJobLink:true})
-            await this.props.getJobLists()
-          }else if(params.$deeplink_path !== undefined){
-            this._checkDeepLink(params)
-          }else{
-            const notificationOpen =await firebase.notifications().getInitialNotification();
-            if(notificationOpen !==null &&  notificationOpen !==undefined){
-                this.setState({isNotification:true});
-              }
-              else{
-                Permissions.checkMultiple(['location']).then(response => {
-                  if(response.storage != 'authorized'){
-                    this.askStoragePermission()
-                  }
-                })
-              }
-          }
-        })
-      }
-      else{
-        SplashScreen.hide()
-      }
-    })
   };
 
   handleNetworks = async isConnected => {
     this.props.connectionState(isConnected);
   };
 
-  _handleAppStateChange = async nextAppState => {
-    if (nextAppState == "active") {
-      SplashScreen.hide();
-    }
-  };
 
-  branchError=(error)=>{
-    AlertMessage(`Error from Branch: " + ${error}`,'alert');
-  }
 
   async componentDidUpdate (props) {
-    const applied = this.props.navigation.getParam("applied");
-    const fromBitlyLink  = this.props.navigation.getParam("fromBitlyLink")
-    const {joblist,interviewSignUp, appliedJob, network}=this.props;
-    const {params, isError, isNotification} = this.state;
-    if (applied && !bitlyLink) {
-      bitlyLink =true
-      this.props.navigation.setParams({ applied: false});
-      const candidateJob = await getItem("mongo_id");
-       this.handleSetProfile(candidateJob.candidate.data);
-    }
-    if (fromBitlyLink && !bitlyLink ) {
-      bitlyLink =true
-      this.props.navigation.setParams({ fromBitlyLink: false});
-    }
-    if(joblist.isSuccess !== props.joblist.isSuccess){
-      if(joblist.isSuccess && this.state.sharedJobLink){
-        this.setState({sharedJobLink:false})
-        joblist.data.forEach((item, i) => {
-          if (item.id == params.$share_data) {
-            this.props.navigation.navigate("FullDescription", {
-              subject: item.subject,
-              job_description: item.job_description,
-              keyword: item.keyword,
-              candidate_profile: item.candidate_profile,
-              jobDetail: item,
-              currentJob: this.props.joblist
-            });
-          }
-        });
-      }
-    }
-    if(appliedJob.success && isNotification){
-      this.setState({isNotification:false})
-        const {
-          linkOpening,
-          textColor,
-          candidateJob,
-          ...profileDetails
-        } = this.state;
-        this.props.navigation.navigate("Profile", {
-          appliedJob,
-          profileDetails
-        });
-    }
-    if(appliedJob.isError !== props.appliedJob.isError){
-      if(appliedJob.isError){
-      AlertMessage("Something went wrong", "toast")
-      }
-    }
-    if(interviewSignUp.isError !== props.interviewSignUp.isError){
-      const { error, success, msg, message } = interviewSignUp;
-    if (error ==1) {
-      AlertMessage((msg || message), 'alert')
-    }
-  }
-  if(interviewSignUp.isSuccess !== props.interviewSignUp.isSuccess){ 
-    const {status} = interviewSignUp ;  
-    if (status==1){
-      this._linkCheck()
-    }
-  }
+    const { network } = this.props;
   if(network.isConnected !== props.network.isConnected){
        if(network.isConnected){
         AlertMessage("Internet connection is back.","toast")
-        const candidateJob = await getItem("mongo_id");
-        const {appliedJob} = this.props;
-        if(candidateJob && Object.keys(candidateJob).length && !appliedJob.success && !appliedJob.isLoading){
-          await this.props.getCandidateJobDetails(candidateJob.candidate.data._id);
-        }
       }else{
         AlertMessage("Opps! No internet connection.", "toast")
       }
    }
 }
 
-_checkDeepLink = async (params) => {
-  let fb_id = params.$deeplink_path;
-      this.setState({ deepLink: true,fb_id });
-      await this.props.getCandidateDetails(fb_id);
-};
-
-_linkCheck = async () => {
-  const { deepLink, fb_id } = this.state;
-  if (deepLink) {
-    const { data, message, error, status } = this.props.interviewSignUp;
-    setItem("mongo_id", JSON.stringify({ candidate: { data: data } }));
-    this.props.navigation.navigate("Instructions", {
-      fb_id: fb_id,
-      profile_pic: `https://pikmail.herokuapp.com/${
-        data.sender_mail
-      }?size=60`,
-      name: data.from,
-      email: data.sender_mail,
-      linkOpening:true
-    });
-  }
-};
 
   componentWillUnmount() {
     BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
@@ -385,18 +191,18 @@ _linkCheck = async () => {
     return (
       <View style={{ flex: 1 }}>
       
-        {(appliedJob.isLoading || joblist.isLoading || interviewSignUp.isLoading ) && <View
+        {/* {(appliedJob.isLoading || joblist.isLoading || interviewSignUp.isLoading ) && <View
           style={{ zIndex: 1, position: "absolute", top: "50%", left: "45%" }}
         >
           <ActivityIndicator
             size="large"
             color={COLOR.MUSTARD}
           />
-        </View>}
-         {this.state.isNotify && 
+        </View>} */}
+         {/* {this.state.isNotify && 
          <View style={{zIndex:1,position:'absolute',top:'31%',left:'45%'}}>
       <Spinner color={COLOR.MUSTARD} />
-    </View> }
+    </View> } */}
         <LinearGradient
           colors={[COLOR.LGONE, COLOR.LGTWO]}
           style={styles.container}

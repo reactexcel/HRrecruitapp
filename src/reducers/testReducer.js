@@ -5,24 +5,26 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  submitting: false
+  isSuccess:false,
+  isLoading:false,
+  isError:false,
+  data:{}
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case SUBMIT_TEST_REQUEST:
       return {
-        submitting: true
+        isSuccess:false, isLoading:true, isError:false
       };
       break;
     case SUBMIT_TEST_SUCCESS:
       return {
-        submitting: false,
-        ...action.payload
+        isSuccess: true, isLoading:false, isError:false, data:action.payload
       };
     case SUBMIT_TEST_FAILURE:
       return {
-        success: false
+        isSuccess: false, isLoading:false, isError:true
       };
     default:
       return state;

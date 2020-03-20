@@ -5,20 +5,16 @@ import {createAppContainer} from 'react-navigation';
 import HomePage from "../screens/HomePage";
 import InterviewLogin from "../screens/InterviewLogin";
 import VerifyingCandidate from "../screens/VerifyingCandidate";
-import OTPpage from "../screens/OTPpage";
-import AddCandidate from "../screens/AddNewCandidate";
 import Instructions from "../screens/Instructions";
 import TestPage from "../screens/TestPage";
 import SubmitTest from "../screens/SubmitTest";
 import JobList from "../screens/JobList";
-import AppIntro from "../screens/AppIntro";
 import AboutUs from "../screens/AboutUs";
-import Profile from "../screens/Profile";
 import FullDescription from "../screens/FullDescription";
 import ProfileDescription from '../components/ProfileDescription'
-import candidateValidation from '../screens/candidateValidation'
 import firebase from "react-native-firebase";
 import ThankYou from '../screens/ThankYou';
+import AddCandidate from '../screens/AddNewCandidate';
 
 const transitionConfig = () => {
   return {
@@ -60,6 +56,9 @@ const Rootstack = createStackNavigator(
     HomePage: {
       screen: HomePage
     },
+    AddCandidate:{
+      screen:AddCandidate
+    },
     ThankYou: {
       screen: ThankYou
     },
@@ -68,15 +67,6 @@ const Rootstack = createStackNavigator(
     },
     VerifyingCandidate: {
       screen: VerifyingCandidate
-    },
-    OTPpage: {
-      screen: OTPpage
-    },
-    candidateValidation:{
-      screen:candidateValidation
-    },
-    AddCandidate: {
-      screen: AddCandidate
     },
     Instructions: {
       screen: Instructions
@@ -92,9 +82,6 @@ const Rootstack = createStackNavigator(
     },
     AboutUs: {
       screen: AboutUs
-    },
-    Profile: {
-      screen: Profile
     },
     FullDescription: {
       screen: FullDescription

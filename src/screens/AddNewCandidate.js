@@ -43,16 +43,8 @@ import {
   getCandidateJobDetails,
   addNewCandidate,
 } from '../actions';
-import DocumentPicker from 'react-native-document-picker';
-import RNFetchBlob from 'rn-fetch-blob';
-// var RNFS = require('react-native-fs');
-import {setItem, getItem} from '../helper/storage';
-import firebase from 'react-native-firebase';
 import LinearGradient from 'react-native-linear-gradient';
 import {UploadProfile} from '../actions/actions';
-import SplashScreen from 'react-native-splash-screen';
-import toastMessage from '../helper/toastAlert';
-// http://176.9.137.77:8081/exams/getQuestinsForCandidate/6145055953
 
 class AddCandidate extends Component {
   contentHeight = 0;
@@ -77,10 +69,10 @@ class AddCandidate extends Component {
   };
 
   async componentDidMount() {
-    const candidate_email = await getItem('email');
-    if (candidate_email) {
-        this.setState({candidate_email})
-      this.props.change('candidate_email', candidate_email);
+    const {currentUser} = this.props.candidate
+    if (currentUser) {
+        this.setState({candidate_email:currentUser})
+      this.props.change('candidate_email', currentUser);
     }
   }
 
@@ -91,7 +83,6 @@ class AddCandidate extends Component {
       from,
       mobile_no,
     };
-    await setItem('email', JSON.stringify(candidate_email));
     this.props.addNewCandidate(data);
   };
 

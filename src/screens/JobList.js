@@ -90,12 +90,13 @@ class JobList extends Component {
     };
   };
   onApplyJob = item => {
-    this.props.navigation.navigate("AddCandidate", {
-      jobDetail: item,
-      currentJob: this.state.joblist,
-      isEditing:false,
-      addCandidate:true,
-      isCandidate:true
+    this.props.navigation.navigate("InterviewLogin", {
+      appliedText:''
+      // jobDetail: item,
+      // currentJob: this.state.joblist,
+      // isEditing:false,
+      // addCandidate:true,
+      // isCandidate:true
     });
   };
   onCancel() {

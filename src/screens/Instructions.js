@@ -61,23 +61,26 @@ class Instructions extends Component {
   handlePress = async () => {
     const {examQuestions, currentUser} = this.props.candidate;
     const email = await getItem('email');
+    console.log(email, currentUser, 'currentUsercurrentUser');
+
     let remaining_time;
+    if (email !== currentUser) {
+      await AsyncStorage.multiRemove(['solution', 'remaining_time']);
+    }
     let remaningTime = await getItem('remaining_time');
-    if (remaningTime > 0) {
+    if (remaningTime) {
       remaining_time = remaningTime;
     } else {
       remaining_time = examQuestions.data.timeForExam * 60;
     }
+    await setItem('email', JSON.stringify(currentUser));
     this.props.navigation.replace('TestPage', {
-      remaining_time:remaining_time,
+      remaining_time: remaining_time,
     });
   };
 
   render() {
-    const name = this.props.navigation.getParam('name');
     const {examQuestions} = this.props.candidate;
-    console.log(this.props.candidate, 'getExamQuestions');
-
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -86,7 +89,7 @@ class Instructions extends Component {
               <Text style={styles.headerText}>Instructions</Text>
             </CardItem>
             <HorizontalLine />
-            {examQuestions.isSuccess ? (
+            {examQuestions.isSuccess && (
               <Fragment>
                 {examQuestions.data.instructions && (
                   <Fragment>
@@ -105,8 +108,12 @@ class Instructions extends Component {
                   </Fragment>
                 )}
               </Fragment>
-            ) : (
-              <Spinner color={COLOR.MUSTARD} />
+            )}
+            {examQuestions.isLoading && <Spinner color={COLOR.MUSTARD} />}
+            {examQuestions.isError && (
+              <Text style={[webViewStyle.styledText, {color: 'red'}]}>
+                {examQuestions.data.msg}
+              </Text>
             )}
           </Card>
         </Content>

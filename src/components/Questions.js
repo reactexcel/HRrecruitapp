@@ -34,21 +34,6 @@ const Questions = props => {
         style={_styles.accordionStyle}
         dataArray={question}
         renderHeader={(questionObj, expanded) => {
-          console.log(questionObj, expanded);
-          
-          // if (
-          //   scrollTop &&
-          //   expanded &&
-          //   questionObj.group_name === "Logical Reasoning"
-          // ) {
-          //   scrollToBegin();
-          // }
-
-          // if (expanded && questionObj.group_name === "Aptitude") {
-          //   scrollToTopLogical(
-          //     expanded && questionObj.group_name === "Aptitude",questionObj.group_name
-          //   );
-          // } 
           return (
             <View
               style={[

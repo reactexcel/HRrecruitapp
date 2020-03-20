@@ -70,7 +70,6 @@ class InterviewLogin extends Component {
       isSuccess !== nextProps.candidate.candidateInterview.isSuccess &&
       isSuccess
     ) {
-      await setItem('email', JSON.stringify(this.state.email));
       this.props.setCurrentUser(this.state.email);
       this.setState({email: ''});
       if(candidateInterview.data.user_id){
@@ -81,11 +80,6 @@ class InterviewLogin extends Component {
     }
   }
 
-  async componentDidMount() {
-    remaningTime = await getItem('remaining_time')
-    console.log(remaningTime,'remaningTime');
-    
-  }
 
   handleSubmit = async () => {
     const {email} = this.state;
@@ -119,7 +113,6 @@ class InterviewLogin extends Component {
       candidateInterview: {isLoading},
     } = this.props.candidate;
     const {appliedText} = this.props.navigation.state.params;
-    console.log(this.props.navigation);
     return (
       <LinearGradient
         colors={[COLOR.LGONE, COLOR.LGTWO]}

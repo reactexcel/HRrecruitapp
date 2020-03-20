@@ -74,11 +74,11 @@ class TestPage extends Component {
     );
   }
   async componentDidMount() {
+    // this.setState({ question: question.data, count: question.data.count });
     this.props.navigation.setParams({
       running: false,
+      handleNavigateToSubmit: this.handleNavigateToSubmit,
     });
-    // const question = await getItem('question');
-    // this.setState({question: question.data, count: question.data.count});
     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     NetInfo.isConnected.addEventListener(
       'connectionChange',
@@ -86,17 +86,9 @@ class TestPage extends Component {
     );
 
     const ans = await getItem('solution');
-    const email = await getItem('email');
-    if (
-      ans !==
-      undefined /* &&
-      email === this.props.navigation.state.params.email */
-    ) {
+    if (ans !== undefined) {
       this.setState({solution: ans.solution});
     }
-    // if (this.props.questions.data.roundType === 'Subjective') {
-    //   AsyncStorage.removeItem('remaining_time');
-    // }
   }
 
   componentWillUnmount() {
@@ -123,7 +115,7 @@ class TestPage extends Component {
 
   static navigationOptions = ({navigation}) => {
     const counter = navigation.state.params.remaining_time;
-    const {running} = navigation.state.params;
+    const {running, handleNavigateToSubmit} = navigation.state.params;
     return {
       headerLeft: <View />,
       headerRight: <View />,
@@ -145,8 +137,6 @@ class TestPage extends Component {
             <CountDown
               until={counter}
               onChange={counter => {
-                console.log(counter);
-
                 setItem('remaining_time', JSON.stringify(counter));
                 if (counter < 180 && counter > 175) {
                   notify(
@@ -154,13 +144,7 @@ class TestPage extends Component {
                   );
                 }
               }}
-              onFinish={() => {
-                // navigation.navigate("SubmitTest", {
-                //   ...navigation.state.params,
-                //   taken_time_minutes:
-                //     navigation.state.params.data.timeForExam
-                // });
-              }}
+              onFinish={() => handleNavigateToSubmit()}
               running={running}
               digitStyle={{backgroundColor: 'transparent'}}
               timeLabels={{m: null, s: null}}
@@ -243,15 +227,21 @@ class TestPage extends Component {
     await setItem('solution', JSON.stringify({solution: uniqSolution}));
   };
 
+  handleNavigateToSubmit = async () => {
+    const remaining_time = await getItem('remaining_time');
+    this.props.navigation.replace('SubmitTest', {
+      taken_time_minutes: 60 - Math.ceil(remaining_time / (60 * 1000)),
+    });
+  };
+
   confirmSubmit = async () => {
     this.showCustomAlert(false);
-    const time = await getItem('remaining_time');
+    const remaining_time = await getItem('remaining_time');
     if (this.state.solution.length === 0) {
       alert('Cannot submit without attempting any question.');
     } else {
-      this.props.navigation.navigate('SubmitTest', {
-        ...this.props.navigation.state.params,
-        taken_time_minutes: 60 - Math.ceil(time.remaining_time / (60 * 1000)),
+      this.props.navigation.replace('SubmitTest', {
+        taken_time_minutes: 60 - Math.ceil(remaining_time / (60 * 1000)),
       });
     }
   };
@@ -268,30 +258,6 @@ class TestPage extends Component {
     this.props.navigation.setParams({
       running: true,
     });
-    // if (this.props.navigation.state.params.show === undefined) {
-    //   this.props.navigation.setParams({
-    //     show: true,
-    //   });
-    // } else if (this.props.navigation.state.params.show) {
-    //   return;
-    // }
-
-    // const time =
-    //   this.props.navigation.state.params.data.timeForExam * 60 * 1000;
-    // const remaining_time = await getItem('remaining_time');
-
-    // if (
-    //   remaining_time !== undefined &&
-    //   remaining_time.remaining_time !== null
-    // ) {
-    //   this.props.navigation.setParams({
-    //     time: remaining_time.remaining_time,
-    //   });
-    // } else {
-    //   this.props.navigation.setParams({
-    //     time,
-    //   });
-    // }
   };
 
   showCustomAlert = async show => {
@@ -305,14 +271,9 @@ class TestPage extends Component {
     });
   };
   render() {
-    // const name = this.props.navigation.getParam("name");
     const {count, question, isOnline, show} = this.state;
-    console.log(this.state.solution, 'kllllllllllllllllllllllll');
     const {examQuestions} = this.props.candidate;
-
     let solution = this.state.solution;
-    // const { roundType } = this.props.questions.data;
-
     return (
       <View style={{flex: 1}}>
         {
@@ -343,7 +304,6 @@ class TestPage extends Component {
                 }}>
                 <ActivityIndicator
                   animating={true}
-                  // style={{ opacity: this.state.opacity }}
                   size="large"
                   color={COLOR.MUSTARD}
                 />
@@ -444,17 +404,13 @@ class TestPage extends Component {
                     styles.text,
                     {color: COLOR.TURQUOISE, marginTop: 10},
                   ]}>
-                  Hi 
+                  Hi
                   {/* {name} */}
                 </Text>
-                {/* {roundType !== "Subjective" ? ( */}
                 <Text style={[styles.text, {color: COLOR.TURQUOISE}]}>
-                  {/* Questions Attempted : {`${solution.length}/`} */}
-                  {count}{' '}
+                  Questions Attempted : {`${solution.length}`}
+                  {/* {count}{' '} */}
                 </Text>
-                {/* ) : (
-                  <Text style={styles.text}>Total Questions : {count}</Text>
-                )} */}
                 <Questions
                   question={examQuestions.data.data}
                   solution={solution}
@@ -474,7 +430,6 @@ class TestPage extends Component {
                     this.confirmSubmit
                     // : this.confirmSecondRoundSubmit
                   }
-                  // roundType={roundType}
                 />
               </Content>
             ) : (
@@ -500,10 +455,3 @@ export default connect(
   mapStateToProps,
   {callingHelp},
 )(TestPage);
-
-// {testPaperId: "5e3eafc1a539ca09871594e9", user_id: "4117367680",…}
-// answers: [{Q_id: "5e3eaf58a539ca09871594e7", ans_id: [1]}]
-// questionIds: ["5e3eaf2da539ca09871594e5", "5e3eaf3ea539ca09871594e6", "5e3eaf58a539ca09871594e7",…]
-// taken_time_minutes: 1
-// testPaperId: "5e3eafc1a539ca09871594e9"
-// user_id: "4117367680"

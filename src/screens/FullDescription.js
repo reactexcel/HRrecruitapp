@@ -160,8 +160,7 @@ class FullDescription extends Component {
           </TouchableOpacity> */}
       
        <CustomButton
-            onPress={()=>this.props.navigation.navigate('AddCandidate', { jobDetail: jobDetail,
-              currentJob: currentJob,isEditing:false,addCandidate:true,isCandidate:this.props.navigation.state.params.isCandidate})}
+            onPress={()=>this.props.navigation.navigate('InterviewLogin',{appliedText:''})}
             type="login_to_apply"
             btnStyle={styles.btnStyle}
             btnTextStyle={[styles.btnText, styles.loginTextStyle]}

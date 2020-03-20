@@ -67,7 +67,7 @@ export default StyleSheet.create({
   cancelBtnStyle: {
     marginLeft: -15,
     height: 30,
-    width: 90,
+    // width: 90,
     paddingLeft: 5,
     backgroundColor: "#e3e5e9"
   },

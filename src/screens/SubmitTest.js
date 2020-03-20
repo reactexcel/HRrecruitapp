@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { BackHandler, Alert, Platform ,Animated} from "react-native";
+import React, {Component} from 'react';
+import {BackHandler, Alert, Platform, Animated} from 'react-native';
 import {
   Container,
   Content,
@@ -8,179 +8,153 @@ import {
   Card,
   CardItem,
   Thumbnail,
-  Spinner
-} from "native-base";
-import NetInfo from "@react-native-community/netinfo";
-import HorizontalLine from "../components/HorizontalLine";
-import CustomButton from "../components/CustomButton";
-import styles from "../styles";
-import { COLOR } from "../styles/color";
-import { connect } from "react-redux";
-import forEach from "lodash/forEach";
-import { submitTest } from "../actions";
-import { getItem, setItem } from "../helper/storage";
-import { SUCCESS_STATUS,LOW_CONN_ALERT } from "../helper/constant";
-import { notify } from "../helper/notify";
+  Spinner,
+} from 'native-base';
+import NetInfo from '@react-native-community/netinfo';
+import HorizontalLine from '../components/HorizontalLine';
+import CustomButton from '../components/CustomButton';
+import styles from '../styles';
+import {COLOR} from '../styles/color';
+import {connect} from 'react-redux';
+import forEach from 'lodash/forEach';
+import {submitTest} from '../actions';
+import {getItem, setItem} from '../helper/storage';
+import {SUCCESS_STATUS, LOW_CONN_ALERT} from '../helper/constant';
+import {notify} from '../helper/notify';
+import AsyncStorage from '@react-native-community/async-storage';
 
 class SubmitTest extends Component {
   constructor() {
     super();
     this.state = {
       isOnline: false,
-      fontSize:new Animated.Value(13.5),
-      fontColor:new Animated.Value(0),
+      fontSize: new Animated.Value(13.5),
+      fontColor: new Animated.Value(0),
     };
   }
   componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", this.handleBackButton);
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     NetInfo.isConnected.addEventListener(
-      "connectionChange",
-      this.handleNetwork
+      'connectionChange',
+      this.handleNetwork,
     );
-    
   }
   handleNetwork = isconnect => {
     //functinality for net connection at time of answering paper
-    this.setState({ isOnline: isconnect });
+    this.setState({isOnline: isconnect});
   };
 
   componentWillUnmount() {
-    BackHandler.removeEventListener("hardwareBackPress", this.handleBackButton);
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     NetInfo.isConnected.removeEventListener(
-      "connectionChange",
-      this.handleNetwork
+      'connectionChange',
+      this.handleNetwork,
     );
   }
 
-  componentDidUpdate() {
-    if (this.props.test.data !== undefined) {
-      if (this.props.test.data.status === SUCCESS_STATUS) {
-        const { roundType } = this.props.navigation.state.params.data;
-        const { round } = this.props.navigation.state.params.data;
-
-        Alert.alert(
-          "Thank You",
-          "Your response has been recorded. Please contact HR for for further instructions.",
-          [
-            {
-              text: "OK",
-              onPress: async () => {
-                const email = this.props.navigation.getParam("email");
-                const stored_email = await getItem("email");
-                if (stored_email.email === email) {
-                  setItem("round", JSON.stringify({ round }));
-                }
-                this.props.navigation.navigate("HomePage",{
-                  fromBitlyLink: true
-                });
-              }
-            }
-          ],
-          { cancelable: false }
-        );
-      }
-    }
-    const { success } = this.props.test;
-    if (success !== undefined) {
-      if (success === false) {
-        notify("Something went wrong");
-      }
+  componentDidUpdate(preProps) {
+    const {isSuccess} = this.props.test;
+    if (isSuccess !== preProps.test.isSuccess && isSuccess) {
+      Alert.alert(
+        'Thank You',
+        'Your response has been recorded. Please contact HR for for further instructions.',
+        [
+          {
+            text: 'OK',
+            onPress: async () => {
+              await AsyncStorage.clear()
+              this.props.navigation.replace('HomePage');
+            },
+          },
+        ],
+        {cancelable: false},
+      );
     }
   }
 
   handleBackButton = () => {
-    alert("Not Allowed");
+    alert('Not Allowed');
     return true;
   };
-  static navigationOptions = ({ navigation }) => {
-    const name = navigation.getParam("name");
-    const profile_pic = navigation.getParam("profile_pic");
+  static navigationOptions = ({navigation}) => {
+    // const name = navigation.getParam("name");
+    const profile_pic = navigation.getParam('profile_pic');
     return {
-      title: name.split(" ")[0],
+      // title: name.split(" ")[0],
       headerStyle: {
         backgroundColor: COLOR.LGONE,
         elevation: 0,
-        color:'white'
+        color: 'white',
       },
       headerTitleStyle: {
-        fontFamily: "Montserrat",
+        fontFamily: 'Montserrat',
         color: COLOR.PINK,
-        fontWeight:'100'
+        fontWeight: '100',
       },
       headerLeft: (
-        <Content style={{ paddingHorizontal: 10 }}>
-          <Thumbnail small source={{ uri: profile_pic }} />
+        <Content style={{paddingHorizontal: 10}}>
+          <Thumbnail small source={{uri: profile_pic}} />
         </Content>
-      )
+      ),
     };
   };
 
   handleTestSubmit = async () => {
-    const email = this.props.navigation.getParam("email");
-    const ans = await getItem("solution");
-    const { params } = this.props.navigation.state;
-    const fb_id = params.fb_id;
-    const job_profile = params.data.job_profile;
-    const roundType = params.data.roundType;
+    const email = this.props.navigation.getParam('email');
+    const answers = await getItem('solution');
+    const {params} = this.props.navigation.state;
+    const {candidateInterview, examQuestions} = this.props.candidate;
+    const {testPaperId, data} = examQuestions.data;
+    const {user_id} = candidateInterview.data;
     const questionIds = [];
-    forEach(params.data.data, value => {
+    forEach(data, value => {
       forEach(value.questions, value => {
         questionIds.push(value._id);
       });
     });
     const taken_time_minutes = params.taken_time_minutes;
-    let data;
-    if (roundType === "Objective") {
-      data = {
-        answers: ans.solution,
-        fb_id,
-        job_profile,
-        questionIds,
-        taken_time_minutes,
-        roundType
-      };
-    } else if (roundType === "Subjective") {
-      data = {
-        fb_id,
-        roundType
-      };
-    }
-    this.props.submitTest(email, data);
+    let payload = {
+      answers: answers.solution,
+      user_id,
+      questionIds,
+      taken_time_minutes,
+      testPaperId,
+    };
+    this.props.submitTest(payload);
   };
-    onSubmitNoInternet=()=>{
-      Animated.parallel([
-        Animated.timing(this.state.fontSize,{
-          toValue:18,
-          duration:1000
-        }).start(()=>{
-          Animated.timing(this.state.fontSize,{
-            toValue:13.5,
-            duration:1000
-          }).start()
-        }),
-        Animated.timing(this.state.fontColor,{
-          toValue:1,
-          duration:1000
-        }).start(()=>{
-          Animated.timing(this.state.fontColor,{
-            toValue:0,
-            duration:1000
-          }).start()
-        })
-      ]).start()
-  }
-  render() {
-    const { isOnline } = this.state;
-    const {
-      test: { submitting }
-    } = this.props;
-    const BackgroundColorConfig = this.state.fontColor.interpolate(
-      {
-          inputRange: [ 0, .5, 1 ],
-          
-          outputRange: [ '#253055', '#ed1040', '#253055']
 
-      });
+  onSubmitNoInternet = () => {
+    Animated.parallel([
+      Animated.timing(this.state.fontSize, {
+        toValue: 18,
+        duration: 1000,
+      }).start(() => {
+        Animated.timing(this.state.fontSize, {
+          toValue: 13.5,
+          duration: 1000,
+        }).start();
+      }),
+      Animated.timing(this.state.fontColor, {
+        toValue: 1,
+        duration: 1000,
+      }).start(() => {
+        Animated.timing(this.state.fontColor, {
+          toValue: 0,
+          duration: 1000,
+        }).start();
+      }),
+    ]).start();
+  };
+  render() {
+    const {isOnline} = this.state;
+    const {
+      test: {isLoading},
+    } = this.props;
+    const BackgroundColorConfig = this.state.fontColor.interpolate({
+      inputRange: [0, 0.5, 1],
+
+      outputRange: ['#253055', '#ed1040', '#253055'],
+    });
     return (
       <Container style={styles.container}>
         <Content padder>
@@ -190,20 +164,30 @@ class SubmitTest extends Component {
             </CardItem>
             <HorizontalLine />
             <CardItem>
-              <Animated.Text style={[styles.text,{fontSize:this.state.fontSize,color:BackgroundColorConfig}]}>
+              <Animated.Text
+                style={[
+                  styles.text,
+                  {fontSize: this.state.fontSize, color: BackgroundColorConfig},
+                ]}>
                 {LOW_CONN_ALERT}
               </Animated.Text>
             </CardItem>
             {!isOnline ? (
-              <Button style={{backgroundColor:"#cccccc"}} onPress={this.onSubmitNoInternet} /* disabled */ block>
+              <Button
+                style={{backgroundColor: '#cccccc'}}
+                onPress={this.onSubmitNoInternet}
+                /* disabled */ block>
                 <Text>Click Here</Text>
               </Button>
-            ) : submitting ? (
+            ) : isLoading ? (
               <Spinner color={COLOR.MUSTARD} />
             ) : (
               <CustomButton
-              textColor={{color:COLOR.LGONE}} style={{backgroundColor:COLOR.MUSTARD}}
-              text="Click Here" onPress={this.handleTestSubmit} />
+                textColor={{color: COLOR.LGONE}}
+                style={{backgroundColor: COLOR.MUSTARD}}
+                text="Click Here"
+                onPress={this.handleTestSubmit}
+              />
             )}
           </Card>
         </Content>
@@ -214,9 +198,10 @@ class SubmitTest extends Component {
 
 const mapStateToProps = state => ({
   test: state.test,
-  email: state.interviewSignUp.email
+  email: state.interviewSignUp.email,
+  candidate: state.candidate,
 });
 export default connect(
   mapStateToProps,
-  { submitTest }
+  {submitTest},
 )(SubmitTest);
