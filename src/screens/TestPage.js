@@ -272,7 +272,7 @@ class TestPage extends Component {
   };
   render() {
     const {count, question, isOnline, show} = this.state;
-    const {examQuestions} = this.props.candidate;
+    const {examQuestions,candidateInterview} = this.props.candidate;
     let solution = this.state.solution;
     return (
       <View style={{flex: 1}}>
@@ -404,12 +404,10 @@ class TestPage extends Component {
                     styles.text,
                     {color: COLOR.TURQUOISE, marginTop: 10},
                   ]}>
-                  Hi
-                  {/* {name} */}
+                  Hi {candidateInterview.data.name}
                 </Text>
                 <Text style={[styles.text, {color: COLOR.TURQUOISE}]}>
-                  Questions Attempted : {`${solution.length}`}
-                  {/* {count}{' '} */}
+                  Questions Attempted :{`${solution.length}/`}{examQuestions.data.totalQuestionsCount}
                 </Text>
                 <Questions
                   question={examQuestions.data.data}
@@ -423,7 +421,7 @@ class TestPage extends Component {
                   showCustomAlert={this.showCustomAlert}
                   isOpen={this.state.isOpen}
                   length={this.state.solution.length}
-                  count={this.state.count}
+                  count={examQuestions.data.totalQuestionsCount}
                   confirmSubmit={
                     // roundType !== "Subjective"
                     // ?

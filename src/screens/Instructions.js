@@ -61,8 +61,6 @@ class Instructions extends Component {
   handlePress = async () => {
     const {examQuestions, currentUser} = this.props.candidate;
     const email = await getItem('email');
-    console.log(email, currentUser, 'currentUsercurrentUser');
-
     let remaining_time;
     if (email !== currentUser) {
       await AsyncStorage.multiRemove(['solution', 'remaining_time']);
@@ -80,6 +78,8 @@ class Instructions extends Component {
   };
 
   render() {
+    console.log(this.props,'propssssssssssss');
+    
     const {examQuestions} = this.props.candidate;
     return (
       <Container style={styles.container}>
