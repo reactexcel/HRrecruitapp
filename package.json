@@ -17,7 +17,7 @@
     "prop-types": "^15.6.1",
     "pubsub-js": "^1.6.0",
     "react": "16.3.1",
-    "react-native": "0.55.4",
+    "react-native": "0.70.6",
     "react-native-branch": "^2.3.0",
     "react-native-collapsible": "^0.11.3",
     "react-native-google-analytics-bridge": "^5.6.3",
@@ -34,7 +34,7 @@
   "devDependencies": {
     "babel-jest": "22.4.3",
     "babel-preset-react-native": "4.0.0",
-    "jest": "22.4.3",
+    "jest": "29.3.1",
     "react-test-renderer": "16.3.1"
   },
   "jest": {
